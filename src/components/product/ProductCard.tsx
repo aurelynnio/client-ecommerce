@@ -7,7 +7,7 @@ import { Store } from "lucide-react";
 
 // Helper function to get price range from variants (new) or models (old)
 const getPriceRange = (
-  product: Product
+  product: Product,
 ): { min: number; max: number } | null => {
   // New structure: variants with price
   if (product.variants && product.variants.length > 0) {
@@ -21,7 +21,7 @@ const getPriceRange = (
 
 // Helper function to get display price
 const getDisplayPrice = (
-  product: Product
+  product: Product,
 ): { current: number; discount?: number } => {
   const priceRange = getPriceRange(product);
   if (priceRange) {
@@ -93,7 +93,7 @@ export const ProductCard = ({
               src={productImage}
               alt={product.name || "Hình ảnh sản phẩm"}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-102"
+              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
               loading={index < 8 ? "eager" : "lazy"}
               priority={index < 4}
@@ -142,7 +142,7 @@ export const ProductCard = ({
         {/* Product Info */}
         <div className="flex flex-col flex-1 p-3 gap-2">
           {/* Product Name */}
-          <h3 className="font-medium text-[13px] leading-tight text-gray-800 line-clamp-2 min-h-[36px] group-hover:text-[#E53935] transition-colors">
+          <h3 className="font-medium text-[13px] leading-tight text-gray-800 line-clamp-2 min-h-9 group-hover:text-[#E53935] transition-colors">
             {product.name || "Tên sản phẩm"}
           </h3>
 
@@ -185,7 +185,9 @@ export const ProductCard = ({
           <div className="flex items-center justify-between text-[11px] text-[#999] pt-1 border-t border-border">
             <span className="truncate max-w-[60%]">
               {product.brand ||
-                (typeof product.shop === "object" ? product.shop.name : "Cửa hàng")}
+                (typeof product.shop === "object"
+                  ? product.shop.name
+                  : "Cửa hàng")}
             </span>
             <span className="shrink-0">
               {formatSoldCount(product.soldCount)}

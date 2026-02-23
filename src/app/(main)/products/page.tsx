@@ -40,13 +40,6 @@ const SORT_TABS = [
 ];
 
 export default function ProductsPage() {
-  const { data: categoriesData } = useCategories({});
-  const categories = categoriesData?.data || [];
-
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [priceSort, setPriceSort] = useState<"asc" | "desc" | null>(null);
-
   const {
     filters: urlFilters,
     updateFilters,
@@ -55,6 +48,13 @@ export default function ProductsPage() {
     defaultFilters: DEFAULT_FILTERS,
     basePath: "/products",
   });
+
+  const { data: categoriesData } = useCategories({});
+  const categories = categoriesData?.data || [];
+
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [productLimit, setProductLimit] = useState(50);
+  const activeCategory = (urlFilters.category as string) || null;
 
   const filters: ProductFilters = useMemo(
     () => ({
@@ -73,6 +73,13 @@ export default function ProductsPage() {
     [urlFilters]
   );
 
+  const priceSort =
+    filters.sortBy === "price_desc"
+      ? "desc"
+      : filters.sortBy === "price_asc"
+        ? "asc"
+        : null;
+
   // Debounced filters using custom hook
   const debouncedFilters = useDebounce(filters, 300);
   const debouncedCategory = useDebounce(activeCategory, 300);
@@ -81,7 +88,7 @@ export default function ProductsPage() {
   const queryParams = useMemo(() => {
     const params: Record<string, string | number | boolean> = {
       page: 1,
-      limit: 50,
+      limit: productLimit,
     };
 
     if (debouncedFilters.search) params.search = debouncedFilters.search;
@@ -100,10 +107,39 @@ export default function ProductsPage() {
     if (debouncedCategory) params.category = debouncedCategory;
 
     return params;
-  }, [debouncedFilters, debouncedCategory]);
+  }, [debouncedFilters, debouncedCategory, productLimit]);
 
   const { data: productsData, isLoading } = useProducts(queryParams);
-  const products = productsData?.products || [];
+  const products = useMemo(() => productsData?.products || [], [productsData?.products]);
+  const totalProducts = productsData?.pagination?.total || products.length;
+
+  const availableColors = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          products.flatMap((product) =>
+            (product.variants || [])
+              .map((variant) => variant.color?.trim())
+              .filter((color): color is string => Boolean(color)),
+          ),
+        ),
+      ).slice(0, 20),
+    [products],
+  );
+
+  const availableSizes = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          products.flatMap((product) =>
+            (product.sizes || []).map((size) => size.trim()),
+          ),
+        ),
+      )
+        .filter((size): size is string => Boolean(size))
+        .slice(0, 20),
+    [products],
+  );
 
   const handleFilterChange = useCallback(
     (newFilters: Partial<ProductFilters>) => {
@@ -123,29 +159,29 @@ export default function ProductsPage() {
       if (newFilters.sortBy !== undefined) updates.sortBy = newFilters.sortBy;
 
       updateFilters(updates);
+      setProductLimit(50);
     },
-    [updateFilters]
+    [updateFilters, setProductLimit]
   );
 
   const handleClearFilters = useCallback(() => {
     resetFilters();
-    setActiveCategory(null);
-    setPriceSort(null);
-  }, [resetFilters]);
+    setProductLimit(50);
+  }, [resetFilters, setProductLimit]);
 
   const handleSortTabClick = (value: string) => {
     if (value === "price") {
       const newSort = priceSort === "asc" ? "desc" : "asc";
-      setPriceSort(newSort);
       handleFilterChange({ sortBy: `price_${newSort}` });
     } else {
-      setPriceSort(null);
       handleFilterChange({ sortBy: value });
     }
+    setProductLimit(50);
   };
 
   const handleCategoryClick = (categoryId: string | null | undefined) => {
-    setActiveCategory(categoryId ?? null);
+    updateFilters({ category: categoryId ?? "" });
+    setProductLimit(50);
   };
 
   return (
@@ -165,7 +201,7 @@ export default function ProductsPage() {
             >
               Tất cả
             </button>
-            {categories?.slice(0, 8).map((category) => (
+            {categories?.map((category) => (
               <button
                 key={category._id}
                 onClick={() => handleCategoryClick(category._id)}
@@ -237,6 +273,8 @@ export default function ProductsPage() {
                       filters={filters}
                       onFilterChange={handleFilterChange}
                       onClearFilters={handleClearFilters}
+                      availableColors={availableColors}
+                      availableSizes={availableSizes}
                     />
                   </div>
                 </SheetContent>
@@ -247,7 +285,7 @@ export default function ProductsPage() {
                 <span className="font-medium text-gray-800">
                   {products?.length || 0}
                 </span>
-                <span className="ml-1">sản phẩm</span>
+                <span className="ml-1">/ {totalProducts} sản phẩm</span>
               </div>
             </div>
           </div>
@@ -262,6 +300,8 @@ export default function ProductsPage() {
             filters={filters}
             onFilterChange={handleFilterChange}
             onClearFilters={handleClearFilters}
+            availableColors={availableColors}
+            availableSizes={availableSizes}
           />
 
           {/* Product Grid */}
@@ -280,13 +320,15 @@ export default function ProductsPage() {
             </div>
 
             {/* Load More */}
-            {products && products.length > 0 && (
+            {products.length > 0 && products.length < totalProducts && (
               <div className="flex justify-center mt-6">
                 <Button
                   variant="outline"
                   className="px-8 h-10 rounded border-[#E53935] text-[#E53935] hover:bg-[#E53935]/5"
+                  onClick={() => setProductLimit((prev) => prev + 50)}
+                  disabled={isLoading}
                 >
-                  Xem thêm sản phẩm
+                  {isLoading ? "Đang tải..." : "Xem thêm sản phẩm"}
                 </Button>
               </div>
             )}

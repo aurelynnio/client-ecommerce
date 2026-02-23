@@ -38,7 +38,7 @@ export default function WishlistPage() {
         toast.error(getSafeErrorMessage(error, "Có lỗi xảy ra"));
       }
     },
-    [removeFromWishlistMutation]
+    [removeFromWishlistMutation],
   );
 
   const handleAddToCart = useCallback(
@@ -56,7 +56,7 @@ export default function WishlistPage() {
         toast.error(getSafeErrorMessage(error, "Không thể thêm vào giỏ hàng"));
       }
     },
-    [addToCartMutation]
+    [addToCartMutation],
   );
 
   // Redirect to login if not authenticated
@@ -157,11 +157,12 @@ export default function WishlistPage() {
                         src={productImage}
                         alt={item.name}
                         fill
-                        className="object-cover group-hover:scale-102 transition-transform duration-300"
+                        className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
                         sizes="(max-width: 640px) 50vw, 25vw"
                       />
                       {/* Remove Button */}
                       <button
+                        aria-label={`Xóa ${item.name} khỏi danh sách yêu thích`}
                         onClick={(e) => {
                           e.preventDefault();
                           handleRemoveItem(item._id);
@@ -176,7 +177,7 @@ export default function WishlistPage() {
                   {/* Info */}
                   <div className="p-3">
                     <Link href={`/products/${item.slug || item._id}`}>
-                      <h3 className="text-[13px] text-gray-800 line-clamp-2 min-h-[36px] group-hover:text-[#E53935] transition-colors">
+                      <h3 className="text-[13px] text-gray-800 line-clamp-2 min-h-9 group-hover:text-[#E53935] transition-colors">
                         {item.name}
                       </h3>
                     </Link>

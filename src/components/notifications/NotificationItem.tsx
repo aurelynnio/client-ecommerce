@@ -8,7 +8,10 @@ interface NotificationItemProps {
   onClose?: () => void;
 }
 
-export default function NotificationItem({ notification, onClose }: NotificationItemProps) {
+export default function NotificationItem({
+  notification,
+  onClose,
+}: NotificationItemProps) {
   const timeAgo = (dateRequest: string) => {
     const date = new Date(dateRequest);
     const now = new Date();
@@ -45,7 +48,7 @@ export default function NotificationItem({ notification, onClose }: Notification
     <div
       className={cn(
         "flex gap-3 px-4 py-3 transition-colors hover:bg-gray-50/80",
-        !notification.isRead && "bg-primary/3"
+        !notification.isRead && "bg-primary/3",
       )}
     >
       {/* Icon */}
@@ -59,7 +62,9 @@ export default function NotificationItem({ notification, onClose }: Notification
           <p
             className={cn(
               "text-[13px] leading-snug line-clamp-1",
-              !notification.isRead ? "font-medium text-gray-800" : "text-gray-700"
+              !notification.isRead
+                ? "font-medium text-gray-800"
+                : "text-gray-700",
             )}
           >
             {notification.title}
@@ -85,7 +90,7 @@ export default function NotificationItem({ notification, onClose }: Notification
       <Link
         href={notification.link}
         onClick={onClose}
-        className="block focus:outline-none"
+        className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
       >
         {Content}
       </Link>
@@ -93,8 +98,12 @@ export default function NotificationItem({ notification, onClose }: Notification
   }
 
   return (
-    <div onClick={onClose} className="cursor-pointer">
+    <button
+      type="button"
+      onClick={onClose}
+      className="block w-full cursor-pointer rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+    >
       {Content}
-    </div>
+    </button>
   );
 }

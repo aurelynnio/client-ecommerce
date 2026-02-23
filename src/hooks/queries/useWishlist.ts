@@ -95,10 +95,11 @@ export function useWishlist(params?: { page?: number; limit?: number }) {
 /**
  * Get wishlist count (for badge display)
  */
-export function useWishlistCount() {
+export function useWishlistCount(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: wishlistKeys.count(),
     queryFn: wishlistApi.getCount,
+    enabled: options?.enabled,
     staleTime: STALE_TIME.MEDIUM,
   });
 }
@@ -224,7 +225,9 @@ export function useWishlistManager(isAuthenticated: boolean) {
   const queryClient = useQueryClient();
 
   // React Query hooks
-  const { data: count = 0, isLoading: isLoadingCount } = useWishlistCount();
+  const { data: count = 0, isLoading: isLoadingCount } = useWishlistCount({
+    enabled: isAuthenticated,
+  });
   const addMutation = useAddToWishlist();
   const removeMutation = useRemoveFromWishlist();
 

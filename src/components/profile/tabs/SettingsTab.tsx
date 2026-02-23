@@ -84,16 +84,6 @@ export default function SettingsTab({ user }: SettingsTabProps) {
     }
   };
 
-  const handleEmailVerification = async () => {
-    toast.info("Dịch vụ xác minh email tạm thời không khả dụng.");
-  };
-
-  const handleTwoFactorToggle = async () => {
-    toast.info("Xác thực 2 yếu tố chưa khả dụng.");
-    setTwoFactorEnabled(false);
-    // setTwoFactorEnabled(false);
-  };
-
   const togglePasswordVisibility = (field: "current" | "new" | "confirm") => {
     setShowPasswords((prev) => ({
       ...prev,
@@ -279,13 +269,14 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       Xác thực 2 yếu tố
                     </h4>
                     <p className="text-xs text-muted-foreground">
-                      Thêm một lớp bảo mật bổ sung cho tài khoản của bạn.
+                      Tính năng đang được phát triển và sẽ sớm khả dụng.
                     </p>
                   </div>
                 </div>
                 <Switch
                   checked={twoFactorEnabled}
-                  onCheckedChange={() => handleTwoFactorToggle()}
+                  onCheckedChange={setTwoFactorEnabled}
+                  disabled
                 />
               </div>
             </div>
@@ -335,10 +326,10 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleEmailVerification}
                     className="rounded-sm"
+                    disabled
                   >
-                    Xác minh ngay
+                    Sắp hỗ trợ
                   </Button>
                 )}
               </div>

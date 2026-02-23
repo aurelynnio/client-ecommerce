@@ -11,15 +11,44 @@ import {
   Ticket,
 } from "lucide-react";
 import Link from "next/link";
+import { useUserOrders } from "@/hooks/queries/useOrders";
+import { useWishlistCount } from "@/hooks/queries/useWishlist";
 
 export default function UserCard() {
   const { data: user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { data: ordersData } = useUserOrders(
+    { page: 1, limit: 50 },
+    { enabled: isAuthenticated },
+  );
+  const { data: wishlistCount = 0 } = useWishlistCount({
+    enabled: isAuthenticated,
+  });
+
+  const orders = ordersData?.orders || [];
+  const pendingOrders = orders.filter((order) => order.status === "pending").length;
+  const shippedOrders = orders.filter((order) => order.status === "shipped").length;
+  const deliveredOrders = orders.filter((order) => order.status === "delivered").length;
 
   // Order status items
   const orderStatus = [
-    { label: "Chờ thanh toán", icon: <Wallet className="w-4 h-4" />, count: 0, href: "/profile/orders?status=pending" },
-    { label: "Chờ giao hàng", icon: <Truck className="w-4 h-4" />, count: 0, href: "/profile/orders?status=shipping" },
-    { label: "Chờ đánh giá", icon: <MessageSquare className="w-4 h-4" />, count: 0, href: "/profile/orders?status=review" },
+    {
+      label: "Chờ thanh toán",
+      icon: <Wallet className="w-4 h-4" />,
+      count: pendingOrders,
+      href: "/profile?tab=orders&status=pending",
+    },
+    {
+      label: "Đang giao",
+      icon: <Truck className="w-4 h-4" />,
+      count: shippedOrders,
+      href: "/profile?tab=orders&status=shipped",
+    },
+    {
+      label: "Đã giao",
+      icon: <MessageSquare className="w-4 h-4" />,
+      count: deliveredOrders,
+      href: "/profile?tab=orders&status=delivered",
+    },
   ];
 
   return (
@@ -97,23 +126,34 @@ export default function UserCard() {
 
       {/* Assets Grid */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
+        <Link
+          href="/profile?tab=orders"
+          className="flex flex-col items-center gap-1 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+        >
           <Gift className="w-5 h-5 text-[#E53935]" />
-          <span className="text-[10px] text-gray-600">Quà tặng</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
+          <span className="text-[10px] text-gray-600">
+            {orders.length} đơn hàng
+          </span>
+        </Link>
+        <Link
+          href="/vouchers"
+          className="flex flex-col items-center gap-1 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+        >
           <Ticket className="w-5 h-5 text-[#E53935]" />
           <span className="text-[10px] text-gray-600">Voucher</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
+        </Link>
+        <Link
+          href="/wishlist"
+          className="flex flex-col items-center gap-1 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+        >
           <Coins className="w-5 h-5 text-[#E53935]" />
-          <span className="text-[10px] text-gray-600">Xu thưởng</span>
-        </div>
+          <span className="text-[10px] text-gray-600">{wishlistCount} yêu thích</span>
+        </Link>
       </div>
 
       {/* Promotional Banner */}
       <Link 
-        href="/promotions"
+        href="/vouchers"
         className="bg-[#FFEBEE] rounded-lg py-2 px-3 flex items-center justify-between cursor-pointer border border-[#E53935]/10 hover:border-[#E53935]/30 transition-colors mt-auto"
       >
         <div className="flex items-center gap-2">

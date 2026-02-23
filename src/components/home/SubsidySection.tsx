@@ -2,47 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Zap, ArrowRight } from "lucide-react";
-
-const subsidyProducts = [
-  {
-    id: 1,
-    name: "Router WiFi 6",
-    image:
-      "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=200&h=200&fit=crop",
-    price: "167.200",
-    originalPrice: "299.000",
-    tag: "Giá sốc",
-  },
-  {
-    id: 2,
-    name: "Nước sốt Nhật",
-    image:
-      "https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=200&h=200&fit=crop",
-    price: "13.900",
-    originalPrice: "25.000",
-    tag: "Nổi bật",
-  },
-  {
-    id: 3,
-    name: "Hộp đựng đồ",
-    image:
-      "https://images.unsplash.com/photo-1582030043134-8da0f9919f03?w=200&h=200&fit=crop",
-    price: "9.800",
-    originalPrice: "19.000",
-    tag: "Giá hời",
-  },
-  {
-    id: 4,
-    name: "Máy giặt mini",
-    image:
-      "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=200&h=200&fit=crop",
-    price: "949.400",
-    originalPrice: "1.500.000",
-    tag: "Bán chạy",
-  },
-];
+import { useFlashSaleWithCountdown } from "@/hooks/queries/useFlashSale";
+import { formatCurrency } from "@/utils/format";
 
 export default function SubsidySection() {
+  const { products, formattedCountdown, isLoading } = useFlashSaleWithCountdown();
+  const displayProducts = products.slice(0, 4);
+
   return (
     <div className="w-full h-full bg-[#f7f7f7] rounded-lg p-4 flex flex-col overflow-hidden">
       {/* Header */}
@@ -51,7 +17,7 @@ export default function SubsidySection() {
           <Zap className="w-5 h-5 text-[#E53935] fill-[#E53935]" />
           <h3 className="text-base font-bold text-[#E53935]">Giá sốc chớp nhoáng</h3>
           <span className="bg-[#E53935] text-white text-[10px] px-2 py-0.5 rounded-full font-medium">
-            Kết thúc sau 02:30:45
+            Kết thúc sau {formattedCountdown.hours}:{formattedCountdown.minutes}:{formattedCountdown.seconds}
           </span>
         </div>
         <Link 
@@ -65,38 +31,64 @@ export default function SubsidySection() {
 
       {/* Products Grid */}
       <div className="flex-1 grid grid-cols-4 gap-2">
-        {subsidyProducts.map((product) => (
-          <Link
-            key={product.id}
-            href={`/products/${product.id}`}
-            className="flex flex-col items-center group cursor-pointer bg-white rounded-lg p-2 hover:shadow-lg transition-all duration-200"
-          >
-            {/* Product Image */}
-            <div className="relative w-full aspect-square mb-2 overflow-hidden rounded-md">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-300"
-              />
-              {/* Tag Badge */}
-              <span className="absolute top-1 left-1 bg-[#E53935] text-white text-[9px] px-1.5 py-0.5 rounded font-bold">
-                {product.tag}
-              </span>
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg p-2 animate-pulse"
+            >
+              <div className="w-full aspect-square bg-gray-100 rounded-md mb-2" />
+              <div className="h-3 bg-gray-100 rounded mb-1" />
+              <div className="h-2 bg-gray-100 rounded w-2/3 mx-auto" />
             </div>
-            
-            {/* Price */}
-            <div className="flex flex-col items-center w-full">
-              <div className="flex items-baseline gap-0.5 text-[#E53935]">
-                <span className="text-[10px] font-medium">₫</span>
-                <span className="text-sm font-bold">{product.price}</span>
-              </div>
-              <span className="text-[10px] text-gray-400 line-through">
-                ₫{product.originalPrice}
-              </span>
-            </div>
-          </Link>
-        ))}
+          ))
+        ) : displayProducts.length > 0 ? (
+          displayProducts.map((product) => {
+            const image = product.variants?.[0]?.images?.[0] || "/images/placeholder.png";
+            const salePrice = product.flashSaleInfo?.salePrice || 0;
+            const originalPrice = product.flashSaleInfo?.originalPrice || 0;
+            const discount = product.flashSaleInfo?.discount || 0;
+
+            return (
+              <Link
+                key={product._id}
+                href={`/products/${product.slug || product._id}`}
+                className="flex flex-col items-center group cursor-pointer bg-white rounded-lg p-2 hover:shadow-lg transition-all duration-200"
+              >
+                {/* Product Image */}
+                <div className="relative w-full aspect-square mb-2 overflow-hidden rounded-md">
+                  <Image
+                    src={image}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  {discount > 0 && (
+                    <span className="absolute top-1 left-1 bg-[#E53935] text-white text-[9px] px-1.5 py-0.5 rounded font-bold">
+                      -{discount}%
+                    </span>
+                  )}
+                </div>
+
+                {/* Price */}
+                <div className="flex flex-col items-center w-full">
+                  <div className="text-[#E53935] text-sm font-bold">
+                    {formatCurrency(salePrice)}
+                  </div>
+                  {originalPrice > salePrice && (
+                    <span className="text-[10px] text-gray-400 line-through">
+                      {formatCurrency(originalPrice)}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            );
+          })
+        ) : (
+          <div className="col-span-4 flex items-center justify-center text-xs text-gray-500">
+            Chưa có sản phẩm flash sale
+          </div>
+        )}
       </div>
     </div>
   );

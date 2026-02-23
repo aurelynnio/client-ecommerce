@@ -45,7 +45,7 @@ export default function NotificationModel({
       <div className="fixed inset-0 z-60 bg-black/5" onClick={onClose} />
 
       {/* Panel */}
-      <div className="fixed right-4 top-14 w-[340px] max-h-[75vh] flex flex-col bg-white z-[70] rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+      <div className="fixed right-4 top-14 w-[340px] max-h-[75vh] flex flex-col bg-white z-70 rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
         {/* Header - clean, minimal */}
         <div className="px-4 py-3 flex justify-between items-center bg-[#fafafa]">
           <div className="flex items-center gap-2">
@@ -57,6 +57,8 @@ export default function NotificationModel({
             )}
           </div>
           <button
+            type="button"
+            aria-label="Đóng thông báo"
             onClick={onClose}
             className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
           >

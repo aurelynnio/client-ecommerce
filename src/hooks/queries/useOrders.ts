@@ -192,10 +192,14 @@ const orderApi = {
 /**
  * Get current user's orders
  */
-export function useUserOrders(params?: OrderListParams) {
+export function useUserOrders(
+  params?: OrderListParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: orderKeys.list(params),
     queryFn: () => orderApi.getUserOrders(params),
+    enabled: options?.enabled,
     staleTime: STALE_TIME.LONG,
   });
 }

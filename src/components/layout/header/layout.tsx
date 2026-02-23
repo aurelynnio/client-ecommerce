@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector, useAppDispatch } from "@/hooks/hooks";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -21,6 +21,7 @@ import { usePathname, useRouter } from "next/navigation";
 import NotificationModel from "@/components/notifications/NotificationModel";
 import { useUnreadNotificationCount } from "@/hooks/queries/useNotifications";
 import { toggleChat } from "@/features/chat/chatSlice";
+import { useCategoryTree } from "@/hooks/queries/useCategories";
 import { useSearchSuggestions } from "@/hooks/queries/useSearch";
 import { useCart } from "@/hooks/queries/useCart";
 import { useWishlistCount } from "@/hooks/queries/useWishlist";
@@ -36,40 +37,6 @@ import {
 import { cn } from "@/utils/cn";
 import TopBar from "./TopBar";
 
-// Category data with subcategories
-const categories = [
-  {
-    name: "Nam",
-    slug: "men",
-    subcategories: ["Áo sơ mi", "Quần", "Giày", "Phụ kiện"],
-  },
-  {
-    name: "Nữ",
-    slug: "women",
-    subcategories: ["Váy", "Áo", "Chân váy", "Túi xách"],
-  },
-  {
-    name: "Trẻ em",
-    slug: "children",
-    subcategories: ["Bé trai", "Bé gái", "Trẻ sơ sinh"],
-  },
-  {
-    name: "Phụ kiện",
-    slug: "accessories",
-    subcategories: ["Đồng hồ", "Kính râm", "Thắt lưng", "Ví"],
-  },
-];
-
-// Hot search keywords
-const HOT_KEYWORDS = [
-  "iPhone 16 Pro",
-  "Váy hè",
-  "Nike Air Max",
-  "Mỹ phẩm",
-  "Đồ ăn vặt",
-];
-const SUGGESTIONS = ["Ốp iPhone 16", "Giày nam", "Áo khoác", "Bàn phím gaming"];
-
 export default function HeaderLayout() {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -78,7 +45,10 @@ export default function HeaderLayout() {
   );
   const { data: cartQueryData } = useCart({ enabled: isAuthenticated });
   const { data: unreadCountData } = useUnreadNotificationCount();
-  const { data: wishlistCountData } = useWishlistCount();
+  const { data: wishlistCountData } = useWishlistCount({
+    enabled: isAuthenticated,
+  });
+  const { data: categoryTree = [] } = useCategoryTree();
   const unreadCount = unreadCountData || 0;
   const wishlistCount = wishlistCountData || 0;
   const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +72,45 @@ export default function HeaderLayout() {
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const path = usePathname();
+
+  const categories = useMemo(
+    () =>
+      categoryTree.slice(0, 6).map((category) => {
+        const subcategories = (
+          category.subcategories ||
+          category.children ||
+          []
+        )
+          .filter((sub) => Boolean(sub?.slug))
+          .slice(0, 6)
+          .map((sub) => ({
+            name: sub.name,
+            slug: sub.slug,
+          }));
+
+        return {
+          name: category.name,
+          slug: category.slug,
+          subcategories,
+        };
+      }),
+    [categoryTree],
+  );
+
+  const hotKeywords = useMemo(
+    () => Array.from(new Set(categories.map((item) => item.name))).slice(0, 5),
+    [categories],
+  );
+
+  const suggestions = useMemo(() => {
+    const fromSubcategories = categories.flatMap((item) =>
+      item.subcategories.map((sub) => sub.name),
+    );
+    const fromRecentSearches = recentSearches.slice(0, 4);
+    return Array.from(
+      new Set([...fromRecentSearches, ...fromSubcategories]),
+    ).slice(0, 8);
+  }, [categories, recentSearches]);
 
   // Debounced search query
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -215,13 +224,13 @@ export default function HeaderLayout() {
                             <div className="pl-4 space-y-1">
                               {category.subcategories.map((sub) => (
                                 <Link
-                                  key={sub}
+                                  key={sub.slug}
                                   href={`/products?category=${
                                     category.slug
-                                  }&subcategory=${sub.toLowerCase()}`}
+                                  }&subcategory=${sub.slug}`}
                                   className="text-sm text-muted-foreground hover:text-foreground py-1 block"
                                 >
-                                  {sub}
+                                  {sub.name}
                                 </Link>
                               ))}
                             </div>
@@ -271,7 +280,7 @@ export default function HeaderLayout() {
                         : "rounded-full",
                     )}
                   >
-                    {/* Left Category Trigger (Mock) */}
+                    {/* Left Category Trigger */}
                     <div className="hidden sm:flex items-center px-4 gap-1 cursor-pointer border-r border-gray-100 h-5 group">
                       <span className="text-xs font-medium text-gray-600 group-hover:text-[#E53935]">
                         Sản phẩm
@@ -315,23 +324,25 @@ export default function HeaderLayout() {
                     </button>
                   </form>
 
-                  {/* Hot Search Links - Always Visible */}
-                  <div className="flex items-center gap-4 mt-1.5 px-2 text-xs">
-                    {HOT_KEYWORDS.map((text, i) => (
-                      <span
-                        key={i}
-                        className={cn(
-                          "cursor-pointer hover:text-[#E53935] transition-colors",
-                          i === 0
-                            ? "text-[#E53935] font-medium"
-                            : "text-gray-500",
-                        )}
-                        onClick={() => handleSearchSubmit(undefined, text)}
-                      >
-                        {text}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Hot Search Links */}
+                  {hotKeywords.length > 0 && (
+                    <div className="flex items-center gap-4 mt-1.5 px-2 text-xs">
+                      {hotKeywords.map((text, i) => (
+                        <span
+                          key={i}
+                          className={cn(
+                            "cursor-pointer hover:text-[#E53935] transition-colors",
+                            i === 0
+                              ? "text-[#E53935] font-medium"
+                              : "text-gray-500",
+                          )}
+                          onClick={() => handleSearchSubmit(undefined, text)}
+                        >
+                          {text}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   {/* Dropdown Results */}
                   {isSearchFocused && (
@@ -531,24 +542,26 @@ export default function HeaderLayout() {
                           )}
 
                           {/* Hot / Guess You Like */}
-                          <div>
-                            <h4 className="text-xs font-bold text-gray-500 mb-2">
-                              Có thể bạn thích
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {SUGGESTIONS.map((term) => (
-                                <div
-                                  key={term}
-                                  className="px-3 py-1 bg-white border border-gray-200 hover:border-[#E53935] hover:text-[#E53935] text-xs text-gray-600 rounded-full cursor-pointer transition-colors"
-                                  onClick={() =>
-                                    handleSearchSubmit(undefined, term)
-                                  }
-                                >
-                                  {term}
-                                </div>
-                              ))}
+                          {suggestions.length > 0 && (
+                            <div>
+                              <h4 className="text-xs font-bold text-gray-500 mb-2">
+                                Có thể bạn thích
+                              </h4>
+                              <div className="flex flex-wrap gap-2">
+                                {suggestions.map((term) => (
+                                  <div
+                                    key={term}
+                                    className="px-3 py-1 bg-white border border-gray-200 hover:border-[#E53935] hover:text-[#E53935] text-xs text-gray-600 rounded-full cursor-pointer transition-colors"
+                                    onClick={() =>
+                                      handleSearchSubmit(undefined, term)
+                                    }
+                                  >
+                                    {term}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       )}
                     </div>

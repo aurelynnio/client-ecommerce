@@ -2,8 +2,8 @@
 import { Package, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useUserOrders, useCancelOrder } from "@/hooks/queries/useOrders";
 import { toast } from "sonner";
 import { Order } from "@/types/order";
@@ -24,6 +24,7 @@ type OrderStatus =
 
 export default function OrdersTab() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data, isLoading, error, refetch } = useUserOrders({ limit: 50 });
   const cancelOrderMutation = useCancelOrder();
 
@@ -32,6 +33,24 @@ export default function OrdersTab() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [cancellingOrder, setCancellingOrder] = useState<string | null>(null);
   const [activeStatus, setActiveStatus] = useState<OrderStatus>("all");
+
+  useEffect(() => {
+    const requestedStatus = searchParams.get("status") as OrderStatus | null;
+    if (
+      requestedStatus &&
+      [
+        "all",
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ].includes(requestedStatus)
+    ) {
+      setActiveStatus(requestedStatus);
+    }
+  }, [searchParams]);
 
   const handleViewOrder = (orderId: string) => {
     const order = userOrders.find((order) => order._id === orderId);

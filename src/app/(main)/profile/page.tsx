@@ -29,11 +29,20 @@ import {
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useUserOrders } from "@/hooks/queries/useOrders";
+import { useWishlistCount } from "@/hooks/queries/useWishlist";
 
 export default function ProfilePage() {
   const searchParams = useSearchParams();
   const { loading: authLoading, isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: currentUser, isLoading } = useProfile();
+  const { data: ordersData } = useUserOrders(
+    { page: 1, limit: 50 },
+    { enabled: isAuthenticated },
+  );
+  const { data: wishlistCount = 0 } = useWishlistCount({
+    enabled: isAuthenticated,
+  });
   const logoutMutation = useLogout();
 
   const router = useRouter();
@@ -45,6 +54,11 @@ export default function ProfilePage() {
       : "profile";
 
   const [open, setOpen] = useState(false);
+  const totalOrders =
+    ordersData?.pagination?.totalItems || ordersData?.orders?.length || 0;
+  const pendingOrders =
+    ordersData?.orders?.filter((order) => order.status === "pending").length || 0;
+  const followingCount = currentUser?.followingShops?.length || 0;
 
   const handleTabChange = (value: string) => {
     router.push(`/profile?tab=${value}`);
@@ -95,9 +109,9 @@ export default function ProfilePage() {
 
   // Quick stats for user card
   const quickStats = [
-    { label: "Đơn hàng", value: "12", icon: Package },
-    { label: "Yêu thích", value: "28", icon: Heart },
-    { label: "Xu", value: "1,500", icon: Gift },
+    { label: "Đơn hàng", value: totalOrders.toString(), icon: Package },
+    { label: "Yêu thích", value: wishlistCount.toString(), icon: Heart },
+    { label: "Đang theo dõi", value: followingCount.toString(), icon: Gift },
   ];
 
   if (!isAuthenticated && !authLoading) {
@@ -237,10 +251,10 @@ export default function ProfilePage() {
             <div className="bg-linear-to-br from-primary/90 to-primary rounded-md p-4 text-white">
               <div className="flex items-center gap-2 mb-3">
                 <Wallet className="h-5 w-5 opacity-90" />
-                <span className="font-medium text-sm">Ví của tôi</span>
+                <span className="font-medium text-sm">Đơn hàng chờ xử lý</span>
               </div>
-              <p className="text-2xl font-bold">₫0</p>
-              <p className="text-xs text-white/60 mt-1">Số dư khả dụng</p>
+              <p className="text-2xl font-bold">{pendingOrders}</p>
+              <p className="text-xs text-white/60 mt-1">Cần theo dõi sớm</p>
             </div>
           </div>
 

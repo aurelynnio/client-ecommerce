@@ -31,7 +31,7 @@ const CountdownTimer = memo(function CountdownTimer({
 
 const TimeBox = memo(function TimeBox({ value }: { value: number }) {
   return (
-    <span className="bg-[#E53935] text-white text-xs font-bold px-1.5 py-0.5 rounded min-w-[24px] text-center">
+    <span className="bg-[#E53935] text-white text-xs font-bold px-1.5 py-0.5 rounded min-w-6 text-center">
       {value.toString().padStart(2, "0")}
     </span>
   );
@@ -46,7 +46,7 @@ const SoldProgress = memo(function SoldProgress({
   return (
     <div className="relative h-4 bg-[#FFCDD2] rounded-full overflow-hidden">
       <div
-        className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#FF5722] to-[#E53935] rounded-full transition-all duration-300"
+        className="absolute inset-y-0 left-0 bg-linear-to-r from-[#FF5722] to-[#E53935] rounded-full transition-all duration-300"
         style={{ width: `${Math.min(percent, 100)}%` }}
       />
       <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white">
@@ -69,7 +69,7 @@ const FlashSaleCard = memo(function FlashSaleCard({
   return (
     <Link
       href={`/products/${product.slug || product._id}`}
-      className="flex-shrink-0 w-[140px] sm:w-[160px] bg-white rounded-lg overflow-hidden border border-transparent hover:border-[#FFCDD2] transition-all group"
+      className="shrink-0 w-[140px] sm:w-40 bg-white rounded-lg overflow-hidden border border-transparent hover:border-[#FFCDD2] transition-all group"
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-50">
@@ -124,7 +124,7 @@ export const FlashSaleSection = memo(function FlashSaleSection() {
   }
 
   return (
-    <section className="bg-gradient-to-r from-[#FFEBEE] to-[#FCE4EC] rounded-lg p-4 mb-6">
+    <section className="bg-linear-to-r from-[#FFEBEE] to-[#FCE4EC] rounded-lg p-4 mb-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">

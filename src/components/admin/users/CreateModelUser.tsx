@@ -279,7 +279,7 @@ export function CreateModelUser({
                     Role <Badge variant="outline">{formData.roles}</Badge> đã có {defaultRolePerms.length} quyền mặc định.
                     Chọn thêm quyền bổ sung bên dưới:
                   </p>
-                  {Object.values(RESOURCES).slice(0, 8).map((resource) => (
+                  {Object.values(RESOURCES).map((resource) => (
                     <div key={resource} className="space-y-1">
                       <div className="flex items-center gap-2">
                         <Checkbox

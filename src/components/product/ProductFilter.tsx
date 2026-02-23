@@ -13,28 +13,39 @@ interface ProductFilterProps {
   filters: ProductFilters;
   onFilterChange: (filters: Partial<ProductFilters>) => void;
   onClearFilters: () => void;
+  availableColors?: string[];
+  availableSizes?: string[];
   isMobileOpen?: boolean;
   onMobileClose?: () => void;
 }
 
-// Màu sắc với tên tiếng Việt
-const COLORS = [
-  { name: "Đen", value: "black", hex: "#000000" },
-  { name: "Trắng", value: "white", hex: "#FFFFFF" },
-  { name: "Xám", value: "gray", hex: "#6B7280" },
-  { name: "Xanh Navy", value: "navy", hex: "#1E3A8A" },
-  { name: "Be", value: "beige", hex: "#E5E0D6" },
-  { name: "Nâu", value: "brown", hex: "#92400E" },
-  { name: "Xanh lá", value: "green", hex: "#065F46" },
-  { name: "Xanh dương", value: "blue", hex: "#1E40AF" },
-];
+const COLOR_HEX_MAP: Record<string, string> = {
+  black: "#000000",
+  white: "#FFFFFF",
+  gray: "#6B7280",
+  navy: "#1E3A8A",
+  beige: "#E5E0D6",
+  brown: "#92400E",
+  green: "#065F46",
+  blue: "#1E40AF",
+  red: "#DC2626",
+  yellow: "#F59E0B",
+  purple: "#7C3AED",
+  pink: "#EC4899",
+  orange: "#F97316",
+};
 
-const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
+const getColorHex = (color: string) => {
+  const normalized = color.trim().toLowerCase();
+  return COLOR_HEX_MAP[normalized] || "#9CA3AF";
+};
 
 export default function ProductFilter({
   filters,
   onFilterChange,
   onClearFilters,
+  availableColors = [],
+  availableSizes = [],
   isMobileOpen = false,
   onMobileClose,
 }: ProductFilterProps) {
@@ -111,6 +122,14 @@ export default function ProductFilter({
     color: true,
     size: true,
   });
+
+  const colorOptions = Array.from(
+    new Set([...availableColors, ...filters.colors].map((color) => color.trim()).filter(Boolean)),
+  ).slice(0, 20);
+
+  const sizeOptions = Array.from(
+    new Set([...availableSizes, ...filters.sizes].map((size) => size.trim()).filter(Boolean)),
+  ).slice(0, 20);
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -271,34 +290,39 @@ export default function ProductFilter({
         </button>
         {expandedSections.color && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {COLORS.map((color) => (
-              <button
-                key={color.value}
-                type="button"
-                onClick={() => handleColorChange(color.value)}
-                className={`
+            {colorOptions.length > 0 ? (
+              colorOptions.map((colorValue) => (
+                <button
+                  key={colorValue}
+                  type="button"
+                  onClick={() => handleColorChange(colorValue)}
+                  className={`
                   relative h-7 w-7 rounded transition-all duration-200 flex items-center justify-center
                   ${
-                    filters.colors.includes(color.value)
+                    filters.colors.includes(colorValue)
                       ? "ring-2 ring-[#E53935] ring-offset-1"
                       : "hover:scale-110"
                   }
                 `}
-                style={{ backgroundColor: color.hex }}
-                title={color.name}
-              >
-                {filters.colors.includes(color.value) && (
-                  <Check
-                    className={`h-3 w-3 ${
-                      color.value === "white" || color.value === "beige"
-                        ? "text-gray-800"
-                        : "text-white"
-                    }`}
-                    strokeWidth={3}
-                  />
-                )}
-              </button>
-            ))}
+                  style={{ backgroundColor: getColorHex(colorValue) }}
+                  title={colorValue}
+                >
+                  {filters.colors.includes(colorValue) && (
+                    <Check
+                      className={`h-3 w-3 ${
+                        getColorHex(colorValue) === "#FFFFFF" ||
+                        getColorHex(colorValue) === "#E5E0D6"
+                          ? "text-gray-800"
+                          : "text-white"
+                      }`}
+                      strokeWidth={3}
+                    />
+                  )}
+                </button>
+              ))
+            ) : (
+              <span className="text-xs text-gray-500">Không có tùy chọn màu</span>
+            )}
           </div>
         )}
       </div>
@@ -318,7 +342,8 @@ export default function ProductFilter({
         </button>
         {expandedSections.size && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {SIZES.map((size) => (
+            {sizeOptions.length > 0 ? (
+              sizeOptions.map((size) => (
               <Button
                 key={size}
                 type="button"
@@ -336,7 +361,10 @@ export default function ProductFilter({
               >
                 {size}
               </Button>
-            ))}
+              ))
+            ) : (
+              <span className="text-xs text-gray-500">Không có tùy chọn size</span>
+            )}
           </div>
         )}
       </div>

@@ -40,20 +40,7 @@ const FooterSection = ({
 
 export default function FooterLayout() {
   const path = usePathname();
-  const adminPaths = [
-    "/admin",
-    "/admin/products",
-    "/admin/orders",
-    "/admin/users",
-    "/admin/notifications",
-    "/admin/categories",
-    "/admin/discounts",
-    "/admin/settings",
-    "/admin/dashboard",
-    "/admin/banners",
-  ];
-
-  if (adminPaths.includes(path)) return null;
+  if (path.startsWith("/admin")) return null;
 
   return (
     <footer className="w-full bg-[#FAFAFC] border-t border-border/40">

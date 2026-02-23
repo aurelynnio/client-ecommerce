@@ -19,7 +19,7 @@ export default function FlashSalePage() {
           isChatOpen ? "max-w-full" : "container max-w-[1400px]",
         )}
       >
-        <div className="flex items-center gap-3 mb-8 bg-gradient-to-r from-[#E53935] to-[#FF5722] p-6 rounded-2xl text-white shadow-lg">
+        <div className="flex items-center gap-3 mb-8 bg-linear-to-r from-[#E53935] to-[#FF5722] p-6 rounded-2xl text-white shadow-lg">
           <Zap className="h-10 w-10 fill-current" />
           <div>
             <h1 className="text-3xl font-bold">FLASH SALE</h1>

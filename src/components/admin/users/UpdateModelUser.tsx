@@ -228,7 +228,6 @@ export function UpdateModelUser({
                       <SelectContent className="rounded-xl border-border/50 shadow-lg">
                         <SelectItem value="user">Người dùng</SelectItem>
                         <SelectItem value="admin">Quản trị viên</SelectItem>
-                        <SelectItem value="moderator">Điều hành viên</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -270,7 +269,7 @@ export function UpdateModelUser({
                     </div>
 
                     <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
-                      {Object.values(RESOURCES).slice(0, 8).map((resource) => (
+                      {Object.values(RESOURCES).map((resource) => (
                         <div key={resource} className="p-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-border/50">
                           <div className="flex items-center gap-2 mb-2">
                             <Checkbox

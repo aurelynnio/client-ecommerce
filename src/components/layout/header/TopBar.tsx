@@ -33,7 +33,7 @@ const TopBarLink = ({ href, icon, children, className }: TopBarLinkProps) => (
     href={href}
     className={cn(
       "flex items-center gap-1 text-[11px] text-gray-600 hover:text-[#E53935] transition-colors duration-200",
-      className
+      className,
     )}
   >
     {icon}
@@ -46,9 +46,7 @@ const Divider = () => (
 );
 
 export default function TopBar() {
-  const { isAuthenticated, data } = useAppSelector(
-    (state) => state.auth
-  );
+  const { isAuthenticated, data } = useAppSelector((state) => state.auth);
   const { data: myShop } = useMyShop({ enabled: isAuthenticated });
 
   // Check if user has seller or admin role (can have a shop)
@@ -157,7 +155,7 @@ export default function TopBar() {
           {isAuthenticated && (
             <>
               <TopBarLink
-                href="/profile/orders"
+                href="/profile?tab=orders"
                 icon={<User className="h-3 w-3" />}
               >
                 Đơn hàng

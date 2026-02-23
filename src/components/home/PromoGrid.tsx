@@ -1,48 +1,78 @@
 "use client";
-import Image from "next/image";
+import { useMemo } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-
-const promoItems = [
-  {
-    id: 1,
-    title: "Mã giảm giá",
-    subtitle: "Giảm đến 50%",
-    image:
-      "https://images.unsplash.com/photo-1696446701796-da61225697cc?w=200&h=200&fit=crop",
-    bgColor: "from-rose-500 to-pink-500",
-    href: "/vouchers",
-  },
-  {
-    id: 2,
-    title: "Hàng mới về",
-    subtitle: "Cập nhật mỗi ngày",
-    image:
-      "https://images.unsplash.com/photo-1505797149-43b007662c21?w=200&h=200&fit=crop",
-    bgColor: "from-blue-500 to-cyan-500",
-    href: "/new-arrivals",
-  },
-  {
-    id: 3,
-    title: "Freeship",
-    subtitle: "Đơn từ 0đ",
-    image:
-      "https://images.unsplash.com/photo-1627384113743-6bd5a479fffd?w=200&h=200&fit=crop",
-    bgColor: "from-emerald-500 to-teal-500",
-    href: "/free-shipping",
-  },
-  {
-    id: 4,
-    title: "Giá sốc",
-    subtitle: "Giá tốt mỗi giờ",
-    image:
-      "https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=200&h=200&fit=crop",
-    bgColor: "from-amber-500 to-orange-500",
-    href: "/flash-sale",
-  },
-];
+import {
+  ArrowRight,
+  Sparkles,
+  TicketPercent,
+  Truck,
+  Zap,
+} from "lucide-react";
+import { useVouchers } from "@/hooks/queries/useVoucher";
+import { useActiveFlashSale } from "@/hooks/queries/useFlashSale";
+import { useNewArrivals } from "@/hooks/queries/useProducts";
 
 export default function PromoGrid() {
+  const { data: vouchersData } = useVouchers({ page: 1, limit: 1 });
+  const { data: flashSaleData } = useActiveFlashSale({ page: 1, limit: 1 });
+  const { data: newArrivals } = useNewArrivals();
+
+  const voucherPagination = vouchersData?.pagination as
+    | { total?: number; totalItems?: number }
+    | undefined;
+  const voucherCount =
+    voucherPagination?.totalItems || voucherPagination?.total || 0;
+  const flashSaleCount =
+    flashSaleData?.pagination?.totalItems || flashSaleData?.data?.length || 0;
+  const newArrivalsCount = newArrivals?.length || 0;
+
+  const promoItems = useMemo(
+    () => [
+      {
+        id: 1,
+        title: "Mã giảm giá",
+        subtitle:
+          voucherCount > 0
+            ? `${voucherCount} mã đang hoạt động`
+            : "Xem ưu đãi mới nhất",
+        icon: TicketPercent,
+        iconClass: "bg-rose-50 text-rose-600",
+        href: "/vouchers",
+      },
+      {
+        id: 2,
+        title: "Hàng mới về",
+        subtitle:
+          newArrivalsCount > 0
+            ? `${newArrivalsCount} sản phẩm mới`
+            : "Cập nhật mỗi ngày",
+        icon: Sparkles,
+        iconClass: "bg-blue-50 text-blue-600",
+        href: "/new-arrivals",
+      },
+      {
+        id: 3,
+        title: "Vận chuyển",
+        subtitle: "Xem chính sách giao hàng",
+        icon: Truck,
+        iconClass: "bg-emerald-50 text-emerald-600",
+        href: "/shipping",
+      },
+      {
+        id: 4,
+        title: "Giá sốc",
+        subtitle:
+          flashSaleCount > 0
+            ? `${flashSaleCount} sản phẩm đang sale`
+            : "Giá tốt theo khung giờ",
+        icon: Zap,
+        iconClass: "bg-amber-50 text-amber-600",
+        href: "/flash-sale",
+      },
+    ],
+    [flashSaleCount, newArrivalsCount, voucherCount],
+  );
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 h-full">
       {promoItems.map((item) => (
@@ -62,17 +92,11 @@ export default function PromoGrid() {
             </span>
           </div>
 
-          {/* Image */}
-          <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-gray-100">
-            <Image
-              src={item.image}
-              alt={item.title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
-            />
+          <div
+            className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center ${item.iconClass}`}
+          >
+            <item.icon className="w-5 h-5" />
           </div>
-
-          {/* Decorative gradient corner - removed for flat design */}
         </Link>
       ))}
     </div>

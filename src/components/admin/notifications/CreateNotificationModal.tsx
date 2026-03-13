@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 
+import { NotificationType } from "@/types/notification";
+
 export interface CreateNotificationForm {
   title: string;
   message: string;
-  type: string;
+  type: NotificationType;
   link: string;
-  userId: string;
+  recipient: string;
 }
 
 interface CreateNotificationModalProps {
@@ -44,9 +46,9 @@ export function CreateNotificationModal({
   const [formData, setFormData] = useState<CreateNotificationForm>({
     title: "",
     message: "",
-    type: "SYSTEM",
+    type: "system",
     link: "",
-    userId: "",
+    recipient: "",
   });
 
   const handleChange = (field: keyof CreateNotificationForm, value: string) => {
@@ -60,13 +62,13 @@ export function CreateNotificationModal({
 
   const handleOpenChangeWrapper = (open: boolean) => {
     if (!open) {
-      setFormData({
-        title: "",
-        message: "",
-        type: "SYSTEM",
-        link: "",
-        userId: "",
-      });
+        setFormData({
+          title: "",
+          message: "",
+          type: "system",
+          link: "",
+          recipient: "",
+        });
     }
     onOpenChange(open);
   };
@@ -104,10 +106,11 @@ export function CreateNotificationModal({
                 <SelectValue placeholder="Chọn loại" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border-border/50">
-                <SelectItem value="SYSTEM">Hệ thống</SelectItem>
-                <SelectItem value="ORDER">Đơn hàng</SelectItem>
-                <SelectItem value="USER">Người dùng</SelectItem>
-                <SelectItem value="PROMOTION">Khuyến mãi</SelectItem>
+                <SelectItem value="system">Hệ thống</SelectItem>
+                <SelectItem value="order_status">Đơn hàng</SelectItem>
+                <SelectItem value="chat">Trò chuyện</SelectItem>
+                <SelectItem value="shop_follow">Theo dõi shop</SelectItem>
+                <SelectItem value="promotion">Khuyến mãi</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -126,11 +129,11 @@ export function CreateNotificationModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-                <Label htmlFor="userId" className="text-sm font-medium">ID Người dùng (Tùy chọn)</Label>
+                <Label htmlFor="recipient" className="text-sm font-medium">ID Người dùng (Tùy chọn)</Label>
                 <Input
-                id="userId"
-                value={formData.userId}
-                onChange={(e) => handleChange("userId", e.target.value)}
+                id="recipient"
+                value={formData.recipient}
+                onChange={(e) => handleChange("recipient", e.target.value)}
                 placeholder="Nhập ID người dùng cụ thể"
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
                 />

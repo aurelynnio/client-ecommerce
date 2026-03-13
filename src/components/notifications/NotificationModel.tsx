@@ -6,6 +6,7 @@ import {
   useNotifications,
   useMarkAllNotificationsAsRead,
   useClearAllNotifications,
+  useUnreadNotificationCount,
 } from "@/hooks/queries/useNotifications";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import NotificationItem from "./NotificationItem";
@@ -20,11 +21,12 @@ export default function NotificationModel({
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const { data, isLoading } = useNotifications({ page: 1, limit: 10 });
+  const { data: unreadCountData } = useUnreadNotificationCount();
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
   const clearAllMutation = useClearAllNotifications();
 
   const notifications = data?.notifications || [];
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const unreadCount = unreadCountData ?? data?.unreadCount ?? 0;
 
   useEffect(() => {
     if (isOpen) {

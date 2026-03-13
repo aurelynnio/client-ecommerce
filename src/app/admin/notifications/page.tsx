@@ -76,11 +76,11 @@ export default function AdminNotificationsPage() {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "ORDER":
+      case "order_status":
         return <AlertCircle className="h-5 w-5 text-blue-500" />;
-      case "SYSTEM":
+      case "system":
         return <Bell className="h-5 w-5 text-orange-500" />;
-      case "USER":
+      case "promotion":
         return <CheckCircle2 className="h-5 w-5 text-green-500" />;
       default:
         return <Bell className="h-5 w-5 text-gray-500" />;
@@ -117,7 +117,7 @@ export default function AdminNotificationsPage() {
                   )}
                 >
                   <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f7f7f7]">
-                    {getIcon(notification.type || "SYSTEM")}
+                    {getIcon(notification.type || "system")}
                   </div>
 
                   <div className="flex-1 space-y-1">

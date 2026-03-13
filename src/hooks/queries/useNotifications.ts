@@ -13,7 +13,7 @@ import { extractApiData } from "@/api";
 import { errorHandler } from "@/services/errorHandler";
 import { STALE_TIME, REFETCH_INTERVAL } from "@/constants/cache";
 import { notificationKeys } from "@/lib/queryKeys";
-import { Notification } from "@/types/notification";
+import { Notification, NotificationType } from "@/types/notification";
 import { PaginationData } from "@/types/common";
 
 // ============ Types ============
@@ -33,8 +33,8 @@ export interface NotificationListResponse {
 export interface CreateNotificationData {
   title: string;
   message: string;
-  type?: string;
-  userId?: string;
+  type?: NotificationType;
+  recipient?: string;
   link?: string;
   orderId?: string;
 }
@@ -87,17 +87,19 @@ const notificationApi = {
     await instance.patch("/notifications/read-all", {});
   },
 
-  delete: async (notificationId: string): Promise<void> => {
-    await instance.delete(`/notifications/${notificationId}`);
-  },
-
   clearAll: async (): Promise<void> => {
     await instance.delete("/notifications");
   },
 
   // Admin: Create notification
   create: async (data: CreateNotificationData): Promise<Notification> => {
-    const response = await instance.post("/notifications", data);
+    const payload = {
+      ...data,
+      recipient: data.recipient?.trim() || undefined,
+      link: data.link?.trim() || undefined,
+      orderId: data.orderId?.trim() || undefined,
+    };
+    const response = await instance.post("/notifications", payload);
     return extractApiData(response);
   },
 };
@@ -167,15 +169,11 @@ export function useMarkAllNotificationsAsRead() {
  * Delete notification
  */
 export function useDeleteNotification() {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: notificationApi.delete,
-    onSuccess: () => {
-      invalidateNotificationQueries(queryClient);
-    },
-    onError: (error) => {
-      errorHandler.log(error, { context: "Delete notification failed" });
+    mutationFn: async () => {
+      throw new Error(
+        "Deleting a single notification is not supported by the current backend API."
+      );
     },
   });
 }

@@ -29,7 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Save, Upload, Trash2 } from "lucide-react";
+import { Save, Upload, Trash2 } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import Image from "next/image";
 import { BannerItem, UpdateBannerPayload } from "@/types/banner";
 
@@ -338,7 +339,7 @@ export function EditBannerModal({
                 className="flex-1 rounded-xl h-11 bg-black text-white hover:bg-black/90 dark:bg-[#0071e3] shadow-sm"
               >
                 {isLoading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}

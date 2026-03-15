@@ -3,6 +3,7 @@ import { useUploadAvatar } from "@/hooks/queries/useProfile";
 import { useState } from "react";
 import Image from "next/image";
 import { Plus, User, Mail, MapPin, Check } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -58,7 +59,7 @@ export default function ProfileTab({ user }: ProfileTabProps) {
             disabled={isUploadingAvatar}
           >
             {isUploadingAvatar ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              <SpinnerLoading noWrapper size={16} className="text-white" />
             ) : (
               <Plus className="h-4 w-4" />
             )}

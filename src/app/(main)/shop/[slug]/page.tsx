@@ -13,7 +13,6 @@ import {
   Search,
   Grid3X3,
   List,
-  Loader2,
 } from "lucide-react";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Button } from "@/components/ui/button";
@@ -383,7 +382,7 @@ export default function ShopPage() {
             >
               {isFetchingNextPage && (
                 <div className="flex flex-col items-center gap-2">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <SpinnerLoading noWrapper size={32} className="text-primary" />
                   <span className="text-sm text-muted-foreground">
                     Đang tải thêm sản phẩm...
                   </span>

@@ -9,7 +9,6 @@ import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { ProductCard } from "@/components/product/ProductCard";
 import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
-import { Loader2 } from "lucide-react";
 import { getSafeErrorMessage } from "@/api";
 
 interface HomeProductListProps {
@@ -153,7 +152,7 @@ export default function HomeProductList({
         >
           {isFetchingNextPage && (
             <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <SpinnerLoading noWrapper size={32} className="text-primary" />
               <span className="text-sm text-muted-foreground">
                 Đang tải thêm sản phẩm...
               </span>

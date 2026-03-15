@@ -1,11 +1,11 @@
-node_modules
+node*modules
 .next
 .git
 .gitignore
 *.md
-.env*
+.env\_
 .vscode
 tests
-__tests__
+**tests**
 vitest.config.js
 jest.config.js

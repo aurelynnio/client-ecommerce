@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 
 import { NotificationType } from "@/types/notification";
 
@@ -161,7 +161,9 @@ export function CreateNotificationModal({
               Hủy
             </Button>
             <Button type="submit" disabled={isLoading} className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]">
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading && (
+                <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
+              )}
               Gửi thông báo
             </Button>
           </DialogFooter>

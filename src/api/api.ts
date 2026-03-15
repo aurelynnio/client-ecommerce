@@ -5,8 +5,6 @@ import type { Store } from "@reduxjs/toolkit";
 // Type for the Redux store
 type AppStore = Store;
 
-
-
 // Type for queued promise handlers
 interface QueuedPromise {
   resolve: (value?: unknown) => void;
@@ -55,7 +53,7 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor to handle token expiration
@@ -126,7 +124,7 @@ instance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default instance;

@@ -20,7 +20,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useLayoutEffect, useEffect } from "react";
-import { User as UserIcon, Mail, Shield, Key, CheckCircle, Loader2 } from "lucide-react";
+import { User as UserIcon, Mail, Shield, Key, CheckCircle } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { User, UpdateUserData, UserRole } from "@/types/user";
 import { RESOURCES, ACTIONS } from "@/constants/permissions";
 import { getRolePermissions, getUserPermissions } from "@/api/permission";
@@ -257,7 +258,7 @@ export function UpdateModelUser({
               <TabsContent value="permissions" className="p-6 pt-4 space-y-4">
                 {loadingPerms ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    <SpinnerLoading noWrapper size={24} className="text-muted-foreground" />
                   </div>
                 ) : (
                   <>
@@ -327,7 +328,7 @@ export function UpdateModelUser({
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <SpinnerLoading noWrapper size={16} />
                   Đang cập nhật...
                 </>
               ) : (

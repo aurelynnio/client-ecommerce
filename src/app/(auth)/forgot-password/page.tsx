@@ -26,7 +26,6 @@ export default function ForgotPasswordPage() {
   const router = useRouter();
   const forgotPasswordMutation = useForgotPassword();
   const isLoading = forgotPasswordMutation.isPending;
-
   const {
     register,
     handleSubmit,

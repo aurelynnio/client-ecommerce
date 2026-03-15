@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Loader2 } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 // Updated: Import from voucher types with backward compatibility alias
 import { CreateVoucherData } from "@/types/voucher";
 
@@ -270,7 +270,9 @@ export function CreateModelDiscount({
               disabled={isLoading}
               className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]"
             >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading && (
+                <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
+              )}
               Tạo mã giảm giá
             </Button>
           </DialogFooter>

@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 // Updated: Import from voucher types with backward compatibility aliases
 import { UpdateVoucherData, Voucher } from "@/types/voucher";
-import { Loader2 } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 
 interface UpdateModelDiscountProps {
   open: boolean;
@@ -257,7 +257,9 @@ export function UpdateModelDiscount({
               disabled={isLoading}
               className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]"
             >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading && (
+                <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
+              )}
               Cập nhật
             </Button>
           </DialogFooter>

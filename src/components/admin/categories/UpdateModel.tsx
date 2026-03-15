@@ -26,7 +26,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Save, X } from "lucide-react";
+import { Save, X } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Category } from "@/types/category";
 
 // Define Zod validation schema với giá trị mặc định rõ ràng
@@ -271,7 +272,7 @@ export function EditCategoryModal({
                 className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]"
               >
                 {isLoading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}

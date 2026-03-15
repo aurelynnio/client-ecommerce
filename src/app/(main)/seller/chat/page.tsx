@@ -12,8 +12,8 @@ import {
   Smile,
   Paperclip,
   ImageIcon,
-  Loader2,
 } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMyShop } from "@/hooks/queries";
@@ -140,7 +140,7 @@ export default function SellerChatPage() {
           <div className="flex-1 overflow-y-auto">
             {isLoadingConversations ? (
               <div className="flex items-center justify-center h-32">
-                <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+                <SpinnerLoading noWrapper size={24} className="text-blue-600" />
               </div>
             ) : filteredConversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-400 p-6">
@@ -244,7 +244,7 @@ export default function SellerChatPage() {
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {isLoadingMessages ? (
                   <div className="flex items-center justify-center h-full">
-                    <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+                    <SpinnerLoading noWrapper size={24} className="text-blue-600" />
                   </div>
                 ) : messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -322,7 +322,7 @@ export default function SellerChatPage() {
                     className="bg-primary hover:bg-primary/90 rounded-xl h-11 px-4"
                   >
                     {isSending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <SpinnerLoading noWrapper size={16} className="text-white" />
                     ) : (
                       <Send className="h-4 w-4" />
                     )}

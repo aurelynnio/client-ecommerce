@@ -26,13 +26,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
-  Loader2,
   Plus,
   Folder,
   ChevronDown,
   Upload,
   Trash2,
 } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Category } from "@/types/category";
 import Image from "next/image";
 
@@ -500,7 +500,7 @@ export function CreateCategoryModal({
                 className="flex-1 rounded-xl h-11 bg-black text-white hover:bg-black/90 dark:bg-[#0071e3] shadow-sm"
               >
                 {isLoading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
                 ) : (
                   <Plus className="h-4 w-4 mr-2" />
                 )}

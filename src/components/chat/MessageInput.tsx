@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Send, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Send, Image as ImageIcon } from "lucide-react";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -58,7 +59,7 @@ export default function MessageInput({ conversationId }: MessageInputProps) {
           className="bg-[#E53935] hover:bg-[#D32F2F]"
         >
           {isSending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <SpinnerLoading noWrapper size={16} className="text-white" />
           ) : (
             <Send className="h-4 w-4" />
           )}

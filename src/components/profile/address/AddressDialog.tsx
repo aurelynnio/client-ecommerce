@@ -210,9 +210,11 @@ export default function AddressDialog({
           } else {
             toast.error("Không tìm thấy thông tin địa chỉ cho vị trí này");
           }
-        } catch (error) {
+        } catch (error: unknown) {
           console.error("Error fetching address:", error);
-          toast.error("Không thể lấy địa chỉ từ vị trí hiện tại");
+          toast.error(
+            getSafeErrorMessage(error, "Không thể lấy địa chỉ từ vị trí hiện tại"),
+          );
         } finally {
           setIsGettingLocation(false);
         }

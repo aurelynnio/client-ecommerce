@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Address, ProfileTabProps } from "@/types/address";
+import { getSafeErrorMessage } from "@/api";
 
 export default function ProfileTab({ user }: ProfileTabProps) {
   const uploadAvatarMutation = useUploadAvatar();
@@ -28,8 +29,8 @@ export default function ProfileTab({ user }: ProfileTabProps) {
       try {
         await uploadAvatarMutation.mutateAsync(formData);
         toast.success("Cập nhật ảnh đại diện thành công");
-      } catch {
-        toast.error("Cập nhật ảnh đại diện thất bại");
+      } catch (error: unknown) {
+        toast.error(getSafeErrorMessage(error, "Cập nhật ảnh đại diện thất bại"));
       } finally {
         setIsUploadingAvatar(false);
       }

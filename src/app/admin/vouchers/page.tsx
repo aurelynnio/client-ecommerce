@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import {
-  useVouchers,
+  useAdminVouchers,
   useVoucherStatistics,
   useCreateVoucher,
   useUpdateVoucher,
@@ -23,8 +23,15 @@ import {
 } from "@/types/voucher";
 import { toast } from "sonner";
 import { PaginationControls } from "@/components/common/Pagination";
+import { getSafeErrorMessage } from "@/api";
+import { useAppSelector } from "@/hooks/hooks";
 
 export default function VouchersPage() {
+  const { isAuthenticated, data: currentUser } = useAppSelector(
+    (state) => state.auth
+  );
+  const canFetchAdminData =
+    isAuthenticated && currentUser?.roles === "admin";
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
@@ -63,8 +70,12 @@ export default function VouchersPage() {
   ]);
 
 
-  const { data: vouchersData, isLoading } = useVouchers(queryParams);
-  const { data: statistics } = useVoucherStatistics();
+  const { data: vouchersData, isLoading } = useAdminVouchers(queryParams, {
+    enabled: canFetchAdminData,
+  });
+  const { data: statistics } = useVoucherStatistics({
+    enabled: canFetchAdminData,
+  });
   const createMutation = useCreateVoucher();
   const updateMutation = useUpdateVoucher();
   const deleteMutation = useDeleteVoucher();
@@ -96,8 +107,8 @@ export default function VouchersPage() {
       await createMutation.mutateAsync(data);
       toast.success("Voucher created successfully");
       setIsCreateOpen(false);
-    } catch {
-      toast.error("Failed to create voucher");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to create voucher"));
     }
   };
 
@@ -108,8 +119,8 @@ export default function VouchersPage() {
       toast.success("Voucher updated successfully");
       setIsUpdateOpen(false);
       setSelectedVoucher(null);
-    } catch {
-      toast.error("Failed to update voucher");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to update voucher"));
     }
   };
 
@@ -119,8 +130,8 @@ export default function VouchersPage() {
     try {
       await deleteMutation.mutateAsync(voucher._id);
       toast.success("Voucher deleted successfully");
-    } catch {
-      toast.error("Failed to delete voucher");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to delete voucher"));
     }
   };
 

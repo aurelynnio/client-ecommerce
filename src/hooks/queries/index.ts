@@ -271,7 +271,9 @@ export {
 
 // Voucher queries
 export {
-  useVouchers,
+  useAdminVouchers,
+  usePlatformVouchers,
+  useShopVouchers,
   useVoucher,
   useAvailableVouchers,
   useVoucherStatistics,

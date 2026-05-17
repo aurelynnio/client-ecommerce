@@ -2,7 +2,14 @@ import { useEffect, useRef } from "react";
 import { useAppDispatch } from "@/hooks/hooks";
 import { authSlice } from "@/features/auth/authSlice";
 import { useQueryClient } from "@tanstack/react-query";
-import { userKeys } from "@/lib/queryKeys";
+import {
+  cartKeys,
+  notificationKeys,
+  orderKeys,
+  shopKeys,
+  userKeys,
+  wishlistKeys,
+} from "@/lib/queryKeys";
 import instance from "@/api/api";
 
 export const useAuthPersistence = () => {
@@ -29,8 +36,13 @@ export const useAuthPersistence = () => {
         }
       } catch {
         // If 401/403 or network error, assume not authenticated via cookies
-        dispatch(authSlice.actions.setIsAuthenticated(false));
-        // We don't check localStorage anymore
+        dispatch(authSlice.actions.clearAuth());
+        queryClient.removeQueries({ queryKey: userKeys.all });
+        queryClient.removeQueries({ queryKey: cartKeys.all });
+        queryClient.removeQueries({ queryKey: wishlistKeys.all });
+        queryClient.removeQueries({ queryKey: notificationKeys.all });
+        queryClient.removeQueries({ queryKey: orderKeys.all });
+        queryClient.removeQueries({ queryKey: shopKeys.myShop() });
       }
     };
 

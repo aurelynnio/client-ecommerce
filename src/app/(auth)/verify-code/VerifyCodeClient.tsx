@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { getSafeErrorMessage } from "@/api";
 
 type VerifyCodeClientProps = {
   initialEmail?: string | null;
@@ -59,8 +60,8 @@ export default function VerifyCodeClient({
         await verifyCodeMutation.mutateAsync({ email, code });
         toast.success("Xác thực email thành công!");
         router.replace("/login");
-      } catch {
-        toast.error("Xác thực email thất bại");
+      } catch (error: unknown) {
+        toast.error(getSafeErrorMessage(error, "Xác thực email thất bại"));
       }
     },
     [canVerify, email, router, verifyCodeMutation],

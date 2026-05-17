@@ -22,6 +22,7 @@ import {
 } from "@/hooks/queries";
 import { ShippingTemplate, ShippingRule, CreateShippingTemplatePayload } from "@/types/shipping";
 import { formatCurrency } from "@/utils/format";
+import { getSafeErrorMessage } from "@/api";
 
 export default function SellerShippingPage() {
   const { data: templates = [], isLoading } = useMyShippingTemplates();
@@ -90,8 +91,8 @@ export default function SellerShippingPage() {
         toast.success("Tạo template thành công!");
       }
       resetForm();
-    } catch {
-      toast.error("Thao tác thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Thao tác thất bại"));
     }
   };
 
@@ -116,8 +117,8 @@ export default function SellerShippingPage() {
     try {
       await deleteTemplateMutation.mutateAsync(id);
       toast.success("Xóa template thành công!");
-    } catch {
-      toast.error("Xóa template thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Xóa template thất bại"));
     }
   };
 

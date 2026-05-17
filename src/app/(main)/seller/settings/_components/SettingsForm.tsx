@@ -14,6 +14,7 @@ import {
   useUploadShopBanner,
 } from "@/hooks/queries/useShop";
 import { UpdateShopPayload, Shop } from "@/types/shop";
+import { getSafeErrorMessage } from "@/api";
 
 interface SettingsFormProps {
   myShop: Shop;
@@ -47,8 +48,8 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
     try {
       await updateShopMutation.mutateAsync(formData);
       toast.success("Cập nhật shop thành công!");
-    } catch {
-      toast.error("Cập nhật shop thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Cập nhật shop thất bại"));
     }
   };
 
@@ -88,8 +89,10 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
         toast.success(
           `Upload ${type === "logo" ? "logo" : "banner"} thành công!`,
         );
-      } catch {
-        toast.error(`Upload ${type === "logo" ? "logo" : "banner"} thất bại`);
+      } catch (error: unknown) {
+        toast.error(
+          getSafeErrorMessage(error, `Upload ${type === "logo" ? "logo" : "banner"} thất bại`),
+        );
       }
     }
   };

@@ -149,8 +149,8 @@ export default function AdminUsersPage() {
     try {
       await deleteMutation.mutateAsync(user._id);
       toast.success("User deleted successfully");
-    } catch {
-      toast.error("Failed to delete user. Please try again.");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to delete user. Please try again."));
     }
   };
 

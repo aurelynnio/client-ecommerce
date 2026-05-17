@@ -39,6 +39,10 @@ export interface CreateNotificationData {
   orderId?: string;
 }
 
+interface QueryOptions {
+  enabled?: boolean;
+}
+
 function invalidateNotificationQueries(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: notificationKeys.all });
 }
@@ -109,10 +113,14 @@ const notificationApi = {
 /**
  * Get notifications list
  */
-export function useNotifications(params?: NotificationListParams) {
+export function useNotifications(
+  params?: NotificationListParams,
+  options?: QueryOptions
+) {
   return useQuery({
     queryKey: notificationKeys.list(params),
     queryFn: () => notificationApi.getList(params),
+    enabled: options?.enabled,
     staleTime: STALE_TIME.MEDIUM,
   });
 }
@@ -120,10 +128,11 @@ export function useNotifications(params?: NotificationListParams) {
 /**
  * Get unread notification count (for badge)
  */
-export function useUnreadNotificationCount() {
+export function useUnreadNotificationCount(options?: QueryOptions) {
   return useQuery({
     queryKey: notificationKeys.unreadCount(),
     queryFn: notificationApi.getUnreadCount,
+    enabled: options?.enabled,
     staleTime: STALE_TIME.SHORT,
     refetchInterval: REFETCH_INTERVAL.NORMAL,
   });

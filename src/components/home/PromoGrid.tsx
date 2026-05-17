@@ -8,20 +8,16 @@ import {
   Truck,
   Zap,
 } from "lucide-react";
-import { useVouchers } from "@/hooks/queries/useVoucher";
+import { usePlatformVouchers } from "@/hooks/queries/useVoucher";
 import { useActiveFlashSale } from "@/hooks/queries/useFlashSale";
 import { useNewArrivals } from "@/hooks/queries/useProducts";
 
 export default function PromoGrid() {
-  const { data: vouchersData } = useVouchers({ page: 1, limit: 1 });
+  const { data: platformVouchers = [] } = usePlatformVouchers();
   const { data: flashSaleData } = useActiveFlashSale({ page: 1, limit: 1 });
   const { data: newArrivals } = useNewArrivals();
 
-  const voucherPagination = vouchersData?.pagination as
-    | { total?: number; totalItems?: number }
-    | undefined;
-  const voucherCount =
-    voucherPagination?.totalItems || voucherPagination?.total || 0;
+  const voucherCount = platformVouchers.length;
   const flashSaleCount =
     flashSaleData?.pagination?.totalItems || flashSaleData?.data?.length || 0;
   const newArrivalsCount = newArrivals?.length || 0;
@@ -33,8 +29,8 @@ export default function PromoGrid() {
         title: "Mã giảm giá",
         subtitle:
           voucherCount > 0
-            ? `${voucherCount} mã đang hoạt động`
-            : "Xem ưu đãi mới nhất",
+            ? `${voucherCount} mã toàn sàn đang hoạt động`
+            : "Xem voucher công khai mới nhất",
         icon: TicketPercent,
         iconClass: "bg-rose-50 text-rose-600",
         href: "/vouchers",

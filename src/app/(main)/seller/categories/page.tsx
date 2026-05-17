@@ -16,6 +16,7 @@ import {
   useDeleteShopCategory,
 } from "@/hooks/queries";
 import { ShopCategory, CreateShopCategoryPayload } from "@/types/shopCategory";
+import { getSafeErrorMessage } from "@/api";
 
 export default function SellerCategoriesPage() {
 
@@ -52,8 +53,8 @@ export default function SellerCategoriesPage() {
         toast.success("Tạo danh mục thành công!");
       }
       resetForm();
-    } catch {
-      toast.error("Thao tác thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Thao tác thất bại"));
     }
   };
 
@@ -73,8 +74,8 @@ export default function SellerCategoriesPage() {
     try {
       await deleteMutation.mutateAsync(id);
       toast.success("Xóa danh mục thành công!");
-    } catch {
-      toast.error("Xóa danh mục thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Xóa danh mục thất bại"));
     }
   };
 
@@ -85,8 +86,8 @@ export default function SellerCategoriesPage() {
         data: { isActive: !category.isActive },
       });
       toast.success(category.isActive ? "Đã ẩn danh mục" : "Đã hiện danh mục");
-    } catch {
-      toast.error("Cập nhật thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Cập nhật thất bại"));
     }
   };
 

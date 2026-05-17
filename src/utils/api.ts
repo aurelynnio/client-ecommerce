@@ -54,6 +54,40 @@ export const ERROR_MESSAGES: Record<string, string> = {
   TIMEOUT: "Yêu cầu quá thời gian chờ",
 };
 
+const BACKEND_MESSAGE_TRANSLATIONS: Record<string, string> = {
+  "email already in use": "Email đã được sử dụng",
+  "username already in use": "Tên người dùng đã được sử dụng",
+  "invalid email or password": "Email hoặc mật khẩu không đúng",
+  "please verify your email before logging in":
+    "Vui lòng xác thực email trước khi đăng nhập",
+  "user not found": "Không tìm thấy tài khoản",
+  "email already verified": "Email đã được xác thực",
+  "invalid verification code": "Mã xác thực không hợp lệ",
+  "verification code has expired": "Mã xác thực đã hết hạn",
+  "invalid or expired verification code": "Mã xác thực không hợp lệ hoặc đã hết hạn",
+  "failed to send verification email. please try again.":
+    "Không thể gửi email xác thực. Vui lòng thử lại",
+  "failed to send password reset email. please try again.":
+    "Không thể gửi email đặt lại mật khẩu. Vui lòng thử lại",
+  "current password is incorrect": "Mật khẩu hiện tại không chính xác",
+  "refresh token is required": "Phiên đăng nhập không hợp lệ, vui lòng đăng nhập lại",
+  "invalid or expired refresh token":
+    "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+  "invalid or revoked refresh token":
+    "Phiên đăng nhập không còn hiệu lực, vui lòng đăng nhập lại",
+  "refresh token has expired": "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+  "access token is required. please login.": "Bạn cần đăng nhập để tiếp tục",
+  "access token has expired. please refresh your token.":
+    "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+  "invalid access token. please login again.":
+    "Phiên đăng nhập không hợp lệ, vui lòng đăng nhập lại",
+  "authentication failed": "Xác thực thất bại, vui lòng đăng nhập lại",
+  "authentication required": "Bạn cần đăng nhập để thực hiện thao tác này",
+  unauthorized: "Bạn cần đăng nhập để thực hiện thao tác này",
+};
+
+const RESERVED_API_STATUSES = new Set(["success", "fail", "error"]);
+
 const HTTP_STATUS_MESSAGES: Record<number, string> = {
   400: "Yêu cầu không hợp lệ",
   401: "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
@@ -81,6 +115,12 @@ function getMessageByErrorCode(code?: string): string | undefined {
   return ERROR_MESSAGES[code.toUpperCase()];
 }
 
+function getMessageByBackendMessage(message?: string): string | undefined {
+  if (!message) return undefined;
+
+  return BACKEND_MESSAGE_TRANSLATIONS[message.trim().toLowerCase()];
+}
+
 /**
  * Sanitize unknown errors before showing to users.
  * Never exposes raw backend/internal error messages.
@@ -103,16 +143,34 @@ export function getSafeErrorMessage(
       status?: number;
       data?: {
         code?: string | number;
+        errorCode?: string;
         status?: string;
+        message?: string;
       };
     };
   };
 
-  const backendCode =
+  const messageByBackendMessage = getMessageByBackendMessage(
+    typeof axiosLikeError?.response?.data?.message === "string"
+      ? axiosLikeError.response.data.message
+      : undefined,
+  );
+  if (messageByBackendMessage) {
+    return messageByBackendMessage;
+  }
+
+  const backendStatusText =
     typeof axiosLikeError?.response?.data?.status === "string"
       ? axiosLikeError.response.data.status
+      : undefined;
+
+  const backendCode =
+    typeof axiosLikeError?.response?.data?.errorCode === "string"
+      ? axiosLikeError.response.data.errorCode
       : typeof axiosLikeError?.response?.data?.code === "string"
         ? axiosLikeError.response.data.code
+        : backendStatusText && !RESERVED_API_STATUSES.has(backendStatusText.toLowerCase())
+          ? backendStatusText
         : undefined;
   const messageByCode = getMessageByErrorCode(backendCode);
   if (messageByCode) {

@@ -795,8 +795,8 @@ export function useProductDetail({
 
       toast.success("Đã thêm vào giỏ hàng");
       return true;
-    } catch {
-      toast.error("Không thể thêm vào giỏ hàng");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể thêm vào giỏ hàng"));
       return false;
     }
   }, [

@@ -39,9 +39,9 @@ export default function AddressTab({ user }: AddressTabProps) {
   const handleSuccess = async () => {
     try {
       await refetch();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error refreshing profile:", error);
-      toast.error("Không thể cập nhật dữ liệu");
+      toast.error(getSafeErrorMessage(error, "Không thể cập nhật dữ liệu"));
     }
   };
 

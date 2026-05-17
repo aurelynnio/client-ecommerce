@@ -1,15 +1,15 @@
-"use client";
-import { useEffect } from "react";
-import { X, Bell } from "lucide-react";
-import { useAppSelector } from "@/hooks/hooks";
+'use client';
+import { useEffect } from 'react';
+import { X, Bell } from 'lucide-react';
+import { useAppSelector } from '@/hooks/hooks';
 import {
   useNotifications,
   useMarkAllNotificationsAsRead,
   useClearAllNotifications,
   useUnreadNotificationCount,
-} from "@/hooks/queries/useNotifications";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import NotificationItem from "./NotificationItem";
+} from '@/hooks/queries/useNotifications';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import NotificationItem from './NotificationItem';
 
 export default function NotificationModel({
   isOpen,
@@ -20,8 +20,14 @@ export default function NotificationModel({
 }) {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
-  const { data, isLoading } = useNotifications({ page: 1, limit: 10 });
-  const { data: unreadCountData } = useUnreadNotificationCount();
+  const shouldFetchNotifications = isAuthenticated && isOpen;
+  const { data, isLoading } = useNotifications(
+    { page: 1, limit: 10 },
+    { enabled: shouldFetchNotifications },
+  );
+  const { data: unreadCountData } = useUnreadNotificationCount({
+    enabled: shouldFetchNotifications,
+  });
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
   const clearAllMutation = useClearAllNotifications();
 
@@ -30,12 +36,12 @@ export default function NotificationModel({
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     }
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
@@ -77,11 +83,7 @@ export default function NotificationModel({
           ) : notifications.length > 0 ? (
             <div>
               {notifications.map((noti) => (
-                <NotificationItem
-                  key={noti._id}
-                  notification={noti}
-                  onClose={onClose}
-                />
+                <NotificationItem key={noti._id} notification={noti} onClose={onClose} />
               ))}
             </div>
           ) : (

@@ -29,6 +29,7 @@ import { Conversation } from "@/types/chat";
 import { useSocket } from "@/context/SocketContext";
 import { joinConversation, leaveConversation } from "@/socket/chat.socket";
 import { toast } from "sonner";
+import { getSafeErrorMessage } from "@/api";
 
 export default function SellerChatPage() {
   const { data: myShop } = useMyShop();
@@ -94,8 +95,8 @@ export default function SellerChatPage() {
         content: newMessage.trim(),
       });
       setNewMessage("");
-    } catch {
-      toast.error("Không thể gửi tin nhắn");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể gửi tin nhắn"));
     }
   };
 

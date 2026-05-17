@@ -24,6 +24,7 @@ import { useShopBySlug, useShopCategories } from "@/hooks/queries/useShop";
 import { useInfiniteShopProducts } from "@/hooks/queries/useProducts";
 import { useStartConversation } from "@/hooks/queries";
 import { setChatOpen } from "@/features/chat/chatSlice";
+import { getSafeErrorMessage } from "@/api";
 
 export default function ShopPage() {
   const params = useParams();
@@ -107,8 +108,8 @@ export default function ShopPage() {
     try {
       await startConversationMutation.mutateAsync({ shopId: currentShop._id });
       dispatch(setChatOpen(true));
-    } catch {
-      toast.error("Không thể bắt đầu cuộc trò chuyện");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể bắt đầu cuộc trò chuyện"));
     }
   };
 

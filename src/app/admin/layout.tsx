@@ -17,6 +17,7 @@ import { useUnreadNotificationCount } from "@/hooks/queries/useNotifications";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RequireRole } from "@/components/common/PermissionGate";
 import { usePermissions } from "@/context/PermissionContext";
+import { getSafeErrorMessage } from "@/api";
 
 export default function AdminLayout({
   children,
@@ -29,8 +30,11 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const logoutMutation = useLogout();
-  const { data } = useAppSelector((state) => state.auth);
-  const { data: unreadCountData } = useUnreadNotificationCount();
+  const { data, isAuthenticated } = useAppSelector((state) => state.auth);
+  const isAdmin = data?.roles === "admin";
+  const { data: unreadCountData } = useUnreadNotificationCount({
+    enabled: isAuthenticated && isAdmin,
+  });
   const unreadCount = unreadCountData || 0;
   const { hasPermission } = usePermissions();
 
@@ -51,8 +55,8 @@ export default function AdminLayout({
       await logoutMutation.mutateAsync();
       toast.success("Đăng xuất thành công");
       router.push("/");
-    } catch {
-      toast.error("Không thể đăng xuất");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể đăng xuất"));
     }
   };
 

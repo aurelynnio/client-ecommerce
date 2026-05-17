@@ -31,6 +31,7 @@ import { cn } from "@/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUserOrders } from "@/hooks/queries/useOrders";
 import { useWishlistCount } from "@/hooks/queries/useWishlist";
+import { getSafeErrorMessage } from "@/api";
 
 export default function ProfilePage() {
   const searchParams = useSearchParams();
@@ -69,8 +70,8 @@ export default function ProfilePage() {
       await logoutMutation.mutateAsync();
       toast.success("Đăng xuất thành công");
       router.push("/");
-    } catch {
-      toast.error("Không thể đăng xuất");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể đăng xuất"));
     }
   };
 

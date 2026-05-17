@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { cn } from "@/utils/cn";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency, formatDate } from "@/utils/format";
+import { getSafeErrorMessage } from "@/api";
 
 interface OrderDialogProps {
   order: Order | null;
@@ -59,9 +60,9 @@ export default function OrderDialog({
       if (result.paymentUrl) {
         window.location.href = result.paymentUrl;
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Payment error:", error);
-      toast.error("Không thể tạo thanh toán. Vui lòng thử lại.");
+      toast.error(getSafeErrorMessage(error, "Không thể tạo thanh toán. Vui lòng thử lại."));
     }
   };
 

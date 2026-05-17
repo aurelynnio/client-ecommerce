@@ -1,22 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Shield, Save, RotateCcw } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { toast } from "sonner";
-import {
-  RESOURCES,
-  ACTIONS,
-} from "@/constants/permissions";
+import { useState, useEffect, useCallback } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Shield, Save, RotateCcw } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { toast } from 'sonner';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 import {
   getUserPermissions,
   updateUserPermissions,
   getAllPermissions,
   getRolePermissions,
-} from "@/api/permission";
+} from '@/api/permission';
+import { getSafeErrorMessage } from '@/api';
 import {
   Dialog,
   DialogContent,
@@ -24,7 +22,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 interface UserPermissionsProps {
   userId: string;
@@ -61,8 +59,8 @@ export default function UserPermissions({
       setOriginalPermissions(userPerms);
       setAllPermissions(allPermsRes?.permissions || []);
       setRolePermissions(rolePermsRes?.rolePermissions?.[userRole] || []);
-    } catch (error) {
-      toast.error("Không thể tải thông tin quyền");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể tải thông tin quyền'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -75,25 +73,17 @@ export default function UserPermissions({
 
   const handleTogglePermission = (permission: string) => {
     setUserPermissions((prev) =>
-      prev.includes(permission)
-        ? prev.filter((p) => p !== permission)
-        : [...prev, permission]
+      prev.includes(permission) ? prev.filter((p) => p !== permission) : [...prev, permission],
     );
   };
 
   const handleSelectAllResource = (resource: string, checked: boolean) => {
-    const resourcePermissions = Object.values(ACTIONS).map(
-      (action) => `${resource}:${action}`
-    );
+    const resourcePermissions = Object.values(ACTIONS).map((action) => `${resource}:${action}`);
 
     if (checked) {
-      setUserPermissions((prev) => [
-        ...new Set([...prev, ...resourcePermissions]),
-      ]);
+      setUserPermissions((prev) => [...new Set([...prev, ...resourcePermissions])]);
     } else {
-      setUserPermissions((prev) =>
-        prev.filter((p) => !resourcePermissions.includes(p))
-      );
+      setUserPermissions((prev) => prev.filter((p) => !resourcePermissions.includes(p)));
     }
   };
 
@@ -107,10 +97,10 @@ export default function UserPermissions({
       setSaving(true);
       await updateUserPermissions(userId, userPermissions);
       setOriginalPermissions(userPermissions);
-      toast.success("Cập nhật quyền thành công");
+      toast.success('Cập nhật quyền thành công');
       onUpdate?.(userPermissions);
-    } catch (error) {
-      toast.error("Không thể cập nhật quyền");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể cập nhật quyền'));
       console.error(error);
     } finally {
       setSaving(false);
@@ -118,11 +108,9 @@ export default function UserPermissions({
   };
 
   const hasChanges =
-    JSON.stringify(userPermissions.sort()) !==
-    JSON.stringify(originalPermissions.sort());
+    JSON.stringify(userPermissions.sort()) !== JSON.stringify(originalPermissions.sort());
 
-  const isPermissionFromRole = (permission: string) =>
-    rolePermissions.includes(permission);
+  const isPermissionFromRole = (permission: string) => rolePermissions.includes(permission);
 
   const getResourcePermissions = (resource: string) =>
     Object.values(ACTIONS).map((action) => `${resource}:${action}`);
@@ -135,8 +123,7 @@ export default function UserPermissions({
   const isSomeResourceSelected = (resource: string) => {
     const resourcePerms = getResourcePermissions(resource);
     return (
-      resourcePerms.some((p) => userPermissions.includes(p)) &&
-      !isAllResourceSelected(resource)
+      resourcePerms.some((p) => userPermissions.includes(p)) && !isAllResourceSelected(resource)
     );
   };
 
@@ -171,11 +158,7 @@ export default function UserPermissions({
             <RotateCcw className="h-4 w-4 mr-1" />
             Đặt lại
           </Button>
-          <Button
-            size="sm"
-            onClick={() => setConfirmOpen(true)}
-            disabled={!hasChanges || saving}
-          >
+          <Button size="sm" onClick={() => setConfirmOpen(true)} disabled={!hasChanges || saving}>
             {saving ? (
               <SpinnerLoading noWrapper size={16} className="mr-1" />
             ) : (
@@ -214,14 +197,10 @@ export default function UserPermissions({
                       <div className="flex items-center justify-center">
                         <Checkbox
                           checked={isChecked}
-                          onCheckedChange={() =>
-                            handleTogglePermission(permission)
-                          }
-                          className={isFromRole ? "border-primary" : ""}
+                          onCheckedChange={() => handleTogglePermission(permission)}
+                          className={isFromRole ? 'border-primary' : ''}
                         />
-                        {isFromRole && (
-                          <span className="ml-1 text-xs text-primary">*</span>
-                        )}
+                        {isFromRole && <span className="ml-1 text-xs text-primary">*</span>}
                       </div>
                     </td>
                   );
@@ -232,9 +211,7 @@ export default function UserPermissions({
                     onCheckedChange={(checked) =>
                       handleSelectAllResource(resource, checked as boolean)
                     }
-                    className={
-                      isSomeResourceSelected(resource) ? "opacity-50" : ""
-                    }
+                    className={isSomeResourceSelected(resource) ? 'opacity-50' : ''}
                   />
                 </td>
               </tr>
@@ -264,16 +241,14 @@ export default function UserPermissions({
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm">
-              <strong>Thêm:</strong>{" "}
-              {userPermissions
-                .filter((p) => !originalPermissions.includes(p))
-                .join(", ") || "Không có"}
+              <strong>Thêm:</strong>{' '}
+              {userPermissions.filter((p) => !originalPermissions.includes(p)).join(', ') ||
+                'Không có'}
             </p>
             <p className="text-sm mt-2">
-              <strong>Xóa:</strong>{" "}
-              {originalPermissions
-                .filter((p) => !userPermissions.includes(p))
-                .join(", ") || "Không có"}
+              <strong>Xóa:</strong>{' '}
+              {originalPermissions.filter((p) => !userPermissions.includes(p)).join(', ') ||
+                'Không có'}
             </p>
           </div>
           <DialogFooter>

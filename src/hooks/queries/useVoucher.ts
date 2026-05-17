@@ -34,6 +34,10 @@ export interface VoucherListResponse {
   };
 }
 
+interface QueryOptions {
+  enabled?: boolean;
+}
+
 function invalidateVoucherLists(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: voucherKeys.lists() });
 }
@@ -44,7 +48,7 @@ function invalidateVoucherStatistics(queryClient: QueryClient) {
 
 // ============ API Functions ============
 const voucherApi = {
-  getAll: async (
+  getAdminList: async (
     params?: Partial<VoucherFilters>
   ): Promise<VoucherListResponse> => {
     const response = await instance.get("/vouchers", { params });
@@ -70,6 +74,16 @@ const voucherApi = {
         totalPages: 0,
       },
     };
+  },
+
+  getPlatform: async (): Promise<Voucher[]> => {
+    const response = await instance.get("/vouchers/platform");
+    return extractApiData(response);
+  },
+
+  getShopPublic: async (shopId: string): Promise<Voucher[]> => {
+    const response = await instance.get(`/vouchers/shop/${shopId}`);
+    return extractApiData(response);
   },
 
   getById: async (id: string): Promise<Voucher> => {
@@ -126,12 +140,39 @@ const voucherApi = {
 // ============ Query Hooks ============
 
 /**
- * Get all vouchers with pagination and filters
+ * Get all vouchers with pagination and filters (Admin)
  */
-export function useVouchers(params?: Partial<VoucherFilters>) {
+export function useAdminVouchers(
+  params?: Partial<VoucherFilters>,
+  options?: QueryOptions
+) {
   return useQuery({
     queryKey: voucherKeys.list(params),
-    queryFn: () => voucherApi.getAll(params),
+    queryFn: () => voucherApi.getAdminList(params),
+    enabled: options?.enabled,
+    staleTime: STALE_TIME.LONG,
+  });
+}
+
+/**
+ * Get public platform vouchers
+ */
+export function usePlatformVouchers() {
+  return useQuery({
+    queryKey: voucherKeys.platform(),
+    queryFn: voucherApi.getPlatform,
+    staleTime: STALE_TIME.LONG,
+  });
+}
+
+/**
+ * Get public vouchers for a specific shop
+ */
+export function useShopVouchers(shopId: string, options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: voucherKeys.shopPublic(shopId),
+    queryFn: () => voucherApi.getShopPublic(shopId),
+    enabled: options?.enabled ?? !!shopId,
     staleTime: STALE_TIME.LONG,
   });
 }
@@ -166,10 +207,11 @@ export function useAvailableVouchers(
 /**
  * Get voucher statistics (Admin)
  */
-export function useVoucherStatistics() {
+export function useVoucherStatistics(options?: QueryOptions) {
   return useQuery({
     queryKey: voucherKeys.statistics(),
     queryFn: voucherApi.getStatistics,
+    enabled: options?.enabled,
     staleTime: STALE_TIME.VERY_LONG,
   });
 }

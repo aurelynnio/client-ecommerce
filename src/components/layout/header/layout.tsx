@@ -44,7 +44,9 @@ export default function HeaderLayout() {
     (state) => state.auth,
   );
   const { data: cartQueryData } = useCart({ enabled: isAuthenticated });
-  const { data: unreadCountData } = useUnreadNotificationCount();
+  const { data: unreadCountData } = useUnreadNotificationCount({
+    enabled: isAuthenticated,
+  });
   const { data: wishlistCountData } = useWishlistCount({
     enabled: isAuthenticated,
   });

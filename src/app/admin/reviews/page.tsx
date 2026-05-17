@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
 import { format } from "date-fns";
+import { getSafeErrorMessage } from "@/api";
 
 export default function AdminReviewsPage() {
   const { filters, updateFilter, resetFilters } = useUrlFilters({
@@ -40,8 +41,8 @@ export default function AdminReviewsPage() {
     try {
       await deleteMutation.mutateAsync(id);
       toast.success("Đã xóa đánh giá thành công");
-    } catch {
-      toast.error("Không thể xóa đánh giá");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể xóa đánh giá"));
     }
   };
 

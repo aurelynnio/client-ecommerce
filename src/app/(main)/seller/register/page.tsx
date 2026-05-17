@@ -18,6 +18,7 @@ import {
 } from "@/hooks/queries/useShop";
 import { useRefreshAuthSession } from "@/hooks/queries";
 import { CreateShopPayload } from "@/types/shop";
+import { getSafeErrorMessage } from "@/api";
 
 export default function SellerRegisterPage() {
   const router = useRouter();
@@ -131,8 +132,8 @@ export default function SellerRegisterPage() {
       }
       toast.success("Đăng ký shop thành công!");
       router.push("/seller/settings");
-    } catch {
-      toast.error("Đăng ký shop thất bại");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Đăng ký shop thất bại"));
     }
   };
 
@@ -172,8 +173,10 @@ export default function SellerRegisterPage() {
         toast.success(
           `Upload ${type === "logo" ? "logo" : "banner"} thành công!`,
         );
-      } catch {
-        toast.error(`Upload ${type === "logo" ? "logo" : "banner"} thất bại`);
+      } catch (error: unknown) {
+        toast.error(
+          getSafeErrorMessage(error, `Upload ${type === "logo" ? "logo" : "banner"} thất bại`),
+        );
       }
     }
   };

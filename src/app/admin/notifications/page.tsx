@@ -14,6 +14,7 @@ import { Bell, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { cn } from "@/utils/cn";
+import { getSafeErrorMessage } from "@/api";
 import { NotificationsHeader } from "@/components/admin/notifications/NotificationsHeader";
 import {
   CreateNotificationModal,
@@ -37,8 +38,8 @@ export default function AdminNotificationsPage() {
     try {
       await markAsReadMutation.mutateAsync(id);
       toast.success("Marked as read");
-    } catch {
-      toast.error("Failed to update status");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to update status"));
     }
   };
 
@@ -46,8 +47,8 @@ export default function AdminNotificationsPage() {
     try {
       await markAllAsReadMutation.mutateAsync();
       toast.success("All notifications marked as read");
-    } catch {
-      toast.error("Failed to update all");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to update all"));
     }
   };
 
@@ -56,8 +57,8 @@ export default function AdminNotificationsPage() {
       try {
         await clearAllMutation.mutateAsync();
         toast.success("All notifications cleared");
-      } catch {
-        toast.error("Failed to clear notifications");
+      } catch (error: unknown) {
+        toast.error(getSafeErrorMessage(error, "Failed to clear notifications"));
       }
     }
   };
@@ -67,8 +68,8 @@ export default function AdminNotificationsPage() {
       await createMutation.mutateAsync(formData);
       toast.success("Notification sent successfully");
       setCreateModalOpen(false);
-    } catch {
-      toast.error("Failed to send notification");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to send notification"));
     }
   };
 

@@ -1,6 +1,6 @@
-import instance from "./api";
-import { endpoint_permission } from "@/constants/endpoint";
-import { extractApiData } from "@/utils/api";
+import instance from './api';
+import { endpoint_permission } from '@/constants/endpoint';
+import { extractApiData } from '@/utils/api';
 
 export interface AllPermissionsResponse {
   permissions: string[];
@@ -26,7 +26,7 @@ export interface UserPermissionsResponse {
 
 export interface AuditLogEntry {
   _id: string;
-  action: "grant" | "revoke";
+  action: 'grant' | 'revoke';
   adminId: {
     _id: string;
     username: string;
@@ -62,16 +62,12 @@ export const getAllPermissions = async (): Promise<AllPermissionsResponse> => {
 };
 
 // Get default permissions for each role
-export const getRolePermissions =
-  async (): Promise<RolePermissionsResponse> => {
-    const response = await instance.get(
-      endpoint_permission.getRolePermissions,
-      {
-        withCredentials: true,
-      }
-    );
-    return extractApiData(response);
-  };
+export const getRolePermissions = async (): Promise<RolePermissionsResponse> => {
+  const response = await instance.get(endpoint_permission.getRolePermissions, {
+    withCredentials: true,
+  });
+  return extractApiData(response);
+};
 
 // Get current user's permissions
 export const getMyPermissions = async (): Promise<string[]> => {
@@ -83,13 +79,10 @@ export const getMyPermissions = async (): Promise<string[]> => {
 };
 
 // Get specific user's permissions (admin only)
-export const getUserPermissions = async (
-  userId: string
-): Promise<UserPermissionsResponse> => {
-  const response = await instance.get(
-    endpoint_permission.getUserPermissions(userId),
-    { withCredentials: true }
-  );
+export const getUserPermissions = async (userId: string): Promise<UserPermissionsResponse> => {
+  const response = await instance.get(endpoint_permission.getUserPermissions(userId), {
+    withCredentials: true,
+  });
   return extractApiData(response);
 };
 
@@ -105,12 +98,12 @@ export interface UpdatePermissionResponse {
 // Update user's permissions (admin only)
 export const updateUserPermissions = async (
   userId: string,
-  permissions: string[]
+  permissions: string[],
 ): Promise<UpdatePermissionResponse> => {
   const response = await instance.put(
     endpoint_permission.updateUserPermissions(userId),
     { permissions },
-    { withCredentials: true }
+    { withCredentials: true },
   );
   return extractApiData(response);
 };
@@ -118,12 +111,12 @@ export const updateUserPermissions = async (
 // Grant single permission to user (admin only)
 export const grantPermission = async (
   userId: string,
-  permission: string
+  permission: string,
 ): Promise<UpdatePermissionResponse> => {
   const response = await instance.post(
     endpoint_permission.grantPermission(userId),
     { permission },
-    { withCredentials: true }
+    { withCredentials: true },
   );
   return extractApiData(response);
 };
@@ -131,12 +124,12 @@ export const grantPermission = async (
 // Revoke single permission from user (admin only)
 export const revokePermission = async (
   userId: string,
-  permission: string
+  permission: string,
 ): Promise<UpdatePermissionResponse> => {
   const response = await instance.post(
     endpoint_permission.revokePermission(userId),
     { permission },
-    { withCredentials: true }
+    { withCredentials: true },
   );
   return extractApiData(response);
 };

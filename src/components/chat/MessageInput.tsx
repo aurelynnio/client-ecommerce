@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useSendChatMessage } from "@/hooks/queries";
+import { getSafeErrorMessage } from "@/api";
 
 interface MessageInputProps {
   conversationId: string;
@@ -26,8 +27,8 @@ export default function MessageInput({ conversationId }: MessageInputProps) {
         messageType: "text",
       });
       setContent("");
-    } catch {
-      toast.error("Không thể gửi tin nhắn");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể gửi tin nhắn"));
     }
   };
 

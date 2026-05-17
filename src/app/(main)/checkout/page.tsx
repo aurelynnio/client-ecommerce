@@ -170,10 +170,13 @@ export default function CheckoutPage() {
               window.location.href = paymentResult.paymentUrl;
               return;
             }
-          } catch (paymentError) {
+          } catch (paymentError: unknown) {
             console.error("Payment error:", paymentError);
             toast.error(
-              "Không thể tạo thanh toán VNPay. Vui lòng thanh toán lại trong lịch sử đơn hàng."
+              getSafeErrorMessage(
+                paymentError,
+                "Không thể tạo thanh toán VNPay. Vui lòng thanh toán lại trong lịch sử đơn hàng.",
+              ),
             );
             router.push("/");
           }

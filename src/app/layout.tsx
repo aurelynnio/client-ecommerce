@@ -13,6 +13,9 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "Ecommerce",
   description: "Ecommerce",
+  other: {
+    google: "notranslate",
+  },
 };
 
 export default function RootLayout({
@@ -21,9 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="vi"
+      translate="no"
+      className="notranslate"
+      suppressHydrationWarning
+    >
       <body
-        className={`${inter.variable} antialiased min-h-screen flex flex-col`}
+        translate="no"
+        className={`${inter.variable} notranslate antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning={true}
       >
         <ReduxProvider>

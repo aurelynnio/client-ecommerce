@@ -84,8 +84,8 @@ export default function CategoriesAdminPage() {
 
       setCreateModalOpen(false);
       toast.success("Category created successfully");
-    } catch {
-      toast.error("Error creating category. Please try again.");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Error creating category. Please try again."));
     }
   };
 
@@ -124,8 +124,8 @@ export default function CategoriesAdminPage() {
       handleCloseEditModal();
 
       toast.success("Category updated successfully");
-    } catch {
-      toast.error("Failed to update category. Please try again.");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to update category. Please try again."));
     }
   };
 

@@ -7,35 +7,30 @@ import {
   Sparkles,
   Search,
   Clock,
-  Tag,
   Ticket,
-  Store,
   Crown,
   Timer,
   ChevronRight,
 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
-import { useVouchers } from "@/hooks/queries";
+import { motion } from "framer-motion";
+import { usePlatformVouchers } from "@/hooks/queries";
 import { VoucherCard } from "@/components/vouchers/VoucherCard";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Input } from "@/components/ui/input";
 
 export default function VouchersPage() {
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<
     "all" | "percentage" | "fixed_amount"
   >("all");
 
-  // Fetch vouchers using React Query
-  const { data: vouchersData, isLoading } = useVouchers({ isActive: true });
-  const allVouchers = useMemo(
-    () => vouchersData?.vouchers || [],
-    [vouchersData],
-  );
+  const {
+    data: allVouchers = [],
+    isLoading,
+    error,
+  } = usePlatformVouchers();
 
   const handleCollectVoucher = (voucherId: string) => {
     setCollectedIds((prev) => new Set(prev).add(voucherId));
@@ -60,8 +55,6 @@ export default function VouchersPage() {
 
   const filteredVouchers = useMemo(() => {
     return allVouchers.filter((v) => {
-      if (activeTab === "platform" && v.scope !== "platform") return false;
-      if (activeTab === "shop" && v.scope !== "shop") return false;
       if (filterType !== "all" && v.type !== filterType) return false;
       if (
         searchQuery &&
@@ -72,7 +65,7 @@ export default function VouchersPage() {
       }
       return true;
     });
-  }, [allVouchers, activeTab, filterType, searchQuery]);
+  }, [allVouchers, filterType, searchQuery]);
 
   if (isLoading && allVouchers.length === 0) {
     return (
@@ -81,6 +74,19 @@ export default function VouchersPage() {
           <SpinnerLoading size={32} />
         </div>
         <p className="text-muted-foreground text-sm">Đang tải ưu đãi...</p>
+      </div>
+    );
+  }
+
+  if (error && allVouchers.length === 0) {
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center gap-4 bg-white">
+        <div className="w-16 h-16 rounded-full bg-[#f7f7f7] flex items-center justify-center">
+          <Ticket className="w-7 h-7 text-gray-400" />
+        </div>
+        <p className="text-muted-foreground text-sm">
+          Không thể tải voucher công khai lúc này.
+        </p>
       </div>
     );
   }
@@ -100,7 +106,7 @@ export default function VouchersPage() {
                   Trung tâm Voucher
                 </h1>
                 <p className="text-muted-foreground text-xs">
-                  Săn mã giảm giá mỗi ngày
+                  Voucher công khai từ nền tảng
                 </p>
               </div>
             </div>
@@ -184,88 +190,54 @@ export default function VouchersPage() {
             </div>
           </div>
 
-          {/* Tabs Navigation */}
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <div className="px-4">
-              <TabsList className="bg-white h-11 p-1 rounded-xl gap-1">
-                <TabsTrigger
-                  value="all"
-                  className="h-9 px-5 rounded-lg text-sm font-medium text-gray-500 data-[state=active]:bg-[#f7f7f7] data-[state=active]:text-gray-800 transition-colors"
-                >
-                  <Tag className="w-4 h-4 mr-2" />
-                  Tất cả
-                </TabsTrigger>
-                <TabsTrigger
-                  value="platform"
-                  className="h-9 px-5 rounded-lg text-sm font-medium text-gray-500 data-[state=active]:bg-[#f7f7f7] data-[state=active]:text-primary transition-colors"
-                >
-                  <Crown className="w-4 h-4 mr-2" />
-                  Toàn sàn
-                </TabsTrigger>
-                <TabsTrigger
-                  value="shop"
-                  className="h-9 px-5 rounded-lg text-sm font-medium text-gray-500 data-[state=active]:bg-[#f7f7f7] data-[state=active]:text-blue-500 transition-colors"
-                >
-                  <Store className="w-4 h-4 mr-2" />
-                  Cửa hàng
-                </TabsTrigger>
-              </TabsList>
+          <div className="px-4 pb-2">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-gray-700">
+              <Crown className="w-4 h-4 text-primary" />
+              Voucher toàn sàn công khai
             </div>
+          </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab + searchQuery + filterType}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <TabsContent
-                  value={activeTab}
-                  className="mt-0 p-4 focus-visible:outline-none"
+          <motion.div
+            key={searchQuery + filterType}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="p-4 pt-2"
+          >
+            {filteredVouchers.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredVouchers.map((voucher) => (
+                  <VoucherCard
+                    key={voucher._id}
+                    voucher={voucher}
+                    isCollected={collectedIds.has(voucher._id)}
+                    onCollect={handleCollectVoucher}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="py-16 flex flex-col items-center justify-center text-center">
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-4">
+                  <Ticket className="w-8 h-8 text-gray-300" />
+                </div>
+                <h3 className="text-base font-medium text-gray-800 mb-2">
+                  Không tìm thấy voucher công khai
+                </h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Thử thay đổi bộ lọc hoặc quay lại sau nhé!
+                </p>
+                <button
+                  className="px-6 py-2.5 bg-white text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setFilterType("all");
+                  }}
                 >
-                  {filteredVouchers.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                      {filteredVouchers.map((voucher) => (
-                        <VoucherCard
-                          key={voucher._id}
-                          voucher={voucher}
-                          isCollected={collectedIds.has(voucher._id)}
-                          onCollect={handleCollectVoucher}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="py-16 flex flex-col items-center justify-center text-center">
-                      <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-4">
-                        <Ticket className="w-8 h-8 text-gray-300" />
-                      </div>
-                      <h3 className="text-base font-medium text-gray-800 mb-2">
-                        Không tìm thấy voucher
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-6">
-                        Thử thay đổi bộ lọc hoặc quay lại sau nhé!
-                      </p>
-                      <button
-                        className="px-6 py-2.5 bg-white text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
-                        onClick={() => {
-                          setSearchQuery("");
-                          setFilterType("all");
-                          setActiveTab("all");
-                        }}
-                      >
-                        Xóa bộ lọc
-                      </button>
-                    </div>
-                  )}
-                </TabsContent>
-              </motion.div>
-            </AnimatePresence>
-          </Tabs>
+                  Xóa bộ lọc
+                </button>
+              </div>
+            )}
+          </motion.div>
         </div>
       </div>
 
@@ -281,9 +253,9 @@ export default function VouchersPage() {
                 Mẹo săn voucher
               </h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Voucher mới sẽ được cập nhật mỗi ngày lúc 00:00. Hãy lưu voucher
-                vào ví để sử dụng khi thanh toán. Mỗi voucher có giới hạn số
-                lượng, hãy nhanh tay nhé!
+                Voucher toàn sàn sẽ được cập nhật theo các chương trình công
+                khai của hệ thống. Voucher riêng của từng shop sẽ xuất hiện ở
+                trang cửa hàng hoặc trong lúc thanh toán khi đủ điều kiện.
               </p>
             </div>
           </div>

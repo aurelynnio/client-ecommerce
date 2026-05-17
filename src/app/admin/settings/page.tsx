@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Save, RotateCcw, CheckCircle } from "lucide-react";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { toast } from "sonner";
+import { getSafeErrorMessage } from "@/api";
 import { useSettings, useUpdateSettings } from "@/hooks/queries/useSettings";
 import {
   StoreSettings,
@@ -84,8 +85,8 @@ export default function SettingsPage() {
       await updateMutation.mutateAsync({ store: storeData });
       toast.success("Đã lưu thông tin cửa hàng");
       setStoreEdits({});
-    } catch {
-      toast.error("Không thể lưu cài đặt");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể lưu cài đặt"));
     }
   };
 
@@ -94,8 +95,8 @@ export default function SettingsPage() {
       await updateMutation.mutateAsync({ notifications: notificationData });
       toast.success("Đã lưu cài đặt thông báo");
       setNotificationEdits({});
-    } catch {
-      toast.error("Không thể lưu cài đặt");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể lưu cài đặt"));
     }
   };
 
@@ -104,8 +105,8 @@ export default function SettingsPage() {
       await updateMutation.mutateAsync({ display: displayData });
       toast.success("Đã lưu cài đặt hiển thị");
       setDisplayEdits({});
-    } catch {
-      toast.error("Không thể lưu cài đặt");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể lưu cài đặt"));
     }
   };
 

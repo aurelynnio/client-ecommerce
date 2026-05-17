@@ -185,6 +185,9 @@ export const voucherKeys = {
   all: ["vouchers"] as const,
   lists: () => [...voucherKeys.all, "list"] as const,
   list: (params?: unknown) => [...voucherKeys.lists(), params] as const,
+  platform: () => [...voucherKeys.all, "platform"] as const,
+  shopPublic: (shopId: string) =>
+    [...voucherKeys.all, "shop-public", shopId] as const,
   detail: (voucherId: string) =>
     [...voucherKeys.all, "detail", voucherId] as const,
   available: (params?: unknown) =>

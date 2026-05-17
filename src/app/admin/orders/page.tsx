@@ -151,8 +151,8 @@ export default function OrdersAdminPage() {
 
       handleCloseEditModal();
       toast.success("Order status updated successfully");
-    } catch {
-      toast.error("Failed to update status. Please try again.");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Failed to update status. Please try again."));
     }
   };
 
@@ -206,8 +206,8 @@ export default function OrdersAdminPage() {
       try {
         await cancelOrderMutation.mutateAsync(order._id);
         toast.success("Order cancelled successfully");
-      } catch {
-        toast.error("Failed to cancel order");
+      } catch (error: unknown) {
+        toast.error(getSafeErrorMessage(error, "Failed to cancel order"));
       }
     }
   };

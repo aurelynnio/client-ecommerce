@@ -102,21 +102,51 @@ const statisticsApi = {
     endDate?: string;
     groupBy?: "day" | "week" | "month";
   }): Promise<RevenueStats[]> => {
-    const response = await instance.get("/statistics/revenue", { params });
-    return extractApiData(response);
+    void params;
+    const dashboard = await statisticsApi.getDashboard();
+    return (
+      dashboard.chartData?.map((item) => ({
+        period: item.month,
+        revenue: item.revenue,
+        orders: item.orders,
+        averageOrderValue: item.orders > 0 ? item.revenue / item.orders : 0,
+      })) ?? []
+    );
   },
 
   getProducts: async (): Promise<ProductStats> => {
-    const response = await instance.get("/statistics/products");
-    return extractApiData(response);
+    const dashboard = await statisticsApi.getDashboard();
+    return {
+      topSelling:
+        dashboard.topProducts?.map((product) => ({
+          productId: product._id,
+          name: product.name,
+          sold: product.sold,
+          revenue: product.revenue,
+        })) ?? [],
+      lowStock: [],
+      byCategory: [],
+    };
   },
 
   getOrders: async (params?: {
     startDate?: string;
     endDate?: string;
   }): Promise<OrderStats> => {
-    const response = await instance.get("/statistics/orders", { params });
-    return extractApiData(response);
+    void params;
+    const dashboard = await statisticsApi.getDashboard();
+    return {
+      byStatus: {
+        pending: dashboard.pendingOrders ?? 0,
+      },
+      byPaymentMethod: {},
+      byDay:
+        dashboard.chartData?.map((item) => ({
+          date: item.month,
+          orders: item.orders,
+          revenue: item.revenue,
+        })) ?? [],
+    };
   },
 };
 

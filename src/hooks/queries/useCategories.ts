@@ -74,6 +74,18 @@ const categoryApi = {
     return extractApiData(response);
   },
 
+  getActive: async (
+    params: CategoryListParams = {}
+  ): Promise<CategoriesResponse> => {
+    const { page = 1, limit = 100, search = "", parentCategory } = params;
+    let url = `/categories/active?page=${page}&limit=${limit}&search=${search}`;
+    if (parentCategory !== undefined) {
+      url += `&parentCategory=${parentCategory}`;
+    }
+    const response = await instance.get(url);
+    return extractApiData(response);
+  },
+
   getById: async (categoryId: string): Promise<Category> => {
     const response = await instance.get(`/categories/${categoryId}`);
     return extractApiData(response);
@@ -126,6 +138,17 @@ export function useCategories(params: CategoryListParams = {}) {
   return useQuery({
     queryKey: categoryKeys.list(params),
     queryFn: () => categoryApi.getAll(params),
+    staleTime: STALE_TIME.STATIC,
+  });
+}
+
+/**
+ * Get public active categories with pagination and filters
+ */
+export function useActiveCategories(params: CategoryListParams = {}) {
+  return useQuery({
+    queryKey: categoryKeys.list({ ...params, isActive: true }),
+    queryFn: () => categoryApi.getActive(params),
     staleTime: STALE_TIME.STATIC,
   });
 }

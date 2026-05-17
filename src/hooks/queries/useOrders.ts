@@ -23,6 +23,7 @@ export interface OrderListParams {
   paymentStatus?: "unpaid" | "paid" | "refunded";
   paymentMethod?: "cod" | "vnpay" | "momo";
   userId?: string;
+  shop?: string;
   search?: string;
   startDate?: string;
   endDate?: string;
@@ -40,6 +41,8 @@ export interface CreateOrderData {
     note?: string;
   };
   paymentMethod: "cod" | "vnpay" | "momo";
+  platformVoucher?: string;
+  shopVouchers?: Array<{ shopId: string; code: string }>;
   voucherShopCode?: string;
   voucherPlatformCode?: string;
   discountCode?: string; // DEPRECATED
@@ -107,9 +110,7 @@ const orderApi = {
       paymentStatus,
       paymentMethod,
       userId,
-      search,
-      startDate,
-      endDate,
+      shop,
     } = params;
 
     const response = await instance.get("/orders/all/list", {
@@ -120,9 +121,7 @@ const orderApi = {
         ...(paymentStatus && { paymentStatus }),
         ...(paymentMethod && { paymentMethod }),
         ...(userId && { userId }),
-        ...(search && { search }),
-        ...(startDate && { startDate }),
-        ...(endDate && { endDate }),
+        ...(shop && { shop }),
       },
     });
     const data = extractApiData<{
@@ -138,12 +137,17 @@ const orderApi = {
 
   // Shop orders
   getShopOrders: async (
-    shopId: string,
+    _shopId: string,
     params: OrderListParams = {},
   ): Promise<OrderListResponse> => {
-    const { page = 1, limit = 10, status } = params;
-    const response = await instance.get(`/orders/shop/${shopId}`, {
-      params: { page, limit, ...(status && { status }) },
+    const { page = 1, limit = 10, status, paymentStatus } = params;
+    const response = await instance.get("/orders/seller/list", {
+      params: {
+        page,
+        limit,
+        ...(status && { status }),
+        ...(paymentStatus && { paymentStatus }),
+      },
     });
     const data = extractApiData<{
       data?: Order[];
@@ -157,13 +161,24 @@ const orderApi = {
   },
 
   getStatistics: async (): Promise<OrderStatistics> => {
-    const response = await instance.get("/orders/statistics");
+    const response = await instance.get("/orders/statistics/overview");
     return extractApiData(response);
   },
 
   // Mutations
   create: async (data: CreateOrderData): Promise<Order> => {
-    const response = await instance.post("/orders", data);
+    const {
+      voucherPlatformCode,
+      discountCode,
+      platformVoucher,
+      shopVouchers,
+      ...orderData
+    } = data;
+    const response = await instance.post("/orders", {
+      ...orderData,
+      platformVoucher: platformVoucher ?? voucherPlatformCode ?? discountCode,
+      shopVouchers: shopVouchers ?? [],
+    });
     return extractApiData(response);
   },
 

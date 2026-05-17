@@ -5,7 +5,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useUrlFilters } from "@/hooks/useUrlFilters";
 import { useProducts } from "@/hooks/queries/useProducts";
-import { useCategories } from "@/hooks/queries/useCategories";
+import { useActiveCategories } from "@/hooks/queries/useCategories";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal, ChevronDown } from "lucide-react";
 import ProductFilter from "@/components/product/ProductFilter";
@@ -49,7 +49,7 @@ export default function ProductsPage() {
     basePath: "/products",
   });
 
-  const { data: categoriesData } = useCategories({});
+  const { data: categoriesData } = useActiveCategories({});
   const categories = categoriesData?.data || [];
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);

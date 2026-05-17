@@ -11,7 +11,7 @@ import { setChatOpen } from "@/features/chat/chatSlice";
 import { ChatbotMessage } from "@/types/chat";
 import Link from "next/link";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
 // Extended ChatbotMessage with Date timestamp for local state
 interface Message extends Omit<ChatbotMessage, "timestamp"> {
@@ -64,7 +64,7 @@ export default function ChatWidget() {
     try {
       const res = await fetch(`${API_URL}/api/chatbot/history/${sid}`);
       const data = await res.json();
-      if (data.success && data.data?.messages) {
+      if (data.status === "success" && data.data?.messages) {
         setMessages(
           data.data.messages.map((m: Message) => ({
             ...m,

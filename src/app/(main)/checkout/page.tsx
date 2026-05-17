@@ -147,8 +147,15 @@ export default function CheckoutPage() {
           note: formData.note,
         },
         paymentMethod,
-        voucherShopCode: appliedShopVoucher?.code,
-        voucherPlatformCode: appliedPlatformVoucher?.code,
+        platformVoucher: appliedPlatformVoucher?.code,
+        shopVouchers: appliedShopVoucher
+          ? [
+              {
+                shopId: itemsByShop[0]?.shop._id,
+                code: appliedShopVoucher.code,
+              },
+            ].filter((voucher) => voucher.shopId)
+          : [],
         note: formData.note,
       };
 

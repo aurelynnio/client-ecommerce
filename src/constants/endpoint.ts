@@ -6,7 +6,7 @@
 export const ENDPOINT_AUTH = {
   LOGIN: "/auth/login",
   REGISTER: "/auth/register",
-  REFRESH: "/auth/refresh",
+  REFRESH: "/auth/refresh-token",
   LOGOUT: "/auth/logout",
 } as const;
 

@@ -92,6 +92,11 @@ export interface ApplyVoucherResult {
   scope: VoucherScope;
 }
 
+export interface AvailableVouchersResponse {
+  platform: Voucher[];
+  shop: Voucher[];
+}
+
 // Voucher state for Redux
 export interface VoucherState {
   vouchers: Voucher[];
@@ -117,5 +122,4 @@ export interface VoucherStatistics {
   platformVouchers: number;
   totalUsage: number;
 }
-
 

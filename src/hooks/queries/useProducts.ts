@@ -32,6 +32,7 @@ export interface ProductListParams {
   tags?: string[];
   search?: string;
   isActive?: boolean;
+  status?: "draft" | "published" | "suspended" | "all";
   rating?: string;
   colors?: string;
   sizes?: string;
@@ -93,14 +94,27 @@ function buildProductQueryParams(
 
   if (hasValue(params.page)) queryParams.page = params.page;
   if (hasValue(params.limit)) queryParams.limit = params.limit;
-  if (params.sort) queryParams.sort = params.sort;
+  if (params.sort) {
+    const sortMap: Record<string, string> = {
+      newest: "-createdAt",
+      popular: "-soldCount",
+      best_selling: "-soldCount",
+      price_asc: "price.currentPrice",
+      price_desc: "-price.currentPrice",
+    };
+    queryParams.sort = sortMap[params.sort] || params.sort;
+  }
   if (params.category) queryParams.category = params.category;
   if (params.brand) queryParams.brand = params.brand;
   if (hasValue(params.minPrice)) queryParams.minPrice = params.minPrice;
   if (hasValue(params.maxPrice)) queryParams.maxPrice = params.maxPrice;
   if (params.tags?.length) queryParams.tags = params.tags.join(",");
   if (params.search?.trim()) queryParams.search = params.search.trim();
-  if (hasValue(params.isActive)) queryParams.isActive = params.isActive;
+  if (params.status) {
+    queryParams.status = params.status;
+  } else if (hasValue(params.isActive)) {
+    queryParams.status = params.isActive ? "published" : "suspended";
+  }
   if (params.rating) queryParams.rating = params.rating;
   if (params.colors) queryParams.colors = params.colors;
   if (params.sizes) queryParams.sizes = params.sizes;

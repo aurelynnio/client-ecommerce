@@ -140,7 +140,7 @@ export default function RegisterPage() {
 
         <div className="grid gap-2">
           <Label htmlFor="password" className="text-sm font-medium">
-            Mật khẩu
+            Password
           </Label>
           <div className="relative">
             <Input
@@ -180,7 +180,7 @@ export default function RegisterPage() {
 
         <div className="grid gap-2">
           <Label htmlFor="confirmPassword" className="text-sm font-medium">
-            Xác nhận mật khẩu
+            Confirm password
           </Label>
           <div className="relative">
             <Input

@@ -29,7 +29,6 @@ export interface UserListParams {
 export interface UpdateProfileData {
   username?: string;
   email?: string;
-  phone?: string;
   avatar?: string;
 }
 
@@ -50,7 +49,7 @@ export interface UpdateAddressData extends Partial<CreateAddressData> {
 export interface CreateUserData {
   username: string;
   email: string;
-  phone: string;
+  phone?: string;
   roles: string;
   isVerifiedEmail: boolean;
   password: string;
@@ -129,7 +128,7 @@ const userApi = {
     oldPassword: string;
     newPassword: string;
   }): Promise<void> => {
-    await instance.post("/users/change-password", data);
+    await instance.put("/users/change-password", data);
   },
 
   // Address mutations
@@ -158,7 +157,9 @@ const userApi = {
 
   // Admin mutations
   createUser: async (data: CreateUserData): Promise<User> => {
-    const response = await instance.post("/users", data);
+    const payload = { ...data };
+    delete payload.phone;
+    const response = await instance.post("/users", payload);
     return extractApiData(response);
   },
 

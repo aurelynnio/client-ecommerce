@@ -19,6 +19,7 @@ import {
   UpdateVoucherData,
   VoucherFilters,
   VoucherScope,
+  AvailableVouchersResponse,
   ApplyVoucherResult,
   VoucherStatistics,
 } from "@/types/voucher";
@@ -95,7 +96,7 @@ const voucherApi = {
     orderTotal: number;
     shopId?: string;
     scope?: VoucherScope;
-  }): Promise<Voucher[]> => {
+  }): Promise<AvailableVouchersResponse> => {
     const response = await instance.get("/vouchers/available", { params });
     return extractApiData(response);
   },

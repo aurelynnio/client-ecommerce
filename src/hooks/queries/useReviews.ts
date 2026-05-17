@@ -150,9 +150,9 @@ const reviewApi = {
     shopId: string,
     params: ReviewListParams = {}
   ): Promise<ReviewListResponse> => {
-    const { page = 1, limit = 10 } = params;
+    const { page = 1, limit = 10, rating } = params;
     const response = await instance.get(`/reviews/shop/${shopId}`, {
-      params: { page, limit },
+      params: { page, limit, ...(rating && { rating }) },
     });
     const data = extractApiData<ReviewListResponse & { data?: Review[] }>(
       response

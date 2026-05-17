@@ -79,7 +79,21 @@ export const removeItemsByShop = createAsyncThunk(
   "remove/cart/shop",
   async ({ shopId }: { shopId: string }, { rejectWithValue }) => {
     try {
-      const response = await instance.delete(`/cart/shop/${shopId}`);
+      const cartResponse = await instance.get("/cart");
+      const cart = extractApiData<{
+        items?: Array<{ _id: string; shopId?: string | { _id?: string } }>;
+      }>(cartResponse);
+      const itemIds =
+        cart.items
+          ?.filter((item) => {
+            const itemShopId =
+              typeof item.shopId === "string" ? item.shopId : item.shopId?._id;
+            return itemShopId === shopId;
+          })
+          .map((item) => item._id) ?? [];
+
+      await Promise.all(itemIds.map((itemId) => instance.delete(`/cart/${itemId}`)));
+      const response = await instance.get("/cart");
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));

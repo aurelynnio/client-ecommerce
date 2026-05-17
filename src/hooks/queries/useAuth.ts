@@ -31,7 +31,12 @@ const authApi = {
   },
 
   register: async (credentials: AuthRegister): Promise<unknown> => {
-    const response = await instance.post("/auth/register", credentials, {
+    const payload = {
+      username: credentials.username,
+      email: credentials.email,
+      password: credentials.password,
+    };
+    const response = await instance.post("/auth/register", payload, {
       withCredentials: true,
     });
     return extractApiData(response);

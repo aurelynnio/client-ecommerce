@@ -59,13 +59,14 @@ const notificationApi = {
     const data = extractApiData<
       NotificationListResponse & {
         data?: Notification[];
+        unreadCount?: number;
         metadata?: { unreadCount?: number };
         meta?: { unreadCount?: number };
       }
     >(response);
     // Handle both old format (meta) and new format (metadata)
     const unreadCount =
-      data?.metadata?.unreadCount ?? data?.meta?.unreadCount ?? 0;
+      data?.unreadCount ?? data?.metadata?.unreadCount ?? data?.meta?.unreadCount ?? 0;
     return {
       notifications: data?.notifications || data?.data || [],
       pagination: data?.pagination || null,

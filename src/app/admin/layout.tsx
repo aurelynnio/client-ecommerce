@@ -72,7 +72,7 @@ export default function AdminLayout({
 
   return (
     <RequireRole roles="admin" redirectTo="/">
-      <div className={cn("min-h-screen flex", adminShellClass, "dark:bg-[#000000]")}>
+      <div className={cn("min-h-screen lg:h-screen flex", adminShellClass, "dark:bg-[#000000]")}>
         {/* Mobile Sidebar */}
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent
@@ -84,7 +84,7 @@ export default function AdminLayout({
             )}
           >
             <SheetTitle className="sr-only">Menu Điều hướng Admin</SheetTitle>
-            <div className="flex h-full flex-col">
+            <div className="flex h-full min-h-0 flex-col">
               {/* Mobile Logo */}
               <div className="flex h-16 items-center px-6">
                 <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ export default function AdminLayout({
                 </div>
               </div>
 
-              <ScrollArea className="flex-1 px-3 py-4">
+              <ScrollArea className="min-h-0 flex-1 px-3 py-4">
                 <nav className="flex flex-col gap-1">
                   {filteredNavigation.map((item) => {
                     const isActive =
@@ -139,7 +139,7 @@ export default function AdminLayout({
         {/* Desktop Sidebar */}
         <aside
           className={cn(
-            "hidden lg:flex flex-col bg-[#f7f7f7] dark:bg-[#1C1C1E] fixed inset-y-0 z-50 transition-all duration-300 ease-in-out",
+            "hidden lg:flex min-h-0 flex-col bg-[#f7f7f7] dark:bg-[#1C1C1E] fixed inset-y-0 z-50 transition-all duration-300 ease-in-out",
             adminSubtleSurfaceClass,
             "rounded-none border-y-0 border-l-0",
             isCollapsed ? "w-[72px]" : "w-[260px]"
@@ -180,7 +180,7 @@ export default function AdminLayout({
           </div>
 
           {/* Navigation */}
-          <ScrollArea className="flex-1 py-4 px-3">
+          <ScrollArea className="min-h-0 flex-1 px-3 py-4">
             <nav className="flex flex-col gap-1">
               {filteredNavigation.map((item) => {
                 const isActive =
@@ -229,7 +229,7 @@ export default function AdminLayout({
           </ScrollArea>
 
           {/* User & Logout */}
-          <div className="p-3">
+          <div className="shrink-0 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             {!isCollapsed && data && (
               <div className="flex items-center gap-3 px-2 py-2 mb-2">
                 <div className="relative h-9 w-9 rounded-full overflow-hidden">
@@ -266,7 +266,7 @@ export default function AdminLayout({
         {/* Main Content */}
         <div
           className={cn(
-            "flex-1 flex flex-col min-h-screen transition-all duration-300",
+            "flex-1 flex min-h-screen min-w-0 flex-col lg:min-h-0 transition-all duration-300",
             isCollapsed ? "lg:ml-[72px]" : "lg:ml-[260px]"
           )}
         >
@@ -331,7 +331,7 @@ export default function AdminLayout({
           />
 
           {/* Page Content */}
-          <main className="flex-1 overflow-x-auto p-4 sm:p-6">
+          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-4 pb-8 sm:p-6 sm:pb-10">
             <div className="max-w-[1600px] mx-auto animate-in fade-in duration-300">
               {children}
             </div>

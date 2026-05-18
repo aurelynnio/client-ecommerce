@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   ShoppingCart,
@@ -188,13 +187,15 @@ export default function AdminDashboard() {
         description="Theo dõi thống kê, doanh thu và nhịp vận hành của toàn bộ hệ thống."
         actions={
           <>
-            <Button
-              variant="ghost"
-              className={cn("h-10 gap-2 text-sm font-medium", adminSecondaryButtonClass)}
+            <div
+              className={cn(
+                "flex h-10 items-center gap-2 px-5 text-sm font-medium",
+                adminSecondaryButtonClass,
+              )}
             >
               <Calendar className="h-3.5 w-3.5" />
               {format(new Date(), "dd/MM/yyyy")}
-            </Button>
+            </div>
             <AdminActionButton onClick={handleRefresh} disabled={loading}>
               {loading ? (
                 <SpinnerLoading size={14} className="text-current" />

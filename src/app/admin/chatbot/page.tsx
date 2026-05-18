@@ -140,7 +140,7 @@ export default function AdminChatbotPage() {
                         : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
                     )}
                   >
-                    <p>{msg.content}</p>
+                    <p>{msg.content?.trim() || "[Tin nhắn trống]"}</p>
                     <p
                       className={cn(
                         "text-[10px] mt-1 text-right",

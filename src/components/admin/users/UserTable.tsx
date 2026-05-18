@@ -259,6 +259,8 @@ export function UsersTable({
              variant="outline"
              size="icon"
              className={adminSmallIconButtonClass}
+             disabled
+             title="Chưa hỗ trợ xuất dữ liệu"
            >
              <Download className="h-4 w-4" />
            </Button>

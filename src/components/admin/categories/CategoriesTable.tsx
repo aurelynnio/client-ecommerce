@@ -283,6 +283,8 @@ export function CategoriesTable({
             variant="outline"
             size="icon"
             className={adminSmallIconButtonClass}
+            disabled
+            title="Bộ lọc nâng cao chưa được hỗ trợ"
           >
             <Filter className="h-4 w-4" />
           </Button>
@@ -290,6 +292,8 @@ export function CategoriesTable({
             variant="outline"
             size="icon"
             className={adminSmallIconButtonClass}
+            disabled
+            title="Chưa hỗ trợ xuất dữ liệu"
           >
             <Download className="h-4 w-4" />
           </Button>

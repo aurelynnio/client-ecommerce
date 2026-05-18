@@ -400,8 +400,8 @@ export default function ProductFilter({
 
   // Desktop version - Sidebar only
   return (
-    <div className="hidden lg:block w-60 shrink-0">
-      <div className="sticky top-[180px] h-fit max-h-[calc(100vh-200px)] overflow-y-auto bg-[#f7f7f7] rounded-lg p-4">
+    <div className="hidden lg:block w-full shrink-0">
+      <div className="sticky top-[188px] h-fit max-h-[calc(100vh-204px)] overflow-y-auto rounded-[28px] border border-[#efe6db] bg-white p-5 shadow-[0_24px_70px_-54px_rgba(15,23,42,0.35)]">
         {filterContent}
       </div>
     </div>

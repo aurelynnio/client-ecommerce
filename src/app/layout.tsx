@@ -13,6 +13,11 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "Ecommerce",
   description: "Ecommerce",
+  icons: {
+    icon: "/images/logo.png",
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
   other: {
     google: "notranslate",
   },

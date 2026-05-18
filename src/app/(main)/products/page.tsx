@@ -7,7 +7,7 @@ import { useUrlFilters } from "@/hooks/useUrlFilters";
 import { useProducts } from "@/hooks/queries/useProducts";
 import { useActiveCategories } from "@/hooks/queries/useCategories";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, Sparkles, LayoutGrid } from "lucide-react";
 import ProductFilter from "@/components/product/ProductFilter";
 import ProductGrid from "@/components/product/ProductGrid";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
@@ -39,6 +39,13 @@ const SORT_TABS = [
   { label: "Giá", value: "price", hasDropdown: true },
 ];
 
+const DEFAULT_MAX_PRICE = 10000000;
+
+const formatCompactPrice = (value: number) =>
+  value.toLocaleString("vi-VN", {
+    maximumFractionDigits: 0,
+  });
+
 export default function ProductsPage() {
   const {
     filters: urlFilters,
@@ -50,7 +57,7 @@ export default function ProductsPage() {
   });
 
   const { data: categoriesData } = useActiveCategories({});
-  const categories = categoriesData?.data || [];
+  const categories = useMemo(() => categoriesData?.data || [], [categoriesData?.data]);
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [productLimit, setProductLimit] = useState(50);
@@ -72,6 +79,11 @@ export default function ProductsPage() {
     }),
     [urlFilters]
   );
+
+  const activeCategoryName = useMemo(() => {
+    if (!activeCategory) return "Tất cả danh mục";
+    return categories.find((category) => category._id === activeCategory)?.name || "Danh mục đã chọn";
+  }, [activeCategory, categories]);
 
   const priceSort =
     filters.sortBy === "price_desc"
@@ -112,6 +124,33 @@ export default function ProductsPage() {
   const { data: productsData, isLoading } = useProducts(queryParams);
   const products = useMemo(() => productsData?.products || [], [productsData?.products]);
   const totalProducts = productsData?.pagination?.total || products.length;
+  const activeFiltersCount = useMemo(() => {
+    return (
+      (filters.search ? 1 : 0) +
+      filters.rating.length +
+      filters.colors.length +
+      filters.sizes.length +
+      (filters.minPrice > 0 || filters.maxPrice < DEFAULT_MAX_PRICE ? 1 : 0) +
+      (activeCategory ? 1 : 0)
+    );
+  }, [activeCategory, filters]);
+
+  const appliedFilterLabels = useMemo(() => {
+    const labels: string[] = [];
+
+    if (activeCategory) labels.push(activeCategoryName);
+    if (filters.search) labels.push(`Từ khóa: ${filters.search}`);
+    if (filters.minPrice > 0 || filters.maxPrice < DEFAULT_MAX_PRICE) {
+      labels.push(
+        `Giá: ${formatCompactPrice(filters.minPrice)}đ - ${formatCompactPrice(filters.maxPrice)}đ`,
+      );
+    }
+    if (filters.colors.length > 0) labels.push(`${filters.colors.length} màu`);
+    if (filters.sizes.length > 0) labels.push(`${filters.sizes.length} kích thước`);
+    if (filters.rating.length > 0) labels.push(`${filters.rating.length} mức đánh giá`);
+
+    return labels;
+  }, [activeCategory, activeCategoryName, filters]);
 
   const availableColors = useMemo(
     () =>
@@ -185,18 +224,70 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="w-full bg-white min-h-screen">
-      {/* Sticky Category & Sort Tabs */}
-      <div className="sticky top-[91px] z-40 bg-white border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-4">
-          {/* Category Pills */}
-          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
+    <div className="min-h-screen bg-[#fcfaf6]">
+      <div className="mx-auto max-w-[1440px] px-4 py-6 lg:px-6">
+        <section className="overflow-hidden rounded-[32px] border border-[#efe6db] bg-white shadow-[0_24px_70px_-48px_rgba(15,23,42,0.3)]">
+          <div className="grid gap-6 px-5 py-6 lg:grid-cols-[minmax(0,1fr)_260px] lg:px-8 lg:py-8">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#f3d7d1] bg-[#fff5f3] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#E53935]">
+                <Sparkles className="h-3.5 w-3.5" />
+                Danh mục sản phẩm
+              </div>
+              <div className="space-y-3">
+                <h1 className="max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 lg:text-4xl">
+                  Khám phá sản phẩm theo cách gọn hơn, dễ lọc hơn và đỡ rối hơn.
+                </h1>
+                <p className="max-w-2xl text-sm leading-7 text-slate-500 lg:text-base">
+                  Toàn bộ danh mục, bộ lọc và sắp xếp được gom lại thành một nhịp đọc rõ ràng hơn để người dùng tìm đúng món nhanh hơn.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="rounded-[24px] border border-[#f0e4d6] bg-[#faf6f0] px-5 py-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Kết quả hiện có
+                </p>
+                <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+                  {totalProducts}
+                </p>
+                <p className="mt-1 text-sm text-slate-500">sản phẩm trong danh sách</p>
+              </div>
+              <div className="rounded-[24px] border border-[#f0e4d6] bg-[#faf6f0] px-5 py-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Bộ lọc đang dùng
+                </p>
+                <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+                  {activeFiltersCount}
+                </p>
+                <p className="mt-1 text-sm text-slate-500">{activeCategoryName}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-5 rounded-[28px] border border-[#efe6db] bg-white px-4 py-4 shadow-[0_20px_60px_-52px_rgba(15,23,42,0.35)] lg:px-5">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Duyệt nhanh theo danh mục
+              </p>
+              <p className="mt-1 text-sm text-slate-500">
+                Chọn một nhóm hàng trước, sau đó tinh chỉnh bằng bộ lọc bên trái.
+              </p>
+            </div>
+            <div className="hidden items-center gap-2 rounded-full bg-[#faf6f0] px-3 py-2 text-xs font-medium text-slate-500 lg:flex">
+              <LayoutGrid className="h-3.5 w-3.5" />
+              {categories.length} danh mục
+            </div>
+          </div>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <button
               onClick={() => handleCategoryClick(null)}
-              className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                 !activeCategory
-                  ? "bg-[#E53935] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-[#E53935] text-white shadow-[0_12px_24px_-18px_rgba(229,57,53,0.9)]"
+                  : "bg-[#faf6f0] text-slate-600 hover:bg-[#f4ede4]"
               }`}
             >
               Tất cả
@@ -205,97 +296,127 @@ export default function ProductsPage() {
               <button
                 key={category._id}
                 onClick={() => handleCategoryClick(category._id)}
-                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   activeCategory === category._id
-                    ? "bg-[#E53935] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-[#E53935] text-white shadow-[0_12px_24px_-18px_rgba(229,57,53,0.9)]"
+                    : "bg-[#faf6f0] text-slate-600 hover:bg-[#f4ede4]"
                 }`}
               >
                 {category.name}
               </button>
             ))}
           </div>
+        </section>
+      </div>
 
-          {/* Sort Tabs */}
-          <div className="flex flex-col gap-2 py-2 border-t border-gray-100 sm:flex-row sm:items-center">
-            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
-              <span className="text-sm text-gray-500 mr-2 shrink-0">
-                Sắp xếp theo
-              </span>
-              {SORT_TABS.map((tab) => (
-                <button
-                  key={tab.value}
-                  onClick={() => handleSortTabClick(tab.value)}
-                  className={`flex items-center gap-1 px-4 py-1.5 text-sm font-medium rounded transition-colors shrink-0 ${
-                    filters.sortBy === tab.value ||
-                    (tab.value === "price" && filters.sortBy?.startsWith("price"))
-                      ? "bg-[#E53935] text-white"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  {tab.label}
-                  {tab.hasDropdown && (
-                    <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform ${
-                        priceSort === "desc" ? "rotate-180" : ""
-                      }`}
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-2 sm:ml-auto">
-              {/* Mobile Filter Button */}
-              <Sheet
-                open={isMobileFilterOpen}
-                onOpenChange={setIsMobileFilterOpen}
-              >
-                <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="lg:hidden rounded h-8 border-gray-200"
-                  >
-                    <SlidersHorizontal className="w-4 h-4 mr-1.5" />
-                    Lọc
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="left"
-                  className="w-[280px] overflow-y-auto p-0"
-                >
-                  <SheetHeader className="p-4 border-b">
-                    <SheetTitle>Bộ lọc</SheetTitle>
-                  </SheetHeader>
-                  <div className="p-4">
-                    <ProductFilter
-                      filters={filters}
-                      onFilterChange={handleFilterChange}
-                      onClearFilters={handleClearFilters}
-                      availableColors={availableColors}
-                      availableSizes={availableSizes}
-                    />
+      <div className="sticky top-[91px] z-40 border-y border-[#efe6db] bg-[#fcfaf6]/95 backdrop-blur-md">
+        <div className="mx-auto max-w-[1440px] px-4 py-3 lg:px-6">
+          <div className="rounded-[24px] border border-[#efe6db] bg-white px-4 py-4 shadow-[0_16px_50px_-44px_rgba(15,23,42,0.35)] lg:px-5">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2 text-sm">
+                  <span className="font-semibold text-slate-950">{totalProducts}</span>
+                  <span className="text-slate-500">sản phẩm</span>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-slate-500">{activeCategoryName}</span>
+                  {activeFiltersCount > 0 ? (
+                    <>
+                      <span className="text-slate-300">•</span>
+                      <span className="rounded-full bg-[#fff1ee] px-2.5 py-1 text-xs font-medium text-[#E53935]">
+                        {activeFiltersCount} bộ lọc đang áp dụng
+                      </span>
+                    </>
+                  ) : null}
+                </div>
+                {appliedFilterLabels.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {appliedFilterLabels.map((label) => (
+                      <span
+                        key={label}
+                        className="rounded-full border border-[#f0e4d6] bg-[#faf6f0] px-3 py-1 text-xs font-medium text-slate-600"
+                      >
+                        {label}
+                      </span>
+                    ))}
+                    <button
+                      onClick={handleClearFilters}
+                      className="rounded-full border border-transparent px-1 text-xs font-medium text-[#E53935] transition-colors hover:text-[#D32F2F]"
+                    >
+                      Xóa bộ lọc
+                    </button>
                   </div>
-                </SheetContent>
-              </Sheet>
+                ) : (
+                  <p className="text-sm text-slate-500">
+                    Chưa áp dụng bộ lọc nào. Bạn có thể bắt đầu từ danh mục, giá hoặc màu sắc.
+                  </p>
+                )}
+              </div>
 
-              {/* Product Count */}
-              <div className="hidden lg:flex items-center text-sm text-gray-500">
-                <span className="font-medium text-gray-800">
-                  {products?.length || 0}
-                </span>
-                <span className="ml-1">/ {totalProducts} sản phẩm</span>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between xl:justify-end">
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                  {SORT_TABS.map((tab) => (
+                    <button
+                      key={tab.value}
+                      onClick={() => handleSortTabClick(tab.value)}
+                      className={`flex shrink-0 items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                        filters.sortBy === tab.value ||
+                        (tab.value === "price" && filters.sortBy?.startsWith("price"))
+                          ? "bg-[#E53935] text-white shadow-[0_12px_24px_-18px_rgba(229,57,53,0.9)]"
+                          : "bg-[#faf6f0] text-slate-600 hover:bg-[#f4ede4]"
+                      }`}
+                    >
+                      {tab.label}
+                      {tab.hasDropdown ? (
+                        <ChevronDown
+                          className={`h-3.5 w-3.5 transition-transform ${
+                            priceSort === "desc" ? "rotate-180" : ""
+                          }`}
+                        />
+                      ) : null}
+                    </button>
+                  ))}
+                </div>
+
+                <Sheet
+                  open={isMobileFilterOpen}
+                  onOpenChange={setIsMobileFilterOpen}
+                >
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full border-[#e9ddd0] bg-white text-slate-700 hover:bg-[#faf6f0] lg:hidden"
+                    >
+                      <SlidersHorizontal className="mr-1.5 h-4 w-4" />
+                      Bộ lọc
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="left"
+                    className="w-[300px] overflow-y-auto border-r border-[#efe6db] bg-[#fcfaf6] p-0"
+                  >
+                    <SheetHeader className="border-b border-[#efe6db] px-5 py-4">
+                      <SheetTitle>Bộ lọc sản phẩm</SheetTitle>
+                    </SheetHeader>
+                    <div className="p-4">
+                      <ProductFilter
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        onClearFilters={handleClearFilters}
+                        availableColors={availableColors}
+                        availableSizes={availableSizes}
+                      />
+                    </div>
+                  </SheetContent>
+                </Sheet>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-[1400px] mx-auto px-4 py-4">
-        <div className="flex gap-4">
-          {/* Desktop Sidebar */}
+      <div className="mx-auto max-w-[1440px] px-4 py-6 lg:px-6">
+        <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
           <ProductFilter
             filters={filters}
             onFilterChange={handleFilterChange}
@@ -304,27 +425,25 @@ export default function ProductsPage() {
             availableSizes={availableSizes}
           />
 
-          {/* Product Grid */}
           <div className="flex-1 min-h-[500px] relative">
             {isLoading && (
-              <div className="absolute inset-0 z-10 bg-white/60 flex items-center justify-center rounded-lg">
+              <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[28px] bg-white/70 backdrop-blur-sm">
                 <SpinnerLoading />
               </div>
             )}
 
-            <div className="bg-[#f7f7f7] rounded-lg p-4">
+            <div className="rounded-[28px] border border-[#efe6db] bg-white p-4 shadow-[0_24px_70px_-54px_rgba(15,23,42,0.35)] sm:p-5">
               <ProductGrid
                 products={products || []}
                 isLoading={isLoading && !products?.length}
               />
             </div>
 
-            {/* Load More */}
             {products.length > 0 && products.length < totalProducts && (
               <div className="flex justify-center mt-6">
                 <Button
                   variant="outline"
-                  className="px-8 h-10 rounded border-[#E53935] text-[#E53935] hover:bg-[#E53935]/5"
+                  className="h-11 rounded-full border-[#E53935]/25 bg-white px-8 text-[#E53935] hover:bg-[#fff5f3]"
                   onClick={() => setProductLimit((prev) => prev + 50)}
                   disabled={isLoading}
                 >

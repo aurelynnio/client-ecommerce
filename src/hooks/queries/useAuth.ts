@@ -1,7 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import instance from "@/api/api";
 import { extractApiData } from "@/api";
-import { AuthLogin, AuthRegister, PasswordReset, User } from "@/types/auth";
+import {
+  AuthLogin,
+  AuthRegister,
+  LoginResult,
+  PasswordReset,
+  TwoFactorLoginChallenge,
+  User,
+} from "@/types/auth";
 import { useAppDispatch } from "@/hooks/hooks";
 import { authSlice } from "@/features/auth/authSlice";
 import {
@@ -22,8 +29,13 @@ interface RefreshTokenResponse {
   permissions?: string[];
 }
 
+interface VerifyLoginTwoFactorPayload {
+  challengeToken: string;
+  code: string;
+}
+
 const authApi = {
-  login: async (credentials: AuthLogin): Promise<User> => {
+  login: async (credentials: AuthLogin): Promise<LoginResult> => {
     const response = await instance.post("/auth/login", credentials, {
       withCredentials: true,
     });
@@ -77,6 +89,24 @@ const authApi = {
     const response = await instance.get("/users/profile");
     return extractApiData(response);
   },
+
+  verifyLoginTwoFactor: async (
+    payload: VerifyLoginTwoFactorPayload,
+  ): Promise<User> => {
+    const response = await instance.post("/auth/2fa/verify-login", payload, {
+      withCredentials: true,
+    });
+    return extractApiData(response);
+  },
+
+  resendLoginTwoFactorCode: async (
+    payload: Pick<VerifyLoginTwoFactorPayload, "challengeToken">,
+  ): Promise<{ email: string; expiresIn: string }> => {
+    const response = await instance.post("/auth/2fa/resend-login-code", payload, {
+      withCredentials: true,
+    });
+    return extractApiData(response);
+  },
 };
 
 function setAuthenticatedUser(dispatch: ReturnType<typeof useAppDispatch>, user: User) {
@@ -88,15 +118,23 @@ function clearUserSession(dispatch: ReturnType<typeof useAppDispatch>) {
   dispatch(authSlice.actions.clearAuth());
 }
 
+function isTwoFactorChallenge(result: LoginResult): result is TwoFactorLoginChallenge {
+  return "requiresTwoFactor" in result && result.requiresTwoFactor === true;
+}
+
 export function useLogin() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: authApi.login,
-    onSuccess: (user) => {
-      setAuthenticatedUser(dispatch, user);
-      queryClient.setQueryData(userKeys.profile(), user);
+    onSuccess: (result) => {
+      if (isTwoFactorChallenge(result)) {
+        return;
+      }
+
+      setAuthenticatedUser(dispatch, result);
+      queryClient.setQueryData(userKeys.profile(), result);
     },
   });
 }
@@ -162,5 +200,24 @@ export function useRefreshAuthSession() {
       setAuthenticatedUser(dispatch, user);
       queryClient.setQueryData(userKeys.profile(), user);
     },
+  });
+}
+
+export function useVerifyLoginTwoFactor() {
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: authApi.verifyLoginTwoFactor,
+    onSuccess: (user) => {
+      setAuthenticatedUser(dispatch, user);
+      queryClient.setQueryData(userKeys.profile(), user);
+    },
+  });
+}
+
+export function useResendLoginTwoFactorCode() {
+  return useMutation({
+    mutationFn: authApi.resendLoginTwoFactorCode,
   });
 }

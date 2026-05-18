@@ -21,11 +21,21 @@ export interface User {
   permissions: Array<string>;
   avatar: string;
   isVerifiedEmail: boolean;
+  isTwoFactorEnabled?: boolean;
   provider: string;
   addresses: Array<Address>;
   createdAt: string;
   updatedAt: string;
 }
+
+export interface TwoFactorLoginChallenge {
+  requiresTwoFactor: true;
+  challengeToken: string;
+  email: string;
+  expiresIn: string;
+}
+
+export type LoginResult = User | TwoFactorLoginChallenge;
 
 export interface AuthState {
   loading: boolean;

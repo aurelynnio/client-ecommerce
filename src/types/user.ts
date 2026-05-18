@@ -19,7 +19,7 @@ export interface User extends BaseEntity {
 
   // Verification
   isVerifiedEmail: boolean;
-  isTwoFactorEnabled?: boolean;
+  isTwoFactorEnabled: boolean;
   provider: AuthProvider;
 
   // Addresses

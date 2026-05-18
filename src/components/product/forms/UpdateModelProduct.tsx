@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -506,14 +507,31 @@ export function UpdateModelProduct({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[1000px] rounded-4xl border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto no-scrollbar">
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-[1000px] rounded-4xl border-border/50 bg-white/80 p-6 shadow-2xl backdrop-blur-xl dark:bg-[#1C1C1E]/80 max-h-[90vh] overflow-y-auto no-scrollbar"
+      >
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold tracking-tight">
-            Cập nhật sản phẩm
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            Chỉnh sửa thông tin sản phẩm
-          </DialogDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <DialogTitle className="text-xl font-semibold tracking-tight">
+                Cập nhật sản phẩm
+              </DialogTitle>
+              <DialogDescription className="mt-1 text-muted-foreground">
+                Chỉnh sửa thông tin sản phẩm
+              </DialogDescription>
+            </div>
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 shrink-0 rounded-2xl text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </DialogClose>
+          </div>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">

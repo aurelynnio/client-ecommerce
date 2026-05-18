@@ -1,6 +1,10 @@
 "use client";
-import { useState } from "react";
-import { useChangePassword } from "@/hooks/queries/useProfile";
+import { useEffect, useState } from "react";
+import {
+  useChangePassword,
+  useConfirmTwoFactor,
+  useSendTwoFactorCode,
+} from "@/hooks/queries/useProfile";
 import { Shield, Key, Eye, EyeOff, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,10 +32,20 @@ export default function SettingsTab({ user }: SettingsTabProps) {
     new: false,
     confirm: false,
   });
+  const sendTwoFactorCodeMutation = useSendTwoFactorCode();
+  const confirmTwoFactorMutation = useConfirmTwoFactor();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(
     user?.isTwoFactorEnabled || false,
   );
+  const [pendingTwoFactorAction, setPendingTwoFactorAction] = useState<
+    "enable" | "disable" | null
+  >(null);
+  const [twoFactorCode, setTwoFactorCode] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  useEffect(() => {
+    setTwoFactorEnabled(user?.isTwoFactorEnabled || false);
+  }, [user?.isTwoFactorEnabled]);
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +103,55 @@ export default function SettingsTab({ user }: SettingsTabProps) {
       ...prev,
       [field]: !prev[field],
     }));
+  };
+
+  const handleTwoFactorToggle = async () => {
+    if (!user?.isVerifiedEmail) {
+      toast.error("Bạn cần xác minh email trước khi bật xác thực 2 yếu tố");
+      return;
+    }
+
+    const action = twoFactorEnabled ? "disable" : "enable";
+
+    try {
+      await sendTwoFactorCodeMutation.mutateAsync(action);
+      setPendingTwoFactorAction(action);
+      setTwoFactorCode("");
+      toast.success(
+        action === "enable"
+          ? "Mã xác minh đã được gửi để bật 2FA"
+          : "Mã xác minh đã được gửi để tắt 2FA",
+      );
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể gửi mã xác thực 2 yếu tố"));
+    }
+  };
+
+  const handleConfirmTwoFactor = async () => {
+    if (!pendingTwoFactorAction) return;
+
+    if (!/^\d{6}$/.test(twoFactorCode.trim())) {
+      toast.error("Vui lòng nhập mã gồm 6 chữ số");
+      return;
+    }
+
+    try {
+      const updatedUser = await confirmTwoFactorMutation.mutateAsync({
+        action: pendingTwoFactorAction,
+        code: twoFactorCode.trim(),
+      });
+      const enabled = !!updatedUser.isTwoFactorEnabled;
+      setTwoFactorEnabled(enabled);
+      setPendingTwoFactorAction(null);
+      setTwoFactorCode("");
+      toast.success(
+        enabled
+          ? "Đã bật xác thực 2 yếu tố"
+          : "Đã tắt xác thực 2 yếu tố",
+      );
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể xác nhận mã 2FA"));
+    }
   };
 
   const SectionHeader = ({
@@ -269,16 +332,114 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       Xác thực 2 yếu tố
                     </h4>
                     <p className="text-xs text-muted-foreground">
-                      Tính năng đang được phát triển và sẽ sớm khả dụng.
+                      Nhận mã xác minh qua email mỗi khi đăng nhập để tăng bảo mật tài khoản.
                     </p>
                   </div>
                 </div>
                 <Switch
                   checked={twoFactorEnabled}
-                  onCheckedChange={setTwoFactorEnabled}
-                  disabled
+                  onCheckedChange={() => {
+                    void handleTwoFactorToggle();
+                  }}
+                  disabled={
+                    !!pendingTwoFactorAction ||
+                    sendTwoFactorCodeMutation.isPending ||
+                    confirmTwoFactorMutation.isPending
+                  }
                 />
               </div>
+              <div className="mt-3 flex items-center gap-2">
+                {twoFactorEnabled ? (
+                  <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
+                    Đang bật
+                  </Badge>
+                ) : (
+                  <Badge
+                    variant="outline"
+                    className="border-slate-200 bg-slate-50 text-slate-600"
+                  >
+                    Chưa bật
+                  </Badge>
+                )}
+                {!user?.isVerifiedEmail ? (
+                  <span className="text-xs text-amber-600">
+                    Cần xác minh email trước khi sử dụng.
+                  </span>
+                ) : null}
+              </div>
+              {pendingTwoFactorAction ? (
+                <div className="mt-4 rounded-md border border-border/40 bg-background p-4">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">
+                      Nhập mã xác thực đã gửi tới {user.email}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Mã có hiệu lực trong 10 phút.
+                    </p>
+                  </div>
+                  <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                    <Input
+                      inputMode="numeric"
+                      maxLength={6}
+                      value={twoFactorCode}
+                      onChange={(e) =>
+                        setTwoFactorCode(e.target.value.replace(/\D/g, ""))
+                      }
+                      placeholder="Nhập 6 chữ số"
+                      className="sm:max-w-[220px]"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          void handleConfirmTwoFactor();
+                        }}
+                        disabled={confirmTwoFactorMutation.isPending}
+                        className="text-white"
+                      >
+                        {confirmTwoFactorMutation.isPending
+                          ? "Đang xác nhận..."
+                          : pendingTwoFactorAction === "enable"
+                            ? "Bật 2FA"
+                            : "Tắt 2FA"}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        disabled={sendTwoFactorCodeMutation.isPending}
+                        onClick={() => {
+                          if (!pendingTwoFactorAction) return;
+                          void sendTwoFactorCodeMutation
+                            .mutateAsync(pendingTwoFactorAction)
+                            .then(() => {
+                              toast.success("Đã gửi lại mã xác thực");
+                            })
+                            .catch((error: unknown) => {
+                              toast.error(
+                                getSafeErrorMessage(
+                                  error,
+                                  "Không thể gửi lại mã xác thực 2 yếu tố",
+                                ),
+                              );
+                            });
+                        }}
+                      >
+                        Gửi lại mã
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setPendingTwoFactorAction(null);
+                          setTwoFactorCode("");
+                        }}
+                      >
+                        Hủy
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <div className="bg-muted/20 p-5 rounded-md border border-border/30">

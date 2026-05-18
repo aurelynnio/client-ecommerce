@@ -152,6 +152,44 @@ export default function SellerProductsPage() {
     return product.stock || 0;
   };
 
+  const getStatusBadge = (product: Product) => {
+    switch (product.status) {
+      case "published":
+        return {
+          label: "Đang bán",
+          className: "bg-emerald-100 text-emerald-700 hover:bg-emerald-100",
+        };
+      case "draft":
+        return {
+          label: "Bản nháp",
+          className: "bg-amber-100 text-amber-700 hover:bg-amber-100",
+        };
+      case "suspended":
+        return {
+          label: "Tạm ngưng",
+          className: "bg-rose-100 text-rose-700 hover:bg-rose-100",
+        };
+      default:
+        return {
+          label: "Ẩn",
+          className: "bg-slate-100 text-slate-600 hover:bg-slate-100",
+        };
+    }
+  };
+
+  const renderStatusBadge = (product: Product) => {
+    const statusBadge = getStatusBadge(product);
+
+    return (
+      <Badge
+        variant="secondary"
+        className={`rounded-full px-3 ${statusBadge.className}`}
+      >
+        {statusBadge.label}
+      </Badge>
+    );
+  };
+
   if (!myShop) return null;
 
   return (
@@ -312,16 +350,7 @@ export default function SellerProductsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <Badge
-                        variant={product.isActive ? "default" : "secondary"}
-                        className={`rounded-full px-3 ${
-                          product.isActive
-                            ? "bg-green-100 text-green-700 hover:bg-green-100"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {product.isActive ? "Đang bán" : "Ẩn"}
-                      </Badge>
+                      {renderStatusBadge(product)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <DropdownMenu>

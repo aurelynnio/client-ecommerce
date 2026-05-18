@@ -69,6 +69,16 @@ const BACKEND_MESSAGE_TRANSLATIONS: Record<string, string> = {
     "Không thể gửi email xác thực. Vui lòng thử lại",
   "failed to send password reset email. please try again.":
     "Không thể gửi email đặt lại mật khẩu. Vui lòng thử lại",
+  "please verify your email before enabling two-factor authentication":
+    "Bạn cần xác minh email trước khi bật xác thực 2 yếu tố",
+  "two-factor authentication is already enabled":
+    "Xác thực 2 yếu tố đã được bật",
+  "two-factor authentication is not enabled":
+    "Xác thực 2 yếu tố chưa được bật",
+  "failed to send two-factor authentication code. please try again.":
+    "Không thể gửi mã xác thực 2 yếu tố. Vui lòng thử lại",
+  "invalid or expired two-factor challenge":
+    "Phiên xác thực 2 yếu tố không còn hiệu lực",
   "current password is incorrect": "Mật khẩu hiện tại không chính xác",
   "refresh token is required": "Phiên đăng nhập không hợp lệ, vui lòng đăng nhập lại",
   "invalid or expired refresh token":

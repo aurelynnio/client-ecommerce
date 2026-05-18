@@ -24,8 +24,9 @@ import {
   Heart,
   Wallet,
   Gift,
-  Star,
   Store,
+  ShieldCheck,
+  UserRound,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -60,6 +61,18 @@ export default function ProfilePage() {
   const pendingOrders =
     ordersData?.orders?.filter((order) => order.status === "pending").length || 0;
   const followingCount = currentUser?.followingShops?.length || 0;
+  const accountRoleLabel =
+    currentUser?.roles === "admin"
+      ? "Quản trị viên"
+      : currentUser?.roles === "seller"
+        ? "Người bán"
+        : "Tài khoản cá nhân";
+  const AccountBadgeIcon =
+    currentUser?.roles === "admin"
+      ? ShieldCheck
+      : currentUser?.roles === "seller"
+        ? Store
+        : UserRound;
 
   const handleTabChange = (value: string) => {
     router.push(`/profile?tab=${value}`);
@@ -171,9 +184,9 @@ export default function ProfilePage() {
                     {currentUser?.username || "Người dùng"}
                   </p>
                   <div className="flex items-center gap-1 mt-0.5">
-                    <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                    <AccountBadgeIcon className="h-3 w-3 text-primary" />
                     <span className="text-xs text-muted-foreground">
-                      Thành viên Vàng
+                      {accountRoleLabel}
                     </span>
                   </div>
                 </div>

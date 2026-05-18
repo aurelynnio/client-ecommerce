@@ -32,6 +32,8 @@ export interface UpdateProfileData {
   avatar?: string;
 }
 
+export type TwoFactorAction = "enable" | "disable";
+
 export interface CreateAddressData {
   fullName: string;
   phone: string;
@@ -129,6 +131,23 @@ const userApi = {
     newPassword: string;
   }): Promise<void> => {
     await instance.put("/users/change-password", data);
+  },
+
+  sendTwoFactorCode: async (action: TwoFactorAction): Promise<{
+    action: TwoFactorAction;
+    email: string;
+    expiresIn: string;
+  }> => {
+    const response = await instance.post("/auth/2fa/send-code", { action });
+    return extractApiData(response);
+  },
+
+  confirmTwoFactor: async (data: {
+    action: TwoFactorAction;
+    code: string;
+  }): Promise<User> => {
+    const response = await instance.post("/auth/2fa/confirm", data);
+    return extractApiData(response);
   },
 
   // Address mutations
@@ -255,6 +274,29 @@ export function useChangePassword() {
     mutationFn: userApi.changePassword,
     onError: (error) => {
       errorHandler.log(error, { context: "Change password failed" });
+    },
+  });
+}
+
+export function useSendTwoFactorCode() {
+  return useMutation({
+    mutationFn: userApi.sendTwoFactorCode,
+    onError: (error) => {
+      errorHandler.log(error, { context: "Send two-factor code failed" });
+    },
+  });
+}
+
+export function useConfirmTwoFactor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: userApi.confirmTwoFactor,
+    onSuccess: (data) => {
+      queryClient.setQueryData(userKeys.profile(), data);
+    },
+    onError: (error) => {
+      errorHandler.log(error, { context: "Confirm two-factor failed" });
     },
   });
 }

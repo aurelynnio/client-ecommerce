@@ -49,9 +49,7 @@ const hasCompleteAddress = (address: Address | null) =>
   );
 
 export default function CheckoutPage() {
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "vnpay" | "momo">(
-    "cod"
-  );
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "vnpay">("cod");
   const [promoCode, setPromoCode] = useState<string>("");
   const [appliedShopVoucher, setAppliedShopVoucher] =
     useState<ApplyVoucherResult | null>(null);
@@ -508,7 +506,7 @@ export default function CheckoutPage() {
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label
                     className={`flex items-center gap-3 p-3 rounded border-2 cursor-pointer transition-all ${
                       paymentMethod === "cod"
@@ -587,43 +585,6 @@ export default function CheckoutPage() {
                     )}
                   </label>
 
-                  <label
-                    className={`flex items-center gap-3 p-3 rounded border-2 cursor-pointer transition-all ${
-                      paymentMethod === "momo"
-                        ? "border-[#E53935] bg-[#E53935]/5"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="payment"
-                      className="sr-only"
-                      checked={paymentMethod === "momo"}
-                      onChange={() => setPaymentMethod("momo")}
-                    />
-                    <Wallet
-                      className={`h-5 w-5 ${
-                        paymentMethod === "momo"
-                          ? "text-[#E53935]"
-                          : "text-gray-400"
-                      }`}
-                    />
-                    <div>
-                      <span
-                        className={`text-sm font-medium ${
-                          paymentMethod === "momo"
-                            ? "text-[#E53935]"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        Ví MoMo
-                      </span>
-                      <p className="text-xs text-gray-500">Ví điện tử</p>
-                    </div>
-                    {paymentMethod === "momo" && (
-                      <Check className="h-4 w-4 text-[#E53935] ml-auto" />
-                    )}
-                  </label>
                 </div>
               </div>
             </div>

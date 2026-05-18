@@ -20,6 +20,15 @@ import { useRefreshAuthSession } from "@/hooks/queries";
 import { CreateShopPayload } from "@/types/shop";
 import { getSafeErrorMessage } from "@/api";
 
+const sectionTitleClass =
+  "text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500";
+const fieldLabelClass =
+  "mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500";
+const fieldSurfaceClass =
+  "rounded-2xl border-slate-200 bg-[#fcfaf6] shadow-[inset_0_0_0_1px_rgba(148,163,184,0.1)] placeholder:text-slate-400 focus-visible:ring-[#E53935]/15 focus-visible:ring-[3px]";
+const helperTextClass = "mt-2 text-xs leading-5 text-slate-400";
+const requiredMark = <span className="ml-1 text-[#E53935]">*</span>;
+
 export default function SellerRegisterPage() {
   const router = useRouter();
   const { data: myShop, isLoading } = useMyShop();
@@ -195,11 +204,14 @@ export default function SellerRegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Shop Info */}
               <div className="space-y-4">
-                <h2 className="font-medium text-gray-800 border-b pb-2">
+                <h2 className={sectionTitleClass}>
                   Thông tin Shop
                 </h2>
                 <div>
-                  <Label htmlFor="name">Tên Shop *</Label>
+                  <Label htmlFor="name" className={fieldLabelClass}>
+                    Tên shop
+                    {requiredMark}
+                  </Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -207,14 +219,16 @@ export default function SellerRegisterPage() {
                       setFormData({ ...formData, name: e.target.value })
                     }
                     placeholder="Nhập tên shop"
-                    className={errors.name ? "border-red-500" : ""}
+                    className={`${fieldSurfaceClass} ${errors.name ? "border-red-500 ring-1 ring-red-200" : ""}`}
                   />
                   {errors.name && (
                     <p className="text-xs text-red-500 mt-1">{errors.name}</p>
                   )}
                 </div>
                 <div>
-                  <Label htmlFor="description">Mô tả Shop</Label>
+                  <Label htmlFor="description" className={fieldLabelClass}>
+                    Mô tả shop
+                  </Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -223,12 +237,16 @@ export default function SellerRegisterPage() {
                     }
                     placeholder="Mô tả về shop của bạn"
                     rows={3}
+                    className={`${fieldSurfaceClass} resize-none`}
                   />
+                  <p className={helperTextClass}>
+                    Tóm tắt ngắn về phong cách sản phẩm, dịch vụ hoặc thế mạnh của shop.
+                  </p>
                 </div>
                 {/* Shop Images */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label>Logo Shop</Label>
+                    <Label className={fieldLabelClass}>Logo shop</Label>
                     <input
                       type="file"
                       ref={logoInputRef}
@@ -257,12 +275,12 @@ export default function SellerRegisterPage() {
                         </div>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Click để upload
+                    <p className={helperTextClass}>
+                      Hình vuông, nền rõ, tối đa 5MB.
                     </p>
                   </div>
                   <div>
-                    <Label>Banner Shop</Label>
+                    <Label className={fieldLabelClass}>Banner shop</Label>
                     <input
                       type="file"
                       ref={bannerInputRef}
@@ -291,8 +309,8 @@ export default function SellerRegisterPage() {
                         </div>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Click để upload
+                    <p className={helperTextClass}>
+                      Ảnh ngang dùng cho phần nhận diện shop, tối đa 5MB.
                     </p>
                   </div>
                 </div>
@@ -300,13 +318,16 @@ export default function SellerRegisterPage() {
 
               {/* Pickup Address */}
               <div className="space-y-4">
-                <h2 className="font-medium text-gray-800 border-b pb-2 flex items-center gap-2">
+                <h2 className={`${sectionTitleClass} flex items-center gap-2`}>
                   <MapPin className="h-4 w-4" />
                   Địa chỉ lấy hàng
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="fullName">Họ tên *</Label>
+                    <Label htmlFor="fullName" className={fieldLabelClass}>
+                      Người liên hệ
+                      {requiredMark}
+                    </Label>
                     <Input
                       id="fullName"
                       value={formData.pickupAddress?.fullName}
@@ -314,7 +335,7 @@ export default function SellerRegisterPage() {
                         updatePickupAddress("fullName", e.target.value)
                       }
                       placeholder="Họ tên người gửi"
-                      className={errors.fullName ? "border-red-500" : ""}
+                      className={`${fieldSurfaceClass} ${errors.fullName ? "border-red-500 ring-1 ring-red-200" : ""}`}
                     />
                     {errors.fullName && (
                       <p className="text-xs text-red-500 mt-1">
@@ -323,7 +344,10 @@ export default function SellerRegisterPage() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="phone">Số điện thoại *</Label>
+                    <Label htmlFor="phone" className={fieldLabelClass}>
+                      Số điện thoại
+                      {requiredMark}
+                    </Label>
                     <Input
                       id="phone"
                       value={formData.pickupAddress?.phone}
@@ -331,7 +355,7 @@ export default function SellerRegisterPage() {
                         updatePickupAddress("phone", e.target.value)
                       }
                       placeholder="0912345678"
-                      className={errors.phone ? "border-red-500" : ""}
+                      className={`${fieldSurfaceClass} ${errors.phone ? "border-red-500 ring-1 ring-red-200" : ""}`}
                     />
                     {errors.phone && (
                       <p className="text-xs text-red-500 mt-1">
@@ -341,7 +365,10 @@ export default function SellerRegisterPage() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="address">Địa chỉ *</Label>
+                  <Label htmlFor="address" className={fieldLabelClass}>
+                    Địa chỉ chi tiết
+                    {requiredMark}
+                  </Label>
                   <Input
                     id="address"
                     value={formData.pickupAddress?.address}
@@ -349,17 +376,23 @@ export default function SellerRegisterPage() {
                       updatePickupAddress("address", e.target.value)
                     }
                     placeholder="Số nhà, tên đường"
-                    className={errors.address ? "border-red-500" : ""}
+                    className={`${fieldSurfaceClass} ${errors.address ? "border-red-500 ring-1 ring-red-200" : ""}`}
                   />
                   {errors.address && (
                     <p className="text-xs text-red-500 mt-1">
                       {errors.address}
                     </p>
                   )}
+                  <p className={helperTextClass}>
+                    Đây là địa chỉ shop dùng để lấy hàng và xử lý vận chuyển.
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="city">Tỉnh/Thành *</Label>
+                    <Label htmlFor="city" className={fieldLabelClass}>
+                      Tỉnh/Thành
+                      {requiredMark}
+                    </Label>
                     <Input
                       id="city"
                       value={formData.pickupAddress?.city}
@@ -367,14 +400,16 @@ export default function SellerRegisterPage() {
                         updatePickupAddress("city", e.target.value)
                       }
                       placeholder="TP. Hồ Chí Minh"
-                      className={errors.city ? "border-red-500" : ""}
+                      className={`${fieldSurfaceClass} ${errors.city ? "border-red-500 ring-1 ring-red-200" : ""}`}
                     />
                     {errors.city && (
                       <p className="text-xs text-red-500 mt-1">{errors.city}</p>
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="district">Quận/Huyện</Label>
+                    <Label htmlFor="district" className={fieldLabelClass}>
+                      Quận/Huyện
+                    </Label>
                     <Input
                       id="district"
                       value={formData.pickupAddress?.district}
@@ -382,10 +417,13 @@ export default function SellerRegisterPage() {
                         updatePickupAddress("district", e.target.value)
                       }
                       placeholder="Quận 1"
+                      className={fieldSurfaceClass}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="ward">Phường/Xã</Label>
+                    <Label htmlFor="ward" className={fieldLabelClass}>
+                      Phường/Xã
+                    </Label>
                     <Input
                       id="ward"
                       value={formData.pickupAddress?.ward}
@@ -393,6 +431,7 @@ export default function SellerRegisterPage() {
                         updatePickupAddress("ward", e.target.value)
                       }
                       placeholder="Phường Bến Nghé"
+                      className={fieldSurfaceClass}
                     />
                   </div>
                 </div>

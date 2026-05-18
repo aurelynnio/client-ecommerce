@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,7 @@ import { useCategoryTree } from "@/hooks/queries/useCategories";
 import { useMyShop, useShopCategories } from "@/hooks/queries/useShop";
 import { flattenCategories } from "@/utils/category";
 import { STATUS_OPTIONS } from "@/constants/product";
+import { validateProductForm } from "@/utils/productFormValidation";
 
 interface UpdateModelProductProps {
   open: boolean;
@@ -87,7 +89,7 @@ export function UpdateModelProduct({
     brand: product?.brand || "",
     status:
       product?.status ||
-      ("published" as "draft" | "published" | "suspended" | "deleted"),
+      ("published" as "draft" | "published" | "suspended"),
     isNewArrival: product?.isNewArrival || false,
     isFeatured: product?.isFeatured || false,
     price: {
@@ -306,14 +308,58 @@ export function UpdateModelProduct({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!product) return;
+    const validationError = validateProductForm({
+      name: formData.name,
+      description: formData.description,
+      category: formData.category,
+      price: formData.price,
+      stock: formData.stock,
+      weight: formData.weight,
+      dimensions: formData.dimensions,
+      variants: formData.variants.map((variant) => ({
+        name: variant.name,
+        price: variant.price,
+        stock: variant.stock,
+      })),
+    });
+
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
 
     const formDataToSend = new FormData();
     formDataToSend.append("id", product._id);
+    const normalizedName = formData.name.trim();
+    const normalizedDescription = formData.description.trim();
+    const normalizedVariants = formData.variants.map((variant) => ({
+      _id: variant._id.startsWith("temp-") ? undefined : variant._id,
+      name: variant.name.trim(),
+      color: variant.color?.trim() || "",
+      price: variant.price,
+      stock: variant.stock,
+      sold: variant.sold || 0,
+    }));
+    const normalizedSizes = Array.from(
+      new Set(formData.sizes.map((size) => size.trim()).filter(Boolean)),
+    );
+    const normalizedAttributes = formData.attributes
+      .map((attribute) => ({
+        name: attribute.name.trim(),
+        value: attribute.value.trim(),
+      }))
+      .filter((attribute) => attribute.name && attribute.value);
+    const normalizedTags = Array.from(
+      new Set(formData.tags.map((tag) => tag.trim()).filter(Boolean)),
+    );
+    const aggregatedStock = normalizedVariants.length
+      ? normalizedVariants.reduce((sum, variant) => sum + variant.stock, 0)
+      : formData.stock;
 
-    if (formData.name !== product.name)
-      formDataToSend.append("name", formData.name);
-    if (formData.description !== product.description)
-      formDataToSend.append("description", formData.description);
+    if (normalizedName !== product.name)
+      formDataToSend.append("name", normalizedName);
+    if (normalizedDescription !== product.description)
+      formDataToSend.append("description", normalizedDescription);
     if (formData.slug !== product.slug)
       formDataToSend.append("slug", formData.slug);
 
@@ -324,7 +370,10 @@ export function UpdateModelProduct({
     if (formData.category !== originalCategory)
       formDataToSend.append("category", formData.category);
 
-    const originalShopCategory = product.shopCategory || "";
+    const originalShopCategory =
+      typeof product.shopCategory === "string"
+        ? product.shopCategory
+        : product.shopCategory?._id || "";
     if (formData.shopCategory !== originalShopCategory)
       formDataToSend.append("shopCategory", formData.shopCategory);
 
@@ -336,8 +385,8 @@ export function UpdateModelProduct({
       formDataToSend.append("isNewArrival", formData.isNewArrival.toString());
     if (formData.isFeatured !== product.isFeatured)
       formDataToSend.append("isFeatured", formData.isFeatured.toString());
-    if (formData.stock !== product.stock)
-      formDataToSend.append("stock", formData.stock.toString());
+    if (aggregatedStock !== product.stock || normalizedVariants.length > 0)
+      formDataToSend.append("stock", aggregatedStock.toString());
     if (formData.weight !== product.weight)
       formDataToSend.append("weight", formData.weight.toString());
 
@@ -359,20 +408,12 @@ export function UpdateModelProduct({
       formDataToSend.append("dimensions", JSON.stringify(formData.dimensions));
     }
 
-    const variantsForServer = formData.variants.map((v) => ({
-      _id: v._id.startsWith("temp-") ? undefined : v._id,
-      name: v.name,
-      color: v.color,
-      price: v.price,
-      stock: v.stock,
-      sold: v.sold || 0,
-    }));
-    formDataToSend.append("variants", JSON.stringify(variantsForServer));
+    formDataToSend.append("variants", JSON.stringify(normalizedVariants));
 
     if (
-      JSON.stringify(formData.sizes) !== JSON.stringify(product.sizes || [])
+      JSON.stringify(normalizedSizes) !== JSON.stringify(product.sizes || [])
     ) {
-      formDataToSend.append("sizes", JSON.stringify(formData.sizes));
+      formDataToSend.append("sizes", JSON.stringify(normalizedSizes));
     }
 
     const existingVariantImagesMapping = formData.variants.map((v, idx) => ({
@@ -392,13 +433,17 @@ export function UpdateModelProduct({
 
 
     if (
-      JSON.stringify(formData.attributes) !== JSON.stringify(product.attributes)
+      JSON.stringify(normalizedAttributes) !==
+      JSON.stringify(product.attributes)
     ) {
-      formDataToSend.append("attributes", JSON.stringify(formData.attributes));
+      formDataToSend.append(
+        "attributes",
+        JSON.stringify(normalizedAttributes),
+      );
     }
 
-    if (JSON.stringify(formData.tags) !== JSON.stringify(product.tags)) {
-      formDataToSend.append("tags", JSON.stringify(formData.tags));
+    if (JSON.stringify(normalizedTags) !== JSON.stringify(product.tags)) {
+      formDataToSend.append("tags", JSON.stringify(normalizedTags));
     }
 
     const originalDescImages = product.descriptionImages || [];
@@ -504,7 +549,9 @@ export function UpdateModelProduct({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Danh mục</Label>
+                <Label className="text-sm font-medium">
+                  Danh mục <span className="text-red-500">*</span>
+                </Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) =>
@@ -562,7 +609,9 @@ export function UpdateModelProduct({
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Mô tả sản phẩm</Label>
+              <Label className="text-sm font-medium">
+                Mô tả sản phẩm <span className="text-red-500">*</span>
+              </Label>
               <Textarea
                 value={formData.description}
                 onChange={(e) =>
@@ -574,6 +623,7 @@ export function UpdateModelProduct({
                 rows={3}
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white resize-none"
+                minLength={10}
               />
             </div>
           </div>
@@ -949,7 +999,9 @@ export function UpdateModelProduct({
                     {/* Variant Basic Info - Name and Color only */}
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <Label className="text-xs">Tên hiển thị</Label>
+                        <Label className="text-xs">
+                          Tên hiển thị <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           value={variant.name}
                           onChange={(e) =>

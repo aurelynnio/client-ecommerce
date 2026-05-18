@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,7 @@ import { useCategoryTree } from "@/hooks/queries/useCategories";
 import { useMyShop, useShopCategories } from "@/hooks/queries/useShop";
 import { flattenCategories } from "@/utils/category";
 import { STATUS_OPTIONS } from "@/constants/product";
+import { validateProductForm } from "@/utils/productFormValidation";
 
 interface CreateModelProductProps {
   open: boolean;
@@ -41,7 +43,7 @@ const initialFormData = {
   category: "",
   shopCategory: "",
   brand: "",
-  status: "published" as "draft" | "published" | "suspended" | "deleted",
+  status: "published" as "draft" | "published" | "suspended",
   isNewArrival: false,
   isFeatured: false,
   price: {
@@ -239,10 +241,54 @@ export function CreateModelProduct({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
+    const validationError = validateProductForm({
+      name: formData.name,
+      description: formData.description,
+      category: formData.category,
+      price: formData.price,
+      stock: formData.stock,
+      weight: formData.weight,
+      dimensions: formData.dimensions,
+      variants: formData.variants.map((variant) => ({
+        name: variant.name,
+        price: variant.price,
+        stock: variant.stock,
+      })),
+    });
 
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("description", formData.description);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    const normalizedName = formData.name.trim();
+    const normalizedDescription = formData.description.trim();
+    const normalizedVariants = formData.variants.map((variant) => ({
+      name: variant.name.trim(),
+      color: variant.color?.trim() || "",
+      price: variant.price,
+      stock: variant.stock,
+      sold: 0,
+    }));
+    const normalizedSizes = Array.from(
+      new Set(formData.sizes.map((size) => size.trim()).filter(Boolean)),
+    );
+    const normalizedAttributes = formData.attributes
+      .map((attribute) => ({
+        name: attribute.name.trim(),
+        value: attribute.value.trim(),
+      }))
+      .filter((attribute) => attribute.name && attribute.value);
+    const normalizedTags = Array.from(
+      new Set(formData.tags.map((tag) => tag.trim()).filter(Boolean)),
+    );
+    const aggregatedStock = normalizedVariants.length
+      ? normalizedVariants.reduce((sum, variant) => sum + variant.stock, 0)
+      : formData.stock;
+
+    formDataToSend.append("name", normalizedName);
+    formDataToSend.append("description", normalizedDescription);
     if (formData.slug) formDataToSend.append("slug", formData.slug);
     if (formData.category) formDataToSend.append("category", formData.category);
     if (formData.shopCategory)
@@ -252,7 +298,7 @@ export function CreateModelProduct({
     formDataToSend.append("isNewArrival", formData.isNewArrival.toString());
     formDataToSend.append("isFeatured", formData.isFeatured.toString());
     formDataToSend.append("price", JSON.stringify(formData.price));
-    formDataToSend.append("stock", formData.stock.toString());
+    formDataToSend.append("stock", aggregatedStock.toString());
     if (formData.weight)
       formDataToSend.append("weight", formData.weight.toString());
     if (
@@ -264,15 +310,8 @@ export function CreateModelProduct({
     }
 
     // Process variants
-    if (formData.variants.length > 0) {
-      const variantsForServer = formData.variants.map((v) => ({
-        name: v.name,
-        color: v.color,
-        price: v.price,
-        stock: v.stock,
-        sold: 0,
-      }));
-      formDataToSend.append("variants", JSON.stringify(variantsForServer));
+    if (normalizedVariants.length > 0) {
+      formDataToSend.append("variants", JSON.stringify(normalizedVariants));
 
       // Append variant images
       formData.variants.forEach((variant, idx) => {
@@ -282,15 +321,15 @@ export function CreateModelProduct({
       });
     }
 
-    if (formData.sizes.length > 0) {
-      formDataToSend.append("sizes", JSON.stringify(formData.sizes));
+    if (normalizedSizes.length > 0) {
+      formDataToSend.append("sizes", JSON.stringify(normalizedSizes));
     }
 
-    if (formData.attributes.length > 0) {
-      formDataToSend.append("attributes", JSON.stringify(formData.attributes));
+    if (normalizedAttributes.length > 0) {
+      formDataToSend.append("attributes", JSON.stringify(normalizedAttributes));
     }
-    if (formData.tags.length > 0) {
-      formDataToSend.append("tags", JSON.stringify(formData.tags));
+    if (normalizedTags.length > 0) {
+      formDataToSend.append("tags", JSON.stringify(normalizedTags));
     }
 
     // Append description images
@@ -387,7 +426,9 @@ export function CreateModelProduct({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Danh mục</Label>
+                <Label className="text-sm font-medium">
+                  Danh mục <span className="text-red-500">*</span>
+                </Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) =>
@@ -446,7 +487,9 @@ export function CreateModelProduct({
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Mô tả sản phẩm</Label>
+              <Label className="text-sm font-medium">
+                Mô tả sản phẩm <span className="text-red-500">*</span>
+              </Label>
               <Textarea
                 value={formData.description}
                 onChange={(e) =>
@@ -459,6 +502,7 @@ export function CreateModelProduct({
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white resize-none"
                 placeholder="Mô tả chi tiết về sản phẩm, chất liệu, công dụng..."
+                minLength={10}
               />
             </div>
           </div>
@@ -534,6 +578,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="150000"
+                  min="0"
                 />
               </div>
               <div className="space-y-2">
@@ -553,6 +598,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="120000"
+                  min="0"
                 />
               </div>
               <div className="space-y-2">
@@ -569,6 +615,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="100"
+                  min="0"
                 />
               </div>
               <div className="space-y-2">
@@ -643,6 +690,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="500"
+                  min="0"
                 />
               </div>
               <div className="space-y-2">
@@ -662,6 +710,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="30"
+                  min="0"
                 />
               </div>
               <div className="space-y-2">
@@ -681,6 +730,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="20"
+                  min="0"
                 />
               </div>
               <div className="space-y-2">
@@ -700,6 +750,7 @@ export function CreateModelProduct({
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="5"
+                  min="0"
                 />
               </div>
             </div>
@@ -812,7 +863,9 @@ export function CreateModelProduct({
                     {/* Variant Basic Info - Name and Color only */}
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <Label className="text-xs">Tên hiển thị</Label>
+                        <Label className="text-xs">
+                          Tên hiển thị <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           value={variant.name}
                           onChange={(e) =>
@@ -850,6 +903,7 @@ export function CreateModelProduct({
                           placeholder="150000"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
+                          min="0"
                         />
                       </div>
                       <div className="space-y-1">
@@ -863,6 +917,7 @@ export function CreateModelProduct({
                           placeholder="100"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
+                          min="0"
                         />
                       </div>
                     </div>

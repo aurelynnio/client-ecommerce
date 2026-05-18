@@ -72,8 +72,19 @@ export interface UpdateCartItemPayload {
 // Helper to get price value from CartItemPrice (handles both number and object)
 export function getCartItemPriceValue(price: CartItemPrice | undefined): number {
   if (price === undefined) return 0;
-  if (typeof price === "number") return price;
-  return price.discountPrice ?? price.currentPrice;
+  if (typeof price === "number") {
+    return Number.isFinite(price) ? price : 0;
+  }
+
+  const discountPrice = price.discountPrice;
+  if (typeof discountPrice === "number" && Number.isFinite(discountPrice)) {
+    return discountPrice;
+  }
+
+  const currentPrice = price.currentPrice;
+  return typeof currentPrice === "number" && Number.isFinite(currentPrice)
+    ? currentPrice
+    : 0;
 }
 
 // Helper function to group cart items by shop

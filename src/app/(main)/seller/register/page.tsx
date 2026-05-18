@@ -70,20 +70,6 @@ export default function SellerRegisterPage() {
     }
   }, [data, isAuthenticated, myShop, router]);
 
-  // Also redirect if user is seller/admin (they likely have a shop)
-  useEffect(() => {
-    if (!isAuthenticated || !data) return;
-    if (canHaveShop && !isLoading) {
-      const timer = setTimeout(() => {
-        if (canHaveShop && !myShop) {
-          // User is seller/admin but myShop not loaded - redirect anyway
-          router.replace("/seller/settings");
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [canHaveShop, data, isAuthenticated, isLoading, myShop, router]);
-
   if (!isAuthenticated) return null;
   if (!data) return <SpinnerLoading fullPage />;
 

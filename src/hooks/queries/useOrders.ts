@@ -13,7 +13,12 @@ import { extractApiData } from "@/api";
 import { errorHandler } from "@/services/errorHandler";
 import { STALE_TIME } from "@/constants/cache";
 import { orderKeys, cartKeys } from "@/lib/queryKeys";
-import { Order, OrderStatus, OrderStatistics } from "@/types/order";
+import {
+  Order,
+  OrderStatus,
+  OrderStatistics,
+  OrderStatusCount,
+} from "@/types/order";
 import { PaginationData } from "@/types/common";
 
 export interface OrderListParams {
@@ -44,6 +49,77 @@ export interface CreateOrderData {
 export interface OrderListResponse {
   orders: Order[];
   pagination: PaginationData | null;
+}
+
+interface ServerOrderStatisticsResponse {
+  summary?: {
+    totalOrders?: number;
+    pendingOrders?: number;
+    completedOrders?: number;
+    cancelledOrders?: number;
+    totalRevenue?: number;
+  };
+  ordersByStatus?: Record<string, { count?: number; totalAmount?: number }>;
+}
+
+function normalizeOrderStatistics(
+  data: ServerOrderStatisticsResponse | OrderStatistics,
+): OrderStatistics {
+  const summary = "summary" in data ? data.summary : undefined;
+  const ordersByStatusRaw =
+    "ordersByStatus" in data ? data.ordersByStatus : undefined;
+
+  const ordersByStatus: OrderStatusCount[] = Array.isArray(ordersByStatusRaw)
+    ? ordersByStatusRaw
+    : ordersByStatusRaw && typeof ordersByStatusRaw === "object"
+      ? Object.entries(ordersByStatusRaw).map(([status, value]) => ({
+          _id: status,
+          count: value?.count || 0,
+        }))
+      : [];
+
+  const countsByStatus = new Map(
+    ordersByStatus.map((item) => [item._id, item.count]),
+  );
+
+  return {
+    totalOrders:
+      summary?.totalOrders ??
+      ("totalOrders" in data ? data.totalOrders : 0) ??
+      0,
+    pendingOrders:
+      summary?.pendingOrders ??
+      ("pendingOrders" in data ? data.pendingOrders : 0) ??
+      countsByStatus.get("pending") ??
+      0,
+    confirmedOrders:
+      ("confirmedOrders" in data ? data.confirmedOrders : 0) ??
+      countsByStatus.get("confirmed") ??
+      0,
+    processingOrders:
+      ("processingOrders" in data ? data.processingOrders : 0) ??
+      countsByStatus.get("processing") ??
+      0,
+    shippedOrders:
+      ("shippedOrders" in data ? data.shippedOrders : 0) ??
+      countsByStatus.get("shipped") ??
+      0,
+    deliveredOrders:
+      ("deliveredOrders" in data ? data.deliveredOrders : 0) ??
+      summary?.completedOrders ??
+      countsByStatus.get("delivered") ??
+      0,
+    cancelledOrders:
+      summary?.cancelledOrders ??
+      ("cancelledOrders" in data ? data.cancelledOrders : 0) ??
+      countsByStatus.get("cancelled") ??
+      0,
+    totalRevenue:
+      summary?.totalRevenue ??
+      ("totalRevenue" in data ? data.totalRevenue : 0) ??
+      0,
+    ordersByStatus,
+  };
 }
 
 function invalidateOrderLists(queryClient: QueryClient) {
@@ -154,7 +230,8 @@ const orderApi = {
 
   getStatistics: async (): Promise<OrderStatistics> => {
     const response = await instance.get("/orders/statistics/overview");
-    return extractApiData(response);
+    const data = extractApiData<ServerOrderStatisticsResponse>(response);
+    return normalizeOrderStatistics(data);
   },
 
   // Mutations

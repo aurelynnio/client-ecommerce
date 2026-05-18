@@ -1,5 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import {
+  AdminActionButton,
+  AdminPageHeader,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface VouchersHeaderProps {
   onOpenCreate: () => void;
@@ -7,20 +10,15 @@ interface VouchersHeaderProps {
 
 export function VouchersHeader({ onOpenCreate }: VouchersHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 border-b border-border/50 pb-6 mb-8 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground uppercase">Mã giảm giá</h1>
-        <p className="text-muted-foreground mt-1 text-sm bg-transparent">
-          Quản lý và tạo mã giảm giá cho cửa hàng
-        </p>
-      </div>
-      <Button 
-        onClick={onOpenCreate}
-        className="w-full rounded-xl h-10 gap-2 text-sm font-medium transition-all shadow-lg hover:shadow-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED] border border-transparent sm:w-auto"
-      >
-        <Plus className="h-4 w-4" />
-        Tạo Mã giảm giá
-      </Button>
-    </div>
+    <AdminPageHeader
+      title="Mã giảm giá"
+      description="Quản lý vòng đời voucher, hiệu lực và hiệu suất sử dụng trên toàn hệ thống."
+      actions={
+        <AdminActionButton onClick={onOpenCreate}>
+          <Plus className="h-4 w-4" />
+          Tạo Mã giảm giá
+        </AdminActionButton>
+      }
+    />
   );
 }

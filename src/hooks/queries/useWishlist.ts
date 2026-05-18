@@ -22,8 +22,28 @@ import {
 } from "@/types/wishlist";
 
 function invalidateWishlistListAndCount(queryClient: QueryClient) {
-  queryClient.invalidateQueries({ queryKey: wishlistKeys.list() });
+  queryClient.invalidateQueries({ queryKey: wishlistKeys.lists() });
   queryClient.invalidateQueries({ queryKey: wishlistKeys.count() });
+}
+
+function syncCheckMultipleWishlistCaches(
+  queryClient: QueryClient,
+  productId: string,
+  isInWishlist: boolean
+) {
+  const cachedQueries =
+    queryClient.getQueriesData<CheckMultipleWishlistResponse>({
+      queryKey: wishlistKeys.checkMultipleRoot(),
+    });
+
+  cachedQueries.forEach(([queryKey, cachedMap]) => {
+    if (!cachedMap || !(productId in cachedMap)) return;
+
+    queryClient.setQueryData<CheckMultipleWishlistResponse>(queryKey, {
+      ...cachedMap,
+      [productId]: isInWishlist,
+    });
+  });
 }
 
 function invalidateWishlistAll(queryClient: QueryClient) {
@@ -69,9 +89,11 @@ const wishlistApi = {
     return { ...extractApiData(response), productId };
   },
 
-  remove: async (productId: string): Promise<string> => {
-    await instance.delete(`/wishlist/${productId}`);
-    return productId;
+  remove: async (
+    productId: string
+  ): Promise<{ productId: string; wishlistCount: number }> => {
+    const response = await instance.delete(`/wishlist/${productId}`);
+    return { ...extractApiData(response), productId };
   },
 
   clear: async (): Promise<void> => {
@@ -144,9 +166,10 @@ export function useAddToWishlist() {
 
   return useMutation({
     mutationFn: wishlistApi.add,
-    onSuccess: (_, productId) => {
-      // Update wishlist check cache
+    onSuccess: ({ wishlistCount }, productId) => {
       queryClient.setQueryData(wishlistKeys.check(productId), true);
+      queryClient.setQueryData(wishlistKeys.count(), wishlistCount);
+      syncCheckMultipleWishlistCaches(queryClient, productId, true);
       invalidateWishlistListAndCount(queryClient);
     },
     onError: (error) => {
@@ -163,9 +186,10 @@ export function useRemoveFromWishlist() {
 
   return useMutation({
     mutationFn: wishlistApi.remove,
-    onSuccess: (productId) => {
-      // Update wishlist check cache
+    onSuccess: ({ productId, wishlistCount }) => {
       queryClient.setQueryData(wishlistKeys.check(productId), false);
+      queryClient.setQueryData(wishlistKeys.count(), wishlistCount);
+      syncCheckMultipleWishlistCaches(queryClient, productId, false);
       invalidateWishlistListAndCount(queryClient);
     },
     onError: (error) => {

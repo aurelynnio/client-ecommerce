@@ -30,6 +30,17 @@ import { Search, MoreHorizontal, Eye, Edit, Trash2, Store, Calendar } from "luci
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import Image from "next/image";
 import { formatCurrency, formatDate } from "@/utils/format";
+import {
+  adminFieldSurfaceClass,
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 export interface OrdersTableProps {
   orders: Order[];
@@ -192,7 +203,7 @@ export function OrdersTable({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 bg-[#f7f7f7] p-4 rounded-2xl lg:flex-row lg:items-center lg:justify-between">
+      <div className={adminFilterBarClass}>
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <div className="relative w-full sm:flex-1 sm:min-w-[220px] sm:max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -200,7 +211,7 @@ export function OrdersTable({
               placeholder="Tìm kiếm theo mã đơn hàng, tên khách hàng..."
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              className="pl-9 rounded-xl border-0 bg-white focus-visible:ring-0 transition-all"
+              className={`pl-9 transition-all ${adminSearchInputClass}`}
             />
           </div>
 
@@ -225,10 +236,10 @@ export function OrdersTable({
           )}
 
           <Select value={statusFilter} onValueChange={onStatusFilter}>
-            <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[180px]">
+            <SelectTrigger className={`w-full sm:w-[180px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Tất cả trạng thái" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-0">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="all">Tất cả trạng thái</SelectItem>
               <SelectItem value="pending">Chờ xử lý</SelectItem>
               <SelectItem value="confirmed">Đã xác nhận</SelectItem>
@@ -242,11 +253,11 @@ export function OrdersTable({
           {/* Shop Filter */}
           {onShopFilterChange && shops.length > 0 && (
             <Select value={selectedShop} onValueChange={onShopFilterChange}>
-              <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[160px]">
+              <SelectTrigger className={`w-full sm:w-[160px] ${adminFieldSurfaceClass}`}>
                 <Store className="h-4 w-4 mr-2 text-muted-foreground" />
                 <SelectValue placeholder="Cửa hàng" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-0">
+              <SelectContent className={adminMenuContentClass}>
                 <SelectItem value="all">Tất cả cửa hàng</SelectItem>
                 {shops.map((shop) => (
                   <SelectItem key={shop._id} value={shop._id}>
@@ -262,10 +273,10 @@ export function OrdersTable({
             value={pageSize.toString()}
             onValueChange={(value) => onPageSizeChange(Number(value))}
           >
-            <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[120px]">
+            <SelectTrigger className={`w-full sm:w-[120px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Hiển thị" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-0">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="10">10 / trang</SelectItem>
               <SelectItem value="20">20 / trang</SelectItem>
               <SelectItem value="50">50 / trang</SelectItem>
@@ -274,10 +285,10 @@ export function OrdersTable({
         </div>
       </div>
 
-      <div className="rounded-2xl bg-white overflow-hidden">
+      <div className={adminTableShellClass}>
         <div className="overflow-x-auto no-scrollbar">
           <Table>
-            <TableHeader className="bg-[#f7f7f7]">
+            <TableHeader className={adminTableHeaderClass}>
               <TableRow className="border-0 hover:bg-transparent">
                 <TableHead className="uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Mã đơn hàng
@@ -330,7 +341,7 @@ export function OrdersTable({
                   return (
                     <TableRow
                       key={order._id}
-                      className={`border-0 hover:bg-[#f7f7f7]/50 transition-colors ${
+                      className={`${adminRowHoverClass} border-0 ${
                         isLoading ? "opacity-50 pointer-events-none" : ""
                       }`}
                     >
@@ -350,7 +361,7 @@ export function OrdersTable({
                       <TableCell>
                         <div className="flex items-center gap-2 max-w-[140px]">
                           {shopInfo.logo ? (
-                            <div className="relative h-6 w-6 rounded-md overflow-hidden bg-[#f7f7f7] shrink-0">
+                            <div className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}>
                               <Image
                                 src={shopInfo.logo}
                                 alt={shopInfo.name}
@@ -360,7 +371,7 @@ export function OrdersTable({
                               />
                             </div>
                           ) : (
-                            <div className="h-6 w-6 rounded-md bg-[#f7f7f7] flex items-center justify-center shrink-0">
+                            <div className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}>
                               <Store className="h-3 w-3 text-muted-foreground" />
                             </div>
                           )}
@@ -387,14 +398,14 @@ export function OrdersTable({
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
-                              className="h-8 w-8 p-0 rounded-lg hover:bg-[#f7f7f7]"
+                              className={`p-0 ${adminSmallIconButtonClass}`}
                             >
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             align="end"
-                            className="rounded-xl border-0 shadow-lg"
+                            className={adminMenuContentClass}
                           >
                             <DropdownMenuItem
                               onClick={() => onView(order)}

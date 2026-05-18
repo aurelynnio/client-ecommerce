@@ -93,6 +93,7 @@ export interface OrderStatistics {
   deliveredOrders: number;
   cancelledOrders: number;
   totalRevenue: number;
+  ordersByStatus?: OrderStatusCount[];
   revenueByPeriod?: Array<{
     period: string;
     revenue: number;

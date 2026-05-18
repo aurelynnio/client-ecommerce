@@ -38,6 +38,19 @@ import { Badge } from "@/components/ui/badge";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import Image from "next/image";
 import { formatDate } from "@/utils/format";
+import {
+  adminCodePillClass,
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminMenuSeparatorClass,
+  adminNativeSelectClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface CategoriesTableProps {
   categories: Category[];
@@ -96,7 +109,7 @@ const CategoryRow = ({
   return (
     <>
       <TableRow
-        className={`hover:bg-[#f7f7f7]/50 border-0 transition-colors ${
+        className={`${adminRowHoverClass} border-0 ${
           isLoading ? "opacity-50 pointer-events-none" : ""
         }`}
       >
@@ -109,7 +122,7 @@ const CategoryRow = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 mr-2 hover:bg-[#f7f7f7] rounded-lg"
+                className="mr-2 h-6 w-6 rounded-lg p-0 hover:bg-white"
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? (
@@ -122,7 +135,7 @@ const CategoryRow = ({
               <div className="w-8" />
             )}
             {category.images && category.images.length > 0 ? (
-              <div className="relative h-10 w-10 mr-3 rounded-lg overflow-hidden bg-[#f7f7f7]">
+              <div className={`relative h-10 w-10 mr-3 rounded-lg overflow-hidden ${adminMediaPlaceholderClass}`}>
                 <Image
                   src={category.images[0]}
                   alt={category.name as string}
@@ -131,7 +144,7 @@ const CategoryRow = ({
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 mr-3 rounded-lg bg-[#f7f7f7] flex items-center justify-center">
+              <div className={`w-10 h-10 mr-3 rounded-lg flex items-center justify-center ${adminMediaPlaceholderClass}`}>
                 <Package className="h-5 w-5 text-muted-foreground" />
               </div>
             )}
@@ -143,7 +156,7 @@ const CategoryRow = ({
           </div>
         </TableCell>
         <TableCell>
-          <code className="relative rounded-md bg-[#f7f7f7] px-[0.4rem] py-[0.2rem] font-mono text-xs text-muted-foreground">
+          <code className={adminCodePillClass}>
             {category.slug}
           </code>
         </TableCell>
@@ -162,7 +175,7 @@ const CategoryRow = ({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="h-8 w-8 p-0 rounded-lg hover:bg-[#f7f7f7]"
+                className={`p-0 ${adminSmallIconButtonClass}`}
               >
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal className="h-4 w-4" />
@@ -170,7 +183,7 @@ const CategoryRow = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="rounded-xl border-0 shadow-lg"
+              className={adminMenuContentClass}
             >
               <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
               <DropdownMenuItem
@@ -187,7 +200,7 @@ const CategoryRow = ({
                 <Edit className="h-4 w-4" />
                 Sửa
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-[#f7f7f7]" />
+              <DropdownMenuSeparator className={adminMenuSeparatorClass} />
               <DropdownMenuItem
                 onClick={() => onDelete(category)}
                 className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer gap-2"
@@ -255,7 +268,7 @@ export function CategoriesTable({
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
-      <div className="flex flex-col gap-4 bg-[#f7f7f7] p-4 rounded-2xl lg:flex-row lg:items-center lg:justify-between">
+      <div className={adminFilterBarClass}>
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <div className="relative w-full sm:flex-1 sm:min-w-[220px] sm:max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -263,20 +276,20 @@ export function CategoriesTable({
               placeholder="Tìm kiếm danh mục..."
               value={localSearch}
               onChange={handleSearch}
-              className="pl-9 rounded-xl border-0 bg-white focus-visible:ring-0 transition-all"
+              className={`pl-9 transition-all ${adminSearchInputClass}`}
             />
           </div>
           <Button
             variant="outline"
             size="icon"
-            className="rounded-xl border-0 bg-white hover:bg-white/80 w-9 h-9"
+            className={adminSmallIconButtonClass}
           >
             <Filter className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="rounded-xl border-0 bg-white hover:bg-white/80 w-9 h-9"
+            className={adminSmallIconButtonClass}
           >
             <Download className="h-4 w-4" />
           </Button>
@@ -293,7 +306,7 @@ export function CategoriesTable({
             id="pageSize"
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="h-9 w-full rounded-lg border-0 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/20 sm:w-auto"
+            className={adminNativeSelectClass}
           >
             <option value="5">5</option>
             <option value="10">10</option>
@@ -304,10 +317,10 @@ export function CategoriesTable({
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl bg-white overflow-hidden">
+      <div className={adminTableShellClass}>
         <div className="overflow-x-auto no-scrollbar">
           <Table>
-            <TableHeader className="bg-[#f7f7f7]">
+            <TableHeader className={adminTableHeaderClass}>
               <TableRow className="border-0 hover:bg-transparent">
                 <TableHead className="w-[300px] uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Tên danh mục

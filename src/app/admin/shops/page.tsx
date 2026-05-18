@@ -26,6 +26,22 @@ import { toast } from "sonner";
 import { ViewShopModal } from "@/components/admin/shops/ViewShopModal";
 import { Shop as BaseShop, ShopOwner } from "@/types/shop";
 import { useAllShops, useUpdateShopStatus } from "@/hooks/queries";
+import { cn } from "@/utils/cn";
+import {
+  AdminPageHeader,
+  AdminStatCard,
+  AdminStatsGrid,
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminPrimaryButtonClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminSubtleSurfaceClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 // Extended Shop type for admin list view with additional stats
 interface AdminShopListItem extends Omit<BaseShop, 'owner'> {
@@ -73,11 +89,14 @@ export default function AdminShopsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-green-500/10 text-green-600 border-0">Active</Badge>;
-      case "pending":
-        return <Badge className="bg-amber-500/10 text-amber-600 border-0">Pending</Badge>;
+        return <Badge className="border-0 bg-green-500/10 text-green-600 hover:bg-green-500/10">Đang hoạt động</Badge>;
+      case "inactive":
+        return <Badge className="border-0 bg-amber-500/10 text-amber-600 hover:bg-amber-500/10">Tạm dừng</Badge>;
+      case "banned":
       case "suspended":
-        return <Badge className="bg-red-500/10 text-red-600 border-0">Suspended</Badge>;
+        return <Badge className="border-0 bg-rose-500/10 text-rose-600 hover:bg-rose-500/10">Bị khóa</Badge>;
+      case "pending":
+        return <Badge className="border-0 bg-sky-500/10 text-sky-600 hover:bg-sky-500/10">Đang chờ</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -97,16 +116,16 @@ export default function AdminShopsPage() {
   if (error) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Shops Management</h1>
-          <p className="text-sm text-muted-foreground">Manage all registered shops</p>
-        </div>
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-8 text-center space-y-4">
+        <AdminPageHeader
+          title="Cửa hàng"
+          description="Quản lý toàn bộ shop đăng ký trên hệ thống và trạng thái vận hành của từng shop."
+        />
+        <div className={cn(adminSubtleSurfaceClass, "space-y-4 p-8 text-center")}>
           <p className="text-red-500">
-            {getSafeErrorMessage(error, "Failed to load shops")}
+            {getSafeErrorMessage(error, "Không thể tải danh sách cửa hàng")}
           </p>
-          <Button onClick={() => refetch()} className="rounded-xl">
-            Try Again
+          <Button onClick={() => refetch()} className={adminPrimaryButtonClass}>
+            Thử lại
           </Button>
         </div>
       </div>
@@ -115,55 +134,40 @@ export default function AdminShopsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Shops Management</h1>
-          <p className="text-sm text-muted-foreground">Manage all registered shops</p>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Cửa hàng"
+        description="Theo dõi chất lượng, trạng thái và hiệu suất sơ bộ của các shop trên sàn."
+      />
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: "Total Shops", value: totalShops, color: "text-foreground" },
-          { label: "Active", value: activeShops, color: "text-green-600" },
-          { label: "Inactive", value: inactiveShops, color: "text-amber-600" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-5"
-          >
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
-            <p className={`text-2xl font-bold mt-1 ${stat.color}`}>{stat.value}</p>
-          </div>
-        ))}
-      </div>
+      <AdminStatsGrid className="lg:grid-cols-3">
+        <AdminStatCard title="Tổng số shop" value={totalShops} icon={Store} description="Tất cả cửa hàng đã đăng ký" />
+        <AdminStatCard title="Đang hoạt động" value={activeShops} icon={CheckCircle} accent="green" description="Shop có thể kinh doanh bình thường" />
+        <AdminStatCard title="Tạm dừng" value={inactiveShops} icon={Ban} accent="amber" description="Shop đang bị tắt hoặc chờ xử lý" />
+      </AdminStatsGrid>
 
-      {/* Table */}
-      <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] overflow-hidden">
-        <div className="p-4">
+      <div className={adminTableShellClass}>
+        <div className={cn(adminFilterBarClass, "rounded-none border-x-0 border-t-0")}>
           <div className="relative w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search shops..."
+              placeholder="Tìm kiếm theo tên shop hoặc chủ sở hữu..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 rounded-xl border-0 bg-white dark:bg-black/20"
+              className={`pl-9 ${adminSearchInputClass}`}
             />
           </div>
         </div>
 
         <div className="overflow-x-auto no-scrollbar">
           <Table className="min-w-[720px]">
-          <TableHeader>
+          <TableHeader className={adminTableHeaderClass}>
             <TableRow className="hover:bg-transparent">
-              <TableHead>Shop</TableHead>
-              <TableHead>Owner</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-center">Products</TableHead>
-              <TableHead className="text-center">Rating</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Cửa hàng</TableHead>
+              <TableHead>Chủ sở hữu</TableHead>
+              <TableHead>Trạng thái</TableHead>
+              <TableHead className="text-center">Sản phẩm</TableHead>
+              <TableHead className="text-center">Đánh giá</TableHead>
+              <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -182,15 +186,15 @@ export default function AdminShopsPage() {
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
                   <Store className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  No shops found
+                  Không tìm thấy cửa hàng
                 </TableCell>
               </TableRow>
             ) : (
               filteredShops.map((shop) => (
-                <TableRow key={shop._id} className="hover:bg-muted/30">
+                <TableRow key={shop._id} className={cn(adminRowHoverClass, "border-0")}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-gray-100 dark:bg-gray-800 overflow-hidden relative">
+                      <div className={cn("relative h-10 w-10 overflow-hidden rounded-xl", adminMediaPlaceholderClass)}>
                         {shop.logo ? (
                           <Image src={shop.logo} alt={shop.name} fill className="object-cover" />
                         ) : (
@@ -215,19 +219,19 @@ export default function AdminShopsPage() {
                     <span className="text-amber-500">★</span> {shop.rating?.toFixed(1) || "0.0"}
                   </TableCell>
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className={adminSmallIconButtonClass}>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className={adminMenuContentClass}>
                         <DropdownMenuItem onClick={() => handleViewDetails(shop)}>
-                          <Eye className="h-4 w-4 mr-2" /> View Details
+                          <Eye className="h-4 w-4 mr-2" /> Xem chi tiết
                         </DropdownMenuItem>
                         {shop.status === "inactive" && (
                           <DropdownMenuItem onClick={() => handleStatusChange(shop._id, "active")}>
-                            <CheckCircle className="h-4 w-4 mr-2" /> Activate
+                            <CheckCircle className="h-4 w-4 mr-2" /> Kích hoạt
                           </DropdownMenuItem>
                         )}
                         {shop.status === "active" && (
@@ -235,12 +239,12 @@ export default function AdminShopsPage() {
                             onClick={() => handleStatusChange(shop._id, "banned")}
                             className="text-red-600"
                           >
-                            <Ban className="h-4 w-4 mr-2" /> Ban
+                            <Ban className="h-4 w-4 mr-2" /> Khóa shop
                           </DropdownMenuItem>
                         )}
                         {shop.status === "banned" && (
                           <DropdownMenuItem onClick={() => handleStatusChange(shop._id, "active")}>
-                            <CheckCircle className="h-4 w-4 mr-2" /> Reactivate
+                            <CheckCircle className="h-4 w-4 mr-2" /> Mở lại
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>

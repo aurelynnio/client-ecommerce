@@ -33,6 +33,21 @@ import {
   useAddToFlashSale,
   useRemoveFromFlashSale,
 } from "@/hooks/queries";
+import { cn } from "@/utils/cn";
+import {
+  AdminActionButton,
+  AdminPageHeader,
+  AdminStatCard,
+  AdminStatsGrid,
+  adminFieldSurfaceClass,
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+  adminSearchInputClass,
+  adminSubtleSurfaceClass,
+  adminSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 export default function AdminFlashSalePage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -75,7 +90,7 @@ export default function AdminFlashSalePage() {
       !formData.startTime ||
       !formData.endTime
     ) {
-      toast.error("Please fill all required fields");
+      toast.error("Vui lòng điền đầy đủ các trường bắt buộc");
       return;
     }
 
@@ -84,7 +99,7 @@ export default function AdminFlashSalePage() {
         productId: selectedProductId,
         data: formData,
       });
-      toast.success("Product added to flash sale");
+      toast.success("Đã thêm sản phẩm vào flash sale");
       setAddModalOpen(false);
       setSelectedProductId("");
       setFormData({
@@ -95,17 +110,17 @@ export default function AdminFlashSalePage() {
         endTime: "",
       });
     } catch (error) {
-      toast.error(getSafeErrorMessage(error, "Failed to add product to flash sale"));
+      toast.error(getSafeErrorMessage(error, "Không thể thêm sản phẩm vào flash sale"));
     }
   };
 
   const handleRemoveFromFlashSale = async (productId: string) => {
-    if (!confirm("Remove this product from flash sale?")) return;
+    if (!confirm("Gỡ sản phẩm này khỏi flash sale?")) return;
     try {
       await removeFromFlashSaleMutation.mutateAsync(productId);
-      toast.success("Product removed from flash sale");
+      toast.success("Đã gỡ sản phẩm khỏi flash sale");
     } catch (error) {
-      toast.error(getSafeErrorMessage(error, "Failed to remove product"));
+      toast.error(getSafeErrorMessage(error, "Không thể gỡ sản phẩm"));
     }
   };
 
@@ -131,25 +146,20 @@ export default function AdminFlashSalePage() {
   if (hasError) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <Zap className="h-6 w-6 text-[#E53935]" />
-            Flash Sale
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Manage flash sale campaigns
-          </p>
-        </div>
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-8 text-center space-y-4">
+        <AdminPageHeader
+          title="Flash Sale"
+          description="Điều phối các chiến dịch giảm giá nhanh, lịch chạy và hiệu suất bán ra."
+        />
+        <div className={cn(adminSubtleSurfaceClass, "space-y-4 p-8 text-center")}>
           <p className="text-red-500">
-            {getSafeErrorMessage(hasError, "Failed to load flash sale data")}
+            {getSafeErrorMessage(hasError, "Không thể tải dữ liệu flash sale")}
           </p>
           <div className="flex items-center justify-center gap-2">
-            <Button onClick={() => refetchProducts()} variant="outline" className="rounded-xl">
-              Reload Products
+            <Button onClick={() => refetchProducts()} variant="outline" className={adminSecondaryButtonClass}>
+              Tải lại sản phẩm
             </Button>
-            <Button onClick={() => refetchSchedule()} className="rounded-xl">
-              Reload Schedule
+            <Button onClick={() => refetchSchedule()} className={adminPrimaryButtonClass}>
+              Tải lại lịch
             </Button>
           </div>
         </div>
@@ -159,81 +169,35 @@ export default function AdminFlashSalePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <Zap className="h-6 w-6 text-[#E53935]" />
-            Flash Sale
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Manage flash sale campaigns
-          </p>
-        </div>
-        <Button
-          onClick={() => setAddModalOpen(true)}
-          className="bg-[#E53935] hover:bg-[#D32F2F] text-white rounded-xl gap-2"
-        >
-          <Plus className="h-4 w-4" /> Add Product
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="Flash Sale"
+        description="Quản lý hàng hóa tham gia chiến dịch, khung giờ bán và nhịp tiêu thụ theo thời gian thực."
+        actions={
+          <AdminActionButton onClick={() => setAddModalOpen(true)}>
+            <Plus className="h-4 w-4" /> Thêm sản phẩm
+          </AdminActionButton>
+        }
+      />
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        {[
-          {
-            label: "Active Products",
-            value: totalProducts,
-            icon: Package,
-            color: "text-foreground",
-          },
-          {
-            label: "Total Sold",
-            value: totalSold,
-            icon: TrendingUp,
-            color: "text-green-600",
-          },
-          {
-            label: "Avg Discount",
-            value: `${avgDiscount}%`,
-            icon: Zap,
-            color: "text-[#E53935]",
-          },
-          {
-            label: "Next Sale",
-            value: schedule[0]?.label || "N/A",
-            icon: Clock,
-            color: "text-purple-600",
-          },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-5"
-          >
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            </div>
-            <p className={`text-2xl font-bold mt-1 ${stat.color}`}>
-              {stat.value}
-            </p>
-          </div>
-        ))}
-      </div>
+      <AdminStatsGrid>
+        <AdminStatCard title="Sản phẩm đang chạy" value={totalProducts} icon={Package} description="Số SKU đang có mặt trong chiến dịch" />
+        <AdminStatCard title="Đã bán" value={totalSold} icon={TrendingUp} accent="green" description="Tổng số lượt bán trong flash sale" />
+        <AdminStatCard title="Giảm trung bình" value={`${avgDiscount}%`} icon={Zap} accent="brand" description="Mức giảm giá trung bình của chiến dịch" />
+        <AdminStatCard title="Khung tiếp theo" value={schedule[0]?.label || "N/A"} icon={Clock} accent="blue" description="Khung giờ gần nhất trong lịch" />
+      </AdminStatsGrid>
 
-      {/* Schedule */}
-      <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-5">
+      <div className={cn(adminSurfaceClass, "p-5")}>
         <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <Clock className="h-4 w-4" /> Upcoming Schedule
+          <Clock className="h-4 w-4" /> Lịch sắp tới
         </h3>
         <div className="flex gap-3 overflow-x-auto pb-2">
           {schedule.map((slot, i) => (
             <div
               key={i}
-              className={`shrink-0 px-4 py-3 rounded-xl ${
+              className={`shrink-0 rounded-2xl px-4 py-3 ${
                 slot.status === "upcoming"
-                  ? "bg-[#E53935]/10"
-                  : "bg-white dark:bg-black/20"
+                  ? "bg-[#d8473c]/10 text-[#d8473c]"
+                  : "bg-[#f7f2eb]"
               }`}
             >
               <p className="font-bold text-lg">{slot.label}</p>
@@ -244,23 +208,22 @@ export default function AdminFlashSalePage() {
           ))}
           {schedule.length === 0 && (
             <p className="text-sm text-muted-foreground">
-              No upcoming sales scheduled
+              Chưa có lịch flash sale sắp tới
             </p>
           )}
         </div>
       </div>
 
-      {/* Products Grid */}
       <div className="space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="font-semibold">Flash Sale Products</h3>
+        <div className={cn(adminFilterBarClass, "items-center")}>
+          <h3 className="font-semibold">Sản phẩm trong chiến dịch</h3>
           <div className="relative max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search products..."
+              placeholder="Tìm kiếm sản phẩm..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 rounded-xl border-0 bg-[#f7f7f7] dark:bg-[#1C1C1E] h-9"
+              className={`h-9 pl-9 ${adminSearchInputClass}`}
             />
           </div>
         </div>
@@ -268,7 +231,7 @@ export default function AdminFlashSalePage() {
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="rounded-2xl bg-[#f7f7f7] p-4">
+              <div key={i} className={cn(adminSurfaceClass, "p-4")}>
                 <Skeleton className="aspect-square w-full rounded-xl mb-3" />
                 <Skeleton className="h-4 w-3/4 mb-2" />
                 <Skeleton className="h-4 w-1/2" />
@@ -276,11 +239,11 @@ export default function AdminFlashSalePage() {
             ))}
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E]">
+          <div className={cn(adminSurfaceClass, "py-16 text-center text-muted-foreground")}>
             <Zap className="h-12 w-12 mx-auto mb-3 opacity-30" />
-            <p>No flash sale products</p>
+            <p>Chưa có sản phẩm flash sale</p>
             <p className="text-sm">
-              Add products to start a flash sale campaign
+              Thêm sản phẩm để bắt đầu một chiến dịch mới
             </p>
           </div>
         ) : (
@@ -301,9 +264,9 @@ export default function AdminFlashSalePage() {
               return (
                 <div
                   key={product._id}
-                  className="group rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] overflow-hidden hover:bg-[#f0f0f0] dark:hover:bg-[#252528] transition-colors"
+                  className={cn(adminSurfaceClass, "group overflow-hidden transition-colors hover:bg-[#fcf8f2]")}
                 >
-                  <div className="aspect-square relative bg-white dark:bg-black/20 m-3 rounded-xl overflow-hidden">
+                  <div className={cn("relative m-3 aspect-square overflow-hidden rounded-2xl", adminMediaPlaceholderClass)}>
                     <Image
                       src={
                         product.variants?.[0]?.images?.[0] ||
@@ -313,13 +276,13 @@ export default function AdminFlashSalePage() {
                       fill
                       className="object-cover"
                     />
-                    <Badge className="absolute top-2 left-2 bg-[#E53935] text-white border-0">
+                    <Badge className="absolute top-2 left-2 border-0 bg-[#d8473c] text-white">
                       -{product.flashSale?.discountPercent || 0}%
                     </Badge>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute top-2 right-2 h-8 w-8 bg-white/80 hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 h-8 w-8 rounded-xl bg-white/80 opacity-0 transition-opacity hover:bg-white group-hover:opacity-100"
                       onClick={() => handleRemoveFromFlashSale(product._id)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
@@ -330,7 +293,7 @@ export default function AdminFlashSalePage() {
                       {product.name}
                     </h4>
                     <div className="flex items-baseline gap-2 mb-3">
-                      <span className="text-lg font-bold text-[#E53935]">
+                      <span className="text-lg font-bold text-[#d8473c]">
                         {product.flashSale?.salePrice?.toLocaleString()}đ
                       </span>
                       <span className="text-xs text-muted-foreground line-through">
@@ -339,7 +302,7 @@ export default function AdminFlashSalePage() {
                     </div>
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-muted-foreground">Sold</span>
+                        <span className="text-muted-foreground">Đã bán</span>
                         <span className="font-medium">
                           {product.flashSale?.soldCount || 0}/
                           {product.flashSale?.stock || 0}
@@ -348,7 +311,7 @@ export default function AdminFlashSalePage() {
                       <Progress value={soldPercent} className="h-1.5" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                      <Clock className="h-3 w-3" /> Ends {timeLeft}
+                      <Clock className="h-3 w-3" /> Kết thúc {timeLeft}
                     </p>
                   </div>
                 </div>
@@ -360,23 +323,23 @@ export default function AdminFlashSalePage() {
 
       {/* Add Product Modal */}
       <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className={cn(adminSurfaceClass, "sm:max-w-md rounded-[28px] border-slate-200/80")}>
           <DialogHeader>
-            <DialogTitle>Add Product to Flash Sale</DialogTitle>
+            <DialogTitle>Thêm sản phẩm vào Flash Sale</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Product ID</Label>
+              <Label>ID sản phẩm</Label>
               <Input
-                placeholder="Enter product ID"
+                placeholder="Nhập product ID"
                 value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
-                className="rounded-xl"
+                className={adminFieldSurfaceClass}
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Sale Price</Label>
+                <Label>Giá bán</Label>
                 <Input
                   type="number"
                   value={formData.salePrice}
@@ -386,11 +349,11 @@ export default function AdminFlashSalePage() {
                       salePrice: Number(e.target.value),
                     })
                   }
-                  className="rounded-xl"
+                  className={adminFieldSurfaceClass}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Discount %</Label>
+                <Label>Phần trăm giảm</Label>
                 <Input
                   type="number"
                   value={formData.discountPercent}
@@ -400,42 +363,42 @@ export default function AdminFlashSalePage() {
                       discountPercent: Number(e.target.value),
                     })
                   }
-                  className="rounded-xl"
+                  className={adminFieldSurfaceClass}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Stock for Flash Sale</Label>
+              <Label>Tồn kho cho flash sale</Label>
               <Input
                 type="number"
                 value={formData.stock}
                 onChange={(e) =>
                   setFormData({ ...formData, stock: Number(e.target.value) })
                 }
-                className="rounded-xl"
+                className={adminFieldSurfaceClass}
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Start Time</Label>
+                <Label>Thời gian bắt đầu</Label>
                 <Input
                   type="datetime-local"
                   value={formData.startTime}
                   onChange={(e) =>
                     setFormData({ ...formData, startTime: e.target.value })
                   }
-                  className="rounded-xl"
+                  className={adminFieldSurfaceClass}
                 />
               </div>
               <div className="space-y-2">
-                <Label>End Time</Label>
+                <Label>Thời gian kết thúc</Label>
                 <Input
                   type="datetime-local"
                   value={formData.endTime}
                   onChange={(e) =>
                     setFormData({ ...formData, endTime: e.target.value })
                   }
-                  className="rounded-xl"
+                  className={adminFieldSurfaceClass}
                 />
               </div>
             </div>
@@ -444,16 +407,16 @@ export default function AdminFlashSalePage() {
             <Button
               variant="outline"
               onClick={() => setAddModalOpen(false)}
-              className="rounded-xl"
+              className={adminSecondaryButtonClass}
             >
-              Cancel
+              Hủy
             </Button>
             <Button
               onClick={handleAddToFlashSale}
               disabled={addToFlashSaleMutation.isPending}
-              className="bg-[#E53935] hover:bg-[#D32F2F] text-white rounded-xl"
+              className={adminPrimaryButtonClass}
             >
-              {addToFlashSaleMutation.isPending ? "Adding..." : "Add to Flash Sale"}
+              {addToFlashSaleMutation.isPending ? "Đang thêm..." : "Thêm vào Flash Sale"}
             </Button>
           </DialogFooter>
         </DialogContent>

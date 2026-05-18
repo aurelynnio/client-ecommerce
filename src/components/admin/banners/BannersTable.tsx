@@ -34,6 +34,18 @@ import { BannerItem } from "@/types/banner";
 import { Badge } from "@/components/ui/badge";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import Image from "next/image";
+import {
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminMenuSeparatorClass,
+  adminNativeSelectClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface BannersTableProps {
   banners: BannerItem[];
@@ -98,7 +110,7 @@ export function BannersTable({
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
-      <div className="flex flex-col gap-4 bg-[#f7f7f7] p-4 rounded-2xl lg:flex-row lg:items-center lg:justify-between">
+      <div className={adminFilterBarClass}>
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <div className="relative w-full sm:flex-1 sm:min-w-[220px] sm:max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -106,20 +118,20 @@ export function BannersTable({
               placeholder="Tìm kiếm banner..."
               value={localSearch}
               onChange={handleSearch}
-              className="pl-9 rounded-xl border-0 bg-white focus-visible:ring-0 transition-all"
+              className={`pl-9 transition-all ${adminSearchInputClass}`}
             />
           </div>
           <Button
             variant="outline"
             size="icon"
-            className="rounded-xl border-0 bg-white hover:bg-white/80 w-9 h-9"
+            className={adminSmallIconButtonClass}
           >
             <Filter className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="rounded-xl border-0 bg-white hover:bg-white/80 w-9 h-9"
+            className={adminSmallIconButtonClass}
           >
             <Download className="h-4 w-4" />
           </Button>
@@ -133,7 +145,7 @@ export function BannersTable({
             id="pageSize"
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="h-9 w-full rounded-lg border-0 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/20 sm:w-auto"
+            className={adminNativeSelectClass}
           >
             <option value="5">5</option>
             <option value="10">10</option>
@@ -143,10 +155,10 @@ export function BannersTable({
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl bg-white overflow-hidden">
+      <div className={adminTableShellClass}>
         <div className="overflow-x-auto no-scrollbar">
             <Table>
-            <TableHeader className="bg-[#f7f7f7]">
+            <TableHeader className={adminTableHeaderClass}>
                 <TableRow className="border-0 hover:bg-transparent">
                 <TableHead className="w-[350px] uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                     Nội dung Banner
@@ -184,10 +196,10 @@ export function BannersTable({
                 )}
                 {!isLoading &&
                 banners.map((banner) => (
-                    <TableRow key={banner._id} className="hover:bg-[#f7f7f7]/50 border-0 transition-colors">
+                    <TableRow key={banner._id} className={`${adminRowHoverClass} border-0`}>
                       <TableCell className="font-medium p-4 pl-6">
                         <div className="flex items-center gap-4">
-                          <div className="relative h-16 w-28 rounded-xl overflow-hidden bg-[#f7f7f7] flex-shrink-0">
+                          <div className={`relative h-16 w-28 rounded-xl overflow-hidden flex-shrink-0 ${adminMediaPlaceholderClass}`}>
                             <Image
                               src={banner.imageUrl}
                               alt={banner.title}
@@ -214,17 +226,17 @@ export function BannersTable({
                       <TableCell className="text-right pr-6">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0 rounded-lg hover:bg-[#f7f7f7]">
+                            <Button variant="ghost" className={`p-0 ${adminSmallIconButtonClass}`}>
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="rounded-xl border-0 shadow-lg">
+                          <DropdownMenuContent align="end" className={adminMenuContentClass}>
                             <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
                             <DropdownMenuItem onClick={() => onEdit(banner)} className="cursor-pointer gap-2">
                               <Edit className="h-4 w-4" />
                               Chỉnh sửa
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator className="bg-[#f7f7f7]" />
+                            <DropdownMenuSeparator className={adminMenuSeparatorClass} />
                             <DropdownMenuItem
                               onClick={() => onDelete(banner)}
                               className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer gap-2"

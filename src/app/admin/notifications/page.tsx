@@ -21,6 +21,13 @@ import {
   CreateNotificationForm,
 } from "@/components/admin/notifications/CreateNotificationModal";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
+import {
+  AdminStatCard,
+  AdminStatsGrid,
+  adminMediaPlaceholderClass,
+  adminSubtleSurfaceClass,
+  adminSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 export default function AdminNotificationsPage() {
   const { data, isLoading } = useNotifications({ page: 1, limit: 50 });
@@ -33,6 +40,9 @@ export default function AdminNotificationsPage() {
 
   const notifications = data?.notifications || [];
   const pagination = data?.pagination;
+  const unreadCount = notifications.filter((item) => !item.isRead).length;
+  const systemCount = notifications.filter((item) => item.type === "system").length;
+  const promotionCount = notifications.filter((item) => item.type === "promotion").length;
 
   const handleMarkAsRead = async (id: string) => {
     try {
@@ -96,7 +106,13 @@ export default function AdminNotificationsPage() {
         onClearAll={handleClearAll}
       />
 
-      <div className="rounded-2xl bg-white overflow-hidden min-h-[500px] flex flex-col">
+      <AdminStatsGrid className="lg:grid-cols-3">
+        <AdminStatCard title="Tổng thông báo" value={notifications.length} icon={Bell} description="Thông báo đang có trong bộ nhớ hiển thị" />
+        <AdminStatCard title="Chưa đọc" value={unreadCount} icon={AlertCircle} accent="amber" description="Các thông báo cần được xử lý" />
+        <AdminStatCard title="Khuyến mãi / hệ thống" value={`${promotionCount} / ${systemCount}`} icon={CheckCircle2} accent="green" description="Tỷ lệ giữa thông điệp hệ thống và chiến dịch" />
+      </AdminStatsGrid>
+
+      <div className={cn(adminSurfaceClass, "min-h-[500px] overflow-hidden flex flex-col")}>
         {isLoading && notifications.length === 0 ? (
           <div className="flex items-center justify-center flex-1">
             <SpinnerLoading size={32} />
@@ -113,11 +129,11 @@ export default function AdminNotificationsPage() {
                 <div
                   key={notification._id}
                   className={cn(
-                    "group relative flex gap-4 rounded-xl p-4 transition-all hover:bg-[#f7f7f7]",
-                    !notification.isRead && "bg-red-50"
+                    "group relative flex gap-4 rounded-2xl p-4 transition-all hover:bg-[#fbf6f0]",
+                    !notification.isRead && "bg-red-50/70"
                   )}
                 >
-                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f7f7f7]">
+                  <div className={cn("mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl", adminMediaPlaceholderClass)}>
                     {getIcon(notification.type || "system")}
                   </div>
 
@@ -151,17 +167,17 @@ export default function AdminNotificationsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-7 px-2 text-xs hover:bg-red-100 hover:text-[#E53935]"
+                          className="h-7 rounded-xl px-2 text-xs hover:bg-red-100 hover:text-[#d8473c]"
                           onClick={() => handleMarkAsRead(notification._id)}
                         >
-                          Mark as read
+                          Đánh dấu đã đọc
                         </Button>
                       )}
                     </div>
                   </div>
 
                   {!notification.isRead && (
-                    <div className="absolute right-4 top-4 h-2 w-2 rounded-full bg-[#E53935]" />
+                    <div className="absolute right-4 top-4 h-2 w-2 rounded-full bg-[#d8473c]" />
                   )}
                 </div>
               ))}
@@ -170,9 +186,8 @@ export default function AdminNotificationsPage() {
         )}
 
         {pagination && (
-          <div className="p-4 bg-[#f7f7f7] text-center text-xs text-muted-foreground">
-            Showing {notifications.length} of {pagination.totalItems}{" "}
-            notifications
+          <div className={cn(adminSubtleSurfaceClass, "m-4 mt-0 rounded-2xl p-4 text-center text-xs text-muted-foreground")}>
+            Hiển thị {notifications.length} trên tổng số {pagination.totalItems} thông báo
           </div>
         )}
       </div>

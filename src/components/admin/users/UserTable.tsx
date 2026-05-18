@@ -40,6 +40,19 @@ import { User } from "@/types/user";
 import Image from "next/image";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { formatDate as formatDateValue } from "@/utils/format";
+import {
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminMenuLabelClass,
+  adminMenuSeparatorClass,
+  adminNativeSelectClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface UsersTableProps {
   users: User[];
@@ -148,7 +161,7 @@ export function UsersTable({
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
-      <div className="flex flex-col gap-4 bg-[#f7f7f7] p-4 rounded-2xl lg:flex-row lg:items-center lg:justify-between">
+      <div className={adminFilterBarClass}>
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <div className="relative w-full sm:flex-1 sm:min-w-[220px] sm:max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -156,7 +169,7 @@ export function UsersTable({
               placeholder="Tìm kiếm người dùng..."
               value={localSearch}
               onChange={handleSearch}
-              className="pl-9 rounded-xl border-0 bg-white focus-visible:ring-0 transition-all"
+              className={`pl-9 transition-all ${adminSearchInputClass}`}
             />
           </div>
 
@@ -165,7 +178,7 @@ export function UsersTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start rounded-xl border-0 bg-white hover:bg-white/80 sm:w-auto sm:justify-center"
+                className="w-full justify-start rounded-2xl border border-slate-200 bg-white/90 hover:bg-white sm:w-auto sm:justify-center"
               >
                 <Shield className="h-4 w-4 mr-2 text-muted-foreground" />
                 {selectedRole === "admin"
@@ -175,11 +188,11 @@ export function UsersTable({
                   : "Tất cả vai trò"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="rounded-xl border-0 shadow-lg p-1">
-              <DropdownMenuLabel className="text-muted-foreground text-xs uppercase tracking-wider px-2 py-1.5">
+            <DropdownMenuContent className={adminMenuContentClass}>
+              <DropdownMenuLabel className={adminMenuLabelClass}>
                 Lọc theo vai trò
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-[#f7f7f7]" />
+              <DropdownMenuSeparator className={adminMenuSeparatorClass} />
               <DropdownMenuItem
                 onClick={() => handleRoleFilter("")}
                  className={`cursor-pointer rounded-lg ${!selectedRole ? "bg-[#f7f7f7] font-medium" : ""}`}
@@ -206,7 +219,7 @@ export function UsersTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start rounded-xl border-0 bg-white hover:bg-white/80 sm:w-auto sm:justify-center"
+                className="w-full justify-start rounded-2xl border border-slate-200 bg-white/90 hover:bg-white sm:w-auto sm:justify-center"
               >
                 <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
                 {selectedVerified === true
@@ -216,11 +229,11 @@ export function UsersTable({
                   : "Trạng thái"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="rounded-xl border-0 shadow-lg p-1">
-              <DropdownMenuLabel className="text-muted-foreground text-xs uppercase tracking-wider px-2 py-1.5">
+            <DropdownMenuContent className={adminMenuContentClass}>
+              <DropdownMenuLabel className={adminMenuLabelClass}>
                 Lọc theo xác minh
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-[#f7f7f7]" />
+              <DropdownMenuSeparator className={adminMenuSeparatorClass} />
               <DropdownMenuItem
                 onClick={() => handleVerifiedFilter(null)}
                 className={`cursor-pointer rounded-lg ${selectedVerified === null ? "bg-[#f7f7f7] font-medium" : ""}`}
@@ -245,7 +258,7 @@ export function UsersTable({
            <Button
              variant="outline"
              size="icon"
-             className="rounded-xl border-0 bg-white hover:bg-white/80 w-9 h-9"
+             className={adminSmallIconButtonClass}
            >
              <Download className="h-4 w-4" />
            </Button>
@@ -259,7 +272,7 @@ export function UsersTable({
             id="pageSize"
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="h-9 w-full rounded-lg border-0 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/20 sm:w-auto"
+            className={adminNativeSelectClass}
           >
             <option value="5">5</option>
             <option value="10">10</option>
@@ -270,10 +283,10 @@ export function UsersTable({
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl bg-white overflow-hidden">
+      <div className={adminTableShellClass}>
         <div className="overflow-x-auto no-scrollbar">
             <Table>
-            <TableHeader className="bg-[#f7f7f7]">
+            <TableHeader className={adminTableHeaderClass}>
                 <TableRow className="border-0 hover:bg-transparent">
                 <TableHead className="uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                     Người dùng
@@ -320,11 +333,11 @@ export function UsersTable({
                 users.map((user) => (
                     <TableRow
                     key={user._id}
-                     className="border-0 hover:bg-[#f7f7f7]/50 transition-colors"
+                     className={`${adminRowHoverClass} border-0`}
                     >
                     <TableCell className="pl-6 font-medium">
                         <div className="flex items-center gap-3">
-                            <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#f7f7f7]">
+                            <div className={`relative w-10 h-10 rounded-full overflow-hidden ${adminMediaPlaceholderClass}`}>
                                 {user.avatar ? (
                                 <Image
                                     alt={user?.username as string}
@@ -370,15 +383,15 @@ export function UsersTable({
                     <TableCell className="text-right pr-6">
                         <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                             <Button variant="ghost" className="h-8 w-8 p-0 rounded-lg hover:bg-[#f7f7f7]">
+                             <Button variant="ghost" className={`p-0 ${adminSmallIconButtonClass}`}>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                             align="end"
-                            className="rounded-xl border-0 shadow-lg p-1"
+                            className={adminMenuContentClass}
                         >
-                            <DropdownMenuLabel className="text-xs font-normal text-muted-foreground px-2 py-1.5">Thao tác</DropdownMenuLabel>
+                            <DropdownMenuLabel className={adminMenuLabelClass}>Thao tác</DropdownMenuLabel>
                             <DropdownMenuItem
                             onClick={() => onView(user)}
                              className="cursor-pointer rounded-lg gap-2"
@@ -393,7 +406,7 @@ export function UsersTable({
                             <Edit className="h-4 w-4" />
                             Chỉnh sửa
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator className="bg-[#f7f7f7] my-1" />
+                            <DropdownMenuSeparator className={adminMenuSeparatorClass} />
                             <DropdownMenuItem
                              className="cursor-pointer rounded-lg gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
                             onClick={() => onDelete(user)}

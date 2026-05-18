@@ -21,6 +21,15 @@ import {
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 
 import { NotificationType } from "@/types/notification";
+import {
+  adminFieldSurfaceClass,
+  adminMenuContentClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+  adminSubtleSurfaceClass,
+  adminSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 export interface CreateNotificationForm {
   title: string;
@@ -75,7 +84,7 @@ export function CreateNotificationModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChangeWrapper}>
-      <DialogContent className="sm:max-w-[500px] rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6">
+      <DialogContent className={cn(adminSurfaceClass, "sm:max-w-[500px] rounded-[28px] border-slate-200/80 p-6")}>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">Tạo thông báo</DialogTitle>
           <DialogDescription className="text-muted-foreground">
@@ -92,7 +101,7 @@ export function CreateNotificationModal({
               onChange={(e) => handleChange("title", e.target.value)}
               placeholder="Tiêu đề thông báo"
               required
-              className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+              className={adminFieldSurfaceClass}
             />
           </div>
 
@@ -102,10 +111,10 @@ export function CreateNotificationModal({
               value={formData.type}
               onValueChange={(value) => handleChange("type", value)}
             >
-              <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all">
+              <SelectTrigger className={adminFieldSurfaceClass}>
                 <SelectValue placeholder="Chọn loại" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border/50">
+              <SelectContent className={adminMenuContentClass}>
                 <SelectItem value="system">Hệ thống</SelectItem>
                 <SelectItem value="order_status">Đơn hàng</SelectItem>
                 <SelectItem value="chat">Trò chuyện</SelectItem>
@@ -123,11 +132,11 @@ export function CreateNotificationModal({
               onChange={(e) => handleChange("message", e.target.value)}
               placeholder="Nội dung thông báo..."
               required
-              className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all resize-none min-h-[100px]"
+              className={cn(adminFieldSurfaceClass, "min-h-[100px] resize-none")}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className={cn(adminSubtleSurfaceClass, "grid grid-cols-2 gap-4 rounded-2xl p-4")}>
             <div className="space-y-2">
                 <Label htmlFor="recipient" className="text-sm font-medium">ID Người dùng (Tùy chọn)</Label>
                 <Input
@@ -135,7 +144,7 @@ export function CreateNotificationModal({
                 value={formData.recipient}
                 onChange={(e) => handleChange("recipient", e.target.value)}
                 placeholder="Nhập ID người dùng cụ thể"
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                className={adminFieldSurfaceClass}
                 />
             </div>
             <div className="space-y-2">
@@ -145,7 +154,7 @@ export function CreateNotificationModal({
                 value={formData.link}
                 onChange={(e) => handleChange("link", e.target.value)}
                 placeholder="/products/..."
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                className={adminFieldSurfaceClass}
                 />
             </div>
           </div>
@@ -156,11 +165,11 @@ export function CreateNotificationModal({
               variant="outline"
               onClick={() => handleOpenChangeWrapper(false)}
               disabled={isLoading}
-              className="rounded-xl border-gray-200"
+              className={adminSecondaryButtonClass}
             >
               Hủy
             </Button>
-            <Button type="submit" disabled={isLoading} className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]">
+            <Button type="submit" disabled={isLoading} className={adminPrimaryButtonClass}>
               {isLoading && (
                 <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
               )}

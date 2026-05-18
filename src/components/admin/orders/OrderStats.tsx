@@ -5,6 +5,10 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { formatCurrency } from "@/utils/format";
+import {
+  AdminStatCard,
+  AdminStatsGrid,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface OrderStatusCount {
   _id: string;
@@ -91,18 +95,16 @@ export function OrdersStats({
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <AdminStatsGrid>
       {stats.map((stat, index) => (
-        <div key={index} className="rounded-2xl bg-[#f7f7f7] p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{stat.title}</h3>
-            <stat.icon className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-          </div>
-        </div>
+        <AdminStatCard
+          key={index}
+          title={stat.title}
+          value={stat.value}
+          icon={stat.icon}
+          accent={index === 1 ? "amber" : index === 2 ? "green" : index === 3 ? "blue" : "brand"}
+        />
       ))}
-    </div>
+    </AdminStatsGrid>
   );
 }

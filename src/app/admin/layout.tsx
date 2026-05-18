@@ -18,6 +18,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { RequireRole } from "@/components/common/PermissionGate";
 import { usePermissions } from "@/context/PermissionContext";
 import { getSafeErrorMessage } from "@/api";
+import {
+  adminFieldSurfaceClass,
+  adminShellClass,
+  adminSubtleSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 export default function AdminLayout({
   children,
@@ -67,19 +72,23 @@ export default function AdminLayout({
 
   return (
     <RequireRole roles="admin" redirectTo="/">
-      <div className="min-h-screen bg-white dark:bg-[#000000] flex">
+      <div className={cn("min-h-screen flex", adminShellClass, "dark:bg-[#000000]")}>
         {/* Mobile Sidebar */}
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent
             side="left"
-            className="w-[280px] p-0 border-r-0 bg-[#f7f7f7] dark:bg-[#1C1C1E]"
+            className={cn(
+              "w-[280px] p-0 border-r-0 dark:bg-[#1C1C1E]",
+              adminSubtleSurfaceClass,
+              "rounded-none border-y-0 border-l-0",
+            )}
           >
             <SheetTitle className="sr-only">Menu Điều hướng Admin</SheetTitle>
             <div className="flex h-full flex-col">
               {/* Mobile Logo */}
               <div className="flex h-16 items-center px-6">
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-xl bg-[#E53935] flex items-center justify-center">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#d8473c] shadow-[0_14px_26px_-18px_rgba(216,71,60,0.9)]">
                     <span className="text-white font-bold text-sm">A</span>
                   </div>
                   <span className="text-lg font-bold tracking-tight">
@@ -102,19 +111,19 @@ export default function AdminLayout({
                         className={cn(
                           "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                           isActive
-                            ? "bg-white text-[#E53935]"
-                            : "text-muted-foreground hover:text-foreground hover:bg-white/60"
+                            ? "bg-white text-[#d8473c] shadow-[0_10px_24px_-20px_rgba(15,23,42,0.6)]"
+                            : "text-muted-foreground hover:text-foreground hover:bg-white/75"
                         )}
                       >
                         <item.icon
                           className={cn(
                             "h-4 w-4",
-                            isActive && "text-[#E53935]"
+                            isActive && "text-[#d8473c]"
                           )}
                         />
                         <span className="flex-1">{item.name}</span>
                         {item.badge && (
-                          <Badge className="bg-[#E53935]/10 text-[#E53935] text-[10px] px-1.5 py-0 h-4 border-0">
+                          <Badge className="bg-[#d8473c]/10 text-[#d8473c] text-[10px] px-1.5 py-0 h-4 border-0">
                             {item.badge}
                           </Badge>
                         )}
@@ -131,6 +140,8 @@ export default function AdminLayout({
         <aside
           className={cn(
             "hidden lg:flex flex-col bg-[#f7f7f7] dark:bg-[#1C1C1E] fixed inset-y-0 z-50 transition-all duration-300 ease-in-out",
+            adminSubtleSurfaceClass,
+            "rounded-none border-y-0 border-l-0",
             isCollapsed ? "w-[72px]" : "w-[260px]"
           )}
         >
@@ -138,7 +149,7 @@ export default function AdminLayout({
           <div className="flex h-16 items-center justify-between px-4">
             {!isCollapsed && (
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-xl bg-[#E53935] flex items-center justify-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#d8473c] shadow-[0_14px_26px_-18px_rgba(216,71,60,0.9)]">
                   <span className="text-white font-bold">A</span>
                 </div>
                 <div className="flex flex-col">
@@ -156,7 +167,7 @@ export default function AdminLayout({
               size="icon"
               onClick={() => setIsCollapsed(!isCollapsed)}
               className={cn(
-                "h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-black/5 rounded-lg",
+                "h-9 w-9 rounded-2xl text-muted-foreground hover:text-foreground hover:bg-white/80",
                 isCollapsed && "mx-auto"
               )}
             >
@@ -182,8 +193,8 @@ export default function AdminLayout({
                     className={cn(
                       "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
                       isActive
-                        ? "bg-white dark:bg-white/10 text-[#E53935]"
-                        : "text-muted-foreground hover:text-foreground hover:bg-white/60 dark:hover:bg-white/5",
+                        ? "bg-white dark:bg-white/10 text-[#d8473c] shadow-[0_10px_24px_-20px_rgba(15,23,42,0.6)]"
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/75 dark:hover:bg-white/5",
                       isCollapsed && "justify-center px-2"
                     )}
                     title={isCollapsed ? item.name : undefined}
@@ -192,7 +203,7 @@ export default function AdminLayout({
                       className={cn(
                         "h-5 w-5 shrink-0 transition-colors",
                         isActive
-                          ? "text-[#E53935]"
+                          ? "text-[#d8473c]"
                           : "text-muted-foreground group-hover:text-foreground"
                       )}
                     />
@@ -200,7 +211,7 @@ export default function AdminLayout({
                       <>
                         <span className="flex-1">{item.name}</span>
                         {item.badge && (
-                          <Badge className="bg-[#E53935]/10 text-[#E53935] text-[10px] px-1.5 py-0 h-4 border-0">
+                          <Badge className="bg-[#d8473c]/10 text-[#d8473c] text-[10px] px-1.5 py-0 h-4 border-0">
                             {item.badge}
                           </Badge>
                         )}
@@ -209,7 +220,7 @@ export default function AdminLayout({
 
                     {/* Collapsed badge indicator */}
                     {isCollapsed && item.badge && (
-                      <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-[#E53935]" />
+                      <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-[#d8473c]" />
                     )}
                   </Link>
                 );
@@ -260,12 +271,12 @@ export default function AdminLayout({
           )}
         >
           {/* Header */}
-          <header className="sticky top-0 z-40 h-16 bg-white dark:bg-[#000000] px-4 lg:px-6 flex items-center justify-between">
+          <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/50 bg-white/70 px-4 backdrop-blur-xl dark:bg-[#000000] lg:px-6">
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden -ml-2 text-muted-foreground rounded-xl hover:bg-[#f7f7f7]"
+                className="lg:hidden -ml-2 rounded-2xl text-muted-foreground hover:bg-white/80"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="h-5 w-5" />
@@ -281,12 +292,12 @@ export default function AdminLayout({
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative rounded-xl hover:bg-[#f7f7f7]"
+                className={cn("relative rounded-2xl hover:bg-white/80", adminFieldSurfaceClass)}
                 onClick={() => setNotificationOpen(true)}
               >
                 <Bell className="h-5 w-5 text-muted-foreground" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#E53935]" />
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#d8473c]" />
                 )}
               </Button>
 
@@ -320,7 +331,7 @@ export default function AdminLayout({
           />
 
           {/* Page Content */}
-          <main className="flex-1 p-4 sm:p-6 overflow-x-auto">
+          <main className="flex-1 overflow-x-auto p-4 sm:p-6">
             <div className="max-w-[1600px] mx-auto animate-in fade-in duration-300">
               {children}
             </div>

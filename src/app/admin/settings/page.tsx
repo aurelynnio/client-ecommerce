@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 import { Save, RotateCcw, CheckCircle } from "lucide-react";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { toast } from "sonner";
@@ -16,6 +15,14 @@ import {
   NotificationSettings,
   DisplaySettings,
 } from "@/types/settings";
+import {
+  AdminActionButton,
+  AdminPageHeader,
+  adminFieldSurfaceClass,
+  adminSubtleSurfaceClass,
+  adminSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 export default function SettingsPage() {
   const { data: settings, isLoading, error, refetch } = useSettings();
@@ -142,130 +149,119 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-8 p-1">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight text-foreground">
-            Settings
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage system settings and display preferences
-          </p>
-        </div>
-        {hasChanges && (
-          <div className="flex items-center gap-2 text-sm text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg">
-            <span>Có thay đổi chưa lưu</span>
-          </div>
-        )}
-      </div>
+      <AdminPageHeader
+        title="Cài đặt"
+        description="Điều chỉnh thông tin cửa hàng, thông báo vận hành và cấu hình hiển thị của khu vực quản trị."
+        actions={
+          hasChanges ? (
+            <div className="flex items-center gap-2 rounded-2xl bg-amber-50 px-3 py-2 text-sm text-amber-700">
+              <span>Có thay đổi chưa lưu</span>
+            </div>
+          ) : undefined
+        }
+      />
 
       <Tabs defaultValue="general" className="space-y-6">
-        <div className="rounded-2xl bg-[#f7f7f7] p-2 w-fit">
+        <div className={cn(adminSubtleSurfaceClass, "w-fit p-2")}>
           <TabsList className="bg-transparent p-0 gap-2">
             <TabsTrigger
               value="general"
-              className="rounded-xl px-4 py-2 hover:bg-white/50 data-[state=active]:bg-white data-[state=active]:text-[#E53935] transition-all text-sm font-medium"
+              className="rounded-2xl px-4 py-2 text-sm font-medium transition-all hover:bg-white/50 data-[state=active]:bg-white data-[state=active]:text-[#d8473c]"
             >
-              General
+              Chung
             </TabsTrigger>
             <TabsTrigger
               value="notifications"
-              className="rounded-xl px-4 py-2 hover:bg-white/50 data-[state=active]:bg-white data-[state=active]:text-[#E53935] transition-all text-sm font-medium"
+              className="rounded-2xl px-4 py-2 text-sm font-medium transition-all hover:bg-white/50 data-[state=active]:bg-white data-[state=active]:text-[#d8473c]"
             >
-              Notifications
+              Thông báo
             </TabsTrigger>
             <TabsTrigger
               value="display"
-              className="rounded-xl px-4 py-2 hover:bg-white/50 data-[state=active]:bg-white data-[state=active]:text-[#E53935] transition-all text-sm font-medium"
+              className="rounded-2xl px-4 py-2 text-sm font-medium transition-all hover:bg-white/50 data-[state=active]:bg-white data-[state=active]:text-[#d8473c]"
             >
-              Display
+              Hiển thị
             </TabsTrigger>
           </TabsList>
         </div>
 
         <TabsContent value="general" className="mt-0">
-          <div className="rounded-2xl bg-white p-6 space-y-8">
+          <div className={cn(adminSurfaceClass, "space-y-8 p-6")}>
             <div>
-              <h3 className="text-lg font-semibold tracking-tight">
-                Store Information
-              </h3>
+              <h3 className="text-lg font-semibold tracking-tight">Thông tin cửa hàng</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Update basic store details and contact info
+                Cập nhật thông tin cơ bản và kênh liên hệ vận hành.
               </p>
             </div>
 
             <div className="grid gap-6 max-w-xl">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium">
-                  Store Name
+                  Tên cửa hàng
                 </Label>
                 <Input
                   id="name"
                   value={storeData.name || ""}
                   onChange={(e) => handleStoreChange("name", e.target.value)}
-                  className="rounded-xl border-0 bg-[#f7f7f7] focus:bg-white transition-all h-10"
+                  className={`h-10 ${adminFieldSurfaceClass}`}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
-                  Contact Email
+                  Email liên hệ
                 </Label>
                 <Input
                   id="email"
                   type="email"
                   value={storeData.email || ""}
                   onChange={(e) => handleStoreChange("email", e.target.value)}
-                  className="rounded-xl border-0 bg-[#f7f7f7] focus:bg-white transition-all h-10"
+                  className={`h-10 ${adminFieldSurfaceClass}`}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-sm font-medium">
-                  Phone Number
+                  Số điện thoại
                 </Label>
                 <Input
                   id="phone"
                   value={storeData.phone || ""}
                   onChange={(e) => handleStoreChange("phone", e.target.value)}
-                  className="rounded-xl border-0 bg-[#f7f7f7] focus:bg-white transition-all h-10"
+                  className={`h-10 ${adminFieldSurfaceClass}`}
                 />
               </div>
 
               <div className="pt-2">
-                <Button
+                <AdminActionButton
                   onClick={handleSaveStore}
                   disabled={updateMutation.isPending}
-                  className="rounded-xl bg-[#E53935] hover:bg-[#D32F2F] text-white h-10 px-6"
                 >
                   {updateMutation.isPending ? (
                     <SpinnerLoading size={16} noWrapper className="mr-2" />
                   ) : (
                     <Save className="h-4 w-4 mr-2" />
                   )}
-                  Save Changes
-                </Button>
+                  Lưu thay đổi
+                </AdminActionButton>
               </div>
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="notifications" className="mt-0">
-          <div className="rounded-2xl bg-white p-6 space-y-8">
+          <div className={cn(adminSurfaceClass, "space-y-8 p-6")}>
             <div>
-              <h3 className="text-lg font-semibold tracking-tight">
-                Notification Configuration
-              </h3>
+              <h3 className="text-lg font-semibold tracking-tight">Cấu hình thông báo</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Choose which events trigger notifications
+                Chọn các sự kiện hệ thống cần theo dõi và cảnh báo.
               </p>
             </div>
 
             <div className="space-y-6 max-w-2xl">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-[#f7f7f7]">
+              <div className={cn(adminSubtleSurfaceClass, "flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between")}>
                 <div className="flex flex-col space-y-1">
-                  <Label htmlFor="new-orders" className="text-base font-medium">
-                    New Orders
-                  </Label>
+                  <Label htmlFor="new-orders" className="text-base font-medium">Đơn hàng mới</Label>
                   <span className="text-xs text-muted-foreground font-normal">
-                    Check to receive notifications when new orders are placed
+                    Nhận thông báo khi phát sinh đơn hàng mới.
                   </span>
                 </div>
                 <Switch
@@ -277,13 +273,11 @@ export default function SettingsPage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-[#f7f7f7]">
+              <div className={cn(adminSubtleSurfaceClass, "flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between")}>
                 <div className="flex flex-col space-y-1">
-                  <Label htmlFor="low-stock" className="text-base font-medium">
-                    Low Stock Alerts
-                  </Label>
+                  <Label htmlFor="low-stock" className="text-base font-medium">Cảnh báo tồn kho thấp</Label>
                   <span className="text-xs text-muted-foreground font-normal">
-                    Get notified when product inventory drops below threshold
+                    Báo động khi số lượng sản phẩm xuống dưới ngưỡng an toàn.
                   </span>
                 </div>
                 <Switch
@@ -296,42 +290,37 @@ export default function SettingsPage() {
               </div>
 
               <div className="pt-2">
-                <Button
+                <AdminActionButton
                   onClick={handleSaveNotifications}
                   disabled={updateMutation.isPending}
-                  className="rounded-xl bg-[#E53935] hover:bg-[#D32F2F] text-white h-10 px-6"
                 >
                   {updateMutation.isPending ? (
                     <SpinnerLoading size={16} noWrapper className="mr-2" />
                   ) : (
                     <CheckCircle className="h-4 w-4 mr-2" />
                   )}
-                  Save Notification Settings
-                </Button>
+                  Lưu cấu hình thông báo
+                </AdminActionButton>
               </div>
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="display" className="mt-0">
-          <div className="rounded-2xl bg-white p-6 space-y-8">
+          <div className={cn(adminSurfaceClass, "space-y-8 p-6")}>
             <div>
-              <h3 className="text-lg font-semibold tracking-tight">
-                Interface Configuration
-              </h3>
+              <h3 className="text-lg font-semibold tracking-tight">Cấu hình giao diện</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Customize the look and feel of your admin panel
+                Tùy chỉnh cách hiển thị của khu vực quản trị.
               </p>
             </div>
 
             <div className="space-y-6 max-w-2xl">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-[#f7f7f7]">
+              <div className={cn(adminSubtleSurfaceClass, "flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between")}>
                 <div className="flex flex-col space-y-1">
-                  <Label htmlFor="dark-mode" className="text-base font-medium">
-                    Dark Mode Preferences
-                  </Label>
+                  <Label htmlFor="dark-mode" className="text-base font-medium">Tùy chọn dark mode</Label>
                   <span className="text-xs text-muted-foreground font-normal">
-                    Toggle between light and dark themes for the interface
+                    Bật hoặc tắt chế độ tối cho giao diện quản trị.
                   </span>
                 </div>
                 <Switch
@@ -344,18 +333,17 @@ export default function SettingsPage() {
               </div>
 
               <div className="pt-2">
-                <Button
+                <AdminActionButton
                   onClick={handleSaveDisplay}
                   disabled={updateMutation.isPending}
-                  className="rounded-xl bg-[#E53935] hover:bg-[#D32F2F] text-white h-10 px-6"
                 >
                   {updateMutation.isPending ? (
                     <SpinnerLoading size={16} noWrapper className="mr-2" />
                   ) : (
                     <CheckCircle className="h-4 w-4 mr-2" />
                   )}
-                  Save Display Settings
-                </Button>
+                  Lưu cài đặt hiển thị
+                </AdminActionButton>
               </div>
             </div>
           </div>

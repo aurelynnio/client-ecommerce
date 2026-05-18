@@ -33,6 +33,16 @@ import { useDashboardStats } from "@/hooks/queries/useStatistics";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
+import {
+  AdminActionButton,
+  AdminPageHeader,
+  AdminStatCard,
+  AdminStatsGrid,
+  adminMediaPlaceholderClass,
+  adminSecondaryButtonClass,
+  adminSubtleSurfaceClass,
+  adminSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 export default function AdminDashboard() {
   const { socket } = useSocket();
@@ -173,56 +183,54 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8 p-1">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Tổng quan
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Theo dõi thống kê và hiệu suất của cửa hàng
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            className="rounded-xl bg-[#f7f7f7] h-10 gap-2 text-sm font-medium"
-          >
-            <Calendar className="h-3.5 w-3.5" />
-            {format(new Date(), "dd/MM/yyyy")}
-          </Button>
-          <Button
-            onClick={handleRefresh}
-            className="rounded-xl h-10 gap-2 text-sm font-medium bg-[#E53935] hover:bg-[#D32F2F] text-white"
-            disabled={loading}
-          >
-            {loading ? (
-              <SpinnerLoading size={14} className="text-current" />
-            ) : (
-              <RefreshCcw className="h-3.5 w-3.5" />
-            )}
-            Làm mới
-          </Button>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Tổng quan"
+        description="Theo dõi thống kê, doanh thu và nhịp vận hành của toàn bộ hệ thống."
+        actions={
+          <>
+            <Button
+              variant="ghost"
+              className={cn("h-10 gap-2 text-sm font-medium", adminSecondaryButtonClass)}
+            >
+              <Calendar className="h-3.5 w-3.5" />
+              {format(new Date(), "dd/MM/yyyy")}
+            </Button>
+            <AdminActionButton onClick={handleRefresh} disabled={loading}>
+              {loading ? (
+                <SpinnerLoading size={14} className="text-current" />
+              ) : (
+                <RefreshCcw className="h-3.5 w-3.5" />
+              )}
+              Làm mới
+            </AdminActionButton>
+          </>
+        }
+      />
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <AdminStatsGrid>
         {statCards.map((stat) => (
-          <div
+          <AdminStatCard
             key={stat.name}
-            className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-6"
-          >
-            <div className="flex items-center justify-between">
-              <div className={cn("p-2 rounded-xl", stat.bg)}>
-                <stat.icon className={cn("h-5 w-5", stat.color)} />
-              </div>
+            title={stat.name}
+            value={stat.value}
+            description={stat.description}
+            icon={stat.icon}
+            accent={
+              stat.name === "Tổng doanh thu"
+                ? "blue"
+                : stat.name === "Đơn hàng"
+                  ? "brand"
+                  : stat.name === "Khách hàng"
+                    ? "amber"
+                    : "green"
+            }
+            meta={
               <div
                 className={cn(
-                  "flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full",
+                  "flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium",
                   stat.trendUp
                     ? "bg-green-500/10 text-green-600"
-                    : "bg-red-500/10 text-red-600"
+                    : "bg-red-500/10 text-red-600",
                 )}
               >
                 {stat.trendUp ? (
@@ -232,23 +240,15 @@ export default function AdminDashboard() {
                 )}
                 {stat.trend}
               </div>
-            </div>
-            <div className="mt-4 space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">
-                {stat.name}
-              </h3>
-              <p className="text-2xl font-bold tracking-tight text-foreground">
-                {stat.value}
-              </p>
-            </div>
-          </div>
+            }
+          />
         ))}
-      </div>
+      </AdminStatsGrid>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Revenue Chart */}
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-6">
+        <div className={cn(adminSurfaceClass, "p-6")}>
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="font-semibold text-lg text-foreground">Doanh thu</h3>
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
                 Tổng quan doanh thu hàng tháng
               </p>
             </div>
-            <div className="p-2 rounded-full bg-white dark:bg-black/20">
+            <div className={cn(adminSubtleSurfaceClass, "rounded-2xl p-2")}>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
@@ -329,7 +329,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Orders Chart */}
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-6">
+        <div className={cn(adminSurfaceClass, "p-6")}>
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="font-semibold text-lg text-foreground">Đơn hàng</h3>
@@ -337,7 +337,7 @@ export default function AdminDashboard() {
                 Số lượng đơn hàng hàng tháng
               </p>
             </div>
-            <div className="p-2 rounded-full bg-white dark:bg-black/20">
+            <div className={cn(adminSubtleSurfaceClass, "rounded-2xl p-2")}>
               <ShoppingCart className="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
@@ -389,7 +389,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Recent Orders Table */}
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-6 flex flex-col">
+        <div className={cn(adminSurfaceClass, "flex flex-col p-6")}>
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="font-semibold text-lg text-foreground">
@@ -401,7 +401,7 @@ export default function AdminDashboard() {
             </div>
             <Link
               href="/admin/orders"
-              className="text-sm font-medium text-[#E53935] hover:underline flex items-center gap-1"
+              className="flex items-center gap-1 text-sm font-medium text-[#d8473c] hover:underline"
             >
               Xem tất cả <ArrowRight className="h-3 w-3" />
             </Link>
@@ -412,10 +412,10 @@ export default function AdminDashboard() {
               displayStats.recentOrders.map((order) => (
                 <div
                   key={order._id}
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-black/20 transition-colors"
+                  className="flex items-center justify-between rounded-2xl p-3 transition-colors hover:bg-[#fbf6f0]"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-black/20">
+                    <div className={cn("hidden h-10 w-10 items-center justify-center rounded-2xl sm:flex", adminMediaPlaceholderClass)}>
                       <Package className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div className="space-y-1">
@@ -448,7 +448,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Top Products List */}
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-6 flex flex-col">
+        <div className={cn(adminSurfaceClass, "flex flex-col p-6")}>
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="font-semibold text-lg text-foreground">
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
             </div>
             <Link
               href="/admin/products"
-              className="text-sm font-medium text-[#E53935] hover:underline flex items-center gap-1"
+              className="flex items-center gap-1 text-sm font-medium text-[#d8473c] hover:underline"
             >
               Xem tất cả <ArrowRight className="h-3 w-3" />
             </Link>
@@ -471,10 +471,10 @@ export default function AdminDashboard() {
               displayStats.topProducts.map((product, index) => (
                 <div
                   key={product._id}
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-black/20 transition-colors"
+                  className="flex items-center justify-between rounded-2xl p-3 transition-colors hover:bg-[#fbf6f0]"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative h-12 w-12 shrink-0 rounded-xl bg-white dark:bg-black/20 overflow-hidden">
+                    <div className={cn("relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl", adminMediaPlaceholderClass)}>
                       {product.image ? (
                         <Image
                           src={product.image}

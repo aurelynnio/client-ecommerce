@@ -43,6 +43,19 @@ import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { cn } from "@/utils/cn";
 import { formatDate } from "@/utils/format";
 import Image from "next/image";
+import {
+  adminFieldSurfaceClass,
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminMenuLabelClass,
+  adminMenuSeparatorClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface DiscountsTableProps {
   discounts: Voucher[];
@@ -157,7 +170,7 @@ export function DiscountsTable({
     return (
       <div className="flex items-center gap-2 max-w-[140px]">
         {shopInfo.logo ? (
-          <div className="relative h-6 w-6 rounded-md overflow-hidden bg-gray-100 shrink-0">
+          <div className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}>
             <Image
               src={shopInfo.logo}
               alt={shopInfo.name}
@@ -167,7 +180,7 @@ export function DiscountsTable({
             />
           </div>
         ) : (
-          <div className="h-6 w-6 rounded-md bg-gray-100 flex items-center justify-center shrink-0">
+          <div className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}>
             <Store className="h-3 w-3 text-muted-foreground" />
           </div>
         )}
@@ -184,7 +197,7 @@ export function DiscountsTable({
   return (
     <div className="space-y-4">
       {/* Filters and Search Bar */}
-      <div className="flex flex-col gap-4 bg-white/50 dark:bg-white/5 p-4 rounded-[1.5rem] backdrop-blur-xl border border-border/50 lg:flex-row lg:items-center lg:justify-between">
+      <div className={adminFilterBarClass}>
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <div className="relative w-full sm:flex-1 sm:min-w-[220px] sm:max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -192,7 +205,7 @@ export function DiscountsTable({
               placeholder="Tìm kiếm theo mã..."
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              className="pl-9 rounded-xl border-gray-200 bg-white/80 focus:bg-white transition-all shadow-sm"
+              className={`pl-9 transition-all ${adminSearchInputClass}`}
             />
           </div>
 
@@ -201,10 +214,10 @@ export function DiscountsTable({
               value={selectedDiscountType}
               onValueChange={onDiscountTypeFilterChange}
             >
-              <SelectTrigger className="w-full rounded-xl border-gray-200 bg-white/80 shadow-sm hover:bg-gray-50 h-10 sm:w-[160px]">
+              <SelectTrigger className={`h-10 w-full sm:w-[160px] ${adminFieldSurfaceClass}`}>
                 <SelectValue placeholder="Loại giảm giá" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border/50 shadow-lg">
+              <SelectContent className={adminMenuContentClass}>
                 <SelectItem value="all">Tất cả loại</SelectItem>
                 <SelectItem value="percent">Phần trăm</SelectItem>
                 <SelectItem value="fixed">Số tiền cố định</SelectItem>
@@ -219,10 +232,10 @@ export function DiscountsTable({
                 onActiveFilterChange(value === "all" ? null : value === "true")
               }
             >
-              <SelectTrigger className="w-full rounded-xl border-gray-200 bg-white/80 shadow-sm hover:bg-gray-50 h-10 sm:w-[140px]">
+              <SelectTrigger className={`h-10 w-full sm:w-[140px] ${adminFieldSurfaceClass}`}>
                 <SelectValue placeholder="Trạng thái" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border/50 shadow-lg">
+              <SelectContent className={adminMenuContentClass}>
                 <SelectItem value="all">Tất cả trạng thái</SelectItem>
                 <SelectItem value="true">Đang hoạt động</SelectItem>
                 <SelectItem value="false">Ngừng hoạt động</SelectItem>
@@ -231,10 +244,10 @@ export function DiscountsTable({
 
             {onScopeFilterChange && (
               <Select value={selectedScope} onValueChange={onScopeFilterChange}>
-                <SelectTrigger className="w-full rounded-xl border-gray-200 bg-white/80 shadow-sm hover:bg-gray-50 h-10 sm:w-[140px]">
+                <SelectTrigger className={`h-10 w-full sm:w-[140px] ${adminFieldSurfaceClass}`}>
                   <SelectValue placeholder="Phạm vi" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl border-border/50 shadow-lg">
+                <SelectContent className={adminMenuContentClass}>
                   <SelectItem value="all">Tất cả phạm vi</SelectItem>
                   <SelectItem value="platform">Hệ thống</SelectItem>
                   <SelectItem value="shop">Cửa hàng</SelectItem>
@@ -252,10 +265,10 @@ export function DiscountsTable({
             value={pageSize.toString()}
             onValueChange={(value) => onPageSizeChange(Number(value))}
           >
-            <SelectTrigger className="w-full h-9 rounded-lg border-gray-200 bg-white/80 shadow-sm sm:w-[100px]">
+            <SelectTrigger className={`h-9 w-full sm:w-[100px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Số lượng" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="10">10</SelectItem>
               <SelectItem value="20">20</SelectItem>
               <SelectItem value="50">50</SelectItem>
@@ -265,11 +278,11 @@ export function DiscountsTable({
       </div>
 
       {/* Table Container */}
-      <div className="rounded-[2rem] border border-border/50 bg-white/60 dark:bg-[#1C1C1E]/60 backdrop-blur-xl shadow-sm overflow-hidden">
+      <div className={adminTableShellClass}>
         <div className="overflow-x-auto no-scrollbar">
           <Table>
-            <TableHeader className="bg-gray-50/50">
-              <TableRow className="border-border/50 hover:bg-transparent">
+            <TableHeader className={adminTableHeaderClass}>
+              <TableRow className="border-0 hover:bg-transparent">
                 <TableHead className="uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Mã
                 </TableHead>
@@ -328,7 +341,7 @@ export function DiscountsTable({
                   <TableRow
                     key={discount._id}
                     className={cn(
-                      "border-border/50 transition-colors hover:bg-gray-50/50",
+                      `${adminRowHoverClass} border-0`,
                       isLoading && "opacity-50 pointer-events-none"
                     )}
                   >
@@ -373,7 +386,7 @@ export function DiscountsTable({
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="h-8 w-8 p-0 rounded-lg hover:bg-gray-100"
+                            className={`p-0 ${adminSmallIconButtonClass}`}
                           >
                             <span className="sr-only">Open menu</span>
                             <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
@@ -381,9 +394,9 @@ export function DiscountsTable({
                         </DropdownMenuTrigger>
                          <DropdownMenuContent
                            align="end"
-                           className="rounded-xl border-border/50 shadow-lg p-1 bg-white/95 backdrop-blur-xl"
+                           className={adminMenuContentClass}
                          >
-                           <DropdownMenuLabel className="text-xs font-normal text-muted-foreground px-2 py-1.5">
+                           <DropdownMenuLabel className={adminMenuLabelClass}>
                              Thao tác
                            </DropdownMenuLabel>
                            <DropdownMenuItem
@@ -400,7 +413,7 @@ export function DiscountsTable({
                              <Edit className="h-4 w-4" />
                              Chỉnh sửa
                            </DropdownMenuItem>
-                           <DropdownMenuSeparator className="bg-border/50 my-1" />
+                           <DropdownMenuSeparator className={adminMenuSeparatorClass} />
                            <DropdownMenuItem
                              onClick={() => onDelete(discount)}
                              className="text-red-600 focus:text-red-700 focus:bg-red-50 rounded-lg cursor-pointer gap-2"

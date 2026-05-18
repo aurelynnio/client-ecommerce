@@ -40,6 +40,18 @@ import {
 import { Product } from "@/types/product";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import Image from "next/image";
+import {
+  adminFieldSurfaceClass,
+  adminFilterBarClass,
+  adminMediaPlaceholderClass,
+  adminMenuContentClass,
+  adminPrimaryButtonClass,
+  adminRowHoverClass,
+  adminSearchInputClass,
+  adminSmallIconButtonClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface ProductsTableProps {
   products: Product[];
@@ -192,7 +204,7 @@ export function ProductsTable({
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col gap-4 bg-[#f7f7f7] p-4 rounded-2xl lg:flex-row lg:items-center lg:justify-between">
+      <div className={adminFilterBarClass}>
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <div className="relative w-full sm:flex-1 sm:min-w-[220px] sm:max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -200,7 +212,7 @@ export function ProductsTable({
               placeholder="Tìm kiếm sản phẩm..."
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              className="pl-9 rounded-xl border-0 bg-white focus-visible:ring-0 transition-all"
+              className={`pl-9 transition-all ${adminSearchInputClass}`}
             />
           </div>
 
@@ -208,10 +220,10 @@ export function ProductsTable({
             value={selectedCategory}
             onValueChange={onCategoryFilterChange}
           >
-            <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[160px]">
+            <SelectTrigger className={`w-full sm:w-[160px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Danh mục" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-0">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="all">Tất cả danh mục</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category.id} value={category.id}>
@@ -222,10 +234,10 @@ export function ProductsTable({
           </Select>
 
           <Select value={selectedBrand} onValueChange={onBrandFilterChange}>
-            <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[140px]">
+            <SelectTrigger className={`w-full sm:w-[140px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Thương hiệu" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-0">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="all">Tất cả thương hiệu</SelectItem>
               {brands.map((brand) => (
                 <SelectItem key={brand} value={brand}>
@@ -239,13 +251,13 @@ export function ProductsTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="flex w-full items-center justify-start gap-2 rounded-xl border-0 bg-white hover:bg-white/80 sm:w-auto sm:justify-center"
+                className="flex w-full items-center justify-start gap-2 rounded-2xl border border-slate-200 bg-white/90 hover:bg-white sm:w-auto sm:justify-center"
               >
                 <Filter className="h-4 w-4" />
                 Giá
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80 p-4 rounded-xl border-0">
+            <DropdownMenuContent className={`w-80 p-4 ${adminMenuContentClass}`}>
               <DropdownMenuLabel className="uppercase text-xs font-bold tracking-wider text-muted-foreground">
                 Lọc theo giá
               </DropdownMenuLabel>
@@ -256,19 +268,19 @@ export function ProductsTable({
                     value={localMinPrice}
                     onChange={(e) => setLocalMinPrice(e.target.value)}
                     type="number"
-                    className="rounded-lg border-0 bg-[#f7f7f7]"
+                    className={adminSearchInputClass}
                   />
                   <Input
                     placeholder="Tối đa"
                     value={localMaxPrice}
                     onChange={(e) => setLocalMaxPrice(e.target.value)}
                     type="number"
-                    className="rounded-lg border-0 bg-[#f7f7f7]"
+                    className={adminSearchInputClass}
                   />
                 </div>
                 <Button
                   onClick={handlePriceFilterApply}
-                  className="w-full rounded-lg bg-[#E53935] text-white hover:bg-[#D32F2F]"
+                  className={`w-full ${adminPrimaryButtonClass}`}
                 >
                   Áp dụng
                 </Button>
@@ -286,10 +298,10 @@ export function ProductsTable({
               }
             }}
           >
-            <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[140px]">
+            <SelectTrigger className={`w-full sm:w-[140px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Trạng thái" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-0">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="all">Tất cả trạng thái</SelectItem>
               <SelectItem value="true">Đang bán</SelectItem>
               <SelectItem value="false">Ngừng bán</SelectItem>
@@ -298,11 +310,11 @@ export function ProductsTable({
 
           {onShopFilterChange && shops.length > 0 && (
             <Select value={selectedShop} onValueChange={onShopFilterChange}>
-              <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[160px]">
+              <SelectTrigger className={`w-full sm:w-[160px] ${adminFieldSurfaceClass}`}>
                 <Store className="h-4 w-4 mr-2 text-muted-foreground" />
                 <SelectValue placeholder="Cửa hàng" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-0">
+              <SelectContent className={adminMenuContentClass}>
                 <SelectItem value="all">Tất cả cửa hàng</SelectItem>
                 {shops.map((shop) => (
                   <SelectItem key={shop._id} value={shop._id}>
@@ -318,10 +330,10 @@ export function ProductsTable({
             value={pageSize.toString()}
             onValueChange={(value) => onPageSizeChange(Number(value))}
           >
-            <SelectTrigger className="w-full rounded-xl border-0 bg-white focus:ring-0 sm:w-[120px]">
+            <SelectTrigger className={`w-full sm:w-[120px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Hiển thị" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-0">
+            <SelectContent className={adminMenuContentClass}>
               <SelectItem value="10">10 / trang</SelectItem>
               <SelectItem value="20">20 / trang</SelectItem>
               <SelectItem value="50">50 / trang</SelectItem>
@@ -331,10 +343,10 @@ export function ProductsTable({
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl bg-white overflow-hidden">
+      <div className={adminTableShellClass}>
         <div className="overflow-x-auto no-scrollbar">
           <Table>
-            <TableHeader className="bg-[#f7f7f7]">
+            <TableHeader className={adminTableHeaderClass}>
               <TableRow className="border-0 hover:bg-transparent">
                 <TableHead className="w-[70px] uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Hình ảnh
@@ -394,13 +406,13 @@ export function ProductsTable({
                 products.map((product) => (
                   <TableRow
                     key={product._id}
-                    className={`border-0 hover:bg-[#f7f7f7]/50 transition-colors ${
+                    className={`${adminRowHoverClass} border-0 ${
                       isLoading ? "opacity-50 pointer-events-none" : ""
                     }`}
                   >
                     <TableCell className="pl-6">
                       {getMainImage(product) ? (
-                        <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-[#f7f7f7]">
+                        <div className={`relative h-12 w-12 rounded-xl overflow-hidden ${adminMediaPlaceholderClass}`}>
                           <Image
                             src={getMainImage(product)!}
                             alt={product.name}
@@ -410,7 +422,7 @@ export function ProductsTable({
                           />
                         </div>
                       ) : (
-                        <div className="h-12 w-12 rounded-xl bg-[#f7f7f7] flex items-center justify-center">
+                        <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${adminMediaPlaceholderClass}`}>
                           <Package className="h-5 w-5 text-muted-foreground" />
                         </div>
                       )}
@@ -462,7 +474,7 @@ export function ProductsTable({
                     <TableCell>
                       <div className="flex items-center gap-2 max-w-[140px]">
                         {getShopInfo(product.shop).logo ? (
-                          <div className="relative h-6 w-6 rounded-md overflow-hidden bg-[#f7f7f7] shrink-0">
+                          <div className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}>
                             <Image
                               src={getShopInfo(product.shop).logo!}
                               alt={getShopInfo(product.shop).name}
@@ -472,7 +484,7 @@ export function ProductsTable({
                             />
                           </div>
                         ) : (
-                          <div className="h-6 w-6 rounded-md bg-[#f7f7f7] flex items-center justify-center shrink-0">
+                          <div className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}>
                             <Store className="h-3 w-3 text-muted-foreground" />
                           </div>
                         )}
@@ -534,14 +546,14 @@ export function ProductsTable({
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="h-8 w-8 p-0 rounded-lg hover:bg-[#f7f7f7]"
+                            className={`p-0 ${adminSmallIconButtonClass}`}
                           >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
-                          className="rounded-xl border-0 shadow-lg"
+                          className={adminMenuContentClass}
                         >
                           <DropdownMenuItem
                             onClick={() => onView(product)}

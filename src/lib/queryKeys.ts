@@ -75,13 +75,16 @@ export const flashSaleKeys = {
 // Wishlist query keys
 export const wishlistKeys = {
   all: ["wishlist"] as const,
+  lists: () => [...wishlistKeys.all, "list"] as const,
   list: (params?: { page?: number; limit?: number }) =>
-    [...wishlistKeys.all, "list", params] as const,
+    [...wishlistKeys.lists(), params] as const,
   count: () => [...wishlistKeys.all, "count"] as const,
+  checks: () => [...wishlistKeys.all, "check"] as const,
   check: (productId: string) =>
-    [...wishlistKeys.all, "check", productId] as const,
+    [...wishlistKeys.checks(), productId] as const,
+  checkMultipleRoot: () => [...wishlistKeys.all, "check-multiple"] as const,
   checkMultiple: (productIds: string[]) =>
-    [...wishlistKeys.all, "check-multiple", productIds] as const,
+    [...wishlistKeys.checkMultipleRoot(), productIds] as const,
 };
 
 // Cart query keys

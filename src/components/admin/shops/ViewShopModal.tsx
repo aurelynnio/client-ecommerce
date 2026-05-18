@@ -12,6 +12,14 @@ import { Store, Package, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Shop, ShopOwner, ShopStatus } from "@/types/shop";
+import {
+  adminMediaPlaceholderClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+  adminSubtleSurfaceClass,
+  adminSurfaceClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 // Extended shop interface for admin view with additional computed fields
 interface AdminShopView extends Omit<Shop, 'owner' | 'status'> {
@@ -45,7 +53,7 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl rounded-3xl">
+      <DialogContent className={cn(adminSurfaceClass, "max-w-2xl rounded-[28px] border-slate-200/80 p-6")}>
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Chi tiết cửa hàng</DialogTitle>
         </DialogHeader>
@@ -53,7 +61,7 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
         <div className="space-y-6">
           {/* Shop Header */}
           <div className="flex items-start gap-4">
-            <div className="relative h-20 w-20 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
+            <div className={cn("relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl", adminMediaPlaceholderClass)}>
               {shop.logo ? (
                 <Image
                   src={shop.logo}
@@ -84,7 +92,7 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
           </div>
 
           {/* Owner Information */}
-          <div className="p-4 rounded-2xl bg-gray-50 dark:bg-gray-900/50 space-y-3">
+          <div className={cn(adminSubtleSurfaceClass, "space-y-3 rounded-2xl p-4")}>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
               Thông tin chủ sở hữu
             </h4>
@@ -102,17 +110,17 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
 
           {/* Statistics */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-center">
+            <div className="rounded-2xl bg-sky-50 p-4 text-center">
               <Package className="h-5 w-5 mx-auto mb-2 text-blue-600" />
               <p className="text-2xl font-bold text-blue-700">{shop.totalProducts || 0}</p>
               <p className="text-xs text-blue-600/80">Sản phẩm</p>
             </div>
-            <div className="p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 text-center">
+            <div className="rounded-2xl bg-emerald-50 p-4 text-center">
               <ShoppingCart className="h-5 w-5 mx-auto mb-2 text-green-600" />
               <p className="text-2xl font-bold text-green-700">{shop.totalOrders || 0}</p>
               <p className="text-xs text-green-600/80">Đơn hàng</p>
             </div>
-            <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/20 text-center">
+            <div className="rounded-2xl bg-amber-50 p-4 text-center">
               <Star className="h-5 w-5 mx-auto mb-2 text-amber-600" />
               <p className="text-2xl font-bold text-amber-700">{shop.rating?.toFixed(1) || "0.0"}</p>
               <p className="text-xs text-amber-600/80">Đánh giá</p>
@@ -133,13 +141,13 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
 
           {/* Quick Links */}
           <div className="flex gap-3 pt-2">
-            <Button variant="outline" className="flex-1 rounded-xl" asChild>
+            <Button variant="outline" className={cn("flex-1", adminSecondaryButtonClass)} asChild>
               <Link href={`/admin/products?shop=${shop._id}`}>
                 <Package className="h-4 w-4 mr-2" />
                 Xem sản phẩm
               </Link>
             </Button>
-            <Button variant="outline" className="flex-1 rounded-xl" asChild>
+            <Button variant="outline" className={cn("flex-1", adminPrimaryButtonClass)} asChild>
               <Link href={`/admin/orders?shop=${shop._id}`}>
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 Xem đơn hàng

@@ -4,13 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAppSelector } from "@/hooks/hooks";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -20,10 +13,12 @@ import {
   useApplyVoucher,
   useCart,
   useClearCart,
+  useProfile,
 } from "@/hooks/queries";
 import { formatCurrency } from "@/utils/format";
 import { toast } from "sonner";
 import { ApplyVoucherResult } from "@/types/voucher";
+import { Address } from "@/types/address";
 import {
   Check,
   CreditCard,
@@ -40,6 +35,19 @@ import Link from "next/link";
 import { groupCartItemsByShop } from "@/types/cart";
 import { getSafeErrorMessage } from "@/api";
 
+const getPrimaryAddress = (addresses: Address[] = []) =>
+  addresses.find((address) => address.isDefault) ?? addresses[0] ?? null;
+
+const hasCompleteAddress = (address: Address | null) =>
+  !!(
+    address?.fullName?.trim() &&
+    address.phone?.trim() &&
+    address.address?.trim() &&
+    address.city?.trim() &&
+    address.district?.trim() &&
+    address.ward?.trim()
+  );
+
 export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "vnpay" | "momo">(
     "cod"
@@ -49,22 +57,15 @@ export default function CheckoutPage() {
     useState<ApplyVoucherResult | null>(null);
   const [appliedPlatformVoucher, setAppliedPlatformVoucher] =
     useState<ApplyVoucherResult | null>(null);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    district: "",
-    ward: "",
-    note: "",
-  });
+  const [note, setNote] = useState("");
 
-  const { data: userData } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { checkoutTotal, selectedItems } = useAppSelector((state) => state.cart);
   const router = useRouter();
   const cartQuery = useCart();
   const cartData = cartQuery.data;
+  const profileQuery = useProfile({ enabled: isAuthenticated });
+  const currentUser = profileQuery.data;
 
   const createOrderMutation = useCreateOrder();
   const clearCartMutation = useClearCart();
@@ -90,6 +91,11 @@ export default function CheckoutPage() {
 
   const finalTotal = (checkoutTotal || 0) - totalDiscount;
   const cartItemIds = cartItems.map((item) => item._id);
+  const primaryAddress = useMemo(
+    () => getPrimaryAddress(currentUser?.addresses),
+    [currentUser?.addresses]
+  );
+  const hasValidAddress = hasCompleteAddress(primaryAddress);
 
   useEffect(() => {
     if (cartQuery.isLoading) {
@@ -100,37 +106,35 @@ export default function CheckoutPage() {
       router.push("/cart");
       return;
     }
+  }, [cartItems, cartQuery.isLoading, router]);
 
-    if (userData && !formData.email) {
-      const defaultAddress = userData.addresses?.[0] || {};
-      setFormData((prev) => ({
-        ...prev,
-        fullName: defaultAddress.fullName || userData.username || "",
-        email: userData.email || "",
-        phone: defaultAddress.phone || "",
-        address: defaultAddress.address || "",
-        city: defaultAddress.city || "",
-        district: defaultAddress.district || "",
-        ward: defaultAddress.ward || "",
-      }));
+  useEffect(() => {
+    if (cartQuery.isLoading || profileQuery.isLoading || !cartItems.length) {
+      return;
     }
-  }, [userData, cartItems, cartQuery.isLoading, router, formData.email]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const handleSelectChange = (value: string, field: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+    if (!hasValidAddress) {
+      toast.error(
+        "Vui lòng cập nhật địa chỉ nhận hàng trong hồ sơ trước khi thanh toán",
+        { id: "checkout-address-required" }
+      );
+      router.replace("/profile?tab=address");
+    }
+  }, [
+    cartItems.length,
+    cartQuery.isLoading,
+    hasValidAddress,
+    profileQuery.isLoading,
+    router,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!formData.city) {
-      toast.error("Vui lòng chọn Tỉnh/Thành phố");
+    if (!primaryAddress || !hasValidAddress) {
+      toast.error("Địa chỉ giao hàng chưa đầy đủ");
+      router.push("/profile?tab=address");
       return;
     }
 
@@ -138,13 +142,13 @@ export default function CheckoutPage() {
       const orderData = {
         cartItemIds,
         shippingAddress: {
-          fullName: formData.fullName,
-          phone: formData.phone,
-          address: formData.address,
-          city: formData.city,
-          district: formData.district,
-          ward: formData.ward,
-          note: formData.note,
+          fullName: primaryAddress.fullName,
+          phone: primaryAddress.phone,
+          address: primaryAddress.address,
+          city: primaryAddress.city,
+          district: primaryAddress.district,
+          ward: primaryAddress.ward,
+          note,
         },
         paymentMethod,
         platformVoucher: appliedPlatformVoucher?.code,
@@ -156,7 +160,7 @@ export default function CheckoutPage() {
               },
             ].filter((voucher) => voucher.shopId)
           : [],
-        note: formData.note,
+        note,
       };
 
       const result = await createOrderMutation.mutateAsync(orderData);
@@ -261,6 +265,14 @@ export default function CheckoutPage() {
     );
   }
 
+  if (profileQuery.isLoading) {
+    return (
+      <div className="w-full min-h-screen bg-background py-20 flex items-center justify-center">
+        <p className="text-gray-500">Đang tải địa chỉ giao hàng...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full min-h-screen bg-background py-4 -mt-4 -mx-4 px-4">
       <div className="max-w-[1200px] mx-auto">
@@ -291,121 +303,71 @@ export default function CheckoutPage() {
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="fullName" className="text-sm text-gray-600">
-                      Họ và tên
-                    </Label>
-                    <Input
-                      id="fullName"
-                      placeholder="Nguyễn Văn A"
-                      value={formData.fullName}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="phone" className="text-sm text-gray-600">
-                      Số điện thoại
-                    </Label>
-                    <Input
-                      id="phone"
-                      placeholder="0123 456 789"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5 md:col-span-2">
-                    <Label htmlFor="email" className="text-sm text-gray-600">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="email@example.com"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5 md:col-span-2">
-                    <Label htmlFor="address" className="text-sm text-gray-600">
-                      Địa chỉ
-                    </Label>
-                    <Input
-                      id="address"
-                      placeholder="Số nhà, tên đường"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="city" className="text-sm text-gray-600">
-                      Tỉnh/Thành phố
-                    </Label>
-                    <Select
-                      value={formData.city}
-                      onValueChange={(value) =>
-                        handleSelectChange(value, "city")
-                      }
-                      required
-                    >
-                      <SelectTrigger className="h-10 rounded border-gray-200 focus:ring-[#E53935]/20">
-                        <SelectValue placeholder="Chọn tỉnh/thành" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="hanoi">Hà Nội</SelectItem>
-                        <SelectItem value="hcm">TP. Hồ Chí Minh</SelectItem>
-                        <SelectItem value="danang">Đà Nẵng</SelectItem>
-                        <SelectItem value="haiphong">Hải Phòng</SelectItem>
-                        <SelectItem value="cantho">Cần Thơ</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="district" className="text-sm text-gray-600">
-                      Quận/Huyện
-                    </Label>
-                    <Input
-                      id="district"
-                      placeholder="Quận/Huyện"
-                      value={formData.district}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="ward" className="text-sm text-gray-600">
-                      Phường/Xã
-                    </Label>
-                    <Input
-                      id="ward"
-                      placeholder="Phường/Xã"
-                      value={formData.ward}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="note" className="text-sm text-gray-600">
-                      Ghi chú
-                    </Label>
-                    <Input
-                      id="note"
-                      placeholder="Ghi chú cho người giao hàng..."
-                      value={formData.note}
-                      onChange={handleInputChange}
-                      className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
-                    />
-                  </div>
+                <div className="rounded border border-gray-200 bg-white p-4">
+                  {primaryAddress && hasValidAddress ? (
+                    <div className="space-y-3">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-semibold text-gray-800">
+                              {primaryAddress.fullName}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {primaryAddress.phone}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            {primaryAddress.address}, {primaryAddress.ward},{" "}
+                            {primaryAddress.district}, {primaryAddress.city}
+                          </p>
+                          {currentUser?.email && (
+                            <p className="text-sm text-gray-500">
+                              Email tài khoản: {currentUser.email}
+                            </p>
+                          )}
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => router.push("/profile?tab=address")}
+                          className="border-gray-200 text-[#E53935] hover:bg-[#E53935]/5 hover:text-[#E53935]"
+                        >
+                          Cập nhật địa chỉ
+                        </Button>
+                      </div>
+
+                      <div className="space-y-1.5 border-t border-gray-100 pt-3">
+                        <Label htmlFor="note" className="text-sm text-gray-600">
+                          Ghi chú
+                        </Label>
+                        <Input
+                          id="note"
+                          placeholder="Ghi chú cho người giao hàng..."
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}
+                          className="h-10 rounded border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          Chưa có địa chỉ giao hàng
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Vui lòng cập nhật địa chỉ trong hồ sơ để tiếp tục thanh toán.
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        onClick={() => router.push("/profile?tab=address")}
+                        className="bg-[#E53935] hover:bg-[#D32F2F]"
+                      >
+                        Đi tới hồ sơ
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -29,6 +29,15 @@ import { Badge } from "@/components/ui/badge";
 import { Save, X } from "lucide-react";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Category } from "@/types/category";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminFieldSurfaceClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 // Define Zod validation schema với giá trị mặc định rõ ràng
 const formSchema = z.object({
@@ -122,7 +131,7 @@ export function EditCategoryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px] rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[500px] p-6")}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <DialogHeader>
@@ -154,7 +163,7 @@ export function EditCategoryModal({
                         field.onChange(e);
                         handleNameChange(e.target.value);
                       }}
-                       className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                       className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,7 +184,7 @@ export function EditCategoryModal({
                     <Input 
                       placeholder="ten-danh-muc" 
                       {...field} 
-                      className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                      className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                     />
                   </FormControl>
                   <FormDescription>
@@ -199,7 +208,7 @@ export function EditCategoryModal({
                       rows={3}
                       {...field}
                       value={field.value || ""}
-                      className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all resize-none"
+                      className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -212,7 +221,7 @@ export function EditCategoryModal({
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50/50 p-3">
+                <FormItem className={cn(adminInsetPanelClass, "flex flex-row items-center justify-between p-3")}>
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Trạng thái</FormLabel>
                     <div className="flex items-center gap-2">
@@ -255,13 +264,13 @@ export function EditCategoryModal({
               </div>
             </div>
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className={adminDialogFooterClass}>
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleClose}
                 disabled={isLoading}
-                className="rounded-xl border-gray-200"
+                className={cn("sm:min-w-28", adminSecondaryButtonClass)}
               >
                 <X className="h-4 w-4 mr-2" />
                 Hủy
@@ -269,7 +278,7 @@ export function EditCategoryModal({
               <Button
                 type="submit"
                 disabled={isLoading || !form.formState.isValid}
-                className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]"
+                className={cn("sm:min-w-40", adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />

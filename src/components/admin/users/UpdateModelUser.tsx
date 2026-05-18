@@ -26,6 +26,14 @@ import { User, UpdateUserData, UserRole } from "@/types/user";
 import { RESOURCES, ACTIONS } from "@/constants/permissions";
 import { getRolePermissions, getUserPermissions } from "@/api/permission";
 import { cn } from "@/utils/cn";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminFieldSurfaceClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface UpdateModelUserProps {
   open: boolean;
@@ -136,7 +144,7 @@ export function UpdateModelUser({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[550px] rounded-3xl border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-0 overflow-hidden max-h-[90vh]">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[550px] p-0 overflow-hidden max-h-[90vh]")}>
         <DialogHeader className="p-6 pb-4 border-b border-border/50">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
@@ -160,12 +168,12 @@ export function UpdateModelUser({
           <div className="overflow-y-auto no-scrollbar max-h-[calc(90vh-200px)]">
             <Tabs defaultValue="info" className="w-full">
               <div className="px-6 pt-4">
-                <TabsList className="grid w-full grid-cols-2 rounded-xl bg-gray-100/80 dark:bg-white/5 p-1">
-                  <TabsTrigger value="info" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
+                <TabsList className="grid w-full grid-cols-2 rounded-2xl bg-[#f5efe8] p-1">
+                  <TabsTrigger value="info" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
                     <UserIcon className="h-4 w-4" />
                     Thông tin
                   </TabsTrigger>
-                  <TabsTrigger value="permissions" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
+                  <TabsTrigger value="permissions" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
                     <Key className="h-4 w-4" />
                     Quyền hạn
                     {formData.permissions.length > 0 && (
@@ -188,7 +196,7 @@ export function UpdateModelUser({
                     id="username"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    className="rounded-xl border-gray-200 bg-gray-50/50 dark:bg-white/5 focus:bg-white dark:focus:bg-white/10 transition-all h-11"
+                    className={cn(adminFieldSurfaceClass, "h-11 transition-colors focus:bg-white")}
                     required
                     disabled={isLoading}
                   />
@@ -205,7 +213,7 @@ export function UpdateModelUser({
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="rounded-xl border-gray-200 bg-gray-50/50 dark:bg-white/5 focus:bg-white dark:focus:bg-white/10 transition-all h-11"
+                    className={cn(adminFieldSurfaceClass, "h-11 transition-colors focus:bg-white")}
                     required
                     disabled={isLoading}
                   />
@@ -223,10 +231,10 @@ export function UpdateModelUser({
                       onValueChange={(value) => setFormData({ ...formData, roles: value })}
                       disabled={isLoading}
                     >
-                      <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 dark:bg-white/5 h-11">
+                      <SelectTrigger className={cn(adminFieldSurfaceClass, "h-11")}>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="rounded-xl border-border/50 shadow-lg">
+                      <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
                         <SelectItem value="user">Người dùng</SelectItem>
                         <SelectItem value="admin">Quản trị viên</SelectItem>
                       </SelectContent>
@@ -243,10 +251,10 @@ export function UpdateModelUser({
                       onValueChange={(value) => setFormData({ ...formData, isVerifiedEmail: value === "true" })}
                       disabled={isLoading}
                     >
-                      <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 dark:bg-white/5 h-11">
+                      <SelectTrigger className={cn(adminFieldSurfaceClass, "h-11")}>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="rounded-xl border-border/50 shadow-lg">
+                      <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
                         <SelectItem value="true">Đã xác minh</SelectItem>
                         <SelectItem value="false">Chưa xác minh</SelectItem>
                       </SelectContent>
@@ -262,7 +270,7 @@ export function UpdateModelUser({
                   </div>
                 ) : (
                   <>
-                    <div className="p-3 rounded-xl bg-blue-50/50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20">
+                    <div className="rounded-2xl border border-[#f1d7d1] bg-[#fff5f2] p-3">
                       <p className="text-xs text-blue-600 dark:text-blue-400">
                         Role <span className="font-semibold">{formData.roles}</span> có {defaultRolePerms.length} quyền mặc định.
                         <span className="text-blue-500 ml-1">*</span> = quyền từ role
@@ -271,7 +279,7 @@ export function UpdateModelUser({
 
                     <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
                       {Object.values(RESOURCES).map((resource) => (
-                        <div key={resource} className="p-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-border/50">
+                        <div key={resource} className={cn(adminInsetPanelClass, "p-3")}>
                           <div className="flex items-center gap-2 mb-2">
                             <Checkbox
                               checked={isAllResourceSelected(resource)}
@@ -291,8 +299,8 @@ export function UpdateModelUser({
                                   variant={isSelected ? "default" : "outline"}
                                   className={cn(
                                     "cursor-pointer text-xs transition-all",
-                                    isFromRole && !isSelected && "border-blue-300 dark:border-blue-500",
-                                    isSelected && "bg-black dark:bg-[#0071e3]"
+                                    isFromRole && !isSelected && "border-[#d8473c]/35 text-[#d8473c]",
+                                    isSelected && "border-[#d8473c]/15 bg-[#d8473c] text-white hover:bg-[#c53b31]"
                                   )}
                                   onClick={() => handleTogglePermission(perm)}
                                 >
@@ -311,19 +319,19 @@ export function UpdateModelUser({
             </Tabs>
           </div>
 
-          <DialogFooter className="p-6 pt-4 border-t border-border/50 gap-2 sm:gap-0 bg-transparent">
+          <DialogFooter className={cn(adminDialogFooterClass, "px-6 pb-6")}>
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className="rounded-xl border-gray-200"
+              className={cn("sm:min-w-28", adminSecondaryButtonClass)}
             >
               Hủy
             </Button>
             <Button
               type="submit"
-              className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED] gap-2"
+              className={cn("gap-2 sm:min-w-44", adminPrimaryButtonClass)}
               disabled={isLoading}
             >
               {isLoading ? (

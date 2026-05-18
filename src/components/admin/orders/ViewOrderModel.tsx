@@ -11,6 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import { Edit, Package, Store } from "lucide-react";
 import Image from "next/image";
 import { formatCurrency, formatDate } from "@/utils/format";
+import {
+  adminDialogContentClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 interface ViewOrderModalProps {
   isOpen: boolean;
@@ -98,7 +104,7 @@ export function ViewOrderModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6">
+      <DialogContent className={cn(adminDialogContentClass, "max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar p-6")}>
         <DialogHeader className="border-b border-border/50 pb-4">
           <DialogTitle className="flex justify-between items-center">
             <span className="text-xl font-semibold tracking-tight">
@@ -106,7 +112,7 @@ export function ViewOrderModal({
             </span>
             <Button
               onClick={() => onEdit(order)}
-              className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] gap-2"
+              className={cn("gap-2", adminPrimaryButtonClass)}
             >
               <Edit className="w-4 h-4" />
               Cập nhật
@@ -116,7 +122,7 @@ export function ViewOrderModal({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           {/* Thông tin đơn hàng */}
-          <div className="p-5 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-4">
+          <div className={cn(adminInsetPanelClass, "p-5 space-y-4")}>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
               Thông tin đơn hàng
             </h3>
@@ -148,7 +154,7 @@ export function ViewOrderModal({
 
           {/* Shop Information */}
                 {order.shopId && (
-            <div className="p-5 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-4">
+            <div className={cn(adminInsetPanelClass, "p-5 space-y-4")}>
               <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
                 Thông tin cửa hàng
               </h3>
@@ -183,7 +189,7 @@ export function ViewOrderModal({
 
           {/* Thông tin khách hàng & Địa chỉ */}
           <div className="space-y-4">
-            <div className="p-5 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-4">
+            <div className={cn(adminInsetPanelClass, "p-5 space-y-4")}>
               <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
                 Khách hàng & Giao hàng
               </h3>

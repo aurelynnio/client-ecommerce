@@ -15,6 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  adminDialogContentClass,
+  adminFieldSurfaceClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 interface EditOrderModalProps {
   isOpen: boolean;
@@ -42,7 +49,7 @@ export function EditOrderModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[400px] rounded-4xl border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[420px] p-6")}>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">
             Cập nhật trạng thái đơn hàng
@@ -55,10 +62,10 @@ export function EditOrderModal({
               Trạng thái đơn hàng
             </Label>
             <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all">
+              <SelectTrigger className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}>
                 <SelectValue placeholder="Chọn trạng thái" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border/50">
+              <SelectContent className="rounded-2xl border-[#ebe2d8]">
                 <SelectItem value="pending">Chờ xử lý</SelectItem>
                 <SelectItem value="confirmed">Đã xác nhận</SelectItem>
                 <SelectItem value="processing">Đang xử lý</SelectItem>
@@ -69,19 +76,19 @@ export function EditOrderModal({
             </Select>
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4">
+          <div className="flex flex-col-reverse gap-3 border-t border-[#ebe2d8] pt-5 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="rounded-xl border-gray-200"
+              className={cn("sm:min-w-28", adminSecondaryButtonClass)}
             >
               Hủy
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
-              className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]"
+              className={cn("sm:min-w-36", adminPrimaryButtonClass)}
             >
               {isLoading ? "Đang lưu..." : "Lưu thay đổi"}
             </Button>

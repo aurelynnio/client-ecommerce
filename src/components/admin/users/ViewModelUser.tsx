@@ -25,6 +25,13 @@ import Image from "next/image";
 import UserPermissions from "./UserPermissions";
 import { cn } from "@/utils/cn";
 import { formatDate } from "@/utils/format";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface ViewModelUserProps {
   open: boolean;
@@ -72,7 +79,7 @@ export function ViewModelUser({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] rounded-3xl border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-0 overflow-hidden max-h-[90vh]">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[600px] p-0 overflow-hidden max-h-[90vh]")}>
         <DialogHeader className="p-6 pb-4 border-b border-border/50">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
@@ -90,12 +97,12 @@ export function ViewModelUser({
         <div className="overflow-y-auto no-scrollbar max-h-[calc(90vh-180px)]">
           <Tabs defaultValue="profile" className="w-full">
             <div className="px-6 pt-4">
-              <TabsList className="grid w-full grid-cols-2 rounded-xl bg-gray-100/80 dark:bg-white/5 p-1">
-                <TabsTrigger value="profile" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
+              <TabsList className="grid w-full grid-cols-2 rounded-2xl bg-[#f5efe8] p-1">
+                <TabsTrigger value="profile" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
                   <UserIcon className="h-4 w-4" />
                   Hồ sơ
                 </TabsTrigger>
-                <TabsTrigger value="permissions" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
+                <TabsTrigger value="permissions" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
                   <Key className="h-4 w-4" />
                   Quyền hạn
                 </TabsTrigger>
@@ -141,7 +148,7 @@ export function ViewModelUser({
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-2">
+                <div className={cn(adminInsetPanelClass, "p-4 space-y-2")}>
                   <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" />
                     Ngày tham gia
@@ -150,7 +157,7 @@ export function ViewModelUser({
                     {formatDate(user.createdAt, LONG_DATE_OPTIONS)}
                   </div>
                 </div>
-                <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-2">
+                <div className={cn(adminInsetPanelClass, "p-4 space-y-2")}>
                   <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1.5">
                     <Shield className="w-3.5 h-3.5" />
                     Vai trò
@@ -168,7 +175,7 @@ export function ViewModelUser({
                 {user.addresses && user.addresses.length > 0 ? (
                   <div className="space-y-3">
                     {user.addresses.map((addr, index) => (
-                      <div key={index} className="p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50">
+                      <div key={index} className={cn(adminInsetPanelClass, "p-4")}>
                         <div className="flex justify-between items-start mb-2">
                           <span className="font-medium text-sm text-foreground">{addr.fullName}</span>
                           <div className="flex items-center gap-1 text-xs text-muted-foreground bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded-md">
@@ -201,18 +208,18 @@ export function ViewModelUser({
           </Tabs>
         </div>
 
-        <DialogFooter className="p-6 pt-4 border-t border-border/50 gap-2 sm:gap-0 bg-transparent">
+        <DialogFooter className={cn(adminDialogFooterClass, "px-6 pb-6")}>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="rounded-xl border-gray-200"
+            className={cn("sm:min-w-28", adminSecondaryButtonClass)}
           >
             Đóng
           </Button>
           {onEdit && (
             <Button
               onClick={handleEdit}
-              className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED] gap-2"
+              className={cn("gap-2 sm:min-w-40", adminPrimaryButtonClass)}
             >
               <Edit className="h-4 w-4" />
               Sửa người dùng

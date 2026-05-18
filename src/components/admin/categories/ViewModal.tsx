@@ -26,6 +26,13 @@ import { Category } from "@/types/category";
 import { useState } from "react";
 import Image from "next/image";
 import { formatDate } from "@/utils/format";
+import {
+  adminDialogContentClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 interface ViewCategoryModalProps {
   isOpen: boolean;
@@ -76,7 +83,7 @@ export function ViewCategoryModal({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6 sm:max-w-[700px] max-h-[90vh] overflow-y-auto no-scrollbar">
+        <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[700px] max-h-[90vh] overflow-y-auto no-scrollbar p-6")}>
           <DialogHeader className="border-b border-border/50 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -93,7 +100,7 @@ export function ViewCategoryModal({
 
           <div className="space-y-6 pt-6">
             {/* Header Info */}
-            <div className="p-5 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 flex items-start gap-4">
+            <div className={cn(adminInsetPanelClass, "flex items-start gap-4 p-5")}>
               <div className="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 shrink-0">
                 <Folder className="h-6 w-6" />
               </div>
@@ -119,7 +126,7 @@ export function ViewCategoryModal({
 
             {/* Basic Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-white/40 border border-border/50 flex flex-col gap-1">
+              <div className={cn(adminInsetPanelClass, "flex flex-col gap-1 p-4")}>
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Số lượng sản phẩm
                 </span>
@@ -130,7 +137,7 @@ export function ViewCategoryModal({
                   </span>
                 </div>
               </div>
-              <div className="p-4 rounded-2xl bg-white/40 border border-border/50 flex flex-col gap-1">
+              <div className={cn(adminInsetPanelClass, "flex flex-col gap-1 p-4")}>
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Ngày tạo
                 </span>
@@ -231,19 +238,19 @@ export function ViewCategoryModal({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-6 border-t border-border/50 mt-2">
+          <div className="mt-2 flex flex-col-reverse gap-3 border-t border-[#ebe2d8] pt-6 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="rounded-xl h-10 border-gray-200"
+              className={cn("h-10 sm:min-w-28", adminSecondaryButtonClass)}
             >
               Đóng
             </Button>
             <Button
               type="button"
               onClick={handleEdit}
-              className="rounded-xl h-10 bg-black text-white hover:bg-black/90 dark:bg-[#0071e3] gap-2 px-5"
+              className={cn("h-10 gap-2 px-5 sm:min-w-40", adminPrimaryButtonClass)}
             >
               <Edit className="h-4 w-4" />
               Sửa danh mục

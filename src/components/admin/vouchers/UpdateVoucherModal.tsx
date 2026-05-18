@@ -22,6 +22,15 @@ import { Switch } from "@/components/ui/switch";
 // Updated: Import from voucher types with backward compatibility aliases
 import { UpdateVoucherData, Voucher } from "@/types/voucher";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminFieldSurfaceClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 interface UpdateModelDiscountProps {
   open: boolean;
@@ -83,7 +92,7 @@ export function UpdateModelDiscount({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[600px] p-6")}>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">
             Cập nhật mã giảm giá
@@ -106,7 +115,7 @@ export function UpdateModelDiscount({
                   onChange={(e) => handleChange("code", e.target.value)}
                   placeholder="VD: GIAMGIA2024"
                   required
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 />
               </div>
 
@@ -118,10 +127,10 @@ export function UpdateModelDiscount({
                   value={formData.discountType}
                   onValueChange={(value) => handleChange("discountType", value)}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all">
+                  <SelectTrigger className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl border-border/50">
+                  <SelectContent className="rounded-2xl border-[#ebe2d8]">
                     <SelectItem value="percent">Phần trăm (%)</SelectItem>
                     <SelectItem value="fixed">Số tiền cố định</SelectItem>
                   </SelectContent>
@@ -138,7 +147,7 @@ export function UpdateModelDiscount({
                 value={formData.description}
                 onChange={(e) => handleChange("description", e.target.value)}
                 placeholder="Mô tả mã giảm giá..."
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all resize-none"
+                className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
               />
             </div>
 
@@ -161,7 +170,7 @@ export function UpdateModelDiscount({
                   min="0"
                   max={formData.discountType === "percent" ? "100" : undefined}
                   required
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 />
               </div>
 
@@ -177,7 +186,7 @@ export function UpdateModelDiscount({
                   placeholder="100"
                   min="1"
                   required
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 />
               </div>
             </div>
@@ -193,7 +202,7 @@ export function UpdateModelDiscount({
                   value={formData.startDate}
                   onChange={(e) => handleChange("startDate", e.target.value)}
                   required
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 />
               </div>
 
@@ -207,7 +216,7 @@ export function UpdateModelDiscount({
                   value={formData.endDate}
                   onChange={(e) => handleChange("endDate", e.target.value)}
                   required
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 />
               </div>
             </div>
@@ -223,11 +232,11 @@ export function UpdateModelDiscount({
                 onChange={(e) => handleChange("minOrderValue", e.target.value)}
                 placeholder="0"
                 min="0"
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all"
+                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
               />
             </div>
 
-            <div className="flex items-center space-x-2 p-3 rounded-xl bg-gray-50/50">
+            <div className={cn(adminInsetPanelClass, "flex items-center space-x-3 p-4")}>
               <Switch
                 id="isActive"
                 checked={formData.isActive}
@@ -242,20 +251,20 @@ export function UpdateModelDiscount({
             </div>
           </div>
 
-          <DialogFooter className="gap-2 sm:gap-0">
+          <DialogFooter className={adminDialogFooterClass}>
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className="rounded-xl border-gray-200"
+              className={cn("sm:min-w-28", adminSecondaryButtonClass)}
             >
               Hủy
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
-              className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED]"
+              className={cn("sm:min-w-36", adminPrimaryButtonClass)}
             >
               {isLoading && (
                 <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />

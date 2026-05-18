@@ -33,6 +33,17 @@ export const adminSearchInputClass =
 export const adminFieldSurfaceClass =
   "rounded-2xl border-0 bg-white/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.14)] focus:ring-0";
 
+export const adminDialogContentClass = cn(
+  adminSurfaceClass,
+  "rounded-[2rem] border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(248,244,238,0.94)_100%)] shadow-[0_28px_60px_-34px_rgba(15,23,42,0.45)] backdrop-blur-xl",
+);
+
+export const adminDialogFooterClass =
+  "flex-col-reverse gap-3 border-t border-[#ebe2d8] bg-transparent pt-5 sm:flex-row sm:justify-end sm:gap-3";
+
+export const adminInsetPanelClass =
+  "rounded-2xl border border-[#ece3d8] bg-[#fbf7f1]/90";
+
 export const adminNativeSelectClass =
   "h-10 w-full rounded-2xl border-0 bg-white/95 px-3 text-sm shadow-[inset_0_0_0_1px_rgba(148,163,184,0.14)] focus:outline-none focus:ring-2 focus:ring-[#d8473c]/15 sm:w-auto";
 

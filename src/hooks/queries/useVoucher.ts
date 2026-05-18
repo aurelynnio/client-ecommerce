@@ -120,7 +120,8 @@ const voucherApi = {
   },
 
   delete: async (id: string): Promise<string> => {
-    await instance.delete(`/vouchers/${id}`);
+    // Admin table "Xóa" is expected to remove the voucher entirely.
+    await instance.delete(`/vouchers/${id}/permanent`);
     return id;
   },
 

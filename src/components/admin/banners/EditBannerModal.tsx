@@ -33,6 +33,15 @@ import { Save, Upload, Trash2 } from "lucide-react";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import Image from "next/image";
 import { BannerItem, UpdateBannerPayload } from "@/types/banner";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminFieldSurfaceClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 
 const editBannerSchema = z.object({
@@ -104,7 +113,7 @@ export function EditBannerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6 sm:max-w-[550px] max-h-[90vh] flex flex-col no-scrollbar">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[550px] max-h-[90vh] flex flex-col no-scrollbar p-6")}>
         <DialogHeader className="shrink-0 pb-6 border-b border-border/50">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold tracking-tight">
             Sửa Banner
@@ -132,7 +141,7 @@ export function EditBannerModal({
                       <Input
                         placeholder="VD: Tương lai của sự mượt mà"
                         {...field}
-                        className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -152,7 +161,7 @@ export function EditBannerModal({
                       <Input
                         placeholder="VD: Trải nghiệm bộ sưu tập tối thượng..."
                         {...field}
-                        className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -173,7 +182,7 @@ export function EditBannerModal({
                         <Input
                           placeholder="/shop"
                           {...field}
-                          className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                          className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                         />
                       </FormControl>
                       <FormMessage />
@@ -194,11 +203,11 @@ export function EditBannerModal({
                         onValueChange={field.onChange}
                       >
                         <FormControl>
-                          <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50">
+                          <SelectTrigger className={adminFieldSurfaceClass}>
                             <SelectValue placeholder="Chọn chủ đề" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-xl">
+                        <SelectContent className="rounded-2xl border-[#ebe2d8]">
                           <SelectItem value="dark">
                             Tối (Chữ trắng)
                           </SelectItem>
@@ -224,7 +233,7 @@ export function EditBannerModal({
                     <FormControl>
                       <div className="space-y-3">
                         <div
-                          className="border-2 border-dashed border-border/50 rounded-xl p-8 text-center cursor-pointer hover:bg-gray-50/50 hover:border-primary/50 transition-all"
+                          className="cursor-pointer rounded-2xl border-2 border-dashed border-[#e7ddd2] p-8 text-center transition-all hover:border-[#d8473c]/40 hover:bg-[#fbf6f0]"
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <input
@@ -305,7 +314,7 @@ export function EditBannerModal({
                   control={form.control}
                   name="isActive"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-xl border border-border/50 bg-gray-50/50 p-4 mt-2">
+                    <FormItem className={cn(adminInsetPanelClass, "mt-2 flex items-center justify-between p-4")}>
                       <div className="space-y-0.5">
                         <FormLabel className="text-sm font-medium block">
                           Trạng thái hoạt động
@@ -323,20 +332,20 @@ export function EditBannerModal({
               </div>
             </div>
 
-            <DialogFooter className="shrink-0 pt-6 border-t border-border/50 gap-3 mt-4">
+            <DialogFooter className={cn(adminDialogFooterClass, "mt-4 shrink-0")}>
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
                 disabled={isLoading}
-                className="flex-1 rounded-xl h-11 border-gray-200"
+                className={cn("h-11 flex-1", adminSecondaryButtonClass)}
               >
                 Hủy
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 rounded-xl h-11 bg-black text-white hover:bg-black/90 dark:bg-[#0071e3] shadow-sm"
+                className={cn("h-11 flex-1 shadow-sm", adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />

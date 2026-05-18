@@ -35,6 +35,15 @@ import {
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Category } from "@/types/category";
 import Image from "next/image";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminFieldSurfaceClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 
 const createFormSchema = z.object({
@@ -213,7 +222,7 @@ export function CreateCategoryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6 sm:max-w-[500px] max-h-[90vh] flex flex-col no-scrollbar">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[500px] max-h-[90vh] flex flex-col no-scrollbar p-6")}>
         <DialogHeader className="shrink-0 pb-6 border-b border-border/50">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold tracking-tight">
             Tạo danh mục
@@ -248,7 +257,7 @@ export function CreateCategoryModal({
                           handleNameChange(e.target.value);
                         }}
                         autoFocus
-                        className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -273,7 +282,7 @@ export function CreateCategoryModal({
                           field.onChange(e);
                           handleSlugChange(e.target.value);
                         }}
-                        className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                       />
                     </FormControl>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1.5 ml-1">
@@ -302,7 +311,7 @@ export function CreateCategoryModal({
                       <div className="relative" ref={dropdownRef}>
                         <button
                           type="button"
-                          className="flex h-10 w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50/50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/5 hover:bg-gray-50 transition-all text-left"
+                          className={cn(adminFieldSurfaceClass, "flex h-10 w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors hover:bg-white focus:outline-none")}
                           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
                           <span
@@ -324,7 +333,7 @@ export function CreateCategoryModal({
                         </button>
 
                         {isDropdownOpen && (
-                          <div className="absolute z-50 w-full mt-1 bg-white border border-border/50 rounded-xl shadow-xl max-h-60 overflow-y-auto no-scrollbar py-1">
+                          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-2xl border border-[#ebe2d8] bg-white py-1 shadow-xl no-scrollbar">
                             <div
                               className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-border/50"
                               onClick={() => {
@@ -385,7 +394,7 @@ export function CreateCategoryModal({
                         rows={3}
                         {...field}
                         value={field.value || ""}
-                        className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm resize-none"
+                        className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -406,7 +415,7 @@ export function CreateCategoryModal({
                       <div className="space-y-3">
                         {/* File Upload Input */}
                         <div
-                          className="border-2 border-dashed border-border/50 rounded-xl p-6 text-center cursor-pointer hover:bg-gray-50/50 hover:border-primary/50 transition-all"
+                          className="cursor-pointer rounded-2xl border-2 border-dashed border-[#e7ddd2] p-6 text-center transition-all hover:border-[#d8473c]/40 hover:bg-[#fbf6f0]"
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <input
@@ -465,7 +474,7 @@ export function CreateCategoryModal({
                 control={form.control}
                 name="isActive"
                 render={({ field }) => (
-                  <FormItem className="flex items-center justify-between rounded-xl border border-border/50 bg-gray-50/50 p-4">
+                  <FormItem className={cn(adminInsetPanelClass, "flex items-center justify-between p-4")}>
                     <div className="space-y-0.5">
                       <FormLabel className="text-sm font-medium block">Trạng thái hoạt động</FormLabel>
                       <div className="text-xs text-muted-foreground">
@@ -484,20 +493,20 @@ export function CreateCategoryModal({
             </div>
 
             {/* Footer */}
-            <DialogFooter className="shrink-0 pt-6 border-t border-border/50 gap-3">
+            <DialogFooter className={cn(adminDialogFooterClass, "shrink-0")}>
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleClose}
                 disabled={isLoading}
-                className="flex-1 rounded-xl h-11 border-gray-200"
+                className={cn("h-11 flex-1", adminSecondaryButtonClass)}
               >
                 Hủy
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading || !form.formState.isValid}
-                className="flex-1 rounded-xl h-11 bg-black text-white hover:bg-black/90 dark:bg-[#0071e3] shadow-sm"
+                className={cn("h-11 flex-1 shadow-sm", adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />

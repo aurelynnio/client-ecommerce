@@ -18,6 +18,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { formatDate } from "@/utils/format";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
 
 interface ViewModelDiscountProps {
   open: boolean;
@@ -77,7 +84,7 @@ export function ViewModelDiscount({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[550px] rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-0 overflow-hidden">
+      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[550px] p-0 overflow-hidden")}>
         <DialogHeader className="p-6 pb-2 border-b border-border/50">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
@@ -103,7 +110,7 @@ export function ViewModelDiscount({
         <div className="p-6 space-y-6">
           {/* Main Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-2">
+            <div className={cn(adminInsetPanelClass, "p-4 space-y-2")}>
               <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5" />
                 Loại
@@ -116,7 +123,7 @@ export function ViewModelDiscount({
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-2">
+            <div className={cn(adminInsetPanelClass, "p-4 space-y-2")}>
               <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1.5">
                 <DollarSign className="w-3.5 h-3.5" />
                 Giá trị
@@ -137,7 +144,7 @@ export function ViewModelDiscount({
               Sử dụng & Giới hạn
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-white/5 border border-border/50 shadow-sm">
+              <div className={cn(adminInsetPanelClass, "flex items-center gap-3 p-3 shadow-none")}>
                 <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
                   <BarChart3 className="h-5 w-5 text-blue-500" />
                 </div>
@@ -151,7 +158,7 @@ export function ViewModelDiscount({
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-white/5 border border-border/50 shadow-sm">
+              <div className={cn(adminInsetPanelClass, "flex items-center gap-3 p-3 shadow-none")}>
                 <div className="h-10 w-10 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
                   <DollarSign className="h-5 w-5 text-indigo-500" />
                 </div>
@@ -171,7 +178,7 @@ export function ViewModelDiscount({
             <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-1">
               Thời gian hiệu lực
             </h4>
-            <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-border/50 space-y-3">
+            <div className={cn(adminInsetPanelClass, "p-4 space-y-3")}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -199,7 +206,7 @@ export function ViewModelDiscount({
               <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-1">
                 Mô tả
               </h4>
-              <div className="p-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-border/50 text-sm">
+              <div className={cn(adminInsetPanelClass, "rounded-xl p-3 text-sm")}>
                 {discount.description}
               </div>
             </div>
@@ -208,17 +215,17 @@ export function ViewModelDiscount({
           {/* Products Info */}
         </div>
 
-        <DialogFooter className="p-6 pt-0 gap-2 sm:gap-0 bg-transparent">
+        <DialogFooter className={cn(adminDialogFooterClass, "border-t-0 px-6 pt-0 pb-6")}>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="rounded-xl border-gray-200"
+            className={cn("sm:min-w-28", adminSecondaryButtonClass)}
           >
             Đóng
           </Button>
           <Button
             onClick={() => onEdit(discount)}
-            className="rounded-xl bg-black hover:bg-black/90 text-white dark:bg-[#0071e3] dark:hover:bg-[#0077ED] gap-2"
+            className={cn("gap-2 sm:min-w-40", adminPrimaryButtonClass)}
           >
             <Edit className="h-4 w-4" />
             Sửa mã giảm giá

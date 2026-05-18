@@ -23,6 +23,15 @@ import { RESOURCES, ACTIONS } from "@/constants/permissions";
 import { getRolePermissions } from "@/api/permission";
 import { UserRole } from "@/types/user";
 import { CreateUserData } from "@/hooks/queries/useProfile";
+import {
+  adminDialogContentClass,
+  adminDialogFooterClass,
+  adminFieldSurfaceClass,
+  adminInsetPanelClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "@/components/admin/shared/AdminPrimitives";
+import { cn } from "@/utils/cn";
 
 interface CreateModelUserProps {
   open: boolean;
@@ -123,7 +132,7 @@ export function CreateModelUser({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-       <DialogContent className="rounded-[2rem] border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6 max-w-lg max-h-[90vh] overflow-y-auto no-scrollbar">
+       <DialogContent className={cn(adminDialogContentClass, "max-w-lg max-h-[90vh] overflow-y-auto no-scrollbar p-6")}>
         <DialogHeader className="border-b border-border/50 pb-6">
           <DialogTitle className="text-2xl font-bold tracking-tight">Thêm người dùng mới</DialogTitle>
           <DialogDescription className="text-muted-foreground">
@@ -143,7 +152,7 @@ export function CreateModelUser({
                 onChange={(e) =>
                     setFormData({ ...formData, username: e.target.value })
                 }
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 required
                 disabled={isLoading}
                 placeholder="Nhập họ và tên"
@@ -161,7 +170,7 @@ export function CreateModelUser({
                 onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                 }
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 required
                 disabled={isLoading}
                 placeholder="Nhập địa chỉ email"
@@ -179,7 +188,7 @@ export function CreateModelUser({
                 onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                 }
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 required
                 disabled={isLoading}
                 placeholder="Nhập số điện thoại"
@@ -197,7 +206,7 @@ export function CreateModelUser({
                 onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                 }
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
                 required
                 disabled={isLoading}
                 placeholder="Nhập mật khẩu (ít nhất 6 ký tự)"
@@ -217,10 +226,10 @@ export function CreateModelUser({
                     }
                     disabled={isLoading}
                     >
-                    <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:ring-0 shadow-sm h-10">
+                    <SelectTrigger className={cn(adminFieldSurfaceClass, "h-10")}>
                         <SelectValue placeholder="Chọn vai trò" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-xl border-border/50 shadow-lg">
+                    <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
                         <SelectItem value="user">Người dùng</SelectItem>
                         <SelectItem value="admin">Quản trị viên</SelectItem>
                     </SelectContent>
@@ -238,10 +247,10 @@ export function CreateModelUser({
                     }
                     disabled={isLoading}
                     >
-                    <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:ring-0 shadow-sm h-10">
+                    <SelectTrigger className={cn(adminFieldSurfaceClass, "h-10")}>
                         <SelectValue placeholder="Trạng thái" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-xl border-border/50 shadow-lg">
+                    <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
                         <SelectItem value="true">Đã xác minh</SelectItem>
                         <SelectItem value="false">Chưa xác minh</SelectItem>
                     </SelectContent>
@@ -255,7 +264,7 @@ export function CreateModelUser({
                 type="button"
                 variant="outline"
                 onClick={() => setShowPermissions(!showPermissions)}
-                className="w-full justify-between rounded-xl border-gray-200 h-10"
+                className={cn("h-10 w-full justify-between", adminSecondaryButtonClass)}
               >
                 <span className="flex items-center gap-2">
                   <Shield className="h-4 w-4" />
@@ -274,7 +283,7 @@ export function CreateModelUser({
               </Button>
 
               {showPermissions && (
-                <div className="border rounded-xl p-3 max-h-[200px] overflow-y-auto space-y-3">
+                <div className={cn(adminInsetPanelClass, "max-h-[200px] space-y-3 overflow-y-auto p-3")}>
                   <p className="text-xs text-muted-foreground">
                     Role <Badge variant="outline">{formData.roles}</Badge> đã có {defaultRolePerms.length} quyền mặc định.
                     Chọn thêm quyền bổ sung bên dưới:
@@ -298,7 +307,10 @@ export function CreateModelUser({
                             <Badge
                               key={perm}
                               variant={formData.permissions.includes(perm) ? "default" : "outline"}
-                              className={`cursor-pointer text-xs ${isFromRole ? "border-primary" : ""}`}
+                              className={cn(
+                                "cursor-pointer text-xs",
+                                isFromRole && "border-[#d8473c]/35 text-[#d8473c]",
+                              )}
                               onClick={() => handleTogglePermission(perm)}
                             >
                               {action}
@@ -314,19 +326,19 @@ export function CreateModelUser({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-6 border-t border-border/50">
+          <div className={adminDialogFooterClass}>
             <Button
               type="button"
               variant="outline"
               onClick={handleClose}
-              className="rounded-xl h-10 px-5 border-gray-200"
+              className={cn("h-10 px-5 sm:min-w-28", adminSecondaryButtonClass)}
               disabled={isLoading}
             >
               Hủy
             </Button>
             <Button
               type="submit"
-              className="rounded-xl h-10 px-6 bg-black text-white hover:bg-black/90 dark:bg-[#0071e3] shadow-sm flex items-center gap-2"
+              className={cn("h-10 px-6 shadow-sm", adminPrimaryButtonClass)}
               disabled={isLoading}
             >
                {isLoading ? "Đang tạo..." : (

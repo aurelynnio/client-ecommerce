@@ -115,12 +115,12 @@ export default function CategorySidebar({ className }: CategorySidebarProps) {
                   {getIcon(category.slug ?? "")}
                 </span>
 
-                {/* Category Name + Inline Subcategories */}
-                <div className="flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
+                {/* Category Name */}
+                <div className="flex items-center flex-1 min-w-0 overflow-hidden">
                   <Link
                     href={`/categories/${category.slug ?? ""}`}
                     className={cn(
-                      "font-medium whitespace-nowrap transition-colors",
+                      "font-medium truncate transition-colors",
                       hoveredCategory === category._id
                         ? "text-primary"
                         : "text-foreground hover:text-primary"
@@ -128,27 +128,6 @@ export default function CategorySidebar({ className }: CategorySidebarProps) {
                   >
                     {category.name}
                   </Link>
-
-                  {/* Inline Subcategories with / separator */}
-                  {category.subcategories &&
-                    category.subcategories.length > 0 && (
-                      <div className="flex items-center gap-1 text-muted-foreground overflow-hidden">
-                        {category.subcategories.slice(0, 3).map((sub) => (
-                          <span
-                            key={sub._id}
-                            className="flex items-center gap-1 whitespace-nowrap"
-                          >
-                            <span className="text-border">/</span>
-                            <Link
-                              href={`/categories/${sub.slug}`}
-                              className="hover:text-primary transition-colors truncate"
-                            >
-                              {sub.name}
-                            </Link>
-                          </span>
-                        ))}
-                      </div>
-                    )}
                 </div>
               </div>
             </li>

@@ -31,15 +31,7 @@ export interface OrderListParams {
 
 export interface CreateOrderData {
   cartItemIds: string[];
-  shippingAddress: {
-    fullName: string;
-    phone: string;
-    address: string;
-    city: string;
-    district: string;
-    ward: string;
-    note?: string;
-  };
+  addressId: string;
   paymentMethod: "cod" | "vnpay" | "momo";
   platformVoucher?: string;
   shopVouchers?: Array<{ shopId: string; code: string }>;

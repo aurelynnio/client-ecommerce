@@ -5,6 +5,29 @@ import { Zap, ArrowRight } from "lucide-react";
 import { useFlashSaleWithCountdown } from "@/hooks/queries/useFlashSale";
 import { formatCurrency } from "@/utils/format";
 
+const emptyFlashSaleItems = [
+  {
+    image: "/images/flash-sale-placeholder-1.svg",
+    label: "Deal thời trang",
+    price: "Từ 99K",
+  },
+  {
+    image: "/images/flash-sale-placeholder-2.svg",
+    label: "Đồ công nghệ",
+    price: "Giảm sâu",
+  },
+  {
+    image: "/images/flash-sale-placeholder-3.svg",
+    label: "Phụ kiện hot",
+    price: "Mua là hời",
+  },
+  {
+    image: "/images/flash-sale-placeholder-4.svg",
+    label: "Gia dụng mới",
+    price: "Ưu đãi sốc",
+  },
+];
+
 export default function SubsidySection() {
   const { products, formattedCountdown, isLoading } = useFlashSaleWithCountdown();
   const displayProducts = products.slice(0, 4);
@@ -85,9 +108,27 @@ export default function SubsidySection() {
             );
           })
         ) : (
-          <div className="col-span-4 flex items-center justify-center text-xs text-gray-500">
-            Chưa có sản phẩm flash sale
-          </div>
+          emptyFlashSaleItems.map((item) => (
+            <div
+              key={item.label}
+              className="flex flex-col items-center justify-between rounded-lg border border-[#FDE2E2] bg-white p-2 shadow-sm"
+            >
+              <div className="relative w-full aspect-square mb-2 overflow-hidden rounded-md bg-[#FFF5F5]">
+                <Image
+                  src={item.image}
+                  alt={item.label}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="w-full text-center">
+                <p className="text-[11px] font-medium text-gray-700 truncate">
+                  {item.label}
+                </p>
+                <p className="text-xs font-bold text-[#E53935]">{item.price}</p>
+              </div>
+            </div>
+          ))
         )}
       </div>
     </div>

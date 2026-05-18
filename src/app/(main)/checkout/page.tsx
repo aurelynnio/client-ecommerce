@@ -141,15 +141,7 @@ export default function CheckoutPage() {
     try {
       const orderData = {
         cartItemIds,
-        shippingAddress: {
-          fullName: primaryAddress.fullName,
-          phone: primaryAddress.phone,
-          address: primaryAddress.address,
-          city: primaryAddress.city,
-          district: primaryAddress.district,
-          ward: primaryAddress.ward,
-          note,
-        },
+        addressId: primaryAddress._id,
         paymentMethod,
         platformVoucher: appliedPlatformVoucher?.code,
         shopVouchers: appliedShopVoucher

@@ -191,7 +191,7 @@ export interface CreateOrderPayload {
     quantity: number;
     price: number;
   }>;
-  shippingAddress: ShippingAddress;
+  addressId: string;
   paymentMethod: PaymentMethod;
   shopId?: string;
   voucherShopCode?: string;

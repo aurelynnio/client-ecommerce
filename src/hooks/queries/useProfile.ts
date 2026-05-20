@@ -58,6 +58,13 @@ export interface CreateUserData {
   permissions?: string[];
 }
 
+export interface UserListStatistics {
+  totalUsers: number;
+  verifiedUsers: number;
+  usersWithAddress: number;
+  recentUsers: number;
+}
+
 export interface UpdateUserData {
   id: string;
   username: string;
@@ -99,17 +106,24 @@ const userApi = {
   // Admin: Get all users
   getAll: async (
     params: UserListParams = {}
-  ): Promise<{ users: User[]; pagination: PaginationData | null }> => {
+  ): Promise<{
+    users: User[];
+    pagination: PaginationData | null;
+    statistics: UserListStatistics | null;
+  }> => {
     const { page = 1, limit = 10, search, role, isVerifiedEmail } = params;
     const response = await instance.get("/users", {
       params: { page, limit, search, role, isVerifiedEmail },
     });
-    const data = extractApiData<{ data?: User[]; pagination?: PaginationData }>(
-      response
-    );
+    const data = extractApiData<{
+      data?: User[];
+      pagination?: PaginationData;
+      statistics?: UserListStatistics;
+    }>(response);
     return {
       users: data?.data || [],
       pagination: data?.pagination || null,
+      statistics: data?.statistics || null,
     };
   },
 

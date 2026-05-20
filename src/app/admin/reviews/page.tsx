@@ -125,7 +125,10 @@ export default function AdminReviewsPage() {
                       <div className="flex items-center gap-3 max-w-[250px]">
                         <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">
                           <Image
-                            src={product?.images?.[0] || "/images/placeholder.png"}
+                            src={
+                              product?.images?.[0] ||
+                              "/images/placeholder-product.svg"
+                            }
                             alt=""
                             fill
                             className="object-cover"

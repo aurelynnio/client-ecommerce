@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { useAppSelector } from "@/hooks/hooks";
 import { useMyShop } from "@/hooks/queries/useShop";
 import {
@@ -45,9 +46,46 @@ const Divider = () => (
   <span className="h-3 w-px bg-gray-300 mx-3 hidden sm:block" />
 );
 
+const SHIPPING_REGIONS = [
+  { code: "vn", label: "Việt Nam", flag: "🇻🇳" },
+  { code: "us", label: "Hoa Kỳ", flag: "🇺🇸" },
+  { code: "jp", label: "Nhật Bản", flag: "🇯🇵" },
+  { code: "kr", label: "Hàn Quốc", flag: "🇰🇷" },
+];
+
+const LANGUAGE_OPTIONS = [
+  { code: "vi", label: "Tiếng Việt", flag: "🇻🇳" },
+  { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+  { code: "ko", label: "한국어", flag: "🇰🇷" },
+];
+
+const getStoredOption = <T extends { code: string }>(
+  storageKey: string,
+  options: T[],
+  fallback: T,
+) => {
+  if (typeof window === "undefined") {
+    return fallback;
+  }
+
+  const savedCode = window.localStorage.getItem(storageKey);
+  return options.find((option) => option.code === savedCode) || fallback;
+};
+
 export default function TopBar() {
   const { isAuthenticated, data } = useAppSelector((state) => state.auth);
   const { data: myShop } = useMyShop({ enabled: isAuthenticated });
+  const [shippingRegion, setShippingRegion] = useState(() =>
+    getStoredOption(
+      "topbar:shipping-region",
+      SHIPPING_REGIONS,
+      SHIPPING_REGIONS[0],
+    ),
+  );
+  const [language, setLanguage] = useState(() =>
+    getStoredOption("topbar:language", LANGUAGE_OPTIONS, LANGUAGE_OPTIONS[0]),
+  );
 
   // Check if user has seller or admin role (can have a shop)
   const canHaveShop =
@@ -73,25 +111,30 @@ export default function TopBar() {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1 text-[11px] text-gray-600 hover:text-[#E53935] transition-colors duration-200 outline-none">
               <MapPin className="h-3 w-3" />
-              <span>Giao đến: Việt Nam</span>
+              <span>
+                Giao đến: {shippingRegion.flag} {shippingRegion.label}
+              </span>
               <ChevronDown className="h-3 w-3" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
               className="w-44 bg-white shadow-lg border-gray-200"
             >
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇻🇳 Việt Nam
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇺🇸 Hoa Kỳ
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇯🇵 Nhật Bản
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇰🇷 Hàn Quốc
-              </DropdownMenuItem>
+              {SHIPPING_REGIONS.map((option) => (
+                <DropdownMenuItem
+                  key={option.code}
+                  className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer"
+                  onClick={() => {
+                    setShippingRegion(option);
+                    window.localStorage.setItem(
+                      "topbar:shipping-region",
+                      option.code,
+                    );
+                  }}
+                >
+                  {option.flag} {option.label}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -185,25 +228,27 @@ export default function TopBar() {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1 text-[11px] text-gray-600 hover:text-[#E53935] transition-colors duration-200 outline-none">
               <Globe className="h-3 w-3" />
-              <span>Tiếng Việt</span>
+              <span>
+                {language.flag} {language.label}
+              </span>
               <ChevronDown className="h-3 w-3" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
               className="w-36 bg-white shadow-lg border-gray-200"
             >
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇻🇳 Tiếng Việt
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇺🇸 Tiếng Anh
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇯🇵 日本語
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer">
-                🇰🇷 한국어
-              </DropdownMenuItem>
+              {LANGUAGE_OPTIONS.map((option) => (
+                <DropdownMenuItem
+                  key={option.code}
+                  className="text-[11px] hover:bg-[#FFEBEE] hover:text-[#E53935] cursor-pointer"
+                  onClick={() => {
+                    setLanguage(option);
+                    window.localStorage.setItem("topbar:language", option.code);
+                  }}
+                >
+                  {option.flag} {option.label}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

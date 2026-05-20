@@ -160,7 +160,7 @@ export default function ShopPage() {
       {/* Shop Banner */}
       <div className="relative h-[200px] md:h-[280px] w-full">
         <Image
-          src={currentShop.banner || "/images/default-banner.jpg"}
+          src={currentShop.banner || "/images/default-banner.svg"}
           alt={currentShop.name}
           fill
           className="object-cover"
@@ -175,7 +175,7 @@ export default function ShopPage() {
             {/* Logo */}
             <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shrink-0 mx-auto md:mx-0">
               <Image
-                src={currentShop.logo || "/images/default-shop.png"}
+                src={currentShop.logo || "/images/placeholder-shop.svg"}
                 alt={currentShop.name}
                 fill
                 className="object-cover"

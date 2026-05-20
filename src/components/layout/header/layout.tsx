@@ -647,7 +647,7 @@ export default function HeaderLayout() {
                         <div className="relative w-9 h-9 rounded-full overflow-hidden border border-gray-100 group-hover:border-[#E53935] transition-colors">
                           <Image
                             alt={data?.username || "User"}
-                            src={data?.avatar || "/images/CyBer.jpg"}
+                            src={data?.avatar || "/images/placeholder-avatar.svg"}
                             fill
                             className="object-cover"
                           />

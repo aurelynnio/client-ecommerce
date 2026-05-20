@@ -37,6 +37,13 @@ export interface NotificationState {
   pagination: PaginationData | null;
 }
 
+export interface NotificationSummary {
+  total: number;
+  unread: number;
+  system: number;
+  promotion: number;
+}
+
 // Notification filters
 export interface NotificationFilters {
   page?: number;

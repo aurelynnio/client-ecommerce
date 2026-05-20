@@ -67,7 +67,9 @@ export default function SubsidySection() {
           ))
         ) : displayProducts.length > 0 ? (
           displayProducts.map((product) => {
-            const image = product.variants?.[0]?.images?.[0] || "/images/placeholder.png";
+            const image =
+              product.variants?.[0]?.images?.[0] ||
+              "/images/placeholder-product.svg";
             const salePrice = product.flashSaleInfo?.salePrice || 0;
             const originalPrice = product.flashSaleInfo?.originalPrice || 0;
             const discount = product.flashSaleInfo?.discount || 0;

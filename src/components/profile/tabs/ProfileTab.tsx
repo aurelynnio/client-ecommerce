@@ -47,7 +47,7 @@ export default function ProfileTab({ user }: ProfileTabProps) {
         <div className="relative group">
           <div className="w-28 h-28 rounded-full ring-2 ring-border overflow-hidden transition-transform duration-200 group-hover:scale-105 relative">
             <Image
-              src={user.avatar || "/placeholder-avatar.jpg"}
+              src={user.avatar || "/images/placeholder-avatar.svg"}
               alt={user.username}
               fill
               className="object-cover rounded-full"

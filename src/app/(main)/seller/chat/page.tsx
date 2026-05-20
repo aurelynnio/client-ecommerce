@@ -6,12 +6,9 @@ import {
   Search,
   Send,
   User,
-  Phone,
-  Video,
-  Info,
-  Smile,
+  Image as ImageIcon,
   Paperclip,
-  ImageIcon,
+  X,
 } from "lucide-react";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import { Button } from "@/components/ui/button";
@@ -30,6 +27,7 @@ import { useSocket } from "@/context/SocketContext";
 import { joinConversation, leaveConversation } from "@/socket/chat.socket";
 import { toast } from "sonner";
 import { getSafeErrorMessage } from "@/api";
+import ChatAttachments from "@/components/chat/ChatAttachments";
 
 export default function SellerChatPage() {
   const { data: myShop } = useMyShop();
@@ -67,8 +65,11 @@ export default function SellerChatPage() {
   const { socket } = useSocket();
 
   const [newMessage, setNewMessage] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!socket || !activeConversationId) return;
@@ -88,16 +89,35 @@ export default function SellerChatPage() {
   };
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim() || !currentConversation || isSending) return;
+    if ((!newMessage.trim() && selectedFiles.length === 0) || !currentConversation || isSending) {
+      return;
+    }
     try {
       await sendMessageMutation.mutateAsync({
         conversationId: currentConversation._id,
         content: newMessage.trim(),
+        files: selectedFiles,
       });
       setNewMessage("");
+      setSelectedFiles([]);
+      if (imageInputRef.current) imageInputRef.current.value = "";
+      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error: unknown) {
       toast.error(getSafeErrorMessage(error, "Không thể gửi tin nhắn"));
     }
+  };
+
+  const appendFiles = (fileList: FileList | null) => {
+    if (!fileList) return;
+
+    setSelectedFiles((prev) => {
+      const next = [...prev, ...Array.from(fileList)];
+      return next.slice(0, 5);
+    });
+  };
+
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, currentIndex) => currentIndex !== index));
   };
 
   const formatTime = (date: string) =>
@@ -227,19 +247,8 @@ export default function SellerChatPage() {
                     <p className="font-medium text-gray-800">
                       {currentConversation.user.name}
                     </p>
-                    <p className="text-xs text-green-500">Đang hoạt động</p>
+                    <p className="text-xs text-gray-500">Khách hàng của shop</p>
                   </div>
-                </div>
-                <div className="flex items-center gap-1 sm:gap-2">
-                  <Button variant="ghost" size="icon" className="rounded-lg">
-                    <Phone className="h-4 w-4 text-gray-500" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="rounded-lg">
-                    <Video className="h-4 w-4 text-gray-500" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="rounded-lg">
-                    <Info className="h-4 w-4 text-gray-500" />
-                  </Button>
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -269,7 +278,13 @@ export default function SellerChatPage() {
                             : "bg-white text-gray-800 rounded-bl-md",
                         )}
                       >
-                        <p className="text-sm">{message.content}</p>
+                        <ChatAttachments
+                          attachments={message.attachments}
+                          isOwnMessage={message.sender === user?._id}
+                        />
+                        {message.content ? (
+                          <p className="text-sm">{message.content}</p>
+                        ) : null}
                         <p
                           className={cn(
                             "text-[10px] mt-1",
@@ -287,25 +302,57 @@ export default function SellerChatPage() {
                 <div ref={messagesEndRef} />
               </div>
               <div className="p-4 bg-white">
+                {selectedFiles.length > 0 && (
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {selectedFiles.map((file, index) => (
+                      <div
+                        key={`${file.name}-${index}`}
+                        className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-xs text-gray-700"
+                      >
+                        <span className="max-w-[220px] truncate">{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeSelectedFile(index)}
+                          className="text-gray-400 hover:text-gray-700"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => appendFiles(e.target.files)}
+                  />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => appendFiles(e.target.files)}
+                  />
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     className="rounded-lg shrink-0"
-                  >
-                    <Smile className="h-5 w-5 text-gray-400" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-lg shrink-0"
+                    onClick={() => imageInputRef.current?.click()}
                   >
                     <ImageIcon className="h-5 w-5 text-gray-400" />
                   </Button>
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     className="rounded-lg shrink-0"
+                    onClick={() => fileInputRef.current?.click()}
                   >
                     <Paperclip className="h-5 w-5 text-gray-400" />
                   </Button>
@@ -319,7 +366,7 @@ export default function SellerChatPage() {
                   />
                   <Button
                     onClick={() => void handleSendMessage()}
-                    disabled={!newMessage.trim() || isSending}
+                    disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
                     className="bg-primary hover:bg-primary/90 rounded-xl h-11 px-4"
                   >
                     {isSending ? (

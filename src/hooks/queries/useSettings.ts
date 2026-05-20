@@ -29,7 +29,7 @@ const settingsApi = {
 /**
  * Fetch current settings
  */
-export function useSettings() {
+export function useSettings(options?: { enabled?: boolean }) {
   return useQuery<
     Settings,
     Error,
@@ -38,6 +38,7 @@ export function useSettings() {
   >({
     queryKey: settingsKeys.current(),
     queryFn: settingsApi.getSettings,
+    enabled: options?.enabled,
     staleTime: STALE_TIME.STATIC,
   });
 }

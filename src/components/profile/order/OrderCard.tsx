@@ -36,7 +36,7 @@ export default function OrderCard({ order, onViewOrder, onCancelOrder, isCancell
     const StatusIcon = statusConfig.icon;
 
     const getProductImage = (product: OrderProduct) => {
-        return product.image || "/images/placeholder-product.jpg";
+        return product.image || "/images/placeholder-product.svg";
     };
 
     const displayId = order.orderCode ? `#${order.orderCode}` : `#${order._id?.slice(-8).toUpperCase()}`;

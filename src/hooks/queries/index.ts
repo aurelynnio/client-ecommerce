@@ -287,3 +287,5 @@ export {
   useApplyVoucher,
   type VoucherListResponse,
 } from "./useVoucher";
+
+export { useSubscribeNewsletter } from "./useNewsletter";

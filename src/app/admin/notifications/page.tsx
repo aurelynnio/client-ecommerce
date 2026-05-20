@@ -40,9 +40,11 @@ export default function AdminNotificationsPage() {
 
   const notifications = data?.notifications || [];
   const pagination = data?.pagination;
-  const unreadCount = notifications.filter((item) => !item.isRead).length;
-  const systemCount = notifications.filter((item) => item.type === "system").length;
-  const promotionCount = notifications.filter((item) => item.type === "promotion").length;
+  const summary = data?.summary;
+  const unreadCount = summary?.unread ?? 0;
+  const systemCount = summary?.system ?? 0;
+  const promotionCount = summary?.promotion ?? 0;
+  const totalCount = summary?.total ?? pagination?.totalItems ?? notifications.length;
 
   const handleMarkAsRead = async (id: string) => {
     try {
@@ -107,7 +109,7 @@ export default function AdminNotificationsPage() {
       />
 
       <AdminStatsGrid className="lg:grid-cols-3">
-        <AdminStatCard title="Tổng thông báo" value={notifications.length} icon={Bell} description="Thông báo đang có trong bộ nhớ hiển thị" />
+        <AdminStatCard title="Tổng thông báo" value={totalCount} icon={Bell} description="Tổng số thông báo của tài khoản hiện tại" />
         <AdminStatCard title="Chưa đọc" value={unreadCount} icon={AlertCircle} accent="amber" description="Các thông báo cần được xử lý" />
         <AdminStatCard title="Khuyến mãi / hệ thống" value={`${promotionCount} / ${systemCount}`} icon={CheckCircle2} accent="green" description="Tỷ lệ giữa thông điệp hệ thống và chiến dịch" />
       </AdminStatsGrid>

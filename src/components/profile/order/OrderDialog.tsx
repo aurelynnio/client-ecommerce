@@ -163,7 +163,7 @@ export default function OrderDialog({
                   >
                     <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border border-border/60 bg-[#f7f7f7] flex-shrink-0">
                       <Image
-                        src={product.image || "/images/placeholder-product.jpg"}
+                        src={product.image || "/images/placeholder-product.svg"}
                         alt={product.name}
                         fill
                         className="object-cover"

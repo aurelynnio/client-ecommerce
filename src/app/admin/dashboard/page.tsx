@@ -70,6 +70,11 @@ export default function AdminDashboard() {
     refetch();
   };
 
+  const formatTrend = (value: number) => {
+    if (value > 0) return `+${value}%`;
+    return `${value}%`;
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "delivered":
@@ -142,9 +147,9 @@ export default function AdminDashboard() {
       name: "Tổng doanh thu",
       value: formatCurrency(displayStats.totalRevenue || 0),
       icon: DollarSign,
-      description: "Tổng thu nhập",
-      trend: "+12.5%",
-      trendUp: true,
+      description: `Hôm nay ${formatCurrency(stats?.revenueToday || 0)}`,
+      trend: formatTrend(stats?.revenueGrowth || 0),
+      trendUp: (stats?.revenueGrowth || 0) >= 0,
       color: "text-blue-500",
       bg: "bg-blue-500/10",
     },
@@ -152,9 +157,9 @@ export default function AdminDashboard() {
       name: "Đơn hàng",
       value: (displayStats.totalOrders || 0).toLocaleString(),
       icon: ShoppingCart,
-      description: "Tổng đơn hàng",
-      trend: "+8.2%",
-      trendUp: true,
+      description: `${stats?.newOrdersToday || 0} đơn mới hôm nay`,
+      trend: formatTrend(stats?.orderGrowth || 0),
+      trendUp: (stats?.orderGrowth || 0) >= 0,
       color: "text-purple-500",
       bg: "bg-purple-500/10",
     },
@@ -162,9 +167,9 @@ export default function AdminDashboard() {
       name: "Khách hàng",
       value: (displayStats.totalUsers || 0).toLocaleString(),
       icon: Users,
-      description: "Tổng người dùng",
-      trend: "+4.6%",
-      trendUp: true,
+      description: `${stats?.newUsersToday || 0} tài khoản mới hôm nay`,
+      trend: formatTrend(stats?.userGrowth || 0),
+      trendUp: (stats?.userGrowth || 0) >= 0,
       color: "text-amber-500",
       bg: "bg-amber-500/10",
     },
@@ -172,9 +177,9 @@ export default function AdminDashboard() {
       name: "Sản phẩm",
       value: (displayStats.totalProducts || 0).toLocaleString(),
       icon: Package,
-      description: "Sản phẩm đang bán",
-      trend: "0%",
-      trendUp: true,
+      description: `${stats?.lowStockProducts || 0} sản phẩm tồn thấp`,
+      trend: `${stats?.pendingOrders || 0} chờ xử lý`,
+      trendUp: false,
       color: "text-emerald-500",
       bg: "bg-emerald-500/10",
     },

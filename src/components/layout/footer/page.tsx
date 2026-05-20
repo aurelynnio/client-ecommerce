@@ -1,4 +1,5 @@
 "use client";
+import { type FormEvent, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useCategoryTree, useSubscribeNewsletter } from "@/hooks/queries";
+import { getSafeErrorMessage } from "@/api";
 
 const FooterSection = ({
   title,
@@ -40,6 +44,54 @@ const FooterSection = ({
 
 export default function FooterLayout() {
   const path = usePathname();
+  const { data: categoryTree = [] } = useCategoryTree();
+  const subscribeNewsletterMutation = useSubscribeNewsletter();
+  const [email, setEmail] = useState("");
+
+  const categoryLinks = useMemo(
+    () =>
+      categoryTree
+        .filter((category) => Boolean(category.slug))
+        .slice(0, 5)
+        .map((category) => ({
+          label: category.name,
+          href: `/products?category=${category.slug}`,
+        })),
+    [categoryTree],
+  );
+
+  const socialLinks = [
+    { icon: Instagram, href: "https://www.instagram.com" },
+    { icon: Facebook, href: "https://www.facebook.com" },
+    { icon: Twitter, href: "https://www.x.com" },
+    { icon: Youtube, href: "https://www.youtube.com" },
+  ];
+
+  const handleSubscribe = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail) {
+      toast.error("Vui lòng nhập email");
+      return;
+    }
+
+    try {
+      const result = await subscribeNewsletterMutation.mutateAsync({
+        email: normalizedEmail,
+        source: "footer",
+      });
+      toast.success(
+        result.alreadySubscribed
+          ? "Email này đã đăng ký bản tin trước đó"
+          : "Đăng ký nhận bản tin thành công",
+      );
+      setEmail("");
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể đăng ký bản tin"));
+    }
+  };
+
   if (path.startsWith("/admin")) return null;
 
   return (
@@ -54,25 +106,36 @@ export default function FooterLayout() {
             <p className="text-muted-foreground text-xs leading-relaxed max-w-[280px]">
               Đăng ký bản tin của chúng tôi để cập nhật những thông tin mới nhất, ưu đãi độc quyền và nhiều hơn thế nữa.
             </p>
-            <div className="flex gap-2 max-w-[280px]">
+            <form className="flex gap-2 max-w-[280px]" onSubmit={handleSubscribe}>
               <Input
                 placeholder="Địa chỉ Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={subscribeNewsletterMutation.isPending}
                 className="bg-background/50 border-border/50 focus-visible:ring-1 text-xs h-9 rounded-full px-4"
               />
-              <Button size="icon" className="h-9 w-9 rounded-full shrink-0">
+              <Button
+                type="submit"
+                size="icon"
+                disabled={subscribeNewsletterMutation.isPending}
+                className="h-9 w-9 rounded-full shrink-0"
+              >
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
-            </div>
+            </form>
 
             <div className="flex gap-1 pt-2">
-              {[Instagram, Facebook, Twitter, Youtube].map((Icon, i) => (
+              {socialLinks.map(({ icon: Icon, href }) => (
                 <Button
-                  key={i}
+                  key={href}
+                  asChild
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-transparent"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Link href={href} target="_blank" rel="noreferrer">
+                    <Icon className="h-4 w-4" />
+                  </Link>
                 </Button>
               ))}
             </div>
@@ -80,13 +143,11 @@ export default function FooterLayout() {
 
           <FooterSection
             title="Cửa hàng"
-            links={[
-              { label: "Mac", href: "/products?category=mac" },
-              { label: "iPad", href: "/products?category=ipad" },
-              { label: "iPhone", href: "/products?category=iphone" },
-              { label: "Watch", href: "/products?category=watch" },
-              { label: "Phụ kiện", href: "/products?category=accessories" },
-            ]}
+            links={
+              categoryLinks.length > 0
+                ? categoryLinks
+                : [{ label: "Tất cả sản phẩm", href: "/products" }]
+            }
           />
 
           <FooterSection

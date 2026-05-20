@@ -1,15 +1,25 @@
 import { BaseEntity } from "./common";
 
 export type MessageType = "text" | "image" | "product";
+export type ExtendedMessageType = MessageType | "file";
 
 export type SenderType = "user" | "shop";
+
+export interface ChatAttachment {
+  url: string;
+  fileName: string;
+  mimeType?: string;
+  size?: number;
+  resourceType?: string;
+}
 
 export interface Message extends BaseEntity {
   conversation: string;
   sender: string;
   senderType: SenderType;
   content: string;
-  messageType: MessageType;
+  messageType: ExtendedMessageType;
+  attachments?: ChatAttachment[];
   productRef?: string;
   isRead: boolean;
 }
@@ -40,8 +50,8 @@ export interface StartConversationPayload {
 export interface SendMessagePayload {
   conversationId: string;
   content: string;
-  attachments?: string[];
-  messageType?: MessageType;
+  files?: File[];
+  messageType?: ExtendedMessageType;
   productRef?: string;
 }
 

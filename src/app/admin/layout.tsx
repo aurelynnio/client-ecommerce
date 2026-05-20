@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LogOut, Menu, ChevronLeft, ChevronRight, Bell } from "lucide-react";
@@ -14,6 +14,7 @@ import Image from "next/image";
 import { ADMIN_NAVIGATION } from "@/constants";
 import NotificationModel from "@/components/notifications/NotificationModel";
 import { useUnreadNotificationCount } from "@/hooks/queries/useNotifications";
+import { useSettings } from "@/hooks/queries/useSettings";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RequireRole } from "@/components/common/PermissionGate";
 import { usePermissions } from "@/context/PermissionContext";
@@ -37,11 +38,24 @@ export default function AdminLayout({
   const logoutMutation = useLogout();
   const { data, isAuthenticated } = useAppSelector((state) => state.auth);
   const isAdmin = data?.roles === "admin";
+  const { data: settings } = useSettings({
+    enabled: isAuthenticated && isAdmin,
+  });
   const { data: unreadCountData } = useUnreadNotificationCount({
     enabled: isAuthenticated && isAdmin,
   });
   const unreadCount = unreadCountData || 0;
   const { hasPermission } = usePermissions();
+  const isDarkMode = settings?.display?.darkMode ?? false;
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("dark", isDarkMode);
+
+    return () => {
+      root.classList.remove("dark");
+    };
+  }, [isDarkMode]);
 
   // Filter navigation items based on user permissions
   const filteredNavigation = useMemo(() => {
@@ -234,7 +248,7 @@ export default function AdminLayout({
               <div className="flex items-center gap-3 px-2 py-2 mb-2">
                 <div className="relative h-9 w-9 rounded-full overflow-hidden">
                   <Image
-                    src={data.avatar || "/default-avatar.png"}
+                    src={data.avatar || "/images/placeholder-avatar.svg"}
                     alt={data.username}
                     fill
                     className="object-cover"
@@ -313,7 +327,7 @@ export default function AdminLayout({
                   </div>
                   <div className="relative h-9 w-9 rounded-full overflow-hidden">
                     <Image
-                      src={data.avatar || "/default-avatar.png"}
+                      src={data.avatar || "/images/placeholder-avatar.svg"}
                       alt={data.username}
                       fill
                       className="object-cover"

@@ -63,7 +63,26 @@ const chatApi = {
   },
 
   sendMessage: async (data: SendMessagePayload): Promise<Message> => {
-    const response = await instance.post("/chat/message", data);
+    const { files = [], ...payload } = data;
+
+    if (files.length > 0) {
+      const formData = new FormData();
+      formData.append("conversationId", payload.conversationId);
+      formData.append("content", payload.content || "");
+      if (payload.productRef) {
+        formData.append("productRef", payload.productRef);
+      }
+      files.forEach((file) => {
+        formData.append("files", file);
+      });
+
+      const response = await instance.post("/chat/message/media", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return extractApiData(response);
+    }
+
+    const response = await instance.post("/chat/message", payload);
     return extractApiData(response);
   },
 

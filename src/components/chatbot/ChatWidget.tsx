@@ -10,8 +10,9 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setChatOpen } from "@/features/chat/chatSlice";
 import { ChatbotMessage } from "@/types/chat";
 import Link from "next/link";
+import api from "@/api/api";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const CHATBOT_API_BASE_URL = api.defaults.baseURL || "/api";
 
 // Extended ChatbotMessage with Date timestamp for local state
 interface Message extends Omit<ChatbotMessage, "timestamp"> {
@@ -62,7 +63,9 @@ export default function ChatWidget() {
 
   const loadHistory = async (sid: string) => {
     try {
-      const res = await fetch(`${API_URL}/api/chatbot/history/${sid}`);
+      const res = await fetch(`${CHATBOT_API_BASE_URL}/chatbot/history/${sid}`, {
+        credentials: "include",
+      });
       const data = await res.json();
       if (data.status === "success" && data.data?.messages) {
         setMessages(
@@ -93,8 +96,9 @@ export default function ChatWidget() {
       setStreamingContent("");
 
       try {
-        const res = await fetch(`${API_URL}/api/chatbot/stream`, {
+        const res = await fetch(`${CHATBOT_API_BASE_URL}/chatbot/stream`, {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: text.trim(), sessionId }),
         });

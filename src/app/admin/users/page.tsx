@@ -58,6 +58,7 @@ export default function AdminUsersPage() {
 
   const users: User[] = usersData?.users || [];
   const pagination = usersData?.pagination || null;
+  const statistics = usersData?.statistics || null;
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -159,23 +160,6 @@ export default function AdminUsersPage() {
     setViewModalOpen(true);
   };
 
-  // Calculate stats
-  const totalUsers = pagination?.totalItems || users.length;
-  const verifiedUsers = users.filter((user) => user.isVerifiedEmail).length;
-  const usersWithAddress = users.filter(
-    (user) => user.addresses && user.addresses.length > 0
-  ).length;
-
-  const oneWeekAgo = new Date();
-  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-  const recentUsers = users.filter((user) => {
-    try {
-      return new Date(user.createdAt) > oneWeekAgo;
-    } catch {
-      return false;
-    }
-  }).length;
-
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -193,10 +177,10 @@ export default function AdminUsersPage() {
 
       {/* Stats Section */}
       <UsersStats
-        totalUsers={totalUsers}
-        verifiedUsers={verifiedUsers}
-        usersWithAddress={usersWithAddress}
-        recentUsers={recentUsers}
+        totalUsers={statistics?.totalUsers ?? pagination?.totalItems ?? users.length}
+        verifiedUsers={statistics?.verifiedUsers ?? 0}
+        usersWithAddress={statistics?.usersWithAddress ?? 0}
+        recentUsers={statistics?.recentUsers ?? 0}
       />
 
       {/* Main Content Area */}

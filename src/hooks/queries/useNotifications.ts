@@ -13,7 +13,11 @@ import { extractApiData } from "@/api";
 import { errorHandler } from "@/services/errorHandler";
 import { STALE_TIME, REFETCH_INTERVAL } from "@/constants/cache";
 import { notificationKeys } from "@/lib/queryKeys";
-import { Notification, NotificationType } from "@/types/notification";
+import {
+  Notification,
+  NotificationSummary,
+  NotificationType,
+} from "@/types/notification";
 import { PaginationData } from "@/types/common";
 
 // ============ Types ============
@@ -28,6 +32,7 @@ export interface NotificationListResponse {
   notifications: Notification[];
   pagination: PaginationData | null;
   unreadCount?: number;
+  summary?: NotificationSummary | null;
 }
 
 export interface CreateNotificationData {
@@ -60,6 +65,7 @@ const notificationApi = {
       NotificationListResponse & {
         data?: Notification[];
         unreadCount?: number;
+        summary?: NotificationSummary;
         metadata?: { unreadCount?: number };
         meta?: { unreadCount?: number };
       }
@@ -71,6 +77,7 @@ const notificationApi = {
       notifications: data?.notifications || data?.data || [],
       pagination: data?.pagination || null,
       unreadCount,
+      summary: data?.summary || null,
     };
   },
 

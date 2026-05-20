@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   useChangePassword,
   useConfirmTwoFactor,
   useSendTwoFactorCode,
 } from "@/hooks/queries/useProfile";
+import { useSendVerificationCode } from "@/hooks/queries/useAuth";
 import { Shield, Key, Eye, EyeOff, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +23,9 @@ interface SettingsTabProps {
 }
 
 export default function SettingsTab({ user }: SettingsTabProps) {
+  const router = useRouter();
   const changePasswordMutation = useChangePassword();
+  const sendVerificationCodeMutation = useSendVerificationCode();
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -151,6 +155,21 @@ export default function SettingsTab({ user }: SettingsTabProps) {
       );
     } catch (error: unknown) {
       toast.error(getSafeErrorMessage(error, "Không thể xác nhận mã 2FA"));
+    }
+  };
+
+  const handleSendVerificationCode = async () => {
+    if (!user?.email) {
+      toast.error("Không tìm thấy email để xác minh");
+      return;
+    }
+
+    try {
+      await sendVerificationCodeMutation.mutateAsync({ email: user.email.trim() });
+      toast.success("Đã gửi mã xác minh đến email của bạn");
+      router.push(`/verify-code?email=${encodeURIComponent(user.email.trim())}`);
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, "Không thể gửi mã xác minh email"));
     }
   };
 
@@ -488,9 +507,14 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                     variant="outline"
                     size="sm"
                     className="rounded-sm"
-                    disabled
+                    disabled={sendVerificationCodeMutation.isPending}
+                    onClick={() => {
+                      void handleSendVerificationCode();
+                    }}
                   >
-                    Sắp hỗ trợ
+                    {sendVerificationCodeMutation.isPending
+                      ? "Đang gửi..."
+                      : "Gửi mã xác minh"}
                   </Button>
                 )}
               </div>

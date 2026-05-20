@@ -270,7 +270,7 @@ export default function AdminFlashSalePage() {
                     <Image
                       src={
                         product.variants?.[0]?.images?.[0] ||
-                        "/images/placeholder.png"
+                        "/images/placeholder-product.svg"
                       }
                       alt={product.name}
                       fill

@@ -132,7 +132,9 @@ export default function SellerReviewsPage() {
                 {/* Product Image */}
                 <div className="relative h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                   <Image
-                    src={product?.images?.[0] || "/images/placeholder.png"}
+                    src={
+                      product?.images?.[0] || "/images/placeholder-product.svg"
+                    }
                     alt=""
                     fill
                     className="object-cover"

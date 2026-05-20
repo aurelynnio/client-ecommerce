@@ -64,7 +64,7 @@ const FlashSaleCard = memo(function FlashSaleCard({
 }) {
   const { flashSaleInfo } = product;
   const productImage =
-    product.variants?.[0]?.images?.[0] || "/images/placeholder.png";
+    product.variants?.[0]?.images?.[0] || "/images/placeholder-product.svg";
 
   return (
     <Link

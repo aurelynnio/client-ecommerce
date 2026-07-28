@@ -5,27 +5,27 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useLayoutEffect, useEffect } from "react";
-import { User as UserIcon, Mail, Shield, Key, CheckCircle } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { User, UpdateUserData, UserRole } from "@/types/user";
-import { RESOURCES, ACTIONS } from "@/constants/permissions";
-import { getRolePermissions, getUserPermissions } from "@/api/permission";
-import { cn } from "@/utils/cn";
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useLayoutEffect, useEffect } from 'react';
+import { User as UserIcon, Mail, Shield, Key, CheckCircle } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { User, UpdateUserData, UserRole } from '@/types/user';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
+import { getRolePermissions, getUserPermissions } from '@/api/permission';
+import { cn } from '@/utils/cn';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -33,7 +33,7 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
+} from '@/components/admin/shared/AdminPrimitives';
 
 interface UpdateModelUserProps {
   open: boolean;
@@ -51,9 +51,9 @@ export function UpdateModelUser({
   isLoading = false,
 }: UpdateModelUserProps) {
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    roles: "user",
+    username: '',
+    email: '',
+    roles: 'user',
     isVerifiedEmail: false,
     permissions: [] as string[],
   });
@@ -63,9 +63,9 @@ export function UpdateModelUser({
   useLayoutEffect(() => {
     if (user) {
       setFormData({
-        username: user.username || "",
-        email: user.email || "",
-        roles: user.roles || "user",
+        username: user.username || '',
+        email: user.email || '',
+        roles: user.roles || 'user',
         isVerifiedEmail: user.isVerifiedEmail || false,
         permissions: [],
       });
@@ -87,7 +87,7 @@ export function UpdateModelUser({
           permissions: userPerms?.userPermissions || [],
         }));
       } catch (error) {
-        console.error("Failed to load permissions:", error);
+        console.error('Failed to load permissions:', error);
       } finally {
         setLoadingPerms(false);
       }
@@ -107,9 +107,7 @@ export function UpdateModelUser({
   };
 
   const handleSelectAllResource = (resource: string, checked: boolean) => {
-    const resourcePermissions = Object.values(ACTIONS).map(
-      (action) => `${resource}:${action}`
-    );
+    const resourcePermissions = Object.values(ACTIONS).map((action) => `${resource}:${action}`);
     if (checked) {
       setFormData((prev) => ({
         ...prev,
@@ -144,22 +142,28 @@ export function UpdateModelUser({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[550px] p-0 overflow-hidden max-h-[90vh]")}>
+      <DialogContent
+        className={cn(adminDialogContentClass, 'sm:max-w-[550px] p-0 overflow-hidden max-h-[90vh]')}
+      >
         <DialogHeader className="p-6 pb-4 border-b border-border/50">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <DialogTitle className="text-xl font-semibold tracking-tight">Chỉnh sửa người dùng</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">
+                Chỉnh sửa người dùng
+              </DialogTitle>
               <DialogDescription className="text-muted-foreground">
                 Cập nhật tài khoản cho {user.username}
               </DialogDescription>
             </div>
-            <Badge className={cn(
-              "px-3 py-1 rounded-full text-xs font-medium border-0",
-              formData.roles === "admin" 
-                ? "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400"
-                : "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-            )}>
-              {formData.roles === "admin" ? "Quản trị viên" : "Người dùng"}
+            <Badge
+              className={cn(
+                'px-3 py-1 rounded-full text-xs font-medium border-0',
+                formData.roles === 'admin'
+                  ? 'bg-purple-100 text-purple-600'
+                  : 'bg-blue-100 text-blue-600',
+              )}
+            >
+              {formData.roles === 'admin' ? 'Quản trị viên' : 'Người dùng'}
             </Badge>
           </div>
         </DialogHeader>
@@ -168,12 +172,18 @@ export function UpdateModelUser({
           <div className="overflow-y-auto no-scrollbar max-h-[calc(90vh-200px)]">
             <Tabs defaultValue="info" className="w-full">
               <div className="px-6 pt-4">
-                <TabsList className="grid w-full grid-cols-2 rounded-2xl bg-[#f5efe8] p-1">
-                  <TabsTrigger value="info" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
+                <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
+                  <TabsTrigger
+                    value="info"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                  >
                     <UserIcon className="h-4 w-4" />
                     Thông tin
                   </TabsTrigger>
-                  <TabsTrigger value="permissions" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
+                  <TabsTrigger
+                    value="permissions"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                  >
                     <Key className="h-4 w-4" />
                     Quyền hạn
                     {formData.permissions.length > 0 && (
@@ -196,7 +206,7 @@ export function UpdateModelUser({
                     id="username"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    className={cn(adminFieldSurfaceClass, "h-11 transition-colors focus:bg-white")}
+                    className={cn(adminFieldSurfaceClass, 'h-11 transition-colors focus:bg-white')}
                     required
                     disabled={isLoading}
                   />
@@ -213,7 +223,7 @@ export function UpdateModelUser({
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className={cn(adminFieldSurfaceClass, "h-11 transition-colors focus:bg-white")}
+                    className={cn(adminFieldSurfaceClass, 'h-11 transition-colors focus:bg-white')}
                     required
                     disabled={isLoading}
                   />
@@ -231,10 +241,10 @@ export function UpdateModelUser({
                       onValueChange={(value) => setFormData({ ...formData, roles: value })}
                       disabled={isLoading}
                     >
-                      <SelectTrigger className={cn(adminFieldSurfaceClass, "h-11")}>
+                      <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-11')}>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
+                      <SelectContent className="rounded-lg border-border shadow-lg">
                         <SelectItem value="user">Người dùng</SelectItem>
                         <SelectItem value="admin">Quản trị viên</SelectItem>
                       </SelectContent>
@@ -242,19 +252,24 @@ export function UpdateModelUser({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="isVerifiedEmail" className="text-sm font-medium flex items-center gap-2">
+                    <Label
+                      htmlFor="isVerifiedEmail"
+                      className="text-sm font-medium flex items-center gap-2"
+                    >
                       <CheckCircle className="h-3.5 w-3.5 text-muted-foreground" />
                       Xác minh
                     </Label>
                     <Select
                       value={formData.isVerifiedEmail.toString()}
-                      onValueChange={(value) => setFormData({ ...formData, isVerifiedEmail: value === "true" })}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, isVerifiedEmail: value === 'true' })
+                      }
                       disabled={isLoading}
                     >
-                      <SelectTrigger className={cn(adminFieldSurfaceClass, "h-11")}>
+                      <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-11')}>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
+                      <SelectContent className="rounded-lg border-border shadow-lg">
                         <SelectItem value="true">Đã xác minh</SelectItem>
                         <SelectItem value="false">Chưa xác minh</SelectItem>
                       </SelectContent>
@@ -270,20 +285,23 @@ export function UpdateModelUser({
                   </div>
                 ) : (
                   <>
-                    <div className="rounded-2xl border border-[#f1d7d1] bg-[#fff5f2] p-3">
-                      <p className="text-xs text-blue-600 dark:text-blue-400">
-                        Role <span className="font-semibold">{formData.roles}</span> có {defaultRolePerms.length} quyền mặc định.
+                    <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3">
+                      <p className="text-xs text-blue-600">
+                        Role <span className="font-semibold">{formData.roles}</span> có{' '}
+                        {defaultRolePerms.length} quyền mặc định.
                         <span className="text-blue-500 ml-1">*</span> = quyền từ role
                       </p>
                     </div>
 
                     <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
                       {Object.values(RESOURCES).map((resource) => (
-                        <div key={resource} className={cn(adminInsetPanelClass, "p-3")}>
+                        <div key={resource} className={cn(adminInsetPanelClass, 'p-3')}>
                           <div className="flex items-center gap-2 mb-2">
                             <Checkbox
                               checked={isAllResourceSelected(resource)}
-                              onCheckedChange={(checked) => handleSelectAllResource(resource, checked as boolean)}
+                              onCheckedChange={(checked) =>
+                                handleSelectAllResource(resource, checked as boolean)
+                              }
                               className="rounded"
                             />
                             <span className="text-sm font-medium capitalize">{resource}</span>
@@ -296,11 +314,12 @@ export function UpdateModelUser({
                               return (
                                 <Badge
                                   key={perm}
-                                  variant={isSelected ? "default" : "outline"}
+                                  variant={isSelected ? 'default' : 'outline'}
                                   className={cn(
-                                    "cursor-pointer text-xs transition-all",
-                                    isFromRole && !isSelected && "border-[#d8473c]/35 text-[#d8473c]",
-                                    isSelected && "border-[#d8473c]/15 bg-[#d8473c] text-white hover:bg-[#c53b31]"
+                                    'cursor-pointer text-xs transition-[border-color,background-color,color,box-shadow]',
+                                    isFromRole && !isSelected && 'border-primary/35 text-primary',
+                                    isSelected &&
+                                      'border-primary/15 bg-primary text-primary-foreground hover:bg-primary-hover',
                                   )}
                                   onClick={() => handleTogglePermission(perm)}
                                 >
@@ -319,19 +338,19 @@ export function UpdateModelUser({
             </Tabs>
           </div>
 
-          <DialogFooter className={cn(adminDialogFooterClass, "px-6 pb-6")}>
+          <DialogFooter className={cn(adminDialogFooterClass, 'px-6 pb-6')}>
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className={cn("sm:min-w-28", adminSecondaryButtonClass)}
+              className={cn('sm:min-w-28', adminSecondaryButtonClass)}
             >
               Hủy
             </Button>
             <Button
               type="submit"
-              className={cn("gap-2 sm:min-w-44", adminPrimaryButtonClass)}
+              className={cn('gap-2 sm:min-w-44', adminPrimaryButtonClass)}
               disabled={isLoading}
             >
               {isLoading ? (
@@ -340,7 +359,7 @@ export function UpdateModelUser({
                   Đang cập nhật...
                 </>
               ) : (
-                "Cập nhật người dùng"
+                'Cập nhật người dùng'
               )}
             </Button>
           </DialogFooter>

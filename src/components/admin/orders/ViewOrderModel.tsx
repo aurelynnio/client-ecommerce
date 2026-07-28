@@ -1,22 +1,17 @@
-import { Order } from "@/types/order";
-import { Shop } from "@/types/shop";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Edit, Package, Store } from "lucide-react";
-import Image from "next/image";
-import { formatCurrency, formatDate } from "@/utils/format";
+import { Order } from '@/types/order';
+import { Shop } from '@/types/shop';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Edit, Package, Store } from 'lucide-react';
+import Image from 'next/image';
+import { formatCurrency, formatDate } from '@/utils/format';
 import {
   adminDialogContentClass,
   adminInsetPanelClass,
   adminPrimaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 interface ViewOrderModalProps {
   isOpen: boolean;
@@ -26,39 +21,34 @@ interface ViewOrderModalProps {
 }
 
 const ORDER_DATE_TIME_OPTIONS: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
 };
 
-export function ViewOrderModal({
-  isOpen,
-  onClose,
-  onEdit,
-  order,
-}: ViewOrderModalProps) {
+export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModalProps) {
   if (!order) return null;
 
   const getStatusBadge = (status: string) => {
     const statusConfig: {
       [key: string]: {
         label: string;
-        variant: "default" | "secondary" | "destructive" | "outline";
+        variant: 'default' | 'secondary' | 'destructive' | 'outline';
       };
     } = {
-      pending: { label: "Chờ xử lý", variant: "secondary" },
-      confirmed: { label: "Đã xác nhận", variant: "outline" },
-      processing: { label: "Đang xử lý", variant: "default" },
-      shipped: { label: "Đang giao", variant: "default" },
-      delivered: { label: "Đã giao", variant: "outline" },
-      cancelled: { label: "Đã hủy", variant: "destructive" },
+      pending: { label: 'Chờ xử lý', variant: 'secondary' },
+      confirmed: { label: 'Đã xác nhận', variant: 'outline' },
+      processing: { label: 'Đang xử lý', variant: 'default' },
+      shipped: { label: 'Đang giao', variant: 'default' },
+      delivered: { label: 'Đã giao', variant: 'outline' },
+      cancelled: { label: 'Đã hủy', variant: 'destructive' },
     };
 
     const config = statusConfig[status] || {
       label: status,
-      variant: "secondary",
+      variant: 'secondary',
     };
 
     return (
@@ -72,17 +62,17 @@ export function ViewOrderModal({
     const statusConfig: {
       [key: string]: {
         label: string;
-        variant: "default" | "secondary" | "destructive" | "outline";
+        variant: 'default' | 'secondary' | 'destructive' | 'outline';
       };
     } = {
-      unpaid: { label: "Chưa thanh toán", variant: "secondary" },
-      paid: { label: "Đã thanh toán", variant: "outline" },
-      refunded: { label: "Hoàn tiền", variant: "destructive" },
+      unpaid: { label: 'Chưa thanh toán', variant: 'secondary' },
+      paid: { label: 'Đã thanh toán', variant: 'outline' },
+      refunded: { label: 'Hoàn tiền', variant: 'destructive' },
     };
 
     const config = statusConfig[status] || {
       label: status,
-      variant: "secondary",
+      variant: 'secondary',
     };
 
     return (
@@ -93,27 +83,29 @@ export function ViewOrderModal({
   };
 
   const getShopInfo = (
-    shopId: string | Shop | undefined
+    shopId: string | Shop | undefined,
   ): { name: string; logo?: string; slug?: string } => {
-    if (!shopId) return { name: "N/A" };
-    if (typeof shopId === "string") return { name: shopId };
-    return { name: shopId.name || "N/A", logo: shopId.logo, slug: shopId.slug };
+    if (!shopId) return { name: 'N/A' };
+    if (typeof shopId === 'string') return { name: shopId };
+    return { name: shopId.name || 'N/A', logo: shopId.logo, slug: shopId.slug };
   };
 
   const shopInfo = getShopInfo(order.shopId);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn(adminDialogContentClass, "max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar p-6")}>
+      <DialogContent
+        className={cn(
+          adminDialogContentClass,
+          'max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar p-6',
+        )}
+      >
         <DialogHeader className="border-b border-border/50 pb-4">
           <DialogTitle className="flex justify-between items-center">
             <span className="text-xl font-semibold tracking-tight">
               Chi tiết đơn hàng #{order._id.slice(-8).toUpperCase()}
             </span>
-            <Button
-              onClick={() => onEdit(order)}
-              className={cn("gap-2", adminPrimaryButtonClass)}
-            >
+            <Button onClick={() => onEdit(order)} className={cn('gap-2', adminPrimaryButtonClass)}>
               <Edit className="w-4 h-4" />
               Cập nhật
             </Button>
@@ -122,16 +114,14 @@ export function ViewOrderModal({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           {/* Thông tin đơn hàng */}
-          <div className={cn(adminInsetPanelClass, "p-5 space-y-4")}>
+          <div className={cn(adminInsetPanelClass, 'p-5 space-y-4')}>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
               Thông tin đơn hàng
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Mã đơn hàng:</span>
-                <span className="font-medium">
-                  #{order._id.slice(-8).toUpperCase()}
-                </span>
+                <span className="font-medium">#{order._id.slice(-8).toUpperCase()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Ngày đặt:</span>
@@ -153,20 +143,15 @@ export function ViewOrderModal({
           </div>
 
           {/* Shop Information */}
-                {order.shopId && (
-            <div className={cn(adminInsetPanelClass, "p-5 space-y-4")}>
+          {order.shopId && (
+            <div className={cn(adminInsetPanelClass, 'p-5 space-y-4')}>
               <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
                 Thông tin cửa hàng
               </h3>
               <div className="flex items-center gap-3">
                 {shopInfo.logo ? (
                   <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-gray-100 border border-border/50">
-                    <Image
-                      src={shopInfo.logo}
-                      alt={shopInfo.name}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={shopInfo.logo} alt={shopInfo.name} fill className="object-cover" />
                   </div>
                 ) : (
                   <div className="h-12 w-12 rounded-xl bg-gray-100 flex items-center justify-center border border-border/50">
@@ -174,13 +159,9 @@ export function ViewOrderModal({
                   </div>
                 )}
                 <div>
-                  <p className="font-medium text-foreground">
-                    {shopInfo.name}
-                  </p>
+                  <p className="font-medium text-foreground">{shopInfo.name}</p>
                   {shopInfo.slug && (
-                    <p className="text-xs text-muted-foreground">
-                      @{shopInfo.slug}
-                    </p>
+                    <p className="text-xs text-muted-foreground">@{shopInfo.slug}</p>
                   )}
                 </div>
               </div>
@@ -189,16 +170,14 @@ export function ViewOrderModal({
 
           {/* Thông tin khách hàng & Địa chỉ */}
           <div className="space-y-4">
-            <div className={cn(adminInsetPanelClass, "p-5 space-y-4")}>
+            <div className={cn(adminInsetPanelClass, 'p-5 space-y-4')}>
               <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
                 Khách hàng & Giao hàng
               </h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Tên:</span>
-                  <span className="font-medium">
-                    {order.shippingAddress.fullName}
-                  </span>
+                  <span className="font-medium">{order.shippingAddress.fullName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Điện thoại:</span>
@@ -206,18 +185,13 @@ export function ViewOrderModal({
                 </div>
                 <div className="border-t border-border/50 pt-2 mt-2">
                   <div className="text-muted-foreground mb-1">Địa chỉ:</div>
-                  <div className="font-medium">
-                    {order.shippingAddress.address}
-                  </div>
+                  <div className="font-medium">{order.shippingAddress.address}</div>
                   {order.shippingAddress.ward && (
                     <div className="text-muted-foreground text-xs mt-0.5">
-                      {order.shippingAddress.ward},{" "}
-                      {order.shippingAddress.district}
+                      {order.shippingAddress.ward}, {order.shippingAddress.district}
                     </div>
                   )}
-                  <div className="text-muted-foreground text-xs">
-                    {order.shippingAddress.city}
-                  </div>
+                  <div className="text-muted-foreground text-xs">{order.shippingAddress.city}</div>
                 </div>
                 {order.shippingAddress.note && (
                   <div className="mt-2 text-xs bg-yellow-50 text-yellow-800 p-2 rounded-lg border border-yellow-100">
@@ -247,10 +221,7 @@ export function ViewOrderModal({
               </thead>
               <tbody className="divide-y divide-border/50">
                 {order.products?.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="hover:bg-gray-50/50 transition-colors"
-                  >
+                  <tr key={index} className="hover:bg-gray-50/50 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden border border-border/50">
@@ -267,9 +238,7 @@ export function ViewOrderModal({
                           )}
                         </div>
                         <div>
-                          <div className="font-medium text-foreground">
-                            {item.name}
-                          </div>
+                          <div className="font-medium text-foreground">{item.name}</div>
                           {item.variationInfo && (
                             <div className="text-xs text-muted-foreground mt-0.5">
                               {item.variationInfo}
@@ -283,9 +252,7 @@ export function ViewOrderModal({
                         </div>
                       </div>
                     </td>
-                    <td className="p-4 text-muted-foreground">
-                      {formatCurrency(item.price)}
-                    </td>
+                    <td className="p-4 text-muted-foreground">{formatCurrency(item.price)}</td>
                     <td className="p-4 text-center">{item.quantity}</td>
                     <td className="p-4 text-right font-medium">
                       {formatCurrency(item.price * item.quantity)}
@@ -298,7 +265,7 @@ export function ViewOrderModal({
                   <td colSpan={3} className="p-4 text-right">
                     Tổng cộng
                   </td>
-                  <td className="p-4 text-right text-base text-black dark:text-white">
+                  <td className="p-4 text-right text-base text-black">
                     {formatCurrency(order.totalAmount)}
                   </td>
                 </tr>

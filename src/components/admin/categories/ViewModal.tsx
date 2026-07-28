@@ -1,14 +1,13 @@
-
-"use client";
+'use client';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Folder,
   Calendar,
@@ -21,18 +20,18 @@ import {
   Image as ImageIcon,
   ZoomIn,
   X,
-} from "lucide-react";
-import { Category } from "@/types/category";
-import { useState } from "react";
-import Image from "next/image";
-import { formatDate } from "@/utils/format";
+} from 'lucide-react';
+import { Category } from '@/types/category';
+import { useState } from 'react';
+import Image from 'next/image';
+import { formatDate } from '@/utils/format';
 import {
   adminDialogContentClass,
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 interface ViewCategoryModalProps {
   isOpen: boolean;
@@ -42,17 +41,12 @@ interface ViewCategoryModalProps {
 }
 
 const LONG_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
 };
 
-export function ViewCategoryModal({
-  isOpen,
-  onClose,
-  onEdit,
-  category,
-}: ViewCategoryModalProps) {
+export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCategoryModalProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   if (!category) return null;
@@ -63,7 +57,7 @@ export function ViewCategoryModal({
 
   const getStatusBadge = (status: boolean) => {
     return status ? (
-      <Badge className="bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+      <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
         <CheckCircle className="h-3 w-3 mr-1" />
         Đang hoạt động
       </Badge>
@@ -83,7 +77,12 @@ export function ViewCategoryModal({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[700px] max-h-[90vh] overflow-y-auto no-scrollbar p-6")}>
+        <DialogContent
+          className={cn(
+            adminDialogContentClass,
+            'sm:max-w-[700px] max-h-[90vh] overflow-y-auto no-scrollbar p-6',
+          )}
+        >
           <DialogHeader className="border-b border-border/50 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -100,18 +99,16 @@ export function ViewCategoryModal({
 
           <div className="space-y-6 pt-6">
             {/* Header Info */}
-            <div className={cn(adminInsetPanelClass, "flex items-start gap-4 p-5")}>
-              <div className="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 shrink-0">
+            <div className={cn(adminInsetPanelClass, 'flex items-start gap-4 p-5')}>
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-info/15 text-info">
                 <Folder className="h-6 w-6" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground">
-                  {category.name}
-                </h3>
+                <h3 className="text-lg font-semibold text-foreground">{category.name}</h3>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge
                     variant="outline"
-                    className="rounded-md font-mono text-xs text-muted-foreground bg-white/50 border-gray-200"
+                    className="rounded-md border-border bg-card/70 font-mono text-xs text-muted-foreground"
                   >
                     {category.slug}
                   </Badge>
@@ -126,25 +123,23 @@ export function ViewCategoryModal({
 
             {/* Basic Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
-              <div className={cn(adminInsetPanelClass, "flex flex-col gap-1 p-4")}>
+              <div className={cn(adminInsetPanelClass, 'flex flex-col gap-1 p-4')}>
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Số lượng sản phẩm
                 </span>
                 <div className="flex items-center gap-2">
                   <Package className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-lg font-semibold">
-                    {category.productCount || 0}
-                  </span>
+                  <span className="text-lg font-semibold">{category.productCount || 0}</span>
                 </div>
               </div>
-              <div className={cn(adminInsetPanelClass, "flex flex-col gap-1 p-4")}>
+              <div className={cn(adminInsetPanelClass, 'flex flex-col gap-1 p-4')}>
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Ngày tạo
                 </span>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium">
-                    {formatDate(category.createdAt || "", LONG_DATE_OPTIONS)}
+                    {formatDate(category.createdAt || '', LONG_DATE_OPTIONS)}
                   </span>
                 </div>
               </div>
@@ -200,7 +195,7 @@ export function ViewCategoryModal({
                         Danh mục cha
                       </p>
                       <p className="font-medium text-sm">
-                        {typeof category.parentCategory === "object"
+                        {typeof category.parentCategory === 'object'
                           ? category.parentCategory.name
                           : category.parentCategory}
                       </p>
@@ -238,19 +233,19 @@ export function ViewCategoryModal({
           </div>
 
           {/* Actions */}
-          <div className="mt-2 flex flex-col-reverse gap-3 border-t border-[#ebe2d8] pt-6 sm:flex-row sm:justify-end">
+          <div className="mt-2 flex flex-col-reverse gap-3 border-t border-border pt-6 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className={cn("h-10 sm:min-w-28", adminSecondaryButtonClass)}
+              className={cn('h-10 sm:min-w-28', adminSecondaryButtonClass)}
             >
               Đóng
             </Button>
             <Button
               type="button"
               onClick={handleEdit}
-              className={cn("h-10 gap-2 px-5 sm:min-w-40", adminPrimaryButtonClass)}
+              className={cn('h-10 gap-2 px-5 sm:min-w-40', adminPrimaryButtonClass)}
             >
               <Edit className="h-4 w-4" />
               Sửa danh mục
@@ -261,10 +256,7 @@ export function ViewCategoryModal({
 
       {/* Image Zoom Modal */}
       {selectedImage && (
-        <Dialog
-          open={!!selectedImage}
-          onOpenChange={() => setSelectedImage(null)}
-        >
+        <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
           <DialogContent className="max-w-screen-lg w-auto bg-transparent border-0 shadow-none p-0 overflow-visible flex items-center justify-center">
             <div className="relative group">
               <Button

@@ -1,25 +1,29 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-import { ReduxProvider } from "./Provider";
-import { SocketProvider } from "@/context/SocketContext";
-import { ErrorBoundary } from "@/components/common/ErrorBoundary";
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
+import './globals.css';
+import { ReduxProvider } from './Provider';
+import { SocketProvider } from '@/context/SocketContext';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
-const inter = localFont({
-  src: "../../public/fonts/InterVariable.woff2",
-  variable: "--font-sans",
+const auraSans = localFont({
+  src: '../../public/fonts/InterVariable.woff2',
+  variable: '--font-aura-sans',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Ecommerce",
-  description: "Ecommerce",
+  title: {
+    default: 'Aura Commerce',
+    template: '%s | Aura',
+  },
+  description: 'Modern refined e-commerce experience.',
   icons: {
-    icon: "/images/logo.png",
-    shortcut: "/images/logo.png",
-    apple: "/images/logo.png",
+    icon: '/images/logo-aura-light.png',
+    shortcut: '/images/logo-aura-light.png',
+    apple: '/images/logo-aura-light.png',
   },
   other: {
-    google: "notranslate",
+    google: 'notranslate',
   },
 };
 
@@ -29,16 +33,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="vi"
-      translate="no"
-      className="notranslate"
-      suppressHydrationWarning
-    >
+    <html lang="vi" translate="no" className="notranslate">
       <body
         translate="no"
-        className={`${inter.variable} notranslate antialiased min-h-screen flex flex-col`}
-        suppressHydrationWarning={true}
+        className={`${auraSans.variable} notranslate antialiased min-h-screen flex flex-col`}
       >
         <ReduxProvider>
           <SocketProvider>

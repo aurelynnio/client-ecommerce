@@ -5,9 +5,9 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   User as UserIcon,
   Mail,
@@ -19,19 +19,19 @@ import {
   Shield,
   Key,
   Phone,
-} from "lucide-react";
-import { User } from "@/types/user";
-import Image from "next/image";
-import UserPermissions from "./UserPermissions";
-import { cn } from "@/utils/cn";
-import { formatDate } from "@/utils/format";
+} from 'lucide-react';
+import { User } from '@/types/user';
+import Image from 'next/image';
+import UserPermissions from './UserPermissions';
+import { cn } from '@/utils/cn';
+import { formatDate } from '@/utils/format';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
+} from '@/components/admin/shared/AdminPrimitives';
 
 interface ViewModelUserProps {
   open: boolean;
@@ -41,31 +41,40 @@ interface ViewModelUserProps {
 }
 
 const LONG_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
 };
 
-export function ViewModelUser({
-  open,
-  onOpenChange,
-  user,
-  onEdit,
-}: ViewModelUserProps) {
+export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUserProps) {
   if (!user) return null;
 
   const statusConfig = {
-    verified: { bg: "bg-green-100 dark:bg-green-900/30", text: "text-green-600 dark:text-green-400", label: "Đã xác minh" },
-    unverified: { bg: "bg-gray-100 dark:bg-gray-800", text: "text-gray-600 dark:text-gray-400", label: "Chưa xác minh" },
+    verified: {
+      bg: 'bg-green-100',
+      text: 'text-green-600',
+      label: 'Đã xác minh',
+    },
+    unverified: {
+      bg: 'bg-gray-100',
+      text: 'text-gray-600',
+      label: 'Chưa xác minh',
+    },
   };
 
   const roleConfig: Record<string, { bg: string; text: string }> = {
-    admin: { bg: "bg-purple-100 dark:bg-purple-900/30", text: "text-purple-600 dark:text-purple-400" },
-    user: { bg: "bg-blue-100 dark:bg-blue-900/30", text: "text-blue-600 dark:text-blue-400" },
-    moderator: { bg: "bg-orange-100 dark:bg-orange-900/30", text: "text-orange-600 dark:text-orange-400" },
+    admin: {
+      bg: 'bg-purple-100',
+      text: 'text-purple-600',
+    },
+    user: { bg: 'bg-blue-100', text: 'text-blue-600' },
+    moderator: {
+      bg: 'bg-orange-100',
+      text: 'text-orange-600',
+    },
   };
 
-  const getStatus = () => user.isVerifiedEmail ? statusConfig.verified : statusConfig.unverified;
+  const getStatus = () => (user.isVerifiedEmail ? statusConfig.verified : statusConfig.unverified);
   const getRoleStyle = () => roleConfig[user.roles] || roleConfig.user;
   const status = getStatus();
   const roleStyle = getRoleStyle();
@@ -79,16 +88,26 @@ export function ViewModelUser({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[600px] p-0 overflow-hidden max-h-[90vh]")}>
+      <DialogContent
+        className={cn(adminDialogContentClass, 'sm:max-w-[600px] p-0 overflow-hidden max-h-[90vh]')}
+      >
         <DialogHeader className="p-6 pb-4 border-b border-border/50">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <DialogTitle className="text-xl font-semibold tracking-tight">Hồ sơ người dùng</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">
+                Hồ sơ người dùng
+              </DialogTitle>
               <DialogDescription className="text-muted-foreground">
                 Thông tin chi tiết về {user.username}
               </DialogDescription>
             </div>
-            <div className={cn("px-3 py-1 rounded-full text-xs font-medium border border-transparent", status.bg, status.text)}>
+            <div
+              className={cn(
+                'px-3 py-1 rounded-full text-xs font-medium border border-transparent',
+                status.bg,
+                status.text,
+              )}
+            >
               {status.label}
             </div>
           </div>
@@ -97,12 +116,18 @@ export function ViewModelUser({
         <div className="overflow-y-auto no-scrollbar max-h-[calc(90vh-180px)]">
           <Tabs defaultValue="profile" className="w-full">
             <div className="px-6 pt-4">
-              <TabsList className="grid w-full grid-cols-2 rounded-2xl bg-[#f5efe8] p-1">
-                <TabsTrigger value="profile" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
+              <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
+                <TabsTrigger
+                  value="profile"
+                  className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                >
                   <UserIcon className="h-4 w-4" />
                   Hồ sơ
                 </TabsTrigger>
-                <TabsTrigger value="permissions" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950">
+                <TabsTrigger
+                  value="permissions"
+                  className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                >
                   <Key className="h-4 w-4" />
                   Quyền hạn
                 </TabsTrigger>
@@ -128,14 +153,26 @@ export function ViewModelUser({
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-foreground truncate">{user.username}</h3>
+                  <h3 className="text-lg font-semibold text-foreground truncate">
+                    {user.username}
+                  </h3>
                   <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-1">
                     <Mail className="h-3.5 w-3.5 flex-shrink-0" />
                     <span className="truncate">{user.email}</span>
                   </div>
                   <div className="flex items-center gap-2 mt-2">
-                    <div className={cn("px-2.5 py-0.5 rounded-lg text-xs font-medium", roleStyle.bg, roleStyle.text)}>
-                      {user.roles === "admin" ? "Quản trị viên" : user.roles === "user" ? "Người dùng" : user.roles}
+                    <div
+                      className={cn(
+                        'px-2.5 py-0.5 rounded-lg text-xs font-medium',
+                        roleStyle.bg,
+                        roleStyle.text,
+                      )}
+                    >
+                      {user.roles === 'admin'
+                        ? 'Quản trị viên'
+                        : user.roles === 'user'
+                          ? 'Người dùng'
+                          : user.roles}
                     </div>
                     {user.isVerifiedEmail ? (
                       <CheckCircle className="h-4 w-4 text-green-500" />
@@ -148,7 +185,7 @@ export function ViewModelUser({
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-4">
-                <div className={cn(adminInsetPanelClass, "p-4 space-y-2")}>
+                <div className={cn(adminInsetPanelClass, 'p-4 space-y-2')}>
                   <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" />
                     Ngày tham gia
@@ -157,12 +194,14 @@ export function ViewModelUser({
                     {formatDate(user.createdAt, LONG_DATE_OPTIONS)}
                   </div>
                 </div>
-                <div className={cn(adminInsetPanelClass, "p-4 space-y-2")}>
+                <div className={cn(adminInsetPanelClass, 'p-4 space-y-2')}>
                   <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1.5">
                     <Shield className="w-3.5 h-3.5" />
                     Vai trò
                   </div>
-                  <div className="text-sm font-semibold capitalize">{user.roles === "admin" ? "Quản trị viên" : "Người dùng"}</div>
+                  <div className="text-sm font-semibold capitalize">
+                    {user.roles === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+                  </div>
                 </div>
               </div>
 
@@ -175,10 +214,12 @@ export function ViewModelUser({
                 {user.addresses && user.addresses.length > 0 ? (
                   <div className="space-y-3">
                     {user.addresses.map((addr, index) => (
-                      <div key={index} className={cn(adminInsetPanelClass, "p-4")}>
+                      <div key={index} className={cn(adminInsetPanelClass, 'p-4')}>
                         <div className="flex justify-between items-start mb-2">
-                          <span className="font-medium text-sm text-foreground">{addr.fullName}</span>
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded-md">
+                          <span className="font-medium text-sm text-foreground">
+                            {addr.fullName}
+                          </span>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground bg-gray-100 px-2 py-0.5 rounded-md">
                             <Phone className="h-3 w-3" />
                             {addr.phone}
                           </div>
@@ -190,7 +231,7 @@ export function ViewModelUser({
                     ))}
                   </div>
                 ) : (
-                  <div className="p-6 rounded-2xl border border-dashed border-border/50 text-center bg-gray-50/30 dark:bg-white/5">
+                  <div className="p-6 rounded-2xl border border-dashed border-border/50 text-center bg-gray-50/30">
                     <MapPin className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">Chưa đăng ký địa chỉ</p>
                   </div>
@@ -201,25 +242,25 @@ export function ViewModelUser({
             <TabsContent value="permissions" className="p-6 pt-4">
               <UserPermissions
                 userId={user._id}
-                userRole={user.roles || "user"}
+                userRole={user.roles || 'user'}
                 username={user.username}
               />
             </TabsContent>
           </Tabs>
         </div>
 
-        <DialogFooter className={cn(adminDialogFooterClass, "px-6 pb-6")}>
+        <DialogFooter className={cn(adminDialogFooterClass, 'px-6 pb-6')}>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className={cn("sm:min-w-28", adminSecondaryButtonClass)}
+            className={cn('sm:min-w-28', adminSecondaryButtonClass)}
           >
             Đóng
           </Button>
           {onEdit && (
             <Button
               onClick={handleEdit}
-              className={cn("gap-2 sm:min-w-40", adminPrimaryButtonClass)}
+              className={cn('gap-2 sm:min-w-40', adminPrimaryButtonClass)}
             >
               <Edit className="h-4 w-4" />
               Sửa người dùng

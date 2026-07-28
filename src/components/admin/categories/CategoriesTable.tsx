@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useState, useEffect, useRef } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Search,
   MoreHorizontal,
@@ -32,12 +32,12 @@ import {
   ChevronDown,
   CheckCircle,
   XCircle,
-} from "lucide-react";
-import { Category } from "@/types/category";
-import { Badge } from "@/components/ui/badge";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import Image from "next/image";
-import { formatDate } from "@/utils/format";
+} from 'lucide-react';
+import { Category } from '@/types/category';
+import { Badge } from '@/components/ui/badge';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import Image from 'next/image';
+import { formatDate } from '@/utils/format';
 import {
   adminCodePillClass,
   adminFilterBarClass,
@@ -50,7 +50,7 @@ import {
   adminSmallIconButtonClass,
   adminTableHeaderClass,
   adminTableShellClass,
-} from "@/components/admin/shared/AdminPrimitives";
+} from '@/components/admin/shared/AdminPrimitives';
 
 interface CategoriesTableProps {
   categories: Category[];
@@ -68,7 +68,7 @@ interface CategoriesTableProps {
 
 export const getStatusBadge = (status: boolean) => {
   return status ? (
-    <Badge className="bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
       <CheckCircle className="h-3 w-3 mr-1" />
       Đang hoạt động
     </Badge>
@@ -103,21 +103,17 @@ const CategoryRow = ({
   isLoading?: boolean;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const hasChildren =
-    category.subcategories && category.subcategories.length > 0;
+  const hasChildren = category.subcategories && category.subcategories.length > 0;
 
   return (
     <>
       <TableRow
         className={`${adminRowHoverClass} border-0 ${
-          isLoading ? "opacity-50 pointer-events-none" : ""
+          isLoading ? 'opacity-50 pointer-events-none' : ''
         }`}
       >
         <TableCell className="font-medium p-4">
-          <div
-            className="flex items-center"
-            style={{ paddingLeft: `${level * 24}px` }}
-          >
+          <div className="flex items-center" style={{ paddingLeft: `${level * 24}px` }}>
             {hasChildren ? (
               <Button
                 variant="ghost"
@@ -135,7 +131,9 @@ const CategoryRow = ({
               <div className="w-8" />
             )}
             {category.images && category.images.length > 0 ? (
-              <div className={`relative h-10 w-10 mr-3 rounded-lg overflow-hidden ${adminMediaPlaceholderClass}`}>
+              <div
+                className={`relative h-10 w-10 mr-3 rounded-lg overflow-hidden ${adminMediaPlaceholderClass}`}
+              >
                 <Image
                   src={category.images[0]}
                   alt={category.name as string}
@@ -144,25 +142,23 @@ const CategoryRow = ({
                 />
               </div>
             ) : (
-              <div className={`w-10 h-10 mr-3 rounded-lg flex items-center justify-center ${adminMediaPlaceholderClass}`}>
+              <div
+                className={`w-10 h-10 mr-3 rounded-lg flex items-center justify-center ${adminMediaPlaceholderClass}`}
+              >
                 <Package className="h-5 w-5 text-muted-foreground" />
               </div>
             )}
             <span
-              className={`text-sm ${level > 0 ? "text-muted-foreground" : "font-medium text-foreground"}`}
+              className={`text-sm ${level > 0 ? 'text-muted-foreground' : 'font-medium text-foreground'}`}
             >
               {category.name}
             </span>
           </div>
         </TableCell>
         <TableCell>
-          <code className={adminCodePillClass}>
-            {category.slug}
-          </code>
+          <code className={adminCodePillClass}>{category.slug}</code>
         </TableCell>
-        <TableCell className="text-muted-foreground text-sm">
-          {getParentName(category)}
-        </TableCell>
+        <TableCell className="text-muted-foreground text-sm">{getParentName(category)}</TableCell>
         <TableCell className="text-center font-medium text-sm">
           {getProductCount(category)}
         </TableCell>
@@ -173,30 +169,18 @@ const CategoryRow = ({
         <TableCell className="text-right pr-6">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className={`p-0 ${adminSmallIconButtonClass}`}
-              >
+              <Button variant="ghost" className={`p-0 ${adminSmallIconButtonClass}`}>
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className={adminMenuContentClass}
-            >
+            <DropdownMenuContent align="end" className={adminMenuContentClass}>
               <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => onView(category)}
-                className="cursor-pointer gap-2"
-              >
+              <DropdownMenuItem onClick={() => onView(category)} className="cursor-pointer gap-2">
                 <Eye className="h-4 w-4" />
                 Xem chi tiết
               </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => onEdit(category)}
-                className="cursor-pointer gap-2"
-              >
+              <DropdownMenuItem onClick={() => onEdit(category)} className="cursor-pointer gap-2">
                 <Edit className="h-4 w-4" />
                 Sửa
               </DropdownMenuItem>
@@ -276,7 +260,7 @@ export function CategoriesTable({
               placeholder="Tìm kiếm danh mục..."
               value={localSearch}
               onChange={handleSearch}
-              className={`pl-9 transition-all ${adminSearchInputClass}`}
+              className={`pl-9 transition-[border-color,background-color,box-shadow] ${adminSearchInputClass}`}
             />
           </div>
           <Button
@@ -300,10 +284,7 @@ export function CategoriesTable({
         </div>
 
         <div className="flex w-full items-center gap-2 sm:w-auto">
-          <Label
-            htmlFor="pageSize"
-            className="text-sm font-medium text-muted-foreground"
-          >
+          <Label htmlFor="pageSize" className="text-sm font-medium text-muted-foreground">
             Hiển thị:
           </Label>
           <select
@@ -361,14 +342,12 @@ export function CategoriesTable({
               )}
               {!isLoading && categories.length === 0 && (
                 <TableRow>
-              <TableCell colSpan={7} className="text-center py-12">
-                <div className="flex flex-col items-center justify-center text-muted-foreground">
-                  <Package className="h-12 w-12 mb-3 opacity-20" />
-                  <div className="text-muted-foreground">
-                    Không tìm thấy danh mục
-                  </div>
-                </div>
-              </TableCell>
+                  <TableCell colSpan={7} className="text-center py-12">
+                    <div className="flex flex-col items-center justify-center text-muted-foreground">
+                      <Package className="h-12 w-12 mb-3 opacity-20" />
+                      <div className="text-muted-foreground">Không tìm thấy danh mục</div>
+                    </div>
+                  </TableCell>
                 </TableRow>
               )}
               {!isLoading &&

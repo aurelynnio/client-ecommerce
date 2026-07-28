@@ -55,7 +55,7 @@ export default function NotificationModel({
       {/* Panel */}
       <div className="fixed right-4 top-14 w-[340px] max-h-[75vh] flex flex-col bg-white z-70 rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
         {/* Header - clean, minimal */}
-        <div className="px-4 py-3 flex justify-between items-center bg-[#fafafa]">
+        <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-800">Thông báo</span>
             {unreadCount > 0 && (
@@ -98,7 +98,7 @@ export default function NotificationModel({
 
         {/* Footer - subtle actions */}
         {notifications.length > 0 && (
-          <div className="px-4 py-2.5 bg-[#fafafa] flex justify-between items-center">
+          <div className="flex items-center justify-between bg-muted/50 px-4 py-2.5">
             <button
               onClick={() => markAllAsReadMutation.mutate()}
               disabled={markAllAsReadMutation.isPending || unreadCount === 0}

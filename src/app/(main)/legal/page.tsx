@@ -1,20 +1,20 @@
-import InfoPage from "@/components/common/InfoPage";
+import InfoPage from '@/components/common/InfoPage';
 
 const sections = [
   {
-    title: "Tuân thủ",
+    title: 'Tuân thủ',
     items: [
-      "Tuân thủ quy định thương mại điện tử hiện hành",
-      "Tuân thủ quy định về bảo vệ dữ liệu cá nhân",
-      "Tuân thủ quy định về thanh toán điện tử",
+      'Tuân thủ quy định thương mại điện tử hiện hành',
+      'Tuân thủ quy định về bảo vệ dữ liệu cá nhân',
+      'Tuân thủ quy định về thanh toán điện tử',
     ],
   },
   {
-    title: "Liên hệ pháp lý",
+    title: 'Liên hệ pháp lý',
     items: [
-      "Email: legal@store.local",
-      "Vui lòng ghi rõ nội dung và tài liệu liên quan",
-      "Yêu cầu sẽ được phản hồi theo SLA nội bộ",
+      'Email: legal@store.local',
+      'Vui lòng ghi rõ nội dung và tài liệu liên quan',
+      'Yêu cầu sẽ được phản hồi theo SLA nội bộ',
     ],
   },
 ];

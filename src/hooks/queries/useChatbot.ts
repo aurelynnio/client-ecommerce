@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { chatbotKeys } from "@/lib/queryKeys";
-import { PaginationData } from "@/types/common";
+import { useQuery } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { chatbotKeys } from '@/lib/queryKeys';
+import { PaginationData } from '@/types/common';
 
 export interface ChatSession {
   sessionId: string;
@@ -13,7 +13,7 @@ export interface ChatSession {
 }
 
 export interface ChatMessage {
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   content: string;
   timestamp: string;
 }
@@ -33,7 +33,7 @@ const chatbotApi = {
     page: number;
     limit: number;
   }): Promise<AdminChatbotSessionsResponse> => {
-    const response = await instance.get("/chatbot/admin/sessions", { params });
+    const response = await instance.get('/chatbot/admin/sessions', { params });
     const data = extractApiData<{
       data?: ChatSession[];
       pagination?: {
@@ -82,8 +82,8 @@ export function useAdminChatbotSessions(params: { page: number; limit: number })
 
 export function useAdminChatbotHistory(sessionId: string | null) {
   return useQuery({
-    queryKey: chatbotKeys.history(sessionId ?? ""),
-    queryFn: () => chatbotApi.getHistory(sessionId ?? ""),
+    queryKey: chatbotKeys.history(sessionId ?? ''),
+    queryFn: () => chatbotApi.getHistory(sessionId ?? ''),
     enabled: !!sessionId,
   });
 }

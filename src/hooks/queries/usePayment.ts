@@ -2,11 +2,11 @@
  * Payment React Query Hooks
  * Replaces paymentAction.ts async thunks with React Query
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { paymentKeys } from "@/lib/queryKeys";
+import { useMutation, useQuery } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { paymentKeys } from '@/lib/queryKeys';
 
 // ============ Types ============
 export interface PaymentUrlResponse {
@@ -27,7 +27,7 @@ export interface PaymentDetails {
 // ============ API Functions ============
 const paymentApi = {
   createUrl: async (orderId: string): Promise<PaymentUrlResponse> => {
-    const response = await instance.post("/payment", { orderId });
+    const response = await instance.post('/payment', { orderId });
 
     return extractApiData(response);
   },
@@ -43,10 +43,7 @@ const paymentApi = {
 /**
  * Get payment details by order ID
  */
-export function usePaymentByOrder(
-  orderId: string,
-  options?: { enabled?: boolean }
-) {
+export function usePaymentByOrder(orderId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: paymentKeys.byOrder(orderId),
     queryFn: () => paymentApi.getByOrder(orderId),
@@ -63,7 +60,7 @@ export function useCreatePaymentUrl() {
   return useMutation({
     mutationFn: paymentApi.createUrl,
     onError: (error) => {
-      errorHandler.log(error, { context: "Create payment URL failed" });
+      errorHandler.log(error, { context: 'Create payment URL failed' });
     },
   });
 }

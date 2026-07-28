@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from './user';
 
 export interface Address {
   _id: string;
@@ -33,7 +33,6 @@ export interface AddressDialogProps {
 export interface AddressTabProps {
   user?: User | null;
 }
-
 
 export interface ProfileTabProps {
   user?: User | null;

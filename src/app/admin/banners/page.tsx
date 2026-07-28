@@ -1,25 +1,16 @@
-"use client";
-import { useState } from "react";
-import { useUrlFilters } from "@/hooks/useUrlFilters";
-import {
-  useBanners,
-  useCreateBanner,
-  useUpdateBanner,
-  useDeleteBanner,
-} from "@/hooks/queries";
-import { Filters } from "@/hooks/useUrlFilters";
-import {
-  BannerItem,
-  CreateBannerPayload,
-  UpdateBannerPayload,
-} from "@/types/banner";
-import { BannersHeader } from "@/components/admin/banners/BannersHeader";
-import { BannersStats } from "@/components/admin/banners/BannersStats";
-import { BannersTable } from "@/components/admin/banners/BannersTable";
-import { CreateBannerModal } from "@/components/admin/banners/CreateBannerModal";
-import { EditBannerModal } from "@/components/admin/banners/EditBannerModal";
-import { toast } from "sonner";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { useState } from 'react';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
+import { useBanners, useCreateBanner, useUpdateBanner, useDeleteBanner } from '@/hooks/queries';
+import { Filters } from '@/hooks/useUrlFilters';
+import { BannerItem, CreateBannerPayload, UpdateBannerPayload } from '@/types/banner';
+import { BannersHeader } from '@/components/admin/banners/BannersHeader';
+import { BannersStats } from '@/components/admin/banners/BannersStats';
+import { BannersTable } from '@/components/admin/banners/BannersTable';
+import { CreateBannerModal } from '@/components/admin/banners/CreateBannerModal';
+import { EditBannerModal } from '@/components/admin/banners/EditBannerModal';
+import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/api';
 
 interface BannerFilters extends Filters {
   page: number;
@@ -28,17 +19,14 @@ interface BannerFilters extends Filters {
 }
 
 export default function BannersAdminPage() {
-  const { filters, updateFilter, updateFilters } = useUrlFilters<BannerFilters>(
-    {
-      defaultFilters: {
-        page: 1,
-        limit: 10,
-        search: "",
-      },
-      basePath: "/admin/banners",
-    }
-  );
-
+  const { filters, updateFilter, updateFilters } = useUrlFilters<BannerFilters>({
+    defaultFilters: {
+      page: 1,
+      limit: 10,
+      search: '',
+    },
+    basePath: '/admin/banners',
+  });
 
   const {
     data: bannersData,
@@ -62,31 +50,31 @@ export default function BannersAdminPage() {
   const handleCreateBanner = async (data: CreateBannerPayload) => {
     try {
       await createMutation.mutateAsync(data);
-      toast.success("Banner created successfully");
+      toast.success('Banner created successfully');
       setCreateModalOpen(false);
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to create banner"));
+      toast.error(getSafeErrorMessage(error, 'Failed to create banner'));
     }
   };
 
   const handleUpdateBanner = async (id: string, data: UpdateBannerPayload) => {
     try {
       await updateMutation.mutateAsync({ id, data });
-      toast.success("Banner updated successfully");
+      toast.success('Banner updated successfully');
       setEditModalOpen(false);
       setSelectedBanner(null);
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to update banner"));
+      toast.error(getSafeErrorMessage(error, 'Failed to update banner'));
     }
   };
 
   const handleDeleteBanner = async (banner: BannerItem) => {
-    if (confirm("Are you sure you want to delete this banner?")) {
+    if (confirm('Are you sure you want to delete this banner?')) {
       try {
         await deleteMutation.mutateAsync(banner._id);
-        toast.success("Banner deleted successfully");
+        toast.success('Banner deleted successfully');
       } catch (error: unknown) {
-        toast.error(getSafeErrorMessage(error, "Failed to delete banner"));
+        toast.error(getSafeErrorMessage(error, 'Failed to delete banner'));
       }
     }
   };
@@ -95,7 +83,7 @@ export default function BannersAdminPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-red-500">
-          Error: {getSafeErrorMessage(error, "Failed to load banners")}
+          Error: {getSafeErrorMessage(error, 'Failed to load banners')}
         </div>
       </div>
     );
@@ -115,7 +103,7 @@ export default function BannersAdminPage() {
         searchTerm={filters.search}
         pageSize={filters.limit}
         isLoading={isLoading}
-        onSearch={(val) => updateFilter("search", val)}
+        onSearch={(val) => updateFilter('search', val)}
         onPageSizeChange={(val) => updateFilters({ limit: val, page: 1 })}
         onEdit={(banner) => {
           setSelectedBanner(banner);
@@ -125,18 +113,14 @@ export default function BannersAdminPage() {
       />
 
       <CreateBannerModal
-        key={createModalOpen ? "create-banner-open" : "create-banner-closed"}
+        key={createModalOpen ? 'create-banner-open' : 'create-banner-closed'}
         isOpen={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
         onCreate={handleCreateBanner}
         isLoading={createMutation.isPending}
       />
       <EditBannerModal
-        key={
-          selectedBanner
-            ? `edit-banner-${selectedBanner._id}`
-            : "edit-banner-closed"
-        }
+        key={selectedBanner ? `edit-banner-${selectedBanner._id}` : 'edit-banner-closed'}
         isOpen={editModalOpen}
         onClose={() => {
           setEditModalOpen(false);

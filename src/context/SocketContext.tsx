@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
-import { useAppSelector } from "@/hooks/hooks";
-import { useQueryClient } from "@tanstack/react-query";
-import { initSocketEvents } from "@/socket/index";
-import { SocketContextType } from "@/types/socket";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { io, Socket } from 'socket.io-client';
+import { useAppSelector } from '@/hooks/hooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { initSocketEvents } from '@/socket/index';
+import { SocketContextType } from '@/types/socket';
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
@@ -25,23 +25,23 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Create socket connection
     const socketUrl = process.env.NEXT_PUBLIC_API_URL;
-    
+
     if (!socketUrl) {
-      console.warn("NEXT_PUBLIC_API_URL is not defined");
+      console.warn('NEXT_PUBLIC_API_URL is not defined');
       return;
     }
 
     const socketInstance = io(socketUrl, {
-      transports: ["websocket"],
+      transports: ['websocket'],
       withCredentials: true,
     });
 
-    socketInstance.on("connect", () => {
+    socketInstance.on('connect', () => {
       setIsConnected(true);
       setSocket(socketInstance);
     });
 
-    socketInstance.on("disconnect", () => {
+    socketInstance.on('disconnect', () => {
       setIsConnected(false);
       setSocket(null);
     });
@@ -56,8 +56,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   }, [isAuthenticated, queryClient]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={{ socket, isConnected }}>{children}</SocketContext.Provider>
   );
 };

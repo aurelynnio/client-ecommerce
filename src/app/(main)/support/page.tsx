@@ -1,20 +1,20 @@
-import InfoPage from "@/components/common/InfoPage";
+import InfoPage from '@/components/common/InfoPage';
 
 const sections = [
   {
-    title: "Cách liên hệ",
+    title: 'Cách liên hệ',
     items: [
-      "Hotline: 1900-6868 (08:00 - 22:00)",
-      "Email: support@store.local",
-      "Mục Trợ giúp trong tài khoản cá nhân",
+      'Hotline: 1900-6868 (08:00 - 22:00)',
+      'Email: support@store.local',
+      'Mục Trợ giúp trong tài khoản cá nhân',
     ],
   },
   {
-    title: "Thông tin cần chuẩn bị",
+    title: 'Thông tin cần chuẩn bị',
     items: [
-      "Mã đơn hàng hoặc email tài khoản",
-      "Ảnh/chứng từ liên quan nếu có",
-      "Mô tả ngắn gọn vấn đề cần hỗ trợ",
+      'Mã đơn hàng hoặc email tài khoản',
+      'Ảnh/chứng từ liên quan nếu có',
+      'Mô tả ngắn gọn vấn đề cần hỗ trợ',
     ],
   },
 ];

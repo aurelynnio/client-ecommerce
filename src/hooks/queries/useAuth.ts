@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
 import {
   AuthLogin,
   AuthRegister,
@@ -8,9 +8,9 @@ import {
   PasswordReset,
   TwoFactorLoginChallenge,
   User,
-} from "@/types/auth";
-import { useAppDispatch } from "@/hooks/hooks";
-import { authSlice } from "@/features/auth/authSlice";
+} from '@/types/auth';
+import { useAppDispatch } from '@/hooks/hooks';
+import { authSlice } from '@/features/auth/authSlice';
 import {
   cartKeys,
   notificationKeys,
@@ -18,7 +18,7 @@ import {
   shopKeys,
   userKeys,
   wishlistKeys,
-} from "@/lib/queryKeys";
+} from '@/lib/queryKeys';
 
 interface VerifyCodePayload {
   email: string;
@@ -36,7 +36,7 @@ interface VerifyLoginTwoFactorPayload {
 
 const authApi = {
   login: async (credentials: AuthLogin): Promise<LoginResult> => {
-    const response = await instance.post("/auth/login", credentials, {
+    const response = await instance.post('/auth/login', credentials, {
       withCredentials: true,
     });
     return extractApiData(response);
@@ -48,61 +48,59 @@ const authApi = {
       email: credentials.email,
       password: credentials.password,
     };
-    const response = await instance.post("/auth/register", payload, {
+    const response = await instance.post('/auth/register', payload, {
       withCredentials: true,
     });
     return extractApiData(response);
   },
 
   sendVerificationCode: async (payload: { email: string }): Promise<unknown> => {
-    const response = await instance.post("/auth/send-verification-code", payload, {
+    const response = await instance.post('/auth/send-verification-code', payload, {
       withCredentials: true,
     });
     return extractApiData(response);
   },
 
   verifyCode: async (payload: VerifyCodePayload): Promise<User> => {
-    const response = await instance.post("/auth/verify-code", payload);
+    const response = await instance.post('/auth/verify-code', payload);
     return extractApiData(response);
   },
 
   forgotPassword: async (email: string): Promise<unknown> => {
-    const response = await instance.post("/auth/forgot-password", { email });
+    const response = await instance.post('/auth/forgot-password', { email });
     return extractApiData(response);
   },
 
   resetPassword: async (payload: PasswordReset): Promise<unknown> => {
-    const response = await instance.post("/auth/reset-password", payload);
+    const response = await instance.post('/auth/reset-password', payload);
     return extractApiData(response);
   },
 
   logout: async (): Promise<void> => {
-    await instance.post("/auth/logout");
+    await instance.post('/auth/logout');
   },
 
   refreshToken: async (): Promise<RefreshTokenResponse> => {
-    const response = await instance.post("/auth/refresh-token");
+    const response = await instance.post('/auth/refresh-token');
     return extractApiData(response);
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const response = await instance.get("/users/profile");
+    const response = await instance.get('/users/profile');
     return extractApiData(response);
   },
 
-  verifyLoginTwoFactor: async (
-    payload: VerifyLoginTwoFactorPayload,
-  ): Promise<User> => {
-    const response = await instance.post("/auth/2fa/verify-login", payload, {
+  verifyLoginTwoFactor: async (payload: VerifyLoginTwoFactorPayload): Promise<User> => {
+    const response = await instance.post('/auth/2fa/verify-login', payload, {
       withCredentials: true,
     });
     return extractApiData(response);
   },
 
   resendLoginTwoFactorCode: async (
-    payload: Pick<VerifyLoginTwoFactorPayload, "challengeToken">,
+    payload: Pick<VerifyLoginTwoFactorPayload, 'challengeToken'>,
   ): Promise<{ email: string; expiresIn: string }> => {
-    const response = await instance.post("/auth/2fa/resend-login-code", payload, {
+    const response = await instance.post('/auth/2fa/resend-login-code', payload, {
       withCredentials: true,
     });
     return extractApiData(response);
@@ -119,7 +117,7 @@ function clearUserSession(dispatch: ReturnType<typeof useAppDispatch>) {
 }
 
 function isTwoFactorChallenge(result: LoginResult): result is TwoFactorLoginChallenge {
-  return "requiresTwoFactor" in result && result.requiresTwoFactor === true;
+  return 'requiresTwoFactor' in result && result.requiresTwoFactor === true;
 }
 
 export function useLogin() {

@@ -12,7 +12,7 @@ export const SHOP_STATUS = {
   BANNED: 'banned',
 } as const;
 
-export type ShopStatus = typeof SHOP_STATUS[keyof typeof SHOP_STATUS];
+export type ShopStatus = (typeof SHOP_STATUS)[keyof typeof SHOP_STATUS];
 
 /**
  * Order status constants
@@ -27,7 +27,7 @@ export const ORDER_STATUS = {
   RETURNED: 'returned',
 } as const;
 
-export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
+export type OrderStatus = (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS];
 
 /**
  * Flash sale status constants
@@ -38,7 +38,7 @@ export const FLASH_SALE_STATUS = {
   ENDED: 'ended',
 } as const;
 
-export type FlashSaleStatus = typeof FLASH_SALE_STATUS[keyof typeof FLASH_SALE_STATUS];
+export type FlashSaleStatus = (typeof FLASH_SALE_STATUS)[keyof typeof FLASH_SALE_STATUS];
 
 /**
  * Product status constants
@@ -51,7 +51,7 @@ export const PRODUCT_STATUS = {
   DELETED: 'deleted',
 } as const;
 
-export type ProductStatusValue = typeof PRODUCT_STATUS[keyof typeof PRODUCT_STATUS];
+export type ProductStatusValue = (typeof PRODUCT_STATUS)[keyof typeof PRODUCT_STATUS];
 
 /**
  * Verification status constants
@@ -62,4 +62,4 @@ export const VERIFICATION_STATUS = {
   REJECTED: 'rejected',
 } as const;
 
-export type VerificationStatus = typeof VERIFICATION_STATUS[keyof typeof VERIFICATION_STATUS];
+export type VerificationStatus = (typeof VERIFICATION_STATUS)[keyof typeof VERIFICATION_STATUS];

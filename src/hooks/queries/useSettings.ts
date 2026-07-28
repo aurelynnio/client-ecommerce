@@ -2,26 +2,22 @@
  * Settings React Query Hooks (Admin)
  * Hooks for managing system settings
  */
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { settingsKeys } from "@/lib/queryKeys";
-import { Settings, UpdateSettingsPayload } from "@/types/settings";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { settingsKeys } from '@/lib/queryKeys';
+import { Settings, UpdateSettingsPayload } from '@/types/settings';
 
 const settingsApi = {
   getSettings: async (): Promise<Settings> => {
-    const response = await instance.get("/settings");
+    const response = await instance.get('/settings');
     return extractApiData(response);
   },
 
   updateSettings: async (data: UpdateSettingsPayload): Promise<Settings> => {
-    const response = await instance.put("/settings", data);
+    const response = await instance.put('/settings', data);
     return extractApiData(response);
   },
 };
@@ -30,12 +26,7 @@ const settingsApi = {
  * Fetch current settings
  */
 export function useSettings(options?: { enabled?: boolean }) {
-  return useQuery<
-    Settings,
-    Error,
-    Settings,
-    ReturnType<typeof settingsKeys.current>
-  >({
+  return useQuery<Settings, Error, Settings, ReturnType<typeof settingsKeys.current>>({
     queryKey: settingsKeys.current(),
     queryFn: settingsApi.getSettings,
     enabled: options?.enabled,
@@ -55,7 +46,7 @@ export function useUpdateSettings() {
       queryClient.setQueryData(settingsKeys.current(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update settings failed" });
+      errorHandler.log(error, { context: 'Update settings failed' });
     },
   });
 }

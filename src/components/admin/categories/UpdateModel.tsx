@@ -1,9 +1,8 @@
-
-"use client";
-import { useEffect } from "react";
-import { useForm, Resolver } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+'use client';
+import { useEffect } from 'react';
+import { useForm, Resolver } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +10,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -21,14 +20,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { Save, X } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Category } from "@/types/category";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Save, X } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Category } from '@/types/category';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -36,19 +35,19 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 // Define Zod validation schema với giá trị mặc định rõ ràng
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Tên danh mục là bắt buộc" }),
+  name: z.string().min(1, { message: 'Tên danh mục là bắt buộc' }),
   slug: z
     .string()
-    .min(1, { message: "Slug là bắt buộc" })
+    .min(1, { message: 'Slug là bắt buộc' })
     .regex(/^[a-z0-9-]+$/, {
-      message: "Slug chỉ được chứa chữ cái thường, số và dấu gạch ngang",
+      message: 'Slug chỉ được chứa chữ cái thường, số và dấu gạch ngang',
     }),
-  description: z.string().default(""),
+  description: z.string().default(''),
   isActive: z.boolean().default(true),
 });
 
@@ -73,43 +72,40 @@ export function EditCategoryModal({
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema) as Resolver<FormData>,
     defaultValues: {
-      name: "",
-      slug: "",
-      description: "",
+      name: '',
+      slug: '',
+      description: '',
       isActive: true,
     },
   });
 
-
   useEffect(() => {
     if (category) {
       form.reset({
-        name: category.name || "",
-        slug: category.slug || "",
-        description: category.description || "",
+        name: category.name || '',
+        slug: category.slug || '',
+        description: category.description || '',
         isActive: category.isActive ?? true,
       });
     }
   }, [category, form]);
 
-
   const generateSlug = (name: string) => {
     return name
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9 ]/g, "")
-      .replace(/\s+/g, "-");
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9 ]/g, '')
+      .replace(/\s+/g, '-');
   };
 
   // Xử lý khi name thay đổi
   const handleNameChange = (name: string) => {
-    const currentSlug = form.getValues("slug");
-    const originalSlug = category ? generateSlug(category.name || "") : "";
-
+    const currentSlug = form.getValues('slug');
+    const originalSlug = category ? generateSlug(category.name || '') : '';
 
     if (!currentSlug || currentSlug === originalSlug) {
-      form.setValue("slug", generateSlug(name), { shouldValidate: true });
+      form.setValue('slug', generateSlug(name), { shouldValidate: true });
     }
   };
 
@@ -131,14 +127,17 @@ export function EditCategoryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[500px] p-6")}>
+      <DialogContent className={cn(adminDialogContentClass, 'sm:max-w-[500px] p-6')}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-xl font-semibold tracking-tight">
                 Chỉnh sửa danh mục
-                <Badge variant="outline" className="text-sm rounded-lg bg-white/50 border-border/50">
-                   ID: {category._id?.slice(-4)}
+                <Badge
+                  variant="outline"
+                  className="text-sm rounded-lg bg-white/50 border-border/50"
+                >
+                  ID: {category._id?.slice(-4)}
                 </Badge>
               </DialogTitle>
               <DialogDescription className="text-muted-foreground">
@@ -163,7 +162,7 @@ export function EditCategoryModal({
                         field.onChange(e);
                         handleNameChange(e.target.value);
                       }}
-                       className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                      className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                     />
                   </FormControl>
                   <FormMessage />
@@ -181,15 +180,13 @@ export function EditCategoryModal({
                     Slug <span className="text-destructive">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="ten-danh-muc" 
-                      {...field} 
-                      className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                    <Input
+                      placeholder="ten-danh-muc"
+                      {...field}
+                      className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                     />
                   </FormControl>
-                  <FormDescription>
-                    SEO URL: /categories/{field.value}
-                  </FormDescription>
+                  <FormDescription>SEO URL: /categories/{field.value}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -207,8 +204,11 @@ export function EditCategoryModal({
                       placeholder="Nhập mô tả danh mục"
                       rows={3}
                       {...field}
-                      value={field.value || ""}
-                      className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
+                      value={field.value || ''}
+                      className={cn(
+                        adminFieldSurfaceClass,
+                        'min-h-24 resize-none transition-colors focus:bg-white',
+                      )}
                     />
                   </FormControl>
                   <FormMessage />
@@ -221,22 +221,31 @@ export function EditCategoryModal({
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem className={cn(adminInsetPanelClass, "flex flex-row items-center justify-between p-3")}>
+                <FormItem
+                  className={cn(
+                    adminInsetPanelClass,
+                    'flex flex-row items-center justify-between p-3',
+                  )}
+                >
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Trạng thái</FormLabel>
                     <div className="flex items-center gap-2">
-                       {field.value ? (
-                          <Badge variant="default" className="bg-green-100 text-green-700 hover:bg-green-100 border-none">Đang hoạt động</Badge>
-                       ) : (
-                          <Badge variant="secondary" className="bg-gray-100 text-gray-600">Ngừng hoạt động</Badge>
-                       )}
+                      {field.value ? (
+                        <Badge
+                          variant="default"
+                          className="bg-green-100 text-green-700 hover:bg-green-100 border-none"
+                        >
+                          Đang hoạt động
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                          Ngừng hoạt động
+                        </Badge>
+                      )}
                     </div>
                   </div>
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                 </FormItem>
               )}
@@ -249,18 +258,14 @@ export function EditCategoryModal({
                   Ngày tạo
                 </FormLabel>
                 <p className="text-sm font-medium mt-1">
-                  {new Date(category.createdAt || "").toLocaleDateString(
-                    "vi-VN"
-                  )}
+                  {new Date(category.createdAt || '').toLocaleDateString('vi-VN')}
                 </p>
               </div>
               <div>
                 <FormLabel className="text-xs text-muted-foreground uppercase tracking-wider">
                   Số lượng sản phẩm
                 </FormLabel>
-                <p className="text-sm font-medium mt-1">
-                  {category.productCount || 0} sản phẩm
-                </p>
+                <p className="text-sm font-medium mt-1">{category.productCount || 0} sản phẩm</p>
               </div>
             </div>
 
@@ -270,7 +275,7 @@ export function EditCategoryModal({
                 variant="outline"
                 onClick={handleClose}
                 disabled={isLoading}
-                className={cn("sm:min-w-28", adminSecondaryButtonClass)}
+                className={cn('sm:min-w-28', adminSecondaryButtonClass)}
               >
                 <X className="h-4 w-4 mr-2" />
                 Hủy
@@ -278,14 +283,14 @@ export function EditCategoryModal({
               <Button
                 type="submit"
                 disabled={isLoading || !form.formState.isValid}
-                className={cn("sm:min-w-40", adminPrimaryButtonClass)}
+                className={cn('sm:min-w-40', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}
-                {isLoading ? "Đang lưu..." : "Lưu thay đổi"}
+                {isLoading ? 'Đang lưu...' : 'Lưu thay đổi'}
               </Button>
             </DialogFooter>
           </form>

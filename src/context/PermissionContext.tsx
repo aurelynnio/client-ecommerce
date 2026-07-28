@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useMemo, useCallback } from "react";
-import { useAppSelector } from "@/hooks/hooks";
+import React, { createContext, useContext, useMemo, useCallback } from 'react';
+import { useAppSelector } from '@/hooks/hooks';
 
 /**
  * Permission Context Type Definition
@@ -33,9 +33,7 @@ const PermissionContext = createContext<PermissionContextType | null>(null);
  * Permission Provider Component
  * Provides permission checking functionality to child components
  */
-export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { data, isAuthenticated } = useAppSelector((state) => state.auth);
 
   // Get permissions from user object
@@ -54,18 +52,18 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
   const hasPermission = useCallback(
     (permission: string): boolean => {
       // Admin has all permissions
-      if (permissions.includes("*")) return true;
+      if (permissions.includes('*')) return true;
 
       // Check for exact match
       if (permissions.includes(permission)) return true;
 
       // Check for manage permission (grants all CRUD)
-      const [resource] = permission.split(":");
+      const [resource] = permission.split(':');
       if (permissions.includes(`${resource}:manage`)) return true;
 
       return false;
     },
-    [permissions]
+    [permissions],
   );
 
   /**
@@ -76,7 +74,7 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
       if (!perms || perms.length === 0) return false;
       return perms.some((p) => hasPermission(p));
     },
-    [hasPermission]
+    [hasPermission],
   );
 
   /**
@@ -87,7 +85,7 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
       if (!perms || perms.length === 0) return false;
       return perms.every((p) => hasPermission(p));
     },
-    [hasPermission]
+    [hasPermission],
   );
 
   /**
@@ -97,12 +95,12 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
     (resource: string, action: string): boolean => {
       return hasPermission(`${resource}:${action}`);
     },
-    [hasPermission]
+    [hasPermission],
   );
 
   // Computed properties
-  const isAdmin = role === "admin";
-  const isSeller = role === "seller";
+  const isAdmin = role === 'admin';
+  const isSeller = role === 'seller';
 
   const value: PermissionContextType = useMemo(
     () => ({
@@ -126,14 +124,10 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
       isSeller,
       isAuthenticated,
       role,
-    ]
+    ],
   );
 
-  return (
-    <PermissionContext.Provider value={value}>
-      {children}
-    </PermissionContext.Provider>
-  );
+  return <PermissionContext.Provider value={value}>{children}</PermissionContext.Provider>;
 };
 
 /**
@@ -143,7 +137,7 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
 export const usePermissions = (): PermissionContextType => {
   const context = useContext(PermissionContext);
   if (!context) {
-    throw new Error("usePermissions must be used within PermissionProvider");
+    throw new Error('usePermissions must be used within PermissionProvider');
   }
   return context;
 };

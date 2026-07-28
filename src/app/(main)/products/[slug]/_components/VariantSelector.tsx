@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { cn } from "@/utils/cn";
-import { Variant, getVariantDisplay } from "@/types/product";
+import Image from 'next/image';
+import { cn } from '@/utils/cn';
+import { Variant, getVariantDisplay } from '@/types/product';
 
 interface VariantSelectorProps {
   variants: Variant[];
@@ -14,9 +14,9 @@ interface VariantSelectorProps {
   onSizeSelect?: (size: string) => void;
 }
 
-export function VariantSelector({ 
-  variants, 
-  selectedIndex, 
+export function VariantSelector({
+  variants,
+  selectedIndex,
   onSelect,
   sizes = [],
   selectedSize = null,
@@ -39,33 +39,33 @@ export function VariantSelector({
               {variants.map((variant, index) => {
                 const isOutOfStock = variant.stock <= 0;
                 const isSelected = selectedIndex === index;
-                
+
                 return (
                   <button
                     key={variant._id}
                     onClick={() => !isOutOfStock && onSelect(index)}
                     disabled={isOutOfStock}
                     className={cn(
-                      "flex items-center gap-2 p-1.5 border rounded-lg transition-all overflow-hidden bg-white text-left",
+                      'flex items-center gap-2 p-1.5 border rounded-lg transition-[border-color,background-color,box-shadow] overflow-hidden bg-white text-left',
                       isSelected
-                        ? "border-[#E53935] ring-1 ring-[#E53935] bg-red-50/30"
-                        : "border-gray-200 hover:border-gray-300",
-                      isOutOfStock && "opacity-50 cursor-not-allowed bg-gray-50"
+                        ? 'border-primary ring-1 ring-primary bg-primary-light'
+                        : 'border-border hover:border-muted-foreground/30',
+                      isOutOfStock && 'opacity-50 cursor-not-allowed bg-muted',
                     )}
                   >
                     {/* Variant Image */}
                     {variant.images?.[0] && (
-                      <div className="w-10 h-10 relative bg-gray-50 shrink-0 rounded overflow-hidden">
-                        <Image 
-                          src={variant.images[0]} 
-                          alt={variant.name} 
-                          fill 
-                          className="object-cover" 
+                      <div className="w-10 h-10 relative bg-muted/40 shrink-0 rounded overflow-hidden">
+                        <Image
+                          src={variant.images[0]}
+                          alt={variant.name}
+                          fill
+                          className="object-cover"
                           sizes="40px"
                         />
                       </div>
                     )}
-                    
+
                     {/* Variant Name */}
                     <div className="flex-1 min-w-0 pr-1">
                       <span className="text-xs text-gray-700 line-clamp-2 font-medium">
@@ -91,16 +91,16 @@ export function VariantSelector({
             <div className="flex flex-wrap gap-2">
               {sizes.map((size) => {
                 const isSelected = selectedSize === size;
-                
+
                 return (
                   <button
                     key={size}
                     onClick={() => onSizeSelect?.(size)}
                     className={cn(
-                      "min-w-[48px] h-10 px-4 border rounded-lg text-sm font-medium transition-all",
+                      'min-w-[48px] h-10 px-4 border rounded-lg text-sm font-medium transition-[border-color,background-color,color,box-shadow]',
                       isSelected
-                        ? "border-[#E53935] bg-[#E53935] text-white"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                        ? 'border-primary bg-primary text-white'
+                        : 'border-border bg-card text-foreground hover:border-muted-foreground/30 hover:bg-muted/40',
                     )}
                   >
                     {size}
@@ -117,22 +117,25 @@ export function VariantSelector({
 
       {/* Selected Info Summary */}
       {(selectedVariant || selectedSize) && (
-        <div className="flex items-center gap-3 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+        <div className="flex items-center gap-3 text-sm text-gray-600 bg-muted/30 border border-border p-3 rounded-lg">
           <span className="text-gray-400">Đã chọn:</span>
           {selectedVariant && (
             <span className="font-medium text-gray-800">
               {selectedVariant.name || getVariantDisplay(selectedVariant)}
             </span>
           )}
-          {selectedVariant && selectedSize && (
-            <span className="text-gray-300">•</span>
-          )}
+          {selectedVariant && selectedSize && <span className="text-gray-300">•</span>}
           {selectedSize && (
             <span className="font-medium text-gray-800">Kích cỡ {selectedSize}</span>
           )}
           <span className="text-gray-300">|</span>
           <span>
-            Kho: <strong className={selectedVariant && selectedVariant.stock <= 5 ? "text-orange-500" : "text-gray-800"}>
+            Kho:{' '}
+            <strong
+              className={
+                selectedVariant && selectedVariant.stock <= 5 ? 'text-orange-500' : 'text-gray-800'
+              }
+            >
               {selectedVariant?.stock || 0}
             </strong>
           </span>

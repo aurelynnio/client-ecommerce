@@ -2,22 +2,17 @@
  * Shop Category React Query Hooks
  * Replaces shopCategoryAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { shopCategoryKeys } from "@/lib/queryKeys";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { shopCategoryKeys } from '@/lib/queryKeys';
 import {
   ShopCategory,
   CreateShopCategoryPayload,
   UpdateShopCategoryPayload,
-} from "@/types/shopCategory";
+} from '@/types/shopCategory';
 
 function invalidateAllShopCategoryQueries(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: shopCategoryKeys.all });
@@ -25,7 +20,7 @@ function invalidateAllShopCategoryQueries(queryClient: QueryClient) {
 
 const normalizeCategory = (category: unknown): ShopCategory => {
   const c =
-    category && typeof category === "object"
+    category && typeof category === 'object'
       ? (category as Record<string, unknown>)
       : ({} as Record<string, unknown>);
 
@@ -35,27 +30,22 @@ const normalizeCategory = (category: unknown): ShopCategory => {
   const displayOrder = c.displayOrder;
 
   return {
-    _id: typeof c._id === "string" ? c._id : "",
-    shop:
-      typeof shopId === "string"
-        ? shopId
-        : typeof shop === "string"
-          ? shop
-          : "",
-    name: typeof c.name === "string" ? c.name : "",
-    slug: typeof c.slug === "string" ? c.slug : "",
-    description: typeof c.description === "string" ? c.description : "",
-    image: typeof c.image === "string" ? c.image : "",
-    productCount: typeof c.productCount === "number" ? c.productCount : 0,
-    isActive: typeof c.isActive === "boolean" ? c.isActive : true,
+    _id: typeof c._id === 'string' ? c._id : '',
+    shop: typeof shopId === 'string' ? shopId : typeof shop === 'string' ? shop : '',
+    name: typeof c.name === 'string' ? c.name : '',
+    slug: typeof c.slug === 'string' ? c.slug : '',
+    description: typeof c.description === 'string' ? c.description : '',
+    image: typeof c.image === 'string' ? c.image : '',
+    productCount: typeof c.productCount === 'number' ? c.productCount : 0,
+    isActive: typeof c.isActive === 'boolean' ? c.isActive : true,
     sortOrder:
-      typeof sortOrder === "number"
+      typeof sortOrder === 'number'
         ? sortOrder
-        : typeof displayOrder === "number"
+        : typeof displayOrder === 'number'
           ? displayOrder
           : 0,
-    createdAt: typeof c.createdAt === "string" ? c.createdAt : "",
-    updatedAt: typeof c.updatedAt === "string" ? c.updatedAt : "",
+    createdAt: typeof c.createdAt === 'string' ? c.createdAt : '',
+    updatedAt: typeof c.updatedAt === 'string' ? c.updatedAt : '',
   };
 };
 
@@ -63,7 +53,7 @@ const normalizeCategoryList = (data: unknown): ShopCategory[] => {
   if (Array.isArray(data)) {
     return data.map(normalizeCategory);
   }
-  if (data && typeof data === "object") {
+  if (data && typeof data === 'object') {
     const categories = (data as Record<string, unknown>).categories;
     if (Array.isArray(categories)) {
       return categories.map(normalizeCategory);
@@ -72,13 +62,11 @@ const normalizeCategoryList = (data: unknown): ShopCategory[] => {
   return [];
 };
 
-const mapCategoryPayload = (
-  payload: CreateShopCategoryPayload | UpdateShopCategoryPayload
-) => {
+const mapCategoryPayload = (payload: CreateShopCategoryPayload | UpdateShopCategoryPayload) => {
   const { sortOrder, ...rest } = payload;
   return {
     ...rest,
-    ...(typeof sortOrder === "number" ? { displayOrder: sortOrder } : {}),
+    ...(typeof sortOrder === 'number' ? { displayOrder: sortOrder } : {}),
   };
 };
 
@@ -86,7 +74,7 @@ const mapCategoryPayload = (
 const shopCategoryApi = {
   // Get seller's own categories
   getMy: async (): Promise<ShopCategory[]> => {
-    const response = await instance.get("/shop-categories/my");
+    const response = await instance.get('/shop-categories/my');
     const data = extractApiData(response);
     return normalizeCategoryList(data);
   },
@@ -99,22 +87,13 @@ const shopCategoryApi = {
   },
 
   create: async (data: CreateShopCategoryPayload): Promise<ShopCategory> => {
-    const response = await instance.post(
-      "/shop-categories",
-      mapCategoryPayload(data)
-    );
+    const response = await instance.post('/shop-categories', mapCategoryPayload(data));
     const result = extractApiData(response);
     return normalizeCategory(result);
   },
 
-  update: async (
-    categoryId: string,
-    data: UpdateShopCategoryPayload
-  ): Promise<ShopCategory> => {
-    const response = await instance.put(
-      `/shop-categories/${categoryId}`,
-      mapCategoryPayload(data)
-    );
+  update: async (categoryId: string, data: UpdateShopCategoryPayload): Promise<ShopCategory> => {
+    const response = await instance.put(`/shop-categories/${categoryId}`, mapCategoryPayload(data));
     const result = extractApiData(response);
     return normalizeCategory(result);
   },
@@ -141,10 +120,7 @@ export function useMyShopCategories() {
 /**
  * Get shop categories by shop ID (public)
  */
-export function useShopCategoriesByShop(
-  shopId: string,
-  options?: { enabled?: boolean }
-) {
+export function useShopCategoriesByShop(shopId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: shopCategoryKeys.byShop(shopId),
     queryFn: () => shopCategoryApi.getByShop(shopId),
@@ -167,7 +143,7 @@ export function useCreateShopCategory() {
       invalidateAllShopCategoryQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create shop category failed" });
+      errorHandler.log(error, { context: 'Create shop category failed' });
     },
   });
 }
@@ -179,18 +155,13 @@ export function useUpdateShopCategory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      categoryId,
-      data,
-    }: {
-      categoryId: string;
-      data: UpdateShopCategoryPayload;
-    }) => shopCategoryApi.update(categoryId, data),
+    mutationFn: ({ categoryId, data }: { categoryId: string; data: UpdateShopCategoryPayload }) =>
+      shopCategoryApi.update(categoryId, data),
     onSuccess: () => {
       invalidateAllShopCategoryQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update shop category failed" });
+      errorHandler.log(error, { context: 'Update shop category failed' });
     },
   });
 }
@@ -207,7 +178,7 @@ export function useDeleteShopCategory() {
       invalidateAllShopCategoryQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete shop category failed" });
+      errorHandler.log(error, { context: 'Delete shop category failed' });
     },
   });
 }

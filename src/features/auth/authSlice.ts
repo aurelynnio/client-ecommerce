@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { AuthState, User } from "@/types/auth";
+import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { AuthState, User } from '@/types/auth';
 import {
   forgotPassword,
   login,
@@ -9,7 +9,7 @@ import {
   resetPassword,
   sendCode,
   verifyCode,
-} from "./authAction";
+} from './authAction';
 
 const initState: AuthState = {
   loading: false,
@@ -18,7 +18,7 @@ const initState: AuthState = {
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState: initState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {

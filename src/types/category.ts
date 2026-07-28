@@ -1,4 +1,4 @@
-import { BaseEntity, PaginationData } from "./common";
+import { BaseEntity, PaginationData } from './common';
 
 // Parent category for populated reference
 export interface ParentCategory extends BaseEntity {

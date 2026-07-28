@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,22 +6,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 // Updated: Import from voucher types with backward compatibility aliases
-import { UpdateVoucherData, Voucher } from "@/types/voucher";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
+import { UpdateVoucherData, Voucher } from '@/types/voucher';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -29,8 +29,8 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 interface UpdateModelDiscountProps {
   open: boolean;
@@ -49,19 +49,17 @@ export function UpdateModelDiscount({
 }: UpdateModelDiscountProps) {
   const initialFormData = useMemo(
     () => ({
-      code: discount?.code || "",
-      description: discount?.description || "",
-      discountType: (discount?.type === "percentage" ? "percent" : "fixed") as
-        | "percent"
-        | "fixed",
-      discountValue: discount?.value?.toString() || "",
-      startDate: discount?.startDate ? discount.startDate.split("T")[0] : "",
-      endDate: discount?.endDate ? discount.endDate.split("T")[0] : "",
-      minOrderValue: discount?.minOrderValue?.toString() || "",
-      usageLimit: discount?.usageLimit?.toString() || "1",
+      code: discount?.code || '',
+      description: discount?.description || '',
+      discountType: (discount?.type === 'percentage' ? 'percent' : 'fixed') as 'percent' | 'fixed',
+      discountValue: discount?.value?.toString() || '',
+      startDate: discount?.startDate ? discount.startDate.split('T')[0] : '',
+      endDate: discount?.endDate ? discount.endDate.split('T')[0] : '',
+      minOrderValue: discount?.minOrderValue?.toString() || '',
+      usageLimit: discount?.usageLimit?.toString() || '1',
       isActive: discount?.isActive ?? true,
     }),
-    [discount]
+    [discount],
   );
 
   const [formData, setFormData] = useState(initialFormData);
@@ -74,7 +72,7 @@ export function UpdateModelDiscount({
     const discountData: UpdateVoucherData = {
       code: formData.code,
       description: formData.description,
-      type: formData.discountType === "percent" ? "percentage" : "fixed_amount",
+      type: formData.discountType === 'percent' ? 'percentage' : 'fixed_amount',
       value: Number(formData.discountValue),
       minOrderValue: Number(formData.minOrderValue) || 0,
       usageLimit: Number(formData.usageLimit),
@@ -92,7 +90,7 @@ export function UpdateModelDiscount({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[600px] p-6")}>
+      <DialogContent className={cn(adminDialogContentClass, 'sm:max-w-[600px] p-6')}>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">
             Cập nhật mã giảm giá
@@ -112,10 +110,10 @@ export function UpdateModelDiscount({
                 <Input
                   id="code"
                   value={formData.code}
-                  onChange={(e) => handleChange("code", e.target.value)}
+                  onChange={(e) => handleChange('code', e.target.value)}
                   placeholder="VD: GIAMGIA2024"
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
 
@@ -125,12 +123,14 @@ export function UpdateModelDiscount({
                 </Label>
                 <Select
                   value={formData.discountType}
-                  onValueChange={(value) => handleChange("discountType", value)}
+                  onValueChange={(value) => handleChange('discountType', value)}
                 >
-                  <SelectTrigger className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}>
+                  <SelectTrigger
+                    className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  >
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-[#ebe2d8]">
+                  <SelectContent className="rounded-lg border-border">
                     <SelectItem value="percent">Phần trăm (%)</SelectItem>
                     <SelectItem value="fixed">Số tiền cố định</SelectItem>
                   </SelectContent>
@@ -145,32 +145,30 @@ export function UpdateModelDiscount({
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => handleChange("description", e.target.value)}
+                onChange={(e) => handleChange('description', e.target.value)}
                 placeholder="Mô tả mã giảm giá..."
-                className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
+                className={cn(
+                  adminFieldSurfaceClass,
+                  'min-h-24 resize-none transition-colors focus:bg-white',
+                )}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="discountValue" className="text-sm font-medium">
-                  Giá trị giảm *{" "}
-                  {formData.discountType === "percent" ? "(%)" : "(VNĐ)"}
+                  Giá trị giảm * {formData.discountType === 'percent' ? '(%)' : '(VNĐ)'}
                 </Label>
                 <Input
                   id="discountValue"
                   type="number"
                   value={formData.discountValue}
-                  onChange={(e) =>
-                    handleChange("discountValue", e.target.value)
-                  }
-                  placeholder={
-                    formData.discountType === "percent" ? "10" : "50000"
-                  }
+                  onChange={(e) => handleChange('discountValue', e.target.value)}
+                  placeholder={formData.discountType === 'percent' ? '10' : '50000'}
                   min="0"
-                  max={formData.discountType === "percent" ? "100" : undefined}
+                  max={formData.discountType === 'percent' ? '100' : undefined}
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
 
@@ -182,11 +180,11 @@ export function UpdateModelDiscount({
                   id="usageLimit"
                   type="number"
                   value={formData.usageLimit}
-                  onChange={(e) => handleChange("usageLimit", e.target.value)}
+                  onChange={(e) => handleChange('usageLimit', e.target.value)}
                   placeholder="100"
                   min="1"
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
             </div>
@@ -200,9 +198,9 @@ export function UpdateModelDiscount({
                   id="startDate"
                   type="date"
                   value={formData.startDate}
-                  onChange={(e) => handleChange("startDate", e.target.value)}
+                  onChange={(e) => handleChange('startDate', e.target.value)}
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
 
@@ -214,9 +212,9 @@ export function UpdateModelDiscount({
                   id="endDate"
                   type="date"
                   value={formData.endDate}
-                  onChange={(e) => handleChange("endDate", e.target.value)}
+                  onChange={(e) => handleChange('endDate', e.target.value)}
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
             </div>
@@ -229,23 +227,20 @@ export function UpdateModelDiscount({
                 id="minOrderValue"
                 type="number"
                 value={formData.minOrderValue}
-                onChange={(e) => handleChange("minOrderValue", e.target.value)}
+                onChange={(e) => handleChange('minOrderValue', e.target.value)}
                 placeholder="0"
                 min="0"
-                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
               />
             </div>
 
-            <div className={cn(adminInsetPanelClass, "flex items-center space-x-3 p-4")}>
+            <div className={cn(adminInsetPanelClass, 'flex items-center space-x-3 p-4')}>
               <Switch
                 id="isActive"
                 checked={formData.isActive}
-                onCheckedChange={(checked) => handleChange("isActive", checked)}
+                onCheckedChange={(checked) => handleChange('isActive', checked)}
               />
-              <Label
-                htmlFor="isActive"
-                className="text-sm font-medium cursor-pointer"
-              >
+              <Label htmlFor="isActive" className="text-sm font-medium cursor-pointer">
                 Kích hoạt mã giảm giá
               </Label>
             </div>
@@ -257,18 +252,16 @@ export function UpdateModelDiscount({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className={cn("sm:min-w-28", adminSecondaryButtonClass)}
+              className={cn('sm:min-w-28', adminSecondaryButtonClass)}
             >
               Hủy
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
-              className={cn("sm:min-w-36", adminPrimaryButtonClass)}
+              className={cn('sm:min-w-36', adminPrimaryButtonClass)}
             >
-              {isLoading && (
-                <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
-              )}
+              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />}
               Cập nhật
             </Button>
           </DialogFooter>

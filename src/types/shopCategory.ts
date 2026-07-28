@@ -1,4 +1,4 @@
-import { BaseEntity } from "./common";
+import { BaseEntity } from './common';
 
 // Shop category interface
 export interface ShopCategory extends BaseEntity {

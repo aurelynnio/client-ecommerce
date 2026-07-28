@@ -4,13 +4,13 @@
  */
 
 import { toast } from 'sonner';
-import { extractApiError } from "@/utils/api";
-import type { ApiError } from "@/utils/api";
+import { extractApiError } from '@/utils/api';
+import type { ApiError } from '@/utils/api';
 
 /**
  * Standard API error structure
  */
-export type { ApiError } from "@/utils/api";
+export type { ApiError } from '@/utils/api';
 
 /**
  * Options for error logging
@@ -64,16 +64,16 @@ export const errorHandler = {
    */
   handle(
     error: unknown,
-    options: ErrorHandlerOptions & { notify?: boolean; notifyMessage?: string } = {}
+    options: ErrorHandlerOptions & { notify?: boolean; notifyMessage?: string } = {},
   ): ApiError {
     const apiError = extractError(error);
-    
+
     this.log(error, options);
-    
+
     if (options.notify) {
       toast.error(options.notifyMessage || apiError.message);
     }
-    
+
     return apiError;
   },
 };

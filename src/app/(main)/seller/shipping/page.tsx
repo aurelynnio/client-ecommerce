@@ -1,28 +1,28 @@
-"use client";
-import { useState } from "react";
-import { Truck, Plus, Edit2, Trash2, Save, X, Package } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+'use client';
+import { useState } from 'react';
+import { Truck, Plus, Edit2, Trash2, Save, X, Package } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 import {
   useMyShippingTemplates,
   useCreateShippingTemplate,
   useUpdateShippingTemplate,
   useDeleteShippingTemplate,
-} from "@/hooks/queries";
-import { ShippingTemplate, ShippingRule, CreateShippingTemplatePayload } from "@/types/shipping";
-import { formatCurrency } from "@/utils/format";
-import { getSafeErrorMessage } from "@/api";
+} from '@/hooks/queries';
+import { ShippingTemplate, ShippingRule, CreateShippingTemplatePayload } from '@/types/shipping';
+import { formatCurrency } from '@/utils/format';
+import { getSafeErrorMessage } from '@/api';
 
 export default function SellerShippingPage() {
   const { data: templates = [], isLoading } = useMyShippingTemplates();
@@ -36,15 +36,15 @@ export default function SellerShippingPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<CreateShippingTemplatePayload>({
-    name: "",
-    rules: [{ name: "Phí cố định", type: "fixed", baseFee: 30000 }],
+    name: '',
+    rules: [{ name: 'Phí cố định', type: 'fixed', baseFee: 30000 }],
     isDefault: false,
   });
 
   const handleAddRule = () => {
     setFormData((prev) => ({
       ...prev,
-      rules: [...prev.rules, { name: "", type: "fixed", baseFee: 0 }],
+      rules: [...prev.rules, { name: '', type: 'fixed', baseFee: 0 }],
     }));
   };
 
@@ -55,27 +55,21 @@ export default function SellerShippingPage() {
     }));
   };
 
-  const handleRuleChange = (
-    index: number,
-    field: keyof ShippingRule,
-    value: string | number,
-  ) => {
+  const handleRuleChange = (index: number, field: keyof ShippingRule, value: string | number) => {
     setFormData((prev) => ({
       ...prev,
-      rules: prev.rules.map((rule, i) =>
-        i === index ? { ...rule, [field]: value } : rule,
-      ),
+      rules: prev.rules.map((rule, i) => (i === index ? { ...rule, [field]: value } : rule)),
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      toast.error("Vui lòng nhập tên template");
+      toast.error('Vui lòng nhập tên template');
       return;
     }
     if (formData.rules.length === 0) {
-      toast.error("Vui lòng thêm ít nhất một quy tắc");
+      toast.error('Vui lòng thêm ít nhất một quy tắc');
       return;
     }
 
@@ -85,14 +79,14 @@ export default function SellerShippingPage() {
           templateId: editingId,
           data: formData,
         });
-        toast.success("Cập nhật template thành công!");
+        toast.success('Cập nhật template thành công!');
       } else {
         await createTemplateMutation.mutateAsync(formData);
-        toast.success("Tạo template thành công!");
+        toast.success('Tạo template thành công!');
       }
       resetForm();
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Thao tác thất bại"));
+      toast.error(getSafeErrorMessage(error, 'Thao tác thất bại'));
     }
   };
 
@@ -113,12 +107,12 @@ export default function SellerShippingPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Bạn có chắc muốn xóa template này?")) return;
+    if (!confirm('Bạn có chắc muốn xóa template này?')) return;
     try {
       await deleteTemplateMutation.mutateAsync(id);
-      toast.success("Xóa template thành công!");
+      toast.success('Xóa template thành công!');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Xóa template thất bại"));
+      toast.error(getSafeErrorMessage(error, 'Xóa template thất bại'));
     }
   };
 
@@ -126,8 +120,8 @@ export default function SellerShippingPage() {
     setShowForm(false);
     setEditingId(null);
     setFormData({
-      name: "",
-      rules: [{ name: "Phí cố định", type: "fixed", baseFee: 30000 }],
+      name: '',
+      rules: [{ name: 'Phí cố định', type: 'fixed', baseFee: 30000 }],
       isDefault: false,
     });
   };
@@ -137,14 +131,12 @@ export default function SellerShippingPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-[#f7f7f7] rounded-xl flex items-center justify-center">
-            <Truck className="h-6 w-6 text-purple-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+            <Truck className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">Phí vận chuyển</h1>
-            <p className="text-sm text-gray-500">
-              Quản lý các template phí ship của shop
-            </p>
+            <h1 className="text-xl font-semibold text-foreground">Phí vận chuyển</h1>
+            <p className="text-sm text-muted-foreground">Quản lý các template phí ship của shop</p>
           </div>
         </div>
         {!showForm && (
@@ -160,10 +152,10 @@ export default function SellerShippingPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="bg-[#f7f7f7] rounded-2xl p-6">
+        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
           <div className="flex items-center justify-between mb-5">
-            <h3 className="font-semibold text-gray-800">
-              {editingId ? "Chỉnh sửa template" : "Thêm template mới"}
+            <h3 className="font-semibold text-foreground">
+              {editingId ? 'Chỉnh sửa template' : 'Thêm template mới'}
             </h3>
             <Button
               type="button"
@@ -178,12 +170,10 @@ export default function SellerShippingPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label className="text-gray-600">Tên template *</Label>
+                <Label className="text-foreground">Tên template *</Label>
                 <Input
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="VD: Giao hàng tiêu chuẩn"
                   className="mt-1.5 h-11 rounded-xl border-0 bg-white"
                 />
@@ -193,21 +183,17 @@ export default function SellerShippingPage() {
                   <input
                     type="checkbox"
                     checked={formData.isDefault}
-                    onChange={(e) =>
-                      setFormData({ ...formData, isDefault: e.target.checked })
-                    }
+                    onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
                     className="rounded border-gray-300 w-4 h-4"
                   />
-                  <span className="text-sm text-gray-600">
-                    Đặt làm mặc định
-                  </span>
+                  <span className="text-sm text-muted-foreground">Đặt làm mặc định</span>
                 </label>
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-3">
-                <Label className="text-gray-600">Quy tắc tính phí</Label>
+                <Label className="text-foreground">Quy tắc tính phí</Label>
                 <Button
                   type="button"
                   variant="outline"
@@ -226,46 +212,32 @@ export default function SellerShippingPage() {
                     className="flex flex-col md:flex-row md:items-center gap-3 p-3 bg-white rounded-xl"
                   >
                     <Input
-                      className="w-full md:flex-1 h-10 rounded-lg border-0 bg-[#f7f7f7]"
+                      className="h-10 w-full bg-muted/50 md:flex-1"
                       placeholder="Tên quy tắc"
                       value={rule.name}
-                      onChange={(e) =>
-                        handleRuleChange(index, "name", e.target.value)
-                      }
+                      onChange={(e) => handleRuleChange(index, 'name', e.target.value)}
                     />
                     <Select
                       value={rule.type}
                       onValueChange={(v) =>
-                        handleRuleChange(
-                          index,
-                          "type",
-                          v as ShippingRule["type"],
-                        )
+                        handleRuleChange(index, 'type', v as ShippingRule['type'])
                       }
                     >
-                      <SelectTrigger className="w-full md:w-[150px] h-10 rounded-lg border-0 bg-[#f7f7f7]">
+                      <SelectTrigger className="h-10 w-full bg-muted/50 md:w-[150px]">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="fixed">Cố định</SelectItem>
                         <SelectItem value="weight_based">Theo cân</SelectItem>
-                        <SelectItem value="quantity_based">
-                          Theo số lượng
-                        </SelectItem>
+                        <SelectItem value="quantity_based">Theo số lượng</SelectItem>
                       </SelectContent>
                     </Select>
                     <Input
                       type="number"
-                      className="w-full md:w-[130px] h-10 rounded-lg border-0 bg-[#f7f7f7]"
+                      className="h-10 w-full bg-muted/50 md:w-[130px]"
                       placeholder="Phí cơ bản"
                       value={rule.baseFee}
-                      onChange={(e) =>
-                        handleRuleChange(
-                          index,
-                          "baseFee",
-                          Number(e.target.value),
-                        )
-                      }
+                      onChange={(e) => handleRuleChange(index, 'baseFee', Number(e.target.value))}
                     />
                     {formData.rules.length > 1 && (
                       <Button
@@ -275,7 +247,7 @@ export default function SellerShippingPage() {
                         onClick={() => handleRemoveRule(index)}
                         className="h-9 w-9 rounded-lg shrink-0 self-end md:self-auto"
                       >
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     )}
                   </div>
@@ -294,7 +266,7 @@ export default function SellerShippingPage() {
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}
-                {editingId ? "Cập nhật" : "Tạo template"}
+                {editingId ? 'Cập nhật' : 'Tạo template'}
               </Button>
               <Button
                 type="button"
@@ -310,7 +282,7 @@ export default function SellerShippingPage() {
       )}
 
       {/* Templates List */}
-      <div className="bg-[#f7f7f7] rounded-2xl overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         {isLoading ? (
           <div className="flex justify-center py-20">
             <SpinnerLoading size={32} />
@@ -318,12 +290,10 @@ export default function SellerShippingPage() {
         ) : templates.length === 0 ? (
           <div className="text-center py-20">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <Truck className="h-10 w-10 text-gray-400" />
+              <Truck className="h-10 w-10 text-muted-foreground" />
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">
-              Chưa có template nào
-            </h3>
-            <p className="text-gray-500 text-sm mb-6">
+            <h3 className="mb-2 font-semibold text-foreground">Chưa có template nào</h3>
+            <p className="mb-6 text-sm text-muted-foreground">
               Tạo template để quản lý phí vận chuyển
             </p>
             <Button
@@ -339,25 +309,23 @@ export default function SellerShippingPage() {
             {templates.map((template, idx) => (
               <div
                 key={template._id}
-                className={`p-5 ${idx % 2 === 0 ? "bg-white" : "bg-white/50"}`}
+                className={`p-5 ${idx % 2 === 0 ? 'bg-white' : 'bg-white/50'}`}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#f7f7f7] rounded-lg flex items-center justify-center">
-                      <Package className="h-5 w-5 text-purple-600" />
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                      <Package className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-800">
-                          {template.name}
-                        </h3>
+                        <h3 className="font-medium text-foreground">{template.name}</h3>
                         {template.isDefault && (
                           <Badge className="bg-primary/10 text-primary hover:bg-primary/10 rounded-full text-xs">
                             Mặc định
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         {template.rules.length} quy tắc
                       </p>
                     </div>
@@ -369,7 +337,7 @@ export default function SellerShippingPage() {
                       onClick={() => handleEdit(template)}
                       className="h-9 w-9 rounded-lg"
                     >
-                      <Edit2 className="h-4 w-4 text-gray-500" />
+                      <Edit2 className="h-4 w-4 text-muted-foreground" />
                     </Button>
                     <Button
                       variant="ghost"
@@ -378,7 +346,7 @@ export default function SellerShippingPage() {
                       disabled={isDeleting}
                       className="h-9 w-9 rounded-lg"
                     >
-                      <Trash2 className="h-4 w-4 text-red-500" />
+                      <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
                 </div>
@@ -386,10 +354,10 @@ export default function SellerShippingPage() {
                   {template.rules.map((rule, i) => (
                     <span
                       key={i}
-                      className="text-xs bg-[#f7f7f7] text-gray-600 px-3 py-1.5 rounded-lg"
+                      className="rounded-lg bg-muted px-3 py-1.5 text-xs text-muted-foreground"
                     >
-                      {rule.name}:{" "}
-                      <span className="font-medium text-gray-800">
+                      {rule.name}:{' '}
+                      <span className="font-medium text-foreground">
                         {formatCurrency(rule.baseFee)}
                       </span>
                     </span>

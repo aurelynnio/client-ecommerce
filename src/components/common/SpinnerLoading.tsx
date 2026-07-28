@@ -1,4 +1,4 @@
-import { cn } from "@/utils/cn";
+import { cn } from '@/utils/cn';
 
 interface SpinnerLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -17,8 +17,8 @@ export default function SpinnerLoading({
   const spinner = (
     <div
       className={cn(
-        "relative flex items-center justify-center animate-spin",
-        noWrapper && className
+        'relative flex items-center justify-center animate-spin',
+        noWrapper && className,
       )}
       style={{ width: size, height: size }}
     >
@@ -52,9 +52,9 @@ export default function SpinnerLoading({
   return (
     <div
       className={cn(
-        "flex items-center justify-center transition-all duration-300",
-        fullPage ? "min-h-[80px] w-full p-4" : "p-2",
-        className
+        'flex items-center justify-center transition-[opacity] duration-300 motion-reduce:transition-none',
+        fullPage ? 'min-h-[80px] w-full p-4' : 'p-2',
+        className,
       )}
       {...props}
     >

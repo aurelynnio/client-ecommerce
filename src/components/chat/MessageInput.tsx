@@ -1,12 +1,12 @@
-"use client";
-import { useState } from "react";
-import { Send, Image as ImageIcon } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useSendChatMessage } from "@/hooks/queries";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { useState } from 'react';
+import { Send, Image as ImageIcon } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useSendChatMessage } from '@/hooks/queries';
+import { getSafeErrorMessage } from '@/api';
 
 interface MessageInputProps {
   conversationId: string;
@@ -15,7 +15,7 @@ interface MessageInputProps {
 export default function MessageInput({ conversationId }: MessageInputProps) {
   const sendMessageMutation = useSendChatMessage();
   const isSending = sendMessageMutation.isPending;
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
 
   const handleSend = async () => {
     if (!content.trim()) return;
@@ -24,23 +24,23 @@ export default function MessageInput({ conversationId }: MessageInputProps) {
       await sendMessageMutation.mutateAsync({
         conversationId,
         content: content.trim(),
-        messageType: "text",
+        messageType: 'text',
       });
-      setContent("");
+      setContent('');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể gửi tin nhắn"));
+      toast.error(getSafeErrorMessage(error, 'Không thể gửi tin nhắn'));
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   };
 
   return (
-    <div className="p-3 border-t border-[#f0f0f0]">
+    <div className="border-t border-border p-3">
       <div className="flex items-center gap-2">
         <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">
           <ImageIcon className="h-5 w-5" />
@@ -51,14 +51,9 @@ export default function MessageInput({ conversationId }: MessageInputProps) {
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={isSending}
-          className="flex-1 border-gray-200 focus:border-[#E53935]"
+          className="flex-1"
         />
-        <Button
-          onClick={handleSend}
-          disabled={!content.trim() || isSending}
-          size="sm"
-          className="bg-[#E53935] hover:bg-[#D32F2F]"
-        >
+        <Button onClick={handleSend} disabled={!content.trim() || isSending} size="sm" className="">
           {isSending ? (
             <SpinnerLoading noWrapper size={16} className="text-white" />
           ) : (

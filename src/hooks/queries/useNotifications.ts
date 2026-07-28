@@ -2,23 +2,14 @@
  * Notification React Query Hooks
  * Replaces notificationAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME, REFETCH_INTERVAL } from "@/constants/cache";
-import { notificationKeys } from "@/lib/queryKeys";
-import {
-  Notification,
-  NotificationSummary,
-  NotificationType,
-} from "@/types/notification";
-import { PaginationData } from "@/types/common";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME, REFETCH_INTERVAL } from '@/constants/cache';
+import { notificationKeys } from '@/lib/queryKeys';
+import { Notification, NotificationSummary, NotificationType } from '@/types/notification';
+import { PaginationData } from '@/types/common';
 
 // ============ Types ============
 export interface NotificationListParams {
@@ -54,11 +45,9 @@ function invalidateNotificationQueries(queryClient: QueryClient) {
 
 // ============ API Functions ============
 const notificationApi = {
-  getList: async (
-    params: NotificationListParams = {}
-  ): Promise<NotificationListResponse> => {
+  getList: async (params: NotificationListParams = {}): Promise<NotificationListResponse> => {
     const { page = 1, limit = 10 } = params;
-    const response = await instance.get("/notifications", {
+    const response = await instance.get('/notifications', {
       params: { page, limit },
     });
     const data = extractApiData<
@@ -82,7 +71,7 @@ const notificationApi = {
   },
 
   getUnreadCount: async (): Promise<number> => {
-    const response = await instance.get("/notifications/count");
+    const response = await instance.get('/notifications/count');
     const data = extractApiData<{ count?: number }>(response);
     return data?.count || 0;
   },
@@ -96,11 +85,11 @@ const notificationApi = {
   },
 
   markAllAsRead: async (): Promise<void> => {
-    await instance.patch("/notifications/read-all", {});
+    await instance.patch('/notifications/read-all', {});
   },
 
   clearAll: async (): Promise<void> => {
-    await instance.delete("/notifications");
+    await instance.delete('/notifications');
   },
 
   // Admin: Create notification
@@ -111,7 +100,7 @@ const notificationApi = {
       link: data.link?.trim() || undefined,
       orderId: data.orderId?.trim() || undefined,
     };
-    const response = await instance.post("/notifications", payload);
+    const response = await instance.post('/notifications', payload);
     return extractApiData(response);
   },
 };
@@ -121,10 +110,7 @@ const notificationApi = {
 /**
  * Get notifications list
  */
-export function useNotifications(
-  params?: NotificationListParams,
-  options?: QueryOptions
-) {
+export function useNotifications(params?: NotificationListParams, options?: QueryOptions) {
   return useQuery({
     queryKey: notificationKeys.list(params),
     queryFn: () => notificationApi.getList(params),
@@ -160,7 +146,7 @@ export function useMarkNotificationAsRead() {
       invalidateNotificationQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Mark as read failed" });
+      errorHandler.log(error, { context: 'Mark as read failed' });
     },
   });
 }
@@ -177,7 +163,7 @@ export function useMarkAllNotificationsAsRead() {
       invalidateNotificationQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Mark all as read failed" });
+      errorHandler.log(error, { context: 'Mark all as read failed' });
     },
   });
 }
@@ -189,7 +175,7 @@ export function useDeleteNotification() {
   return useMutation({
     mutationFn: async () => {
       throw new Error(
-        "Deleting a single notification is not supported by the current backend API."
+        'Deleting a single notification is not supported by the current backend API.',
       );
     },
   });
@@ -207,7 +193,7 @@ export function useClearAllNotifications() {
       invalidateNotificationQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Clear all notifications failed" });
+      errorHandler.log(error, { context: 'Clear all notifications failed' });
     },
   });
 }
@@ -224,7 +210,7 @@ export function useCreateNotification() {
       invalidateNotificationQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create notification failed" });
+      errorHandler.log(error, { context: 'Create notification failed' });
     },
   });
 }

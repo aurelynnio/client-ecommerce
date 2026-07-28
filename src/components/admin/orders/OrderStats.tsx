@@ -1,14 +1,6 @@
-import {
-  Clock,
-  CheckCircle,
-  DollarSign,
-  ShoppingCart,
-} from "lucide-react";
-import { formatCurrency } from "@/utils/format";
-import {
-  AdminStatCard,
-  AdminStatsGrid,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Clock, CheckCircle, DollarSign, ShoppingCart } from 'lucide-react';
+import { formatCurrency } from '@/utils/format';
+import { AdminStatCard, AdminStatsGrid } from '@/components/admin/shared/AdminPrimitives';
 
 interface OrderStatusCount {
   _id: string;
@@ -54,41 +46,38 @@ export function OrdersStats({
     ordersByStatus.length > 0
       ? {
           total: ordersByStatus.reduce((sum, item) => sum + item.count, 0),
-          pending: statsByStatus.get("pending") || 0,
-          confirmed: statsByStatus.get("confirmed") || 0,
-          processing: statsByStatus.get("processing") || 0,
-          shipped: statsByStatus.get("shipped") || 0,
-          delivered: statsByStatus.get("delivered") || 0,
-          cancelled: statsByStatus.get("cancelled") || 0,
+          pending: statsByStatus.get('pending') || 0,
+          confirmed: statsByStatus.get('confirmed') || 0,
+          processing: statsByStatus.get('processing') || 0,
+          shipped: statsByStatus.get('shipped') || 0,
+          delivered: statsByStatus.get('delivered') || 0,
+          cancelled: statsByStatus.get('cancelled') || 0,
           revenue: totalRevenue,
         }
       : fallbackStats;
 
   const formatNumber = (value: number) => {
-    return new Intl.NumberFormat("vi-VN").format(value);
+    return new Intl.NumberFormat('vi-VN').format(value);
   };
 
   const stats = [
     {
-      title: "Tổng đơn hàng",
+      title: 'Tổng đơn hàng',
       value: formatNumber(calculatedStats.total),
       icon: ShoppingCart,
-
     },
     {
-      title: "Chờ xử lý",
+      title: 'Chờ xử lý',
       value: formatNumber(calculatedStats.pending),
       icon: Clock,
-
     },
     {
-      title: "Đã giao",
+      title: 'Đã giao',
       value: formatNumber(calculatedStats.delivered),
       icon: CheckCircle,
-
     },
     {
-      title: "TỔNG DOANH THU",
+      title: 'TỔNG DOANH THU',
       value: formatCurrency(calculatedStats.revenue),
       icon: DollarSign,
     },
@@ -102,7 +91,7 @@ export function OrdersStats({
           title={stat.title}
           value={stat.value}
           icon={stat.icon}
-          accent={index === 1 ? "amber" : index === 2 ? "green" : index === 3 ? "blue" : "brand"}
+          accent={index === 1 ? 'amber' : index === 2 ? 'green' : index === 3 ? 'blue' : 'brand'}
         />
       ))}
     </AdminStatsGrid>

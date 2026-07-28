@@ -1,33 +1,33 @@
-import { useState, useCallback } from "react";
-import { toast } from "sonner";
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Plus, X, Trash2, Upload } from "lucide-react";
-import { ProductAttribute, VariantFormCreate } from "@/types/product";
-import { TagItem } from "@/components/product/forms/TagItem";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Plus, X, Trash2, Upload } from 'lucide-react';
+import { ProductAttribute, VariantFormCreate } from '@/types/product';
+import { TagItem } from '@/components/product/forms/TagItem';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import Image from "next/image";
-import { useCategoryTree } from "@/hooks/queries/useCategories";
-import { useMyShop, useShopCategories } from "@/hooks/queries/useShop";
-import { flattenCategories } from "@/utils/category";
-import { STATUS_OPTIONS } from "@/constants/product";
-import { validateProductForm } from "@/utils/productFormValidation";
+} from '@/components/ui/select';
+import Image from 'next/image';
+import { useCategoryTree } from '@/hooks/queries/useCategories';
+import { useMyShop, useShopCategories } from '@/hooks/queries/useShop';
+import { flattenCategories } from '@/utils/category';
+import { STATUS_OPTIONS } from '@/constants/product';
+import { validateProductForm } from '@/utils/productFormValidation';
 
 interface CreateModelProductProps {
   open: boolean;
@@ -37,19 +37,19 @@ interface CreateModelProductProps {
 }
 
 const initialFormData = {
-  name: "",
-  description: "",
-  slug: "",
-  category: "",
-  shopCategory: "",
-  brand: "",
-  status: "published" as "draft" | "published" | "suspended",
+  name: '',
+  description: '',
+  slug: '',
+  category: '',
+  shopCategory: '',
+  brand: '',
+  status: 'published' as 'draft' | 'published' | 'suspended',
   isNewArrival: false,
   isFeatured: false,
   price: {
     currentPrice: 0,
     discountPrice: 0,
-    currency: "VND",
+    currency: 'VND',
   },
   stock: 0,
   weight: 0,
@@ -69,28 +69,26 @@ export function CreateModelProduct({
 }: CreateModelProductProps) {
   const { data: categories = [] } = useCategoryTree();
   const { data: myShop } = useMyShop();
-  const { data: shopCategoriesData } = useShopCategories(myShop?._id || "", {
+  const { data: shopCategoriesData } = useShopCategories(myShop?._id || '', {
     enabled: !!myShop?._id,
   });
   const shopCategories = shopCategoriesData?.categories || [];
   const flatCategories = flattenCategories(categories);
 
   const [formData, setFormData] = useState(initialFormData);
-  const [newTag, setNewTag] = useState("");
-  const [newAttribute, setNewAttribute] = useState({ name: "", value: "" });
-  const [newSize, setNewSize] = useState("");
+  const [newTag, setNewTag] = useState('');
+  const [newAttribute, setNewAttribute] = useState({ name: '', value: '' });
+  const [newSize, setNewSize] = useState('');
 
   const resetForm = () => {
     formData.variants.forEach((v) => {
       v.images.previews.forEach((url) => URL.revokeObjectURL(url));
     });
-    formData.descriptionImages.previews.forEach((url) =>
-      URL.revokeObjectURL(url),
-    );
+    formData.descriptionImages.previews.forEach((url) => URL.revokeObjectURL(url));
     setFormData(initialFormData);
-    setNewTag("");
-    setNewAttribute({ name: "", value: "" });
-    setNewSize("");
+    setNewTag('');
+    setNewAttribute({ name: '', value: '' });
+    setNewSize('');
   };
 
   const handleClose = (isOpen: boolean) => {
@@ -101,8 +99,8 @@ export function CreateModelProduct({
   const addVariant = () => {
     const newVariant: VariantFormCreate = {
       _id: `temp-${Date.now()}`,
-      name: "",
-      color: "",
+      name: '',
+      color: '',
       price: formData.price.currentPrice,
       stock: 0,
       images: { files: [], previews: [] },
@@ -113,11 +111,7 @@ export function CreateModelProduct({
     }));
   };
 
-  const updateVariant = (
-    index: number,
-    field: keyof VariantFormCreate,
-    value: unknown,
-  ) => {
+  const updateVariant = (index: number, field: keyof VariantFormCreate, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       variants: prev.variants.map((v, i) => {
@@ -133,7 +127,7 @@ export function CreateModelProduct({
         ...prev,
         sizes: [...prev.sizes, newSize.trim()],
       }));
-      setNewSize("");
+      setNewSize('');
     }
   };
 
@@ -162,7 +156,7 @@ export function CreateModelProduct({
 
     const currentImages = formData.variants[variantIndex]?.images;
     if ((currentImages?.files.length || 0) + files.length > 8) {
-      alert("Mỗi variant tối đa 8 ảnh");
+      alert('Mỗi variant tối đa 8 ảnh');
       return;
     }
 
@@ -202,14 +196,12 @@ export function CreateModelProduct({
     }));
   };
 
-  const handleDescriptionImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleDescriptionImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
     if (formData.descriptionImages.files.length + files.length > 20) {
-      alert("Tối đa 20 ảnh mô tả chi tiết");
+      alert('Tối đa 20 ảnh mô tả chi tiết');
       return;
     }
 
@@ -231,9 +223,7 @@ export function CreateModelProduct({
         ...prev,
         descriptionImages: {
           files: prev.descriptionImages.files.filter((_, i) => i !== index),
-          previews: prev.descriptionImages.previews.filter(
-            (_, i) => i !== index,
-          ),
+          previews: prev.descriptionImages.previews.filter((_, i) => i !== index),
         },
       };
     });
@@ -266,7 +256,7 @@ export function CreateModelProduct({
     const normalizedDescription = formData.description.trim();
     const normalizedVariants = formData.variants.map((variant) => ({
       name: variant.name.trim(),
-      color: variant.color?.trim() || "",
+      color: variant.color?.trim() || '',
       price: variant.price,
       stock: variant.stock,
       sold: 0,
@@ -287,31 +277,25 @@ export function CreateModelProduct({
       ? normalizedVariants.reduce((sum, variant) => sum + variant.stock, 0)
       : formData.stock;
 
-    formDataToSend.append("name", normalizedName);
-    formDataToSend.append("description", normalizedDescription);
-    if (formData.slug) formDataToSend.append("slug", formData.slug);
-    if (formData.category) formDataToSend.append("category", formData.category);
-    if (formData.shopCategory)
-      formDataToSend.append("shopCategory", formData.shopCategory);
-    if (formData.brand) formDataToSend.append("brand", formData.brand);
-    formDataToSend.append("status", formData.status);
-    formDataToSend.append("isNewArrival", formData.isNewArrival.toString());
-    formDataToSend.append("isFeatured", formData.isFeatured.toString());
-    formDataToSend.append("price", JSON.stringify(formData.price));
-    formDataToSend.append("stock", aggregatedStock.toString());
-    if (formData.weight)
-      formDataToSend.append("weight", formData.weight.toString());
-    if (
-      formData.dimensions.height ||
-      formData.dimensions.width ||
-      formData.dimensions.length
-    ) {
-      formDataToSend.append("dimensions", JSON.stringify(formData.dimensions));
+    formDataToSend.append('name', normalizedName);
+    formDataToSend.append('description', normalizedDescription);
+    if (formData.slug) formDataToSend.append('slug', formData.slug);
+    if (formData.category) formDataToSend.append('category', formData.category);
+    if (formData.shopCategory) formDataToSend.append('shopCategory', formData.shopCategory);
+    if (formData.brand) formDataToSend.append('brand', formData.brand);
+    formDataToSend.append('status', formData.status);
+    formDataToSend.append('isNewArrival', formData.isNewArrival.toString());
+    formDataToSend.append('isFeatured', formData.isFeatured.toString());
+    formDataToSend.append('price', JSON.stringify(formData.price));
+    formDataToSend.append('stock', aggregatedStock.toString());
+    if (formData.weight) formDataToSend.append('weight', formData.weight.toString());
+    if (formData.dimensions.height || formData.dimensions.width || formData.dimensions.length) {
+      formDataToSend.append('dimensions', JSON.stringify(formData.dimensions));
     }
 
     // Process variants
     if (normalizedVariants.length > 0) {
-      formDataToSend.append("variants", JSON.stringify(normalizedVariants));
+      formDataToSend.append('variants', JSON.stringify(normalizedVariants));
 
       // Append variant images
       formData.variants.forEach((variant, idx) => {
@@ -322,20 +306,20 @@ export function CreateModelProduct({
     }
 
     if (normalizedSizes.length > 0) {
-      formDataToSend.append("sizes", JSON.stringify(normalizedSizes));
+      formDataToSend.append('sizes', JSON.stringify(normalizedSizes));
     }
 
     if (normalizedAttributes.length > 0) {
-      formDataToSend.append("attributes", JSON.stringify(normalizedAttributes));
+      formDataToSend.append('attributes', JSON.stringify(normalizedAttributes));
     }
     if (normalizedTags.length > 0) {
-      formDataToSend.append("tags", JSON.stringify(normalizedTags));
+      formDataToSend.append('tags', JSON.stringify(normalizedTags));
     }
 
     // Append description images
     if (formData.descriptionImages.files.length > 0) {
       formData.descriptionImages.files.forEach((file) => {
-        formDataToSend.append("descriptionImages", file);
+        formDataToSend.append('descriptionImages', file);
       });
     }
 
@@ -348,7 +332,7 @@ export function CreateModelProduct({
         if (prev.tags.includes(newTag.trim())) return prev;
         return { ...prev, tags: [...prev.tags, newTag.trim()] };
       });
-      setNewTag("");
+      setNewTag('');
     }
   }, [newTag, setFormData, setNewTag]);
 
@@ -368,7 +352,7 @@ export function CreateModelProduct({
         ...prev,
         attributes: [...prev.attributes, { ...newAttribute }],
       }));
-      setNewAttribute({ name: "", value: "" });
+      setNewAttribute({ name: '', value: '' });
     }
   };
 
@@ -381,7 +365,7 @@ export function CreateModelProduct({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[1000px] rounded-4xl border-border/50 bg-white/80 dark:bg-[#1C1C1E]/80 backdrop-blur-xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto no-scrollbar">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-xl border-border bg-card p-6 shadow-lg sm:max-w-[1000px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">
             Tạo sản phẩm mới
@@ -402,9 +386,7 @@ export function CreateModelProduct({
                 </Label>
                 <Input
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, name: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
@@ -415,9 +397,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Slug (URL)</Label>
                 <Input
                   value={formData.slug}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, slug: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="Để trống sẽ tự tạo từ tên"
@@ -431,9 +411,7 @@ export function CreateModelProduct({
                 </Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, category: value }))
-                  }
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   disabled={isLoading}
                 >
                   <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
@@ -477,9 +455,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Thương hiệu</Label>
                 <Input
                   value={formData.brand}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, brand: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                   placeholder="VD: Nike, Adidas, Uniqlo"
@@ -522,12 +498,7 @@ export function CreateModelProduct({
                   key={index}
                   className="relative w-24 h-24 rounded-xl overflow-hidden border group"
                 >
-                  <Image
-                    src={preview}
-                    alt={`Mô tả ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={preview} alt={`Mô tả ${index + 1}`} fill className="object-cover" />
                   <button
                     type="button"
                     onClick={() => removeDescriptionImage(index)}
@@ -538,7 +509,7 @@ export function CreateModelProduct({
                 </div>
               ))}
               {formData.descriptionImages.files.length < 20 && (
-                <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#E53935] hover:bg-red-50/50 transition-colors">
+                <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
                   <Upload className="h-6 w-6 text-gray-400" />
                   <span className="text-xs text-gray-400 mt-1">Thêm ảnh</span>
                   <input
@@ -565,7 +536,7 @@ export function CreateModelProduct({
                 </Label>
                 <Input
                   type="number"
-                  value={formData.price.currentPrice || ""}
+                  value={formData.price.currentPrice || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -585,7 +556,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Giá khuyến mãi</Label>
                 <Input
                   type="number"
-                  value={formData.price.discountPrice || ""}
+                  value={formData.price.discountPrice || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -605,7 +576,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Tồn kho</Label>
                 <Input
                   type="number"
-                  value={formData.stock || ""}
+                  value={formData.stock || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -652,9 +623,7 @@ export function CreateModelProduct({
                   }
                   disabled={isLoading}
                 />
-                <Label className="text-sm font-medium cursor-pointer">
-                  Sản phẩm mới
-                </Label>
+                <Label className="text-sm font-medium cursor-pointer">Sản phẩm mới</Label>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-border/50">
                 <Switch
@@ -664,9 +633,7 @@ export function CreateModelProduct({
                   }
                   disabled={isLoading}
                 />
-                <Label className="text-sm font-medium cursor-pointer">
-                  Sản phẩm nổi bật
-                </Label>
+                <Label className="text-sm font-medium cursor-pointer">Sản phẩm nổi bật</Label>
               </div>
             </div>
           </div>
@@ -680,7 +647,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Cân nặng (gram)</Label>
                 <Input
                   type="number"
-                  value={formData.weight || ""}
+                  value={formData.weight || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -697,7 +664,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Dài (cm)</Label>
                 <Input
                   type="number"
-                  value={formData.dimensions.length || ""}
+                  value={formData.dimensions.length || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -717,7 +684,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Rộng (cm)</Label>
                 <Input
                   type="number"
-                  value={formData.dimensions.width || ""}
+                  value={formData.dimensions.width || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -737,7 +704,7 @@ export function CreateModelProduct({
                 <Label className="text-sm font-medium">Cao (cm)</Label>
                 <Input
                   type="number"
-                  value={formData.dimensions.height || ""}
+                  value={formData.dimensions.height || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -764,8 +731,7 @@ export function CreateModelProduct({
                   Phân loại hàng (Variants)
                 </h3>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Thêm các biến thể sản phẩm theo màu sắc. SKU sẽ được tự động
-                  tạo.
+                  Thêm các biến thể sản phẩm theo màu sắc. SKU sẽ được tự động tạo.
                 </p>
               </div>
               <Button
@@ -785,16 +751,12 @@ export function CreateModelProduct({
               <Label className="text-sm font-medium text-blue-700">
                 Kích thước sản phẩm (áp dụng cho tất cả variants)
               </Label>
-              <p className="text-xs text-blue-600 mb-2">
-                VD: S, M, L, XL hoặc 36, 37, 38, 39, 40
-              </p>
+              <p className="text-xs text-blue-600 mb-2">VD: S, M, L, XL hoặc 36, 37, 38, 39, 40</p>
               <div className="flex gap-2 mb-2">
                 <Input
                   value={newSize}
                   onChange={(e) => setNewSize(e.target.value)}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && (e.preventDefault(), addSize())
-                  }
+                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSize())}
                   placeholder="Nhập size và nhấn Enter"
                   disabled={isLoading}
                   className="rounded-lg text-sm h-9 bg-white"
@@ -841,14 +803,9 @@ export function CreateModelProduct({
             ) : (
               <div className="space-y-4">
                 {formData.variants.map((variant, idx) => (
-                  <div
-                    key={variant._id}
-                    className="border rounded-xl p-4 space-y-4 bg-gray-50/30"
-                  >
+                  <div key={variant._id} className="border rounded-xl p-4 space-y-4 bg-gray-50/30">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">
-                        Variant #{idx + 1}
-                      </span>
+                      <span className="text-sm font-medium text-gray-700">Variant #{idx + 1}</span>
                       <Button
                         type="button"
                         onClick={() => removeVariant(idx)}
@@ -868,9 +825,7 @@ export function CreateModelProduct({
                         </Label>
                         <Input
                           value={variant.name}
-                          onChange={(e) =>
-                            updateVariant(idx, "name", e.target.value)
-                          }
+                          onChange={(e) => updateVariant(idx, 'name', e.target.value)}
                           placeholder="VD: Đỏ, Xanh Navy, Đen"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
@@ -880,9 +835,7 @@ export function CreateModelProduct({
                         <Label className="text-xs">Màu sắc</Label>
                         <Input
                           value={variant.color}
-                          onChange={(e) =>
-                            updateVariant(idx, "color", e.target.value)
-                          }
+                          onChange={(e) => updateVariant(idx, 'color', e.target.value)}
                           placeholder="VD: Đỏ, Xanh, Đen"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
@@ -896,10 +849,8 @@ export function CreateModelProduct({
                         <Label className="text-xs">Giá (VND)</Label>
                         <Input
                           type="number"
-                          value={variant.price || ""}
-                          onChange={(e) =>
-                            updateVariant(idx, "price", Number(e.target.value))
-                          }
+                          value={variant.price || ''}
+                          onChange={(e) => updateVariant(idx, 'price', Number(e.target.value))}
                           placeholder="150000"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
@@ -910,10 +861,8 @@ export function CreateModelProduct({
                         <Label className="text-xs">Tồn kho</Label>
                         <Input
                           type="number"
-                          value={variant.stock || ""}
-                          onChange={(e) =>
-                            updateVariant(idx, "stock", Number(e.target.value))
-                          }
+                          value={variant.stock || ''}
+                          onChange={(e) => updateVariant(idx, 'stock', Number(e.target.value))}
                           placeholder="100"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
@@ -924,9 +873,7 @@ export function CreateModelProduct({
 
                     {/* Variant Images */}
                     <div className="space-y-2">
-                      <Label className="text-xs">
-                        Ảnh variant (tối đa 8 ảnh)
-                      </Label>
+                      <Label className="text-xs">Ảnh variant (tối đa 8 ảnh)</Label>
                       <div className="flex flex-wrap gap-2">
                         {variant.images.previews.map((preview, imgIdx) => (
                           <div
@@ -949,7 +896,7 @@ export function CreateModelProduct({
                           </div>
                         ))}
                         {variant.images.files.length < 8 && (
-                          <label className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#E53935] hover:bg-red-50/50 transition-colors">
+                          <label className="flex size-16 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
                             <Upload className="h-4 w-4 text-gray-400" />
                             <input
                               type="file"
@@ -977,18 +924,14 @@ export function CreateModelProduct({
             <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
               <Input
                 value={newAttribute.name}
-                onChange={(e) =>
-                  setNewAttribute({ ...newAttribute, name: e.target.value })
-                }
+                onChange={(e) => setNewAttribute({ ...newAttribute, name: e.target.value })}
                 placeholder="Tên thông số (VD: Chất liệu)"
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
               />
               <Input
                 value={newAttribute.value}
-                onChange={(e) =>
-                  setNewAttribute({ ...newAttribute, value: e.target.value })
-                }
+                onChange={(e) => setNewAttribute({ ...newAttribute, value: e.target.value })}
                 placeholder="Giá trị (VD: Cotton 100%)"
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
@@ -1034,9 +977,7 @@ export function CreateModelProduct({
               <Input
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && (e.preventDefault(), addTag())
-                }
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Nhập tag và nhấn Enter"
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
@@ -1074,9 +1015,9 @@ export function CreateModelProduct({
             <Button
               type="submit"
               disabled={isLoading}
-              className="rounded-xl bg-[#E53935] hover:bg-[#D32F2F]"
+              className="rounded-lg bg-primary hover:bg-primary-hover"
             >
-              {isLoading ? "Đang tạo..." : "Tạo sản phẩm"}
+              {isLoading ? 'Đang tạo...' : 'Tạo sản phẩm'}
             </Button>
           </div>
         </form>

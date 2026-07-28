@@ -1,8 +1,5 @@
-import { Download, RefreshCw } from "lucide-react";
-import {
-  AdminActionButton,
-  AdminPageHeader,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Download, RefreshCw } from 'lucide-react';
+import { AdminActionButton, AdminPageHeader } from '@/components/admin/shared/AdminPrimitives';
 
 interface ProductsHeaderProps {
   onRefresh?: () => void;

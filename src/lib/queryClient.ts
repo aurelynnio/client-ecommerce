@@ -1,5 +1,5 @@
-import { QueryClient } from "@tanstack/react-query";
-import { STALE_TIME, GC_TIME } from "@/constants/cache";
+import { QueryClient } from '@tanstack/react-query';
+import { STALE_TIME, GC_TIME } from '@/constants/cache';
 
 /**
  * React Query client configuration
@@ -38,9 +38,6 @@ export function invalidateQueries(queryKey: readonly unknown[]) {
  * Prefetch query helper
  * Use for SSR or preloading data
  */
-export async function prefetchQuery<T>(
-  queryKey: readonly unknown[],
-  queryFn: () => Promise<T>
-) {
+export async function prefetchQuery<T>(queryKey: readonly unknown[], queryFn: () => Promise<T>) {
   await queryClient.prefetchQuery({ queryKey, queryFn });
 }

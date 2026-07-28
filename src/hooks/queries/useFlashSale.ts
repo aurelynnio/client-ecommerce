@@ -2,24 +2,19 @@
  * Flash Sale React Query Hooks
  * Replaces flashSaleAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useState, useEffect, useCallback, useMemo } from "react";
-import instance from "@/api/api";
-import { extractApiData, getSafeErrorMessage } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME, REFETCH_INTERVAL } from "@/constants/cache";
-import { flashSaleKeys } from "@/lib/queryKeys";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import instance from '@/api/api';
+import { extractApiData, getSafeErrorMessage } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME, REFETCH_INTERVAL } from '@/constants/cache';
+import { flashSaleKeys } from '@/lib/queryKeys';
 import {
   FlashSaleResponse,
   FlashSaleSlot,
   FlashSaleSlotResponse,
   AddToFlashSalePayload,
-} from "@/types/flash-sale";
+} from '@/types/flash-sale';
 
 export interface AdminFlashSaleProduct {
   _id: string;
@@ -51,29 +46,29 @@ function invalidateFlashSaleQueries(queryClient: QueryClient) {
 
 // ============ API Functions ============
 const flashSaleApi = {
-  getActive: async (params?: {
-    page?: number;
-    limit?: number;
-  }): Promise<FlashSaleResponse> => {
-    const response = await instance.get("/flash-sale", { params });
+  getActive: async (params?: { page?: number; limit?: number }): Promise<FlashSaleResponse> => {
+    const response = await instance.get('/flash-sale', { params });
     return extractApiData(response);
   },
 
   getSchedule: async (): Promise<FlashSaleSlot[]> => {
-    const response = await instance.get("/flash-sale/schedule");
+    const response = await instance.get('/flash-sale/schedule');
     return extractApiData(response);
   },
 
   getAdminProducts: async (): Promise<AdminFlashSaleProduct[]> => {
-    const response = await instance.get("/flash-sale");
-    const data = extractApiData<{
-      data?: AdminFlashSaleProduct[];
-    } | AdminFlashSaleProduct[]>(response);
+    const response = await instance.get('/flash-sale');
+    const data = extractApiData<
+      | {
+          data?: AdminFlashSaleProduct[];
+        }
+      | AdminFlashSaleProduct[]
+    >(response);
     return Array.isArray(data) ? data : (data?.data ?? []);
   },
 
   getAdminSchedule: async (): Promise<AdminFlashSaleSlot[]> => {
-    const response = await instance.get("/flash-sale/schedule");
+    const response = await instance.get('/flash-sale/schedule');
     return extractApiData(response);
   },
 
@@ -87,15 +82,12 @@ const flashSaleApi = {
     totalSold: number;
     revenue: number;
   }> => {
-    const response = await instance.get("/flash-sale/stats");
+    const response = await instance.get('/flash-sale/stats');
     return extractApiData(response);
   },
 
   // Mutations (Seller/Admin)
-  addProduct: async (params: {
-    productId: string;
-    data: AddToFlashSalePayload;
-  }): Promise<void> => {
+  addProduct: async (params: { productId: string; data: AddToFlashSalePayload }): Promise<void> => {
     const { productId, data } = params;
     await instance.post(`/flash-sale/${productId}`, data);
   },
@@ -155,10 +147,7 @@ export function useAdminFlashSaleSchedule() {
 /**
  * Get flash sale products by time slot
  */
-export function useFlashSaleBySlot(
-  timeSlot: string,
-  options?: { enabled?: boolean }
-) {
+export function useFlashSaleBySlot(timeSlot: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: flashSaleKeys.slot(timeSlot),
     queryFn: () => flashSaleApi.getBySlot(timeSlot),
@@ -192,7 +181,7 @@ export function useAddToFlashSale() {
       invalidateFlashSaleQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Add to flash sale failed" });
+      errorHandler.log(error, { context: 'Add to flash sale failed' });
     },
   });
 }
@@ -209,7 +198,7 @@ export function useRemoveFromFlashSale() {
       invalidateFlashSaleQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Remove from flash sale failed" });
+      errorHandler.log(error, { context: 'Remove from flash sale failed' });
     },
   });
 }
@@ -289,9 +278,9 @@ export function useFlashSaleWithCountdown() {
     const secs = seconds % 60;
 
     return {
-      hours: hours.toString().padStart(2, "0"),
-      minutes: minutes.toString().padStart(2, "0"),
-      seconds: secs.toString().padStart(2, "0"),
+      hours: hours.toString().padStart(2, '0'),
+      minutes: minutes.toString().padStart(2, '0'),
+      seconds: secs.toString().padStart(2, '0'),
     };
   }, []);
 
@@ -299,10 +288,7 @@ export function useFlashSaleWithCountdown() {
   const isLoading = isLoadingProducts || isLoadingSchedule;
   const error =
     productsError || scheduleError
-      ? getSafeErrorMessage(
-          productsError || scheduleError,
-          "Không thể tải dữ liệu flash sale"
-        )
+      ? getSafeErrorMessage(productsError || scheduleError, 'Không thể tải dữ liệu flash sale')
       : null;
 
   return {

@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   useNotifications,
   useMarkNotificationAsRead,
   useMarkAllNotificationsAsRead,
   useClearAllNotifications,
   useCreateNotification,
-} from "@/hooks/queries/useNotifications";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bell, Clock, CheckCircle2, AlertCircle } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { toast } from "sonner";
-import { cn } from "@/utils/cn";
-import { getSafeErrorMessage } from "@/api";
-import { NotificationsHeader } from "@/components/admin/notifications/NotificationsHeader";
+} from '@/hooks/queries/useNotifications';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Bell, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
+import { cn } from '@/utils/cn';
+import { getSafeErrorMessage } from '@/api';
+import { NotificationsHeader } from '@/components/admin/notifications/NotificationsHeader';
 import {
   CreateNotificationModal,
   CreateNotificationForm,
-} from "@/components/admin/notifications/CreateNotificationModal";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
+} from '@/components/admin/notifications/CreateNotificationModal';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
 import {
   AdminStatCard,
   AdminStatsGrid,
   adminMediaPlaceholderClass,
   adminSubtleSurfaceClass,
   adminSurfaceClass,
-} from "@/components/admin/shared/AdminPrimitives";
+} from '@/components/admin/shared/AdminPrimitives';
 
 export default function AdminNotificationsPage() {
   const { data, isLoading } = useNotifications({ page: 1, limit: 50 });
@@ -49,28 +49,28 @@ export default function AdminNotificationsPage() {
   const handleMarkAsRead = async (id: string) => {
     try {
       await markAsReadMutation.mutateAsync(id);
-      toast.success("Marked as read");
+      toast.success('Marked as read');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to update status"));
+      toast.error(getSafeErrorMessage(error, 'Failed to update status'));
     }
   };
 
   const handleMarkAllRead = async () => {
     try {
       await markAllAsReadMutation.mutateAsync();
-      toast.success("All notifications marked as read");
+      toast.success('All notifications marked as read');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to update all"));
+      toast.error(getSafeErrorMessage(error, 'Failed to update all'));
     }
   };
 
   const handleClearAll = async () => {
-    if (confirm("Are you sure you want to clear all notifications?")) {
+    if (confirm('Are you sure you want to clear all notifications?')) {
       try {
         await clearAllMutation.mutateAsync();
-        toast.success("All notifications cleared");
+        toast.success('All notifications cleared');
       } catch (error: unknown) {
-        toast.error(getSafeErrorMessage(error, "Failed to clear notifications"));
+        toast.error(getSafeErrorMessage(error, 'Failed to clear notifications'));
       }
     }
   };
@@ -78,10 +78,10 @@ export default function AdminNotificationsPage() {
   const handleCreateNotification = async (formData: CreateNotificationForm) => {
     try {
       await createMutation.mutateAsync(formData);
-      toast.success("Notification sent successfully");
+      toast.success('Notification sent successfully');
       setCreateModalOpen(false);
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to send notification"));
+      toast.error(getSafeErrorMessage(error, 'Failed to send notification'));
     }
   };
 
@@ -89,14 +89,14 @@ export default function AdminNotificationsPage() {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "order_status":
-        return <AlertCircle className="h-5 w-5 text-blue-500" />;
-      case "system":
-        return <Bell className="h-5 w-5 text-orange-500" />;
-      case "promotion":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+      case 'order_status':
+        return <AlertCircle className="h-5 w-5 text-info" />;
+      case 'system':
+        return <Bell className="h-5 w-5 text-warning" />;
+      case 'promotion':
+        return <CheckCircle2 className="h-5 w-5 text-success" />;
       default:
-        return <Bell className="h-5 w-5 text-gray-500" />;
+        return <Bell className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
@@ -109,12 +109,29 @@ export default function AdminNotificationsPage() {
       />
 
       <AdminStatsGrid className="lg:grid-cols-3">
-        <AdminStatCard title="Tổng thông báo" value={totalCount} icon={Bell} description="Tổng số thông báo của tài khoản hiện tại" />
-        <AdminStatCard title="Chưa đọc" value={unreadCount} icon={AlertCircle} accent="amber" description="Các thông báo cần được xử lý" />
-        <AdminStatCard title="Khuyến mãi / hệ thống" value={`${promotionCount} / ${systemCount}`} icon={CheckCircle2} accent="green" description="Tỷ lệ giữa thông điệp hệ thống và chiến dịch" />
+        <AdminStatCard
+          title="Tổng thông báo"
+          value={totalCount}
+          icon={Bell}
+          description="Tổng số thông báo của tài khoản hiện tại"
+        />
+        <AdminStatCard
+          title="Chưa đọc"
+          value={unreadCount}
+          icon={AlertCircle}
+          accent="amber"
+          description="Các thông báo cần được xử lý"
+        />
+        <AdminStatCard
+          title="Khuyến mãi / hệ thống"
+          value={`${promotionCount} / ${systemCount}`}
+          icon={CheckCircle2}
+          accent="green"
+          description="Tỷ lệ giữa thông điệp hệ thống và chiến dịch"
+        />
       </AdminStatsGrid>
 
-      <div className={cn(adminSurfaceClass, "min-h-[500px] overflow-hidden flex flex-col")}>
+      <div className={cn(adminSurfaceClass, 'min-h-[500px] overflow-hidden flex flex-col')}>
         {isLoading && notifications.length === 0 ? (
           <div className="flex items-center justify-center flex-1">
             <SpinnerLoading size={32} />
@@ -131,20 +148,25 @@ export default function AdminNotificationsPage() {
                 <div
                   key={notification._id}
                   className={cn(
-                    "group relative flex gap-4 rounded-2xl p-4 transition-all hover:bg-[#fbf6f0]",
-                    !notification.isRead && "bg-red-50/70"
+                    'group relative flex gap-4 rounded-lg p-4 transition-colors hover:bg-muted/70',
+                    !notification.isRead && 'bg-primary/5',
                   )}
                 >
-                  <div className={cn("mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl", adminMediaPlaceholderClass)}>
-                    {getIcon(notification.type || "system")}
+                  <div
+                    className={cn(
+                      'mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
+                      adminMediaPlaceholderClass,
+                    )}
+                  >
+                    {getIcon(notification.type || 'system')}
                   </div>
 
                   <div className="flex-1 space-y-1">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                       <p
                         className={cn(
-                          "text-sm font-medium leading-none",
-                          !notification.isRead && "text-[#E53935]"
+                          'text-sm font-medium leading-none',
+                          !notification.isRead && 'text-primary',
                         )}
                       >
                         {notification.title}
@@ -152,11 +174,10 @@ export default function AdminNotificationsPage() {
                       <div className="flex items-center gap-2 text-xs text-muted-foreground whitespace-nowrap">
                         <Clock className="h-3 w-3" />
                         {notification.createdAt
-                          ? formatDistanceToNow(
-                              new Date(notification.createdAt),
-                              { addSuffix: true }
-                            )
-                          : ""}
+                          ? formatDistanceToNow(new Date(notification.createdAt), {
+                              addSuffix: true,
+                            })
+                          : ''}
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-2">
@@ -164,12 +185,12 @@ export default function AdminNotificationsPage() {
                     </p>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-2 pt-2">
                       {!notification.isRead && (
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-7 rounded-xl px-2 text-xs hover:bg-red-100 hover:text-[#d8473c]"
+                          className="h-7 rounded-md px-2 text-xs text-primary hover:bg-primary/10 hover:text-primary"
                           onClick={() => handleMarkAsRead(notification._id)}
                         >
                           Đánh dấu đã đọc
@@ -179,7 +200,7 @@ export default function AdminNotificationsPage() {
                   </div>
 
                   {!notification.isRead && (
-                    <div className="absolute right-4 top-4 h-2 w-2 rounded-full bg-[#d8473c]" />
+                    <div className="absolute right-4 top-4 h-2 w-2 rounded-full bg-primary" />
                   )}
                 </div>
               ))}
@@ -188,7 +209,12 @@ export default function AdminNotificationsPage() {
         )}
 
         {pagination && (
-          <div className={cn(adminSubtleSurfaceClass, "m-4 mt-0 rounded-2xl p-4 text-center text-xs text-muted-foreground")}>
+          <div
+            className={cn(
+              adminSubtleSurfaceClass,
+              'm-4 mt-0 rounded-lg p-4 text-center text-xs text-muted-foreground',
+            )}
+          >
             Hiển thị {notifications.length} trên tổng số {pagination.totalItems} thông báo
           </div>
         )}

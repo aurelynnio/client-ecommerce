@@ -1,6 +1,6 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
+'use client';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   Package,
   ShoppingCart,
@@ -14,17 +14,17 @@ import {
   XCircle,
   Truck,
   RotateCcw,
-} from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { useShopStatistics } from "@/hooks/queries/useShop";
-import { formatCurrency } from "@/utils/format";
+} from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { useShopStatistics } from '@/hooks/queries/useShop';
+import { formatCurrency } from '@/utils/format';
 
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
-    return (price / 1000000).toFixed(1) + "M";
+    return (price / 1000000).toFixed(1) + 'M';
   }
   if (price >= 1000) {
-    return (price / 1000).toFixed(0) + "K";
+    return (price / 1000).toFixed(0) + 'K';
   }
   return price.toString();
 };
@@ -37,9 +37,7 @@ export default function SellerDashboardPage() {
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center gap-4">
           <SpinnerLoading size={32} />
-          <p className="text-sm text-gray-500 font-medium">
-            Đang tải thống kê...
-          </p>
+          <p className="text-sm font-medium text-muted-foreground">Đang tải thống kê...</p>
         </div>
       </div>
     );
@@ -49,8 +47,8 @@ export default function SellerDashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center gap-4 text-center">
-          <XCircle className="h-12 w-12 text-red-500" />
-          <p className="text-gray-600">Không thể tải thống kê shop</p>
+          <XCircle className="h-12 w-12 text-destructive" />
+          <p className="text-muted-foreground">Không thể tải thống kê shop</p>
           <button
             onClick={() => refetch()}
             className="flex items-center gap-2 text-primary hover:underline"
@@ -76,56 +74,56 @@ export default function SellerDashboardPage() {
 
   const orderStats = [
     {
-      label: "Chờ xác nhận",
+      label: 'Chờ xác nhận',
       value: ordersByStatus.pending,
       icon: Clock,
-      color: "text-yellow-600",
-      bg: "bg-yellow-50",
+      color: 'text-warning',
     },
     {
-      label: "Đang xử lý",
+      label: 'Đang xử lý',
       value: ordersByStatus.processing + ordersByStatus.confirmed,
       icon: Package,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      color: 'text-info',
     },
     {
-      label: "Đang giao",
+      label: 'Đang giao',
       value: ordersByStatus.shipped,
       icon: Truck,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
+      color: 'text-primary',
     },
     {
-      label: "Hoàn thành",
+      label: 'Hoàn thành',
       value: ordersByStatus.delivered,
       icon: CheckCircle2,
-      color: "text-green-600",
-      bg: "bg-green-50",
+      color: 'text-success',
     },
     {
-      label: "Đã hủy",
+      label: 'Đã hủy',
       value: ordersByStatus.cancelled,
       icon: XCircle,
-      color: "text-red-600",
-      bg: "bg-red-50",
+      color: 'text-destructive',
     },
   ];
 
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-primary to-red-600 rounded-2xl p-6 text-white relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute right-20 bottom-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2" />
-        <div className="relative">
-          <h1 className="text-2xl font-bold mb-1">
-            Xin chào, {shop?.name}! 👋
+      <div className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-medium text-primary">Kênh người bán</p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
+            Tổng quan {shop?.name}
           </h1>
-          <p className="text-white/80 text-sm">
-            Chào mừng bạn đến với Kênh Người Bán. Quản lý shop của bạn tại đây.
+          <p className="mt-2 text-sm text-muted-foreground">
+            Theo dõi vận hành và xử lý việc cần làm hôm nay.
           </p>
         </div>
+        <Link
+          href="/seller/products"
+          className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
+        >
+          Thêm sản phẩm
+        </Link>
       </div>
 
       {/* Stats Cards */}
@@ -150,18 +148,13 @@ export default function SellerDashboardPage() {
           icon={DollarSign}
           color="yellow"
         />
-        <StatCard
-          title="Người theo dõi"
-          value={shop?.followers || 0}
-          icon={Users}
-          color="purple"
-        />
+        <StatCard title="Người theo dõi" value={shop?.followers || 0} icon={Users} color="purple" />
       </div>
 
       {/* Order Status */}
-      <div className="bg-[#f7f7f7] rounded-2xl p-6">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="font-semibold text-gray-800">Trạng thái đơn hàng</h2>
+      <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="font-semibold text-foreground">Trạng thái đơn hàng</h2>
           <Link
             href="/seller/orders"
             className="text-sm text-primary hover:underline flex items-center gap-1"
@@ -175,11 +168,11 @@ export default function SellerDashboardPage() {
             return (
               <div
                 key={stat.label}
-                className="bg-white rounded-xl p-4 text-center"
+                className="rounded-lg border border-border bg-card p-4 text-center"
               >
                 <Icon className={`h-6 w-6 mx-auto mb-2 ${stat.color}`} />
-                <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+                <p className="text-2xl font-semibold text-foreground">{stat.value}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
               </div>
             );
           })}
@@ -188,93 +181,73 @@ export default function SellerDashboardPage() {
 
       {/* Shop Performance */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="bg-[#f7f7f7] rounded-2xl p-5">
+        <div className="rounded-xl border border-border bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
-              <Star className="h-5 w-5 text-yellow-500" />
+            <div className="flex size-10 items-center justify-center rounded-lg bg-warning/15">
+              <Star className="h-5 w-5 text-warning" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Đánh giá</p>
-              <p className="text-xl font-bold">
-                {shop?.rating?.toFixed(1) || "0.0"}
-              </p>
+              <p className="text-sm text-muted-foreground">Đánh giá</p>
+              <p className="text-xl font-bold">{shop?.rating?.toFixed(1) || '0.0'}</p>
             </div>
           </div>
-          <div className="h-1.5 bg-white rounded-full overflow-hidden">
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full bg-yellow-500 rounded-full"
+              className="h-full rounded-full bg-warning"
               style={{ width: `${((shop?.rating || 0) / 5) * 100}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-[#f7f7f7] rounded-2xl p-5">
+        <div className="rounded-xl border border-border bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
-              <Users className="h-5 w-5 text-blue-500" />
+            <div className="flex size-10 items-center justify-center rounded-lg bg-info/15">
+              <Users className="h-5 w-5 text-info" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Người theo dõi</p>
+              <p className="text-sm text-muted-foreground">Người theo dõi</p>
               <p className="text-xl font-bold">{shop?.followers || 0}</p>
             </div>
           </div>
-          <p className="text-xs text-gray-400">Tổng số người theo dõi shop</p>
+          <p className="text-xs text-muted-foreground">Tổng số người theo dõi shop</p>
         </div>
 
-        <div className="bg-[#f7f7f7] rounded-2xl p-5">
+        <div className="rounded-xl border border-border bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-green-500" />
+            <div className="flex size-10 items-center justify-center rounded-lg bg-success/15">
+              <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Tỷ lệ phản hồi</p>
+              <p className="text-sm text-muted-foreground">Tỷ lệ phản hồi</p>
               <p className="text-xl font-bold">{shop?.responseRate || 0}%</p>
             </div>
           </div>
-          <p className="text-xs text-gray-400">Trong 24 giờ qua</p>
+          <p className="text-xs text-muted-foreground">Trong 24 giờ qua</p>
         </div>
       </div>
 
       {/* Quick Actions & Top Products */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-[#f7f7f7] rounded-2xl p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">Thao tác nhanh</h3>
+        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+          <h3 className="mb-4 font-semibold text-foreground">Thao tác nhanh</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <QuickAction
-              href="/seller/products"
-              icon={Package}
-              label="Thêm sản phẩm"
-            />
-            <QuickAction
-              href="/seller/orders"
-              icon={ShoppingCart}
-              label="Xem đơn hàng"
-            />
-            <QuickAction
-              href="/seller/shipping"
-              icon={Truck}
-              label="Vận chuyển"
-            />
-            <QuickAction
-              href="/seller/settings"
-              icon={Star}
-              label="Cài đặt shop"
-            />
+            <QuickAction href="/seller/products" icon={Package} label="Thêm sản phẩm" />
+            <QuickAction href="/seller/orders" icon={ShoppingCart} label="Xem đơn hàng" />
+            <QuickAction href="/seller/shipping" icon={Truck} label="Vận chuyển" />
+            <QuickAction href="/seller/settings" icon={Star} label="Cài đặt shop" />
           </div>
         </div>
 
-        <div className="bg-[#f7f7f7] rounded-2xl p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">
-            Sản phẩm bán chạy
-          </h3>
+        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+          <h3 className="mb-4 font-semibold text-foreground">Sản phẩm bán chạy</h3>
           {statistics?.topProducts && statistics.topProducts.length > 0 ? (
             <div className="space-y-3">
               {statistics.topProducts.slice(0, 4).map((product, index) => (
                 <div
                   key={product._id}
-                  className="flex items-center gap-3 bg-white rounded-xl p-2"
+                  className="flex items-center gap-3 rounded-lg bg-muted/40 p-2"
                 >
-                  <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-xs font-bold text-gray-500">
+                  <div className="flex size-8 items-center justify-center rounded-lg bg-muted text-xs font-bold text-muted-foreground">
                     {product.image ? (
                       <Image
                         src={product.image}
@@ -288,12 +261,8 @@ export default function SellerDashboardPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">
-                      {product.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Đã bán: {product.sold}
-                    </p>
+                    <p className="truncate text-sm font-medium text-foreground">{product.name}</p>
+                    <p className="text-xs text-muted-foreground">Đã bán: {product.sold}</p>
                   </div>
                   <p className="text-sm font-semibold text-primary">
                     {formatCurrency(product.revenue)}
@@ -302,7 +271,7 @@ export default function SellerDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="flex items-center justify-center py-8 text-gray-400">
+            <div className="flex items-center justify-center py-8 text-muted-foreground">
               <div className="text-center">
                 <Package className="h-10 w-10 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">Chưa có dữ liệu</p>
@@ -319,39 +288,35 @@ interface StatCardProps {
   title: string;
   value: string | number;
   icon: React.ElementType;
-  color: "blue" | "green" | "yellow" | "purple";
+  color: 'blue' | 'green' | 'yellow' | 'purple';
   href?: string;
 }
 
 const colorMap = {
-  blue: { bg: "bg-blue-50", text: "text-blue-600", icon: "bg-blue-100" },
-  green: { bg: "bg-green-50", text: "text-green-600", icon: "bg-green-100" },
+  blue: { text: 'text-info', icon: 'bg-info/15' },
+  green: { text: 'text-success', icon: 'bg-success/15' },
   yellow: {
-    bg: "bg-yellow-50",
-    text: "text-yellow-600",
-    icon: "bg-yellow-100",
+    text: 'text-warning',
+    icon: 'bg-warning/15',
   },
   purple: {
-    bg: "bg-purple-50",
-    text: "text-purple-600",
-    icon: "bg-purple-100",
+    text: 'text-primary',
+    icon: 'bg-primary/15',
   },
 };
 
 const StatCard = ({ title, value, icon: Icon, color, href }: StatCardProps) => {
   const colors = colorMap[color];
   const content = (
-    <div className="bg-[#f7f7f7] rounded-2xl p-5 transition-all hover:bg-[#f0f0f0] cursor-pointer">
+    <div className="cursor-pointer rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted">
       <div className="flex items-center justify-between mb-3">
-        <div
-          className={`w-10 h-10 ${colors.icon} rounded-xl flex items-center justify-center`}
-        >
+        <div className={`w-10 h-10 ${colors.icon} rounded-xl flex items-center justify-center`}>
           <Icon className={`h-5 w-5 ${colors.text}`} />
         </div>
-        {href && <ArrowRight className="h-4 w-4 text-gray-400" />}
+        {href && <ArrowRight className="h-4 w-4 text-muted-foreground" />}
       </div>
-      <p className="text-2xl font-bold text-gray-800">{value}</p>
-      <p className="text-sm text-gray-500">{title}</p>
+      <p className="text-2xl font-semibold text-foreground">{value}</p>
+      <p className="text-sm text-muted-foreground">{title}</p>
     </div>
   );
 
@@ -372,11 +337,11 @@ const QuickAction = ({
 }) => (
   <Link
     href={href}
-    className="flex items-center gap-3 p-3 rounded-xl bg-white hover:bg-gray-50 transition-all"
+    className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-muted/60"
   >
-    <div className="w-9 h-9 bg-[#f7f7f7] rounded-lg flex items-center justify-center">
-      <Icon className="h-4 w-4 text-gray-600" />
+    <div className="flex size-9 items-center justify-center rounded-lg bg-muted">
+      <Icon className="h-4 w-4 text-muted-foreground" />
     </div>
-    <span className="text-sm font-medium text-gray-700">{label}</span>
+    <span className="text-sm font-medium text-foreground">{label}</span>
   </Link>
 );

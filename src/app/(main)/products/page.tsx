@@ -1,48 +1,44 @@
-// ProductsPage - Taobao Style with Sticky Category Tabs
-"use client";
+// Products page with URL-backed filters
+'use client';
 
-import { useState, useMemo, useCallback } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
-import { useUrlFilters } from "@/hooks/useUrlFilters";
-import { useProducts } from "@/hooks/queries/useProducts";
-import { useActiveCategories } from "@/hooks/queries/useCategories";
-import { Button } from "@/components/ui/button";
-import { SlidersHorizontal, ChevronDown, Sparkles, LayoutGrid } from "lucide-react";
-import ProductFilter from "@/components/product/ProductFilter";
-import ProductGrid from "@/components/product/ProductGrid";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { ProductFilters, ProductUrlFilters } from "@/types/product";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
+import { useInfiniteProducts } from '@/hooks/queries/useProducts';
+import { useActiveCategories } from '@/hooks/queries/useCategories';
+import { Button } from '@/components/ui/button';
+import { SlidersHorizontal, ChevronDown, Loader2 } from 'lucide-react';
+import ProductFilter from '@/components/product/ProductFilter';
+import ProductGrid from '@/components/product/ProductGrid';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { ProductFilters, ProductUrlFilters } from '@/types/product';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+
+const PAGE_SIZE = 50;
 
 const DEFAULT_FILTERS: ProductUrlFilters = {
-  search: "",
+  search: '',
   minPrice: 0,
   maxPrice: 10000000,
-  rating: "",
-  colors: "",
-  sizes: "",
-  sortBy: "newest",
-  category: "",
+  rating: '',
+  colors: '',
+  sizes: '',
+  sortBy: 'newest',
+  category: '',
 };
 
-// Sort tabs for Taobao style
+// Available sort controls
 const SORT_TABS = [
-  { label: "Phổ biến", value: "popular" },
-  { label: "Mới nhất", value: "newest" },
-  { label: "Bán chạy", value: "best_selling" },
-  { label: "Giá", value: "price", hasDropdown: true },
+  { label: 'Phổ biến', value: 'popular' },
+  { label: 'Mới nhất', value: 'newest' },
+  { label: 'Bán chạy', value: 'best_selling' },
+  { label: 'Giá', value: 'price', hasDropdown: true },
 ];
 
 const DEFAULT_MAX_PRICE = 10000000;
 
 const formatCompactPrice = (value: number) =>
-  value.toLocaleString("vi-VN", {
+  value.toLocaleString('vi-VN', {
     maximumFractionDigits: 0,
   });
 
@@ -53,15 +49,58 @@ export default function ProductsPage() {
     resetFilters,
   } = useUrlFilters<ProductUrlFilters>({
     defaultFilters: DEFAULT_FILTERS,
-    basePath: "/products",
+    basePath: '/products',
   });
 
   const { data: categoriesData } = useActiveCategories({});
   const categories = useMemo(() => categoriesData?.data || [], [categoriesData?.data]);
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [productLimit, setProductLimit] = useState(50);
   const activeCategory = (urlFilters.category as string) || null;
+
+  const [mounted, setMounted] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(1024);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsDropdownOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDropdownOpen]);
+
+  const visibleCount = useMemo(() => {
+    if (!mounted) return 7;
+    if (windowWidth >= 1024) return 7;
+    if (windowWidth >= 768) return 4;
+    return 2;
+  }, [mounted, windowWidth]);
+
+  const visibleCategories = useMemo(() => {
+    return categories.slice(0, visibleCount);
+  }, [categories, visibleCount]);
+
+  const dropdownCategories = useMemo(() => {
+    return categories.slice(visibleCount);
+  }, [categories, visibleCount]);
+
+  const isActiveInDropdown = useMemo(() => {
+    if (!activeCategory) return false;
+    return dropdownCategories.some((cat) => cat._id === activeCategory);
+  }, [activeCategory, dropdownCategories]);
 
   const filters: ProductFilters = useMemo(
     () => ({
@@ -70,60 +109,77 @@ export default function ProductsPage() {
       maxPrice: Number(urlFilters.maxPrice),
       rating:
         (urlFilters.rating as string)
-          ?.split(",")
+          ?.split(',')
           .map(Number)
           .filter((n) => n > 0) || [],
-      colors: (urlFilters.colors as string)?.split(",").filter(Boolean) || [],
-      sizes: (urlFilters.sizes as string)?.split(",").filter(Boolean) || [],
+      colors: (urlFilters.colors as string)?.split(',').filter(Boolean) || [],
+      sizes: (urlFilters.sizes as string)?.split(',').filter(Boolean) || [],
       sortBy: urlFilters.sortBy as string,
     }),
-    [urlFilters]
+    [urlFilters],
   );
 
   const activeCategoryName = useMemo(() => {
-    if (!activeCategory) return "Tất cả danh mục";
-    return categories.find((category) => category._id === activeCategory)?.name || "Danh mục đã chọn";
+    if (!activeCategory) return 'Tất cả danh mục';
+    return (
+      categories.find((category) => category._id === activeCategory)?.name || 'Danh mục đã chọn'
+    );
   }, [activeCategory, categories]);
 
   const priceSort =
-    filters.sortBy === "price_desc"
-      ? "desc"
-      : filters.sortBy === "price_asc"
-        ? "asc"
-        : null;
+    filters.sortBy === 'price_desc' ? 'desc' : filters.sortBy === 'price_asc' ? 'asc' : null;
 
   // Debounced filters using custom hook
   const debouncedFilters = useDebounce(filters, 300);
   const debouncedCategory = useDebounce(activeCategory, 300);
 
-
-  const queryParams = useMemo(() => {
-    const params: Record<string, string | number | boolean> = {
-      page: 1,
-      limit: productLimit,
-    };
+  const infiniteParams = useMemo(() => {
+    const params: Record<string, string | number | boolean> = { limit: PAGE_SIZE };
 
     if (debouncedFilters.search) params.search = debouncedFilters.search;
-    if (debouncedFilters.minPrice > 0)
-      params.minPrice = debouncedFilters.minPrice;
-    if (debouncedFilters.maxPrice < 10000000)
-      params.maxPrice = debouncedFilters.maxPrice;
-    if (debouncedFilters.sortBy !== "newest")
-      params.sort = debouncedFilters.sortBy;
-    if (debouncedFilters.rating.length > 0)
-      params.rating = debouncedFilters.rating.join(",");
-    if (debouncedFilters.colors.length > 0)
-      params.colors = debouncedFilters.colors.join(",");
-    if (debouncedFilters.sizes.length > 0)
-      params.sizes = debouncedFilters.sizes.join(",");
+    if (debouncedFilters.minPrice > 0) params.minPrice = debouncedFilters.minPrice;
+    if (debouncedFilters.maxPrice < 10000000) params.maxPrice = debouncedFilters.maxPrice;
+    if (debouncedFilters.sortBy !== 'newest') params.sort = debouncedFilters.sortBy;
+    if (debouncedFilters.rating.length > 0) params.rating = debouncedFilters.rating.join(',');
+    if (debouncedFilters.colors.length > 0) params.colors = debouncedFilters.colors.join(',');
+    if (debouncedFilters.sizes.length > 0) params.sizes = debouncedFilters.sizes.join(',');
     if (debouncedCategory) params.category = debouncedCategory;
 
     return params;
-  }, [debouncedFilters, debouncedCategory, productLimit]);
+  }, [debouncedFilters, debouncedCategory]);
 
-  const { data: productsData, isLoading } = useProducts(queryParams);
-  const products = useMemo(() => productsData?.products || [], [productsData?.products]);
-  const totalProducts = productsData?.pagination?.total || products.length;
+  const {
+    data: infiniteData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteProducts(infiniteParams);
+
+  const products = useMemo(
+    () => infiniteData?.pages.flatMap((page) => page.products) ?? [],
+    [infiniteData?.pages],
+  );
+  const totalProducts = infiniteData?.pages?.[0]?.pagination.total ?? products.length;
+
+  // Auto-fetch on scroll using IntersectionObserver
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const node = sentinelRef.current;
+    if (!node || !hasNextPage || isFetchingNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: '400px' },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
   const activeFiltersCount = useMemo(() => {
     return (
       (filters.search ? 1 : 0) +
@@ -169,11 +225,7 @@ export default function ProductsPage() {
   const availableSizes = useMemo(
     () =>
       Array.from(
-        new Set(
-          products.flatMap((product) =>
-            (product.sizes || []).map((size) => size.trim()),
-          ),
-        ),
+        new Set(products.flatMap((product) => (product.sizes || []).map((size) => size.trim()))),
       )
         .filter((size): size is string => Boolean(size))
         .slice(0, 20),
@@ -185,144 +237,141 @@ export default function ProductsPage() {
       const updates: Partial<ProductUrlFilters> = {};
 
       if (newFilters.search !== undefined) updates.search = newFilters.search;
-      if (newFilters.minPrice !== undefined)
-        updates.minPrice = newFilters.minPrice;
-      if (newFilters.maxPrice !== undefined)
-        updates.maxPrice = newFilters.maxPrice;
-      if (newFilters.rating !== undefined)
-        updates.rating = newFilters.rating.join(",");
-      if (newFilters.colors !== undefined)
-        updates.colors = newFilters.colors.join(",");
-      if (newFilters.sizes !== undefined)
-        updates.sizes = newFilters.sizes.join(",");
+      if (newFilters.minPrice !== undefined) updates.minPrice = newFilters.minPrice;
+      if (newFilters.maxPrice !== undefined) updates.maxPrice = newFilters.maxPrice;
+      if (newFilters.rating !== undefined) updates.rating = newFilters.rating.join(',');
+      if (newFilters.colors !== undefined) updates.colors = newFilters.colors.join(',');
+      if (newFilters.sizes !== undefined) updates.sizes = newFilters.sizes.join(',');
       if (newFilters.sortBy !== undefined) updates.sortBy = newFilters.sortBy;
 
       updateFilters(updates);
-      setProductLimit(50);
     },
-    [updateFilters, setProductLimit]
+    [updateFilters],
   );
 
   const handleClearFilters = useCallback(() => {
     resetFilters();
-    setProductLimit(50);
-  }, [resetFilters, setProductLimit]);
+  }, [resetFilters]);
 
   const handleSortTabClick = (value: string) => {
-    if (value === "price") {
-      const newSort = priceSort === "asc" ? "desc" : "asc";
+    if (value === 'price') {
+      const newSort = priceSort === 'asc' ? 'desc' : 'asc';
       handleFilterChange({ sortBy: `price_${newSort}` });
     } else {
       handleFilterChange({ sortBy: value });
     }
-    setProductLimit(50);
   };
 
   const handleCategoryClick = (categoryId: string | null | undefined) => {
-    updateFilters({ category: categoryId ?? "" });
-    setProductLimit(50);
+    updateFilters({ category: categoryId ?? '' });
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf6]">
-      <div className="mx-auto max-w-[1440px] px-4 py-6 lg:px-6">
-        <section className="overflow-hidden rounded-[32px] border border-[#efe6db] bg-white shadow-[0_24px_70px_-48px_rgba(15,23,42,0.3)]">
-          <div className="grid gap-6 px-5 py-6 lg:grid-cols-[minmax(0,1fr)_260px] lg:px-8 lg:py-8">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#f3d7d1] bg-[#fff5f3] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#E53935]">
-                <Sparkles className="h-3.5 w-3.5" />
-                Danh mục sản phẩm
-              </div>
-              <div className="space-y-3">
-                <h1 className="max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 lg:text-4xl">
-                  Khám phá sản phẩm theo cách gọn hơn, dễ lọc hơn và đỡ rối hơn.
-                </h1>
-                <p className="max-w-2xl text-sm leading-7 text-slate-500 lg:text-base">
-                  Toàn bộ danh mục, bộ lọc và sắp xếp được gom lại thành một nhịp đọc rõ ràng hơn để người dùng tìm đúng món nhanh hơn.
-                </p>
-              </div>
-            </div>
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-[1440px] px-4 pt-8 pb-4 lg:px-6">
+        {/* Minimal Typographic Header */}
+        <div className="pb-6 border-b border-border/40">
+          <h1 className="text-3xl font-medium tracking-tight text-foreground lg:text-4xl">
+            Sản phẩm
+            <span className="text-sm font-normal text-muted-foreground ml-3 tracking-normal">
+              ({totalProducts} items)
+            </span>
+          </h1>
+        </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              <div className="rounded-[24px] border border-[#f0e4d6] bg-[#faf6f0] px-5 py-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Kết quả hiện có
-                </p>
-                <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
-                  {totalProducts}
-                </p>
-                <p className="mt-1 text-sm text-slate-500">sản phẩm trong danh sách</p>
-              </div>
-              <div className="rounded-[24px] border border-[#f0e4d6] bg-[#faf6f0] px-5 py-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Bộ lọc đang dùng
-                </p>
-                <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
-                  {activeFiltersCount}
-                </p>
-                <p className="mt-1 text-sm text-slate-500">{activeCategoryName}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-5 rounded-[28px] border border-[#efe6db] bg-white px-4 py-4 shadow-[0_20px_60px_-52px_rgba(15,23,42,0.35)] lg:px-5">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Duyệt nhanh theo danh mục
-              </p>
-              <p className="mt-1 text-sm text-slate-500">
-                Chọn một nhóm hàng trước, sau đó tinh chỉnh bằng bộ lọc bên trái.
-              </p>
-            </div>
-            <div className="hidden items-center gap-2 rounded-full bg-[#faf6f0] px-3 py-2 text-xs font-medium text-slate-500 lg:flex">
-              <LayoutGrid className="h-3.5 w-3.5" />
-              {categories.length} danh mục
-            </div>
-          </div>
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {/* Dynamic Category Navigation with More Dropdown */}
+        <div className="flex items-center justify-between border-b border-border/40 pb-4">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => handleCategoryClick(null)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              className={`h-9 px-4 text-xs font-medium rounded-full transition-all border ${
                 !activeCategory
-                  ? "bg-[#E53935] text-white shadow-[0_12px_24px_-18px_rgba(229,57,53,0.9)]"
-                  : "bg-[#faf6f0] text-slate-600 hover:bg-[#f4ede4]"
-              }`}
+                  ? 'bg-primary text-primary-foreground border-primary shadow-xs'
+                  : 'bg-card text-muted-foreground border-border/60 hover:bg-muted hover:text-foreground'
+              } focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
+              aria-current={!activeCategory ? 'page' : undefined}
             >
-              Tất cả
+              Tất cả sản phẩm
             </button>
-            {categories?.map((category) => (
+            {visibleCategories.map((category) => (
               <button
                 key={category._id}
                 onClick={() => handleCategoryClick(category._id)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`h-9 px-4 text-xs font-medium rounded-full transition-all border ${
                   activeCategory === category._id
-                    ? "bg-[#E53935] text-white shadow-[0_12px_24px_-18px_rgba(229,57,53,0.9)]"
-                    : "bg-[#faf6f0] text-slate-600 hover:bg-[#f4ede4]"
+                    ? 'bg-primary text-primary-foreground border-primary shadow-xs'
+                    : 'bg-card text-muted-foreground border-border/60 hover:bg-muted hover:text-foreground'
                 }`}
+                aria-current={activeCategory === category._id ? 'page' : undefined}
               >
                 {category.name}
               </button>
             ))}
+
+            {/* Dropdown for remaining categories */}
+            {dropdownCategories.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  className={`h-9 px-4 text-xs font-medium rounded-full border transition-all flex items-center gap-1.5 ${
+                    isActiveInDropdown
+                      ? 'border-primary bg-primary/5 text-primary font-semibold'
+                      : 'border-border/60 bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
+                  } focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
+                  aria-haspopup="menu"
+                  aria-expanded={isDropdownOpen}
+                >
+                  Xem thêm
+                  <ChevronDown className={`h-3 w-3 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isDropdownOpen && (
+                  <>
+                    <div onClick={() => setIsDropdownOpen(false)} className="fixed inset-0 z-40" />
+                    <div
+                      className="absolute left-0 mt-2 w-56 max-h-80 overflow-y-auto rounded-lg border border-border bg-card p-1 shadow-md z-50 animate-in fade-in-50 zoom-in-95 duration-100"
+                      role="menu"
+                    >
+                      {dropdownCategories.map((category) => (
+                        <button
+                          key={category._id}
+                          onClick={() => {
+                            handleCategoryClick(category._id);
+                            setIsDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                            activeCategory === category._id
+                              ? 'bg-primary/10 text-primary font-semibold'
+                              : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                          } focus-visible:ring-2 focus-visible:ring-primary`}
+                          role="menuitem"
+                        >
+                          {category.name}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
-        </section>
+        </div>
       </div>
 
-      <div className="sticky top-[91px] z-40 border-y border-[#efe6db] bg-[#fcfaf6]/95 backdrop-blur-md">
+      <div className="sticky top-[80px] z-30 bg-background/80 backdrop-blur-md border-b border-border/40 transition-all">
         <div className="mx-auto max-w-[1440px] px-4 py-3 lg:px-6">
-          <div className="rounded-[24px] border border-[#efe6db] bg-white px-4 py-4 shadow-[0_16px_50px_-44px_rgba(15,23,42,0.35)] lg:px-5">
+          <div className="w-full py-1">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2 text-sm">
-                  <span className="font-semibold text-slate-950">{totalProducts}</span>
-                  <span className="text-slate-500">sản phẩm</span>
-                  <span className="text-slate-300">•</span>
-                  <span className="text-slate-500">{activeCategoryName}</span>
+                  <span className="font-semibold text-foreground">{totalProducts}</span>
+                  <span className="text-muted-foreground">sản phẩm</span>
+                  <span className="text-muted-foreground/50">•</span>
+                  <span className="text-muted-foreground">{activeCategoryName}</span>
                   {activeFiltersCount > 0 ? (
                     <>
-                      <span className="text-slate-300">•</span>
-                      <span className="rounded-full bg-[#fff1ee] px-2.5 py-1 text-xs font-medium text-[#E53935]">
+                      <span className="text-muted-foreground/50">•</span>
+                      <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
                         {activeFiltersCount} bộ lọc đang áp dụng
                       </span>
                     </>
@@ -333,20 +382,20 @@ export default function ProductsPage() {
                     {appliedFilterLabels.map((label) => (
                       <span
                         key={label}
-                        className="rounded-full border border-[#f0e4d6] bg-[#faf6f0] px-3 py-1 text-xs font-medium text-slate-600"
+                        className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground"
                       >
                         {label}
                       </span>
                     ))}
                     <button
                       onClick={handleClearFilters}
-                      className="rounded-full border border-transparent px-1 text-xs font-medium text-[#E53935] transition-colors hover:text-[#D32F2F]"
+                      className="rounded-full border border-transparent px-1 text-xs font-medium text-primary transition-colors hover:text-primary-hover"
                     >
                       Xóa bộ lọc
                     </button>
                   </div>
                 ) : (
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground">
                     Chưa áp dụng bộ lọc nào. Bạn có thể bắt đầu từ danh mục, giá hoặc màu sắc.
                   </p>
                 )}
@@ -358,18 +407,18 @@ export default function ProductsPage() {
                     <button
                       key={tab.value}
                       onClick={() => handleSortTabClick(tab.value)}
-                      className={`flex shrink-0 items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`flex shrink-0 items-center gap-1 rounded-full px-4 py-1.5 text-xs font-medium border transition-colors ${
                         filters.sortBy === tab.value ||
-                        (tab.value === "price" && filters.sortBy?.startsWith("price"))
-                          ? "bg-[#E53935] text-white shadow-[0_12px_24px_-18px_rgba(229,57,53,0.9)]"
-                          : "bg-[#faf6f0] text-slate-600 hover:bg-[#f4ede4]"
+                        (tab.value === 'price' && filters.sortBy?.startsWith('price'))
+                          ? 'border-primary bg-primary text-primary-foreground shadow-xs'
+                          : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
                       }`}
                     >
                       {tab.label}
                       {tab.hasDropdown ? (
                         <ChevronDown
                           className={`h-3.5 w-3.5 transition-transform ${
-                            priceSort === "desc" ? "rotate-180" : ""
+                            priceSort === 'desc' ? 'rotate-180' : ''
                           }`}
                         />
                       ) : null}
@@ -377,15 +426,12 @@ export default function ProductsPage() {
                   ))}
                 </div>
 
-                <Sheet
-                  open={isMobileFilterOpen}
-                  onOpenChange={setIsMobileFilterOpen}
-                >
+                <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
                   <SheetTrigger asChild>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="rounded-full border-[#e9ddd0] bg-white text-slate-700 hover:bg-[#faf6f0] lg:hidden"
+                      className="rounded-lg border-border bg-card text-foreground hover:bg-muted lg:hidden"
                     >
                       <SlidersHorizontal className="mr-1.5 h-4 w-4" />
                       Bộ lọc
@@ -393,9 +439,9 @@ export default function ProductsPage() {
                   </SheetTrigger>
                   <SheetContent
                     side="left"
-                    className="w-[300px] overflow-y-auto border-r border-[#efe6db] bg-[#fcfaf6] p-0"
+                    className="w-[300px] overflow-y-auto border-r border-border bg-card p-0"
                   >
-                    <SheetHeader className="border-b border-[#efe6db] px-5 py-4">
+                    <SheetHeader className="border-b border-border px-5 py-4">
                       <SheetTitle>Bộ lọc sản phẩm</SheetTitle>
                     </SheetHeader>
                     <div className="p-4">
@@ -427,28 +473,42 @@ export default function ProductsPage() {
 
           <div className="flex-1 min-h-[500px] relative">
             {isLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[28px] bg-white/70 backdrop-blur-sm">
+              <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-background/80">
                 <SpinnerLoading />
               </div>
             )}
 
-            <div className="rounded-[28px] border border-[#efe6db] bg-white p-4 shadow-[0_24px_70px_-54px_rgba(15,23,42,0.35)] sm:p-5">
-              <ProductGrid
-                products={products || []}
-                isLoading={isLoading && !products?.length}
-              />
+            <div className="w-full">
+              <ProductGrid products={products || []} isLoading={isLoading && !products?.length} />
             </div>
 
-            {products.length > 0 && products.length < totalProducts && (
-              <div className="flex justify-center mt-6">
-                <Button
-                  variant="outline"
-                  className="h-11 rounded-full border-[#E53935]/25 bg-white px-8 text-[#E53935] hover:bg-[#fff5f3]"
-                  onClick={() => setProductLimit((prev) => prev + 50)}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Đang tải..." : "Xem thêm sản phẩm"}
-                </Button>
+            {products.length > 0 && (
+              <div
+                ref={sentinelRef}
+                className="mt-6 flex min-h-[3rem] items-center justify-center"
+                aria-live="polite"
+                aria-busy={isFetchingNextPage}
+              >
+                {isFetchingNextPage ? (
+                  <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                    Đang tải thêm sản phẩm...
+                  </div>
+                ) : hasNextPage ? (
+                  <Button
+                    variant="outline"
+                    className="h-11 rounded-lg border-primary/25 bg-card px-8 text-primary hover:bg-primary/10"
+                    onClick={() => fetchNextPage()}
+                  >
+                    Xem thêm sản phẩm
+                  </Button>
+                ) : (
+                  products.length > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      Bạn đã xem tất cả {products.length} sản phẩm
+                    </p>
+                  )
+                )}
               </div>
             )}
           </div>

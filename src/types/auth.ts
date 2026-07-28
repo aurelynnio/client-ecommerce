@@ -1,4 +1,4 @@
-import { Address } from "./address";
+import { Address } from './address';
 
 export interface AuthLogin {
   email: string;
@@ -9,8 +9,6 @@ export interface AuthRegister extends AuthLogin {
   username: string;
   confirmPassword: string;
 }
-
-
 
 export interface User {
   _id: string;

@@ -2,11 +2,11 @@
  * Statistics React Query Hooks (Admin)
  * Replaces statisticsAction.ts async thunks with React Query
  */
-import { useQuery } from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { STALE_TIME, REFETCH_INTERVAL } from "@/constants/cache";
-import { statisticsKeys } from "@/lib/queryKeys";
+import { useQuery } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { STALE_TIME, REFETCH_INTERVAL } from '@/constants/cache';
+import { statisticsKeys } from '@/lib/queryKeys';
 
 export interface DashboardStats {
   // Flat structure (new format)
@@ -93,14 +93,14 @@ export interface OrderStats {
 
 const statisticsApi = {
   getDashboard: async (): Promise<DashboardStats> => {
-    const response = await instance.get("/statistics/dashboard");
+    const response = await instance.get('/statistics/dashboard');
     return extractApiData(response);
   },
 
   getRevenue: async (params?: {
     startDate?: string;
     endDate?: string;
-    groupBy?: "day" | "week" | "month";
+    groupBy?: 'day' | 'week' | 'month';
   }): Promise<RevenueStats[]> => {
     void params;
     const dashboard = await statisticsApi.getDashboard();
@@ -129,10 +129,7 @@ const statisticsApi = {
     };
   },
 
-  getOrders: async (params?: {
-    startDate?: string;
-    endDate?: string;
-  }): Promise<OrderStats> => {
+  getOrders: async (params?: { startDate?: string; endDate?: string }): Promise<OrderStats> => {
     void params;
     const dashboard = await statisticsApi.getDashboard();
     return {
@@ -168,7 +165,7 @@ export function useDashboardStats() {
 export function useRevenueStats(params?: {
   startDate?: string;
   endDate?: string;
-  groupBy?: "day" | "week" | "month";
+  groupBy?: 'day' | 'week' | 'month';
 }) {
   return useQuery({
     queryKey: statisticsKeys.revenue(params),
@@ -191,10 +188,7 @@ export function useProductStats() {
 /**
  * Get order statistics (Admin)
  */
-export function useOrderStats(params?: {
-  startDate?: string;
-  endDate?: string;
-}) {
+export function useOrderStats(params?: { startDate?: string; endDate?: string }) {
   return useQuery({
     queryKey: statisticsKeys.orders(params),
     queryFn: () => statisticsApi.getOrders(params),

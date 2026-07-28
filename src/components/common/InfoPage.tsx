@@ -1,16 +1,15 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 
 interface InfoLink {
   href: string;
   label: string;
 }
-
 interface InfoSection {
   title: string;
   items: string[];
   links?: InfoLink[];
 }
-
 interface InfoPageProps {
   title: string;
   description: string;
@@ -18,76 +17,82 @@ interface InfoPageProps {
   updatedAt?: string;
 }
 
-export default function InfoPage({
-  title,
-  description,
-  sections,
-  updatedAt,
-}: InfoPageProps) {
-  const quickLinks = [
-    { href: "/", label: "Trang chủ" },
-    { href: "/help", label: "Trợ giúp" },
-    { href: "/support", label: "Hỗ trợ" },
-  ];
-
+/** Shared readable document layout for policy, help and service content. */
+export default function InfoPage({ title, description, sections, updatedAt }: InfoPageProps) {
   return (
-    <main className="min-h-screen bg-[#f7f7f7] py-8 px-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 space-y-8">
-        <nav className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
-          {quickLinks.map((link) => (
+    <main className="min-h-screen bg-background">
+      <div className="aura-container grid gap-8 py-8 lg:grid-cols-[12rem_minmax(0,46rem)] lg:py-12">
+        <aside className="lg:pt-1">
+          <nav aria-label="Điều hướng thông tin" className="flex gap-1 overflow-x-auto lg:flex-col">
             <Link
-              key={link.href}
-              href={link.href}
-              className="px-2.5 py-1 rounded-full bg-[#f7f7f7] hover:bg-gray-100 transition-colors"
+              href="/"
+              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
             >
-              {link.label}
+              Trang chủ
             </Link>
-          ))}
-        </nav>
-
-        <header className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{title}</h1>
-          <p className="text-sm md:text-base text-gray-600">{description}</p>
-          {updatedAt ? (
-            <p className="text-xs text-gray-400">Cập nhật lần cuối: {updatedAt}</p>
-          ) : null}
-        </header>
-
-        <div className="space-y-6">
-          {sections.map((section) => (
-            <section key={section.title} className="space-y-3">
-              <h2 className="text-lg font-semibold text-gray-800">{section.title}</h2>
-              <ul className="space-y-2 text-sm text-gray-600 list-disc pl-5">
-                {section.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              {section.links && section.links.length > 0 ? (
-                <div className="flex flex-wrap gap-3 pt-1">
-                  {section.links.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="text-sm text-[#E53935] hover:underline"
-                    >
-                      {link.label}
-                    </Link>
+            <Link
+              href="/help"
+              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              Trợ giúp
+            </Link>
+            <Link
+              href="/support"
+              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              Hỗ trợ
+            </Link>
+          </nav>
+        </aside>
+        <article className="min-w-0">
+          <header className="border-b border-border pb-7">
+            <h1 className="text-3xl font-semibold tracking-tight text-foreground">{title}</h1>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">
+              {description}
+            </p>
+            {updatedAt ? (
+              <p className="mt-4 text-sm text-muted-foreground">Cập nhật lần cuối: {updatedAt}</p>
+            ) : null}
+          </header>
+          <div className="divide-y divide-border">
+            {sections.map((section) => (
+              <section key={section.title} className="py-7">
+                <h2 className="text-lg font-semibold text-foreground">{section.title}</h2>
+                <ul className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
+                  {section.items.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <ChevronRight
+                        className="mt-1 h-4 w-4 shrink-0 text-primary"
+                        aria-hidden="true"
+                      />
+                      {item}
+                    </li>
                   ))}
-                </div>
-              ) : null}
-            </section>
-          ))}
-        </div>
-
-        <footer className="pt-2 border-t border-gray-100">
-          <p className="text-xs text-gray-500">
-            Cần hỗ trợ thêm? Truy cập{" "}
-            <Link href="/support" className="text-[#E53935] hover:underline">
-              Trung tâm hỗ trợ
+                </ul>
+                {section.links?.length ? (
+                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                    {section.links.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-sm font-medium text-primary hover:text-primary-hover"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </section>
+            ))}
+          </div>
+          <footer className="border-t border-border pt-5 text-sm text-muted-foreground">
+            Cần hỗ trợ thêm?{' '}
+            <Link href="/support" className="font-medium text-primary hover:text-primary-hover">
+              Liên hệ trung tâm hỗ trợ
             </Link>
             .
-          </p>
-        </footer>
+          </footer>
+        </article>
       </div>
     </main>
   );

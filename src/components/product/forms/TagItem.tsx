@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { X } from "lucide-react";
+import { memo } from 'react';
+import { X } from 'lucide-react';
 
 interface TagItemProps {
   tag: string;
@@ -19,4 +19,4 @@ export const TagItem = memo(({ tag, onRemove }: TagItemProps) => (
   </div>
 ));
 
-TagItem.displayName = "TagItem";
+TagItem.displayName = 'TagItem';

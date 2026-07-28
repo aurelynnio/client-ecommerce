@@ -1,6 +1,6 @@
-import { BaseEntity, PaginationData } from "./common";
-import { Shop } from "./shop";
-import { User } from "./user";
+import { BaseEntity, PaginationData } from './common';
+import { Shop } from './shop';
+import { User } from './user';
 
 // Order product interface - matches backend products[] schema
 export interface OrderProduct {
@@ -39,15 +39,9 @@ export interface ShippingAddress {
 
 // Order status type
 export type OrderStatus =
-  | "pending"
-  | "confirmed"
-  | "processing"
-  | "shipped"
-  | "delivered"
-  | "cancelled"
-  | "returned";
-export type PaymentMethod = "cod" | "vnpay" | "momo";
-export type PaymentStatus = "unpaid" | "paid" | "refunded";
+  'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
+export type PaymentMethod = 'cod' | 'vnpay' | 'momo';
+export type PaymentStatus = 'unpaid' | 'paid' | 'refunded';
 
 // Order interface
 export interface Order extends BaseEntity {
@@ -115,7 +109,6 @@ export interface OrderFilters {
   endDate: string;
   [key: string]: string | number | boolean | null | undefined;
 }
-
 
 // Seller order statistics interface
 export interface SellerOrderStatistics {

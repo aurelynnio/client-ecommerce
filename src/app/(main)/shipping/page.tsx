@@ -1,20 +1,20 @@
-import InfoPage from "@/components/common/InfoPage";
+import InfoPage from '@/components/common/InfoPage';
 
 const sections = [
   {
-    title: "Thời gian giao hàng",
+    title: 'Thời gian giao hàng',
     items: [
-      "Thời gian phụ thuộc khu vực nhận hàng",
-      "Đơn có thể giao nhiều kiện nếu từ nhiều shop",
-      "Ngày lễ/tết có thể ảnh hưởng tiến độ",
+      'Thời gian phụ thuộc khu vực nhận hàng',
+      'Đơn có thể giao nhiều kiện nếu từ nhiều shop',
+      'Ngày lễ/tết có thể ảnh hưởng tiến độ',
     ],
   },
   {
-    title: "Lưu ý khi nhận hàng",
+    title: 'Lưu ý khi nhận hàng',
     items: [
-      "Kiểm tra tình trạng gói hàng khi nhận",
-      "Liên hệ ngay hỗ trợ nếu có bất thường",
-      "Giữ lại hóa đơn/chứng từ để đối soát",
+      'Kiểm tra tình trạng gói hàng khi nhận',
+      'Liên hệ ngay hỗ trợ nếu có bất thường',
+      'Giữ lại hóa đơn/chứng từ để đối soát',
     ],
   },
 ];

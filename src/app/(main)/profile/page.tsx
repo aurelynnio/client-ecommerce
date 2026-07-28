@@ -1,19 +1,19 @@
-"use client";
-import { useProfile } from "@/hooks/queries/useProfile";
-import { useAppSelector } from "@/hooks/hooks";
-import { useState } from "react";
-import { useLogout } from "@/hooks/queries";
-import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import UpdateUserProfile from "@/components/profile/modals/UpdateUserModal";
-import ProfileTab from "@/components/profile/tabs/ProfileTab";
-import OrdersTab from "@/components/profile/tabs/OrdersTab";
-import AddressTab from "@/components/profile/tabs/AddressTab";
-import SettingsTab from "@/components/profile/tabs/SettingsTab";
-import ShopTab from "@/components/profile/tabs/ShopTab";
+'use client';
+import { useProfile } from '@/hooks/queries/useProfile';
+import { useAppSelector } from '@/hooks/hooks';
+import { useState } from 'react';
+import { useLogout } from '@/hooks/queries';
+import { toast } from 'sonner';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import UpdateUserProfile from '@/components/profile/modals/UpdateUserModal';
+import ProfileTab from '@/components/profile/tabs/ProfileTab';
+import OrdersTab from '@/components/profile/tabs/OrdersTab';
+import AddressTab from '@/components/profile/tabs/AddressTab';
+import SettingsTab from '@/components/profile/tabs/SettingsTab';
+import ShopTab from '@/components/profile/tabs/ShopTab';
 import {
   User,
   Package,
@@ -27,50 +27,45 @@ import {
   Store,
   ShieldCheck,
   UserRound,
-} from "lucide-react";
-import { cn } from "@/utils/cn";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUserOrders } from "@/hooks/queries/useOrders";
-import { useWishlistCount } from "@/hooks/queries/useWishlist";
-import { getSafeErrorMessage } from "@/api";
+} from 'lucide-react';
+import { cn } from '@/utils/cn';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUserOrders } from '@/hooks/queries/useOrders';
+import { useWishlistCount } from '@/hooks/queries/useWishlist';
+import { getSafeErrorMessage } from '@/api';
 
 export default function ProfilePage() {
   const searchParams = useSearchParams();
   const { loading: authLoading, isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: currentUser, isLoading } = useProfile();
-  const { data: ordersData } = useUserOrders(
-    { page: 1, limit: 50 },
-    { enabled: isAuthenticated },
-  );
+  const { data: ordersData } = useUserOrders({ page: 1, limit: 50 }, { enabled: isAuthenticated });
   const { data: wishlistCount = 0 } = useWishlistCount({
     enabled: isAuthenticated,
   });
   const logoutMutation = useLogout();
 
   const router = useRouter();
-  const tabParam = searchParams.get("tab");
+  const tabParam = searchParams.get('tab');
   const activeTab =
-    tabParam &&
-    ["profile", "orders", "address", "settings", "shop"].includes(tabParam)
+    tabParam && ['profile', 'orders', 'address', 'settings', 'shop'].includes(tabParam)
       ? tabParam
-      : "profile";
+      : 'profile';
 
   const [open, setOpen] = useState(false);
-  const totalOrders =
-    ordersData?.pagination?.totalItems || ordersData?.orders?.length || 0;
+  const totalOrders = ordersData?.pagination?.totalItems || ordersData?.orders?.length || 0;
   const pendingOrders =
-    ordersData?.orders?.filter((order) => order.status === "pending").length || 0;
+    ordersData?.orders?.filter((order) => order.status === 'pending').length || 0;
   const followingCount = currentUser?.followingShops?.length || 0;
   const accountRoleLabel =
-    currentUser?.roles === "admin"
-      ? "Quản trị viên"
-      : currentUser?.roles === "seller"
-        ? "Người bán"
-        : "Tài khoản cá nhân";
+    currentUser?.roles === 'admin'
+      ? 'Quản trị viên'
+      : currentUser?.roles === 'seller'
+        ? 'Người bán'
+        : 'Tài khoản cá nhân';
   const AccountBadgeIcon =
-    currentUser?.roles === "admin"
+    currentUser?.roles === 'admin'
       ? ShieldCheck
-      : currentUser?.roles === "seller"
+      : currentUser?.roles === 'seller'
         ? Store
         : UserRound;
 
@@ -81,51 +76,51 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     try {
       await logoutMutation.mutateAsync();
-      toast.success("Đăng xuất thành công");
-      router.push("/");
+      toast.success('Đăng xuất thành công');
+      router.push('/');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể đăng xuất"));
+      toast.error(getSafeErrorMessage(error, 'Không thể đăng xuất'));
     }
   };
 
   const tabs = [
     {
-      value: "profile",
-      label: "Hồ sơ",
+      value: 'profile',
+      label: 'Hồ sơ',
       icon: User,
-      description: "Thông tin cá nhân",
+      description: 'Thông tin cá nhân',
     },
     {
-      value: "orders",
-      label: "Đơn hàng",
+      value: 'orders',
+      label: 'Đơn hàng',
       icon: Package,
-      description: "Theo dõi & lịch sử",
+      description: 'Theo dõi & lịch sử',
     },
     {
-      value: "address",
-      label: "Địa chỉ",
+      value: 'address',
+      label: 'Địa chỉ',
       icon: MapPin,
-      description: "Địa chỉ giao hàng",
+      description: 'Địa chỉ giao hàng',
     },
     {
-      value: "shop",
-      label: "Shop của tôi",
+      value: 'shop',
+      label: 'Shop của tôi',
       icon: Store,
-      description: "Quản lý shop",
+      description: 'Quản lý shop',
     },
     {
-      value: "settings",
-      label: "Cài đặt",
+      value: 'settings',
+      label: 'Cài đặt',
       icon: Settings,
-      description: "Tùy chỉnh",
+      description: 'Tùy chỉnh',
     },
   ];
 
   // Quick stats for user card
   const quickStats = [
-    { label: "Đơn hàng", value: totalOrders.toString(), icon: Package },
-    { label: "Yêu thích", value: wishlistCount.toString(), icon: Heart },
-    { label: "Đang theo dõi", value: followingCount.toString(), icon: Gift },
+    { label: 'Đơn hàng', value: totalOrders.toString(), icon: Package },
+    { label: 'Yêu thích', value: wishlistCount.toString(), icon: Heart },
+    { label: 'Đang theo dõi', value: followingCount.toString(), icon: Gift },
   ];
 
   if (!isAuthenticated && !authLoading) {
@@ -135,15 +130,11 @@ export default function ProfilePage() {
           <User className="h-10 w-10 text-muted-foreground" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-xl font-bold text-foreground">
-            Vui lòng đăng nhập
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            Đăng nhập để quản lý tài khoản của bạn
-          </p>
+          <h2 className="text-xl font-bold text-foreground">Vui lòng đăng nhập</h2>
+          <p className="text-muted-foreground text-sm">Đăng nhập để quản lý tài khoản của bạn</p>
         </div>
         <Button
-          onClick={() => router.push("/login")}
+          onClick={() => router.push('/login')}
           className="bg-primary hover:bg-primary/90 rounded px-8 h-10"
         >
           Đăng nhập ngay
@@ -160,34 +151,30 @@ export default function ProfilePage() {
 
       <div
         className={cn(
-          "max-w-[1200px] mx-auto transition-opacity duration-200",
-          (authLoading || isLoading || logoutMutation.isPending) && "opacity-50 pointer-events-none",
+          'max-w-[1200px] mx-auto transition-opacity duration-200',
+          (authLoading || isLoading || logoutMutation.isPending) &&
+            'opacity-50 pointer-events-none',
         )}
       >
         <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar */}
           <div className="w-full md:w-[240px] shrink-0 space-y-4">
             {/* User Card */}
-            <div className="bg-card rounded-md p-4 border border-border/50">
+            <div className="bg-card rounded-lg p-4 border border-border/50">
               <div className="flex items-center gap-3 pb-4 border-b border-border/30">
                 <Avatar className="h-14 w-14 ring-2 ring-primary/10">
-                  <AvatarImage
-                    src={currentUser?.avatar ?? undefined}
-                    className="object-cover"
-                  />
+                  <AvatarImage src={currentUser?.avatar ?? undefined} className="object-cover" />
                   <AvatarFallback className="text-lg bg-primary/10 text-primary">
-                    {currentUser?.username?.charAt(0).toUpperCase() || "U"}
+                    {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-foreground truncate">
-                    {currentUser?.username || "Người dùng"}
+                    {currentUser?.username || 'Người dùng'}
                   </p>
                   <div className="flex items-center gap-1 mt-0.5">
                     <AccountBadgeIcon className="h-3 w-3 text-primary" />
-                    <span className="text-xs text-muted-foreground">
-                      {accountRoleLabel}
-                    </span>
+                    <span className="text-xs text-muted-foreground">{accountRoleLabel}</span>
                   </div>
                 </div>
               </div>
@@ -197,17 +184,10 @@ export default function ProfilePage() {
                 {quickStats.map((stat) => {
                   const Icon = stat.icon;
                   return (
-                    <div
-                      key={stat.label}
-                      className="text-center flex flex-col items-center"
-                    >
+                    <div key={stat.label} className="text-center flex flex-col items-center">
                       <Icon className="h-3.5 w-3.5 text-primary/60 mb-1" />
-                      <p className="font-semibold text-primary text-sm">
-                        {stat.value}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">
-                        {stat.label}
-                      </p>
+                      <p className="font-semibold text-primary text-sm">{stat.value}</p>
+                      <p className="text-[10px] text-muted-foreground">{stat.label}</p>
                     </div>
                   );
                 })}
@@ -215,7 +195,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="bg-card rounded-md overflow-hidden border border-border/50">
+            <div className="bg-card rounded-lg overflow-hidden border border-border/50">
               <Tabs
                 value={activeTab}
                 onValueChange={handleTabChange}
@@ -230,11 +210,11 @@ export default function ProfilePage() {
                         key={tab.value}
                         value={tab.value}
                         className={cn(
-                          "flex-none md:flex-1 w-auto md:w-full justify-start px-3 md:px-4 py-2.5 md:py-3 rounded-md md:rounded-none text-sm font-medium border border-border/40 md:border-0 md:border-l-2 md:border-l-transparent shrink-0",
-                          "transition-all duration-200",
-                          "bg-background md:bg-transparent hover:bg-muted/50 text-muted-foreground hover:text-foreground",
-                          "data-[state=active]:bg-primary/10 md:data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:border-primary md:data-[state=active]:border-l-primary",
-                          "data-[state=inactive]:border-border/40 md:data-[state=inactive]:border-l-transparent",
+                          'flex-none md:flex-1 w-auto md:w-full justify-start px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-none text-sm font-medium border border-border/40 md:border-0 md:border-l-2 md:border-l-transparent shrink-0',
+                          'transition-[color,background-color,border-color,box-shadow] duration-200',
+                          'bg-background md:bg-transparent hover:bg-muted/50 text-muted-foreground hover:text-foreground',
+                          'data-[state=active]:bg-primary/10 md:data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:border-primary md:data-[state=active]:border-l-primary',
+                          'data-[state=inactive]:border-border/40 md:data-[state=inactive]:border-l-transparent',
                         )}
                       >
                         <Icon className="h-4 w-4 mr-3 shrink-0" />
@@ -248,7 +228,7 @@ export default function ProfilePage() {
 
               {/* Logout Button */}
               <div className="border-t border-border">
-                  <Button
+                <Button
                   onClick={() => {
                     void handleLogout();
                   }}
@@ -262,7 +242,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Wallet Card */}
-            <div className="bg-linear-to-br from-primary/90 to-primary rounded-md p-4 text-white">
+            <div className="bg-linear-to-br from-primary/90 to-primary rounded-lg p-4 text-white">
               <div className="flex items-center gap-2 mb-3">
                 <Wallet className="h-5 w-5 opacity-90" />
                 <span className="font-medium text-sm">Đơn hàng chờ xử lý</span>
@@ -274,40 +254,21 @@ export default function ProfilePage() {
 
           {/* Main Content Area */}
           <div className="flex-1 min-w-0">
-            <div className="bg-card rounded-md min-h-[500px] border border-border/50">
-              <Tabs
-                value={activeTab}
-                onValueChange={handleTabChange}
-                className="w-full"
-              >
-                <TabsContent
-                  value="profile"
-                  className="mt-0 focus-visible:ring-0 p-4"
-                >
+            <div className="bg-card rounded-lg min-h-[500px] border border-border/50">
+              <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+                <TabsContent value="profile" className="mt-0 focus-visible:ring-0 p-4">
                   {currentUser && <ProfileTab user={currentUser} />}
                 </TabsContent>
-                <TabsContent
-                  value="orders"
-                  className="mt-0 focus-visible:ring-0 p-4"
-                >
+                <TabsContent value="orders" className="mt-0 focus-visible:ring-0 p-4">
                   <OrdersTab />
                 </TabsContent>
-                <TabsContent
-                  value="address"
-                  className="mt-0 focus-visible:ring-0 p-4"
-                >
+                <TabsContent value="address" className="mt-0 focus-visible:ring-0 p-4">
                   {currentUser && <AddressTab user={currentUser} />}
                 </TabsContent>
-                <TabsContent
-                  value="shop"
-                  className="mt-0 focus-visible:ring-0 p-4"
-                >
+                <TabsContent value="shop" className="mt-0 focus-visible:ring-0 p-4">
                   <ShopTab />
                 </TabsContent>
-                <TabsContent
-                  value="settings"
-                  className="mt-0 focus-visible:ring-0 p-4"
-                >
+                <TabsContent value="settings" className="mt-0 focus-visible:ring-0 p-4">
                   {currentUser && <SettingsTab user={currentUser} />}
                 </TabsContent>
               </Tabs>

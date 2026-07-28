@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,22 +6,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
 // Updated: Import from voucher types with backward compatibility alias
-import { CreateVoucherData } from "@/types/voucher";
+import { CreateVoucherData } from '@/types/voucher';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -29,8 +29,8 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 interface CreateModelDiscountProps {
   open: boolean;
@@ -46,14 +46,14 @@ export function CreateModelDiscount({
   isLoading,
 }: CreateModelDiscountProps) {
   const [formData, setFormData] = useState({
-    code: "",
-    description: "",
-    discountType: "percent",
-    discountValue: "",
-    startDate: "",
-    endDate: "",
-    minOrderValue: "",
-    usageLimit: "1",
+    code: '',
+    description: '',
+    discountType: 'percent',
+    discountValue: '',
+    startDate: '',
+    endDate: '',
+    minOrderValue: '',
+    usageLimit: '1',
     isActive: true,
   });
 
@@ -65,9 +65,9 @@ export function CreateModelDiscount({
       code: formData.code,
       name: formData.code, // Use code as name for backward compat
       description: formData.description,
-      type: formData.discountType === "percent" ? "percentage" : "fixed_amount",
+      type: formData.discountType === 'percent' ? 'percentage' : 'fixed_amount',
       value: Number(formData.discountValue),
-      scope: "platform", // Default to platform scope
+      scope: 'platform', // Default to platform scope
       minOrderValue: Number(formData.minOrderValue) || 0,
       usageLimit: Number(formData.usageLimit),
       startDate: formData.startDate,
@@ -84,14 +84,14 @@ export function CreateModelDiscount({
 
   const resetForm = () => {
     setFormData({
-      code: "",
-      description: "",
-      discountType: "percent",
-      discountValue: "",
-      startDate: "",
-      endDate: "",
-      minOrderValue: "",
-      usageLimit: "1",
+      code: '',
+      description: '',
+      discountType: 'percent',
+      discountValue: '',
+      startDate: '',
+      endDate: '',
+      minOrderValue: '',
+      usageLimit: '1',
       isActive: true,
     });
   };
@@ -105,7 +105,7 @@ export function CreateModelDiscount({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChangeWrapper}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[600px] p-6")}>
+      <DialogContent className={cn(adminDialogContentClass, 'sm:max-w-[600px] p-6')}>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">
             Tạo mã giảm giá mới
@@ -125,10 +125,10 @@ export function CreateModelDiscount({
                 <Input
                   id="code"
                   value={formData.code}
-                  onChange={(e) => handleChange("code", e.target.value)}
+                  onChange={(e) => handleChange('code', e.target.value)}
                   placeholder="VD: GIAMGIA2024"
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
 
@@ -138,12 +138,14 @@ export function CreateModelDiscount({
                 </Label>
                 <Select
                   value={formData.discountType}
-                  onValueChange={(value) => handleChange("discountType", value)}
+                  onValueChange={(value) => handleChange('discountType', value)}
                 >
-                  <SelectTrigger className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}>
+                  <SelectTrigger
+                    className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  >
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-[#ebe2d8]">
+                  <SelectContent className="rounded-lg border-border">
                     <SelectItem value="percent">Phần trăm (%)</SelectItem>
                     <SelectItem value="fixed">Số tiền cố định</SelectItem>
                   </SelectContent>
@@ -158,32 +160,30 @@ export function CreateModelDiscount({
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => handleChange("description", e.target.value)}
+                onChange={(e) => handleChange('description', e.target.value)}
                 placeholder="Mô tả mã giảm giá..."
-                className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
+                className={cn(
+                  adminFieldSurfaceClass,
+                  'min-h-24 resize-none transition-colors focus:bg-white',
+                )}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="discountValue" className="text-sm font-medium">
-                  Giá trị giảm *{" "}
-                  {formData.discountType === "percent" ? "(%)" : "(VNĐ)"}
+                  Giá trị giảm * {formData.discountType === 'percent' ? '(%)' : '(VNĐ)'}
                 </Label>
                 <Input
                   id="discountValue"
                   type="number"
                   value={formData.discountValue}
-                  onChange={(e) =>
-                    handleChange("discountValue", e.target.value)
-                  }
-                  placeholder={
-                    formData.discountType === "percent" ? "10" : "50000"
-                  }
+                  onChange={(e) => handleChange('discountValue', e.target.value)}
+                  placeholder={formData.discountType === 'percent' ? '10' : '50000'}
                   min="0"
-                  max={formData.discountType === "percent" ? "100" : undefined}
+                  max={formData.discountType === 'percent' ? '100' : undefined}
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
 
@@ -195,11 +195,11 @@ export function CreateModelDiscount({
                   id="usageLimit"
                   type="number"
                   value={formData.usageLimit}
-                  onChange={(e) => handleChange("usageLimit", e.target.value)}
+                  onChange={(e) => handleChange('usageLimit', e.target.value)}
                   placeholder="100"
                   min="1"
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
             </div>
@@ -213,9 +213,9 @@ export function CreateModelDiscount({
                   id="startDate"
                   type="datetime-local"
                   value={formData.startDate}
-                  onChange={(e) => handleChange("startDate", e.target.value)}
+                  onChange={(e) => handleChange('startDate', e.target.value)}
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
 
@@ -227,9 +227,9 @@ export function CreateModelDiscount({
                   id="endDate"
                   type="datetime-local"
                   value={formData.endDate}
-                  onChange={(e) => handleChange("endDate", e.target.value)}
+                  onChange={(e) => handleChange('endDate', e.target.value)}
                   required
-                  className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 />
               </div>
             </div>
@@ -242,23 +242,20 @@ export function CreateModelDiscount({
                 id="minOrderValue"
                 type="number"
                 value={formData.minOrderValue}
-                onChange={(e) => handleChange("minOrderValue", e.target.value)}
+                onChange={(e) => handleChange('minOrderValue', e.target.value)}
                 placeholder="0"
                 min="0"
-                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
               />
             </div>
 
-            <div className={cn(adminInsetPanelClass, "flex items-center space-x-3 p-4")}>
+            <div className={cn(adminInsetPanelClass, 'flex items-center space-x-3 p-4')}>
               <Switch
                 id="isActive"
                 checked={formData.isActive}
-                onCheckedChange={(checked) => handleChange("isActive", checked)}
+                onCheckedChange={(checked) => handleChange('isActive', checked)}
               />
-              <Label
-                htmlFor="isActive"
-                className="text-sm font-medium cursor-pointer"
-              >
+              <Label htmlFor="isActive" className="text-sm font-medium cursor-pointer">
                 Kích hoạt mã giảm giá
               </Label>
             </div>
@@ -270,18 +267,16 @@ export function CreateModelDiscount({
               variant="outline"
               onClick={() => handleOpenChangeWrapper(false)}
               disabled={isLoading}
-              className={cn("sm:min-w-28", adminSecondaryButtonClass)}
+              className={cn('sm:min-w-28', adminSecondaryButtonClass)}
             >
               Hủy
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
-              className={cn("sm:min-w-40", adminPrimaryButtonClass)}
+              className={cn('sm:min-w-40', adminPrimaryButtonClass)}
             >
-              {isLoading && (
-                <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
-              )}
+              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />}
               Tạo mã giảm giá
             </Button>
           </DialogFooter>

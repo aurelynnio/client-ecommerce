@@ -1,24 +1,22 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { shippingKeys } from "@/lib/queryKeys";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { shippingKeys } from '@/lib/queryKeys';
 import {
   CreateShippingTemplatePayload,
   ShippingTemplate,
   UpdateShippingTemplatePayload,
-} from "@/types/shipping";
-import { errorHandler } from "@/services/errorHandler";
+} from '@/types/shipping';
+import { errorHandler } from '@/services/errorHandler';
 
 const shippingApi = {
   getMyTemplates: async (): Promise<ShippingTemplate[]> => {
-    const response = await instance.get("/shipping");
+    const response = await instance.get('/shipping');
     return extractApiData(response);
   },
 
-  createTemplate: async (
-    data: CreateShippingTemplatePayload,
-  ): Promise<ShippingTemplate> => {
-    const response = await instance.post("/shipping", data);
+  createTemplate: async (data: CreateShippingTemplatePayload): Promise<ShippingTemplate> => {
+    const response = await instance.post('/shipping', data);
     return extractApiData(response);
   },
 
@@ -54,7 +52,7 @@ export function useCreateShippingTemplate() {
       queryClient.invalidateQueries({ queryKey: shippingKeys.templates() });
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create shipping template failed" });
+      errorHandler.log(error, { context: 'Create shipping template failed' });
     },
   });
 }
@@ -68,7 +66,7 @@ export function useUpdateShippingTemplate() {
       queryClient.invalidateQueries({ queryKey: shippingKeys.templates() });
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update shipping template failed" });
+      errorHandler.log(error, { context: 'Update shipping template failed' });
     },
   });
 }
@@ -82,7 +80,7 @@ export function useDeleteShippingTemplate() {
       queryClient.invalidateQueries({ queryKey: shippingKeys.templates() });
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete shipping template failed" });
+      errorHandler.log(error, { context: 'Delete shipping template failed' });
     },
   });
 }

@@ -7,48 +7,51 @@
  * Product status options for forms and filters
  */
 export const STATUS_OPTIONS = [
-  { value: "draft", label: "Bản nháp" },
-  { value: "published", label: "Đang bán" },
-  { value: "suspended", label: "Tạm ngưng" },
+  { value: 'draft', label: 'Bản nháp' },
+  { value: 'published', label: 'Đang bán' },
+  { value: 'suspended', label: 'Tạm ngưng' },
 ] as const;
 
 /**
  * Product status type derived from STATUS_OPTIONS
  */
-export type ProductStatus = typeof STATUS_OPTIONS[number]["value"];
+export type ProductStatus = (typeof STATUS_OPTIONS)[number]['value'];
 
 /**
  * All possible product statuses including deleted
  */
-export type ProductStatusFull = ProductStatus | "deleted";
+export type ProductStatusFull = ProductStatus | 'deleted';
 
 /**
  * Status display configuration
  */
-export const STATUS_CONFIG: Record<ProductStatusFull, {
-  label: string;
-  color: string;
-  bgColor: string;
-}> = {
+export const STATUS_CONFIG: Record<
+  ProductStatusFull,
+  {
+    label: string;
+    color: string;
+    bgColor: string;
+  }
+> = {
   draft: {
-    label: "Bản nháp",
-    color: "text-gray-600",
-    bgColor: "bg-gray-100",
+    label: 'Bản nháp',
+    color: 'text-gray-600',
+    bgColor: 'bg-gray-100',
   },
   published: {
-    label: "Đang bán",
-    color: "text-green-600",
-    bgColor: "bg-green-100",
+    label: 'Đang bán',
+    color: 'text-green-600',
+    bgColor: 'bg-green-100',
   },
   suspended: {
-    label: "Tạm ngưng",
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-100",
+    label: 'Tạm ngưng',
+    color: 'text-yellow-600',
+    bgColor: 'bg-yellow-100',
   },
   deleted: {
-    label: "Đã xóa",
-    color: "text-red-600",
-    bgColor: "bg-red-100",
+    label: 'Đã xóa',
+    color: 'text-red-600',
+    bgColor: 'bg-red-100',
   },
 };
 
@@ -70,26 +73,26 @@ export const MAX_GALLERY_IMAGES = 10;
 /**
  * Default currency
  */
-export const DEFAULT_CURRENCY = "VND";
+export const DEFAULT_CURRENCY = 'VND';
 
 /**
  * Sort options for product listing
  */
 export const SORT_OPTIONS = [
-  { value: "createdAt:desc", label: "Mới nhất" },
-  { value: "createdAt:asc", label: "Cũ nhất" },
-  { value: "price:asc", label: "Giá thấp đến cao" },
-  { value: "price:desc", label: "Giá cao đến thấp" },
-  { value: "soldCount:desc", label: "Bán chạy nhất" },
-  { value: "ratingAverage:desc", label: "Đánh giá cao nhất" },
-  { value: "name:asc", label: "Tên A-Z" },
-  { value: "name:desc", label: "Tên Z-A" },
+  { value: 'createdAt:desc', label: 'Mới nhất' },
+  { value: 'createdAt:asc', label: 'Cũ nhất' },
+  { value: 'price:asc', label: 'Giá thấp đến cao' },
+  { value: 'price:desc', label: 'Giá cao đến thấp' },
+  { value: 'soldCount:desc', label: 'Bán chạy nhất' },
+  { value: 'ratingAverage:desc', label: 'Đánh giá cao nhất' },
+  { value: 'name:asc', label: 'Tên A-Z' },
+  { value: 'name:desc', label: 'Tên Z-A' },
 ] as const;
 
 /**
  * Sort option type
  */
-export type SortOption = typeof SORT_OPTIONS[number]["value"];
+export type SortOption = (typeof SORT_OPTIONS)[number]['value'];
 
 /**
  * Default pagination settings
@@ -103,7 +106,7 @@ export const DEFAULT_PAGINATION = {
  * Variant attribute labels (Vietnamese)
  */
 export const VARIANT_ATTRIBUTE_LABELS = {
-  color: "Màu sắc",
-  size: "Kích thước",
-  material: "Chất liệu",
+  color: 'Màu sắc',
+  size: 'Kích thước',
+  material: 'Chất liệu',
 } as const;

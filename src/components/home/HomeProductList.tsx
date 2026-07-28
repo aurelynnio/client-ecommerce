@@ -1,24 +1,16 @@
-"use client";
-import { useEffect, useRef, useCallback } from "react";
-import { useAppSelector } from "@/hooks/hooks";
-import {
-  useInfiniteProducts,
-  useInfiniteProductsByCategory,
-} from "@/hooks/queries/useProducts";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { ProductCard } from "@/components/product/ProductCard";
-import { motion } from "framer-motion";
-import { cn } from "@/utils/cn";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { useEffect, useRef, useCallback } from 'react';
+import { useInfiniteProducts, useInfiniteProductsByCategory } from '@/hooks/queries/useProducts';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { ProductCard } from '@/components/product/ProductCard';
+import { motion } from 'framer-motion';
+import { getSafeErrorMessage } from '@/api';
 
 interface HomeProductListProps {
   selectedCategorySlug: string | null;
 }
 
-export default function HomeProductList({
-  selectedCategorySlug,
-}: HomeProductListProps) {
-  const { isOpen: isChatOpen } = useAppSelector((state) => state.chat);
+export default function HomeProductList({ selectedCategorySlug }: HomeProductListProps) {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // Use infinite category products when a category is selected
@@ -29,7 +21,7 @@ export default function HomeProductList({
     fetchNextPage: fetchNextCategoryPage,
     hasNextPage: hasNextCategoryPage,
     isFetchingNextPage: isFetchingNextCategoryPage,
-  } = useInfiniteProductsByCategory(selectedCategorySlug || "", {
+  } = useInfiniteProductsByCategory(selectedCategorySlug || '', {
     enabled: !!selectedCategorySlug,
     limit: 20,
   });
@@ -47,12 +39,8 @@ export default function HomeProductList({
   // Determine which data to use
   const isLoading = selectedCategorySlug ? categoryLoading : allLoading;
   const error = selectedCategorySlug ? categoryError : allError;
-  const fetchNextPage = selectedCategorySlug
-    ? fetchNextCategoryPage
-    : fetchNextAllPage;
-  const hasNextPage = selectedCategorySlug
-    ? hasNextCategoryPage
-    : hasNextAllPage;
+  const fetchNextPage = selectedCategorySlug ? fetchNextCategoryPage : fetchNextAllPage;
+  const hasNextPage = selectedCategorySlug ? hasNextCategoryPage : hasNextAllPage;
   const isFetchingNextPage = selectedCategorySlug
     ? isFetchingNextCategoryPage
     : isFetchingNextAllPage;
@@ -70,7 +58,7 @@ export default function HomeProductList({
         fetchNextPage();
       }
     },
-    [fetchNextPage, hasNextPage, isFetchingNextPage]
+    [fetchNextPage, hasNextPage, isFetchingNextPage],
   );
 
   useEffect(() => {
@@ -79,7 +67,7 @@ export default function HomeProductList({
 
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: "100px",
+      rootMargin: '100px',
       threshold: 0,
     });
 
@@ -95,7 +83,7 @@ export default function HomeProductList({
   if (error) {
     return (
       <div className="text-center py-20 text-red-500">
-        Đã xảy ra lỗi: {getSafeErrorMessage(error, "Không thể tải sản phẩm")}
+        Đã xảy ra lỗi: {getSafeErrorMessage(error, 'Không thể tải sản phẩm')}
       </div>
     );
   }
@@ -107,21 +95,16 @@ export default function HomeProductList({
       <div
         className={
           isLoading
-            ? "opacity-50 pointer-events-none transition-opacity"
-            : "opacity-100 transition-opacity"
+            ? 'opacity-50 pointer-events-none transition-opacity'
+            : 'opacity-100 transition-opacity'
         }
       >
         <motion.div
-          key={selectedCategorySlug || "all"}
+          key={selectedCategorySlug || 'all'}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className={cn(
-            "grid gap-3 transition-all duration-300",
-            isChatOpen
-              ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
-          )}
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
         >
           {products && products.length > 0
             ? products.map((p, index) => (
@@ -146,22 +129,15 @@ export default function HomeProductList({
         </motion.div>
 
         {/* Load More Trigger & Loading Spinner */}
-        <div
-          ref={loadMoreRef}
-          className="flex justify-center items-center py-8 mt-4"
-        >
+        <div ref={loadMoreRef} className="flex justify-center items-center py-8 mt-4">
           {isFetchingNextPage && (
             <div className="flex flex-col items-center gap-2">
               <SpinnerLoading noWrapper size={32} className="text-primary" />
-              <span className="text-sm text-muted-foreground">
-                Đang tải thêm sản phẩm...
-              </span>
+              <span className="text-sm text-muted-foreground">Đang tải thêm sản phẩm...</span>
             </div>
           )}
           {!hasNextPage && products.length > 0 && !isLoading && (
-            <p className="text-sm text-muted-foreground">
-              Bạn đã xem hết sản phẩm
-            </p>
+            <p className="text-sm text-muted-foreground">Bạn đã xem hết sản phẩm</p>
           )}
         </div>
       </div>

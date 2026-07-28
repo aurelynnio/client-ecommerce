@@ -1,11 +1,11 @@
-import { BaseEntity, PaginationData } from "./common";
-import { Shop } from "./shop";
+import { BaseEntity, PaginationData } from './common';
+import { Shop } from './shop';
 
 // Voucher type enum - matches backend schema
-export type VoucherType = "fixed_amount" | "percentage";
+export type VoucherType = 'fixed_amount' | 'percentage';
 
 // Voucher scope enum - matches backend schema
-export type VoucherScope = "shop" | "platform";
+export type VoucherScope = 'shop' | 'platform';
 
 // Voucher interface - matches backend voucherSchema
 export interface Voucher extends BaseEntity {
@@ -122,4 +122,3 @@ export interface VoucherStatistics {
   platformVouchers: number;
   totalUsage: number;
 }
-

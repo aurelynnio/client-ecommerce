@@ -1,8 +1,8 @@
-import { Address } from "./address";
-import { BaseEntity, PaginationData } from "./common";
+import { Address } from './address';
+import { BaseEntity, PaginationData } from './common';
 
-export type UserRole = "user" | "admin" | "seller";
-export type AuthProvider = "local" | "google";
+export type UserRole = 'user' | 'admin' | 'seller';
+export type AuthProvider = 'local' | 'google';
 
 export interface User extends BaseEntity {
   username: string;

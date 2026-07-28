@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { Button } from "@/components/ui/button";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { useVerifyCode } from "@/hooks/queries";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { getSafeErrorMessage } from "@/api";
+} from '@/components/ui/input-otp';
+import { Button } from '@/components/ui/button';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { useVerifyCode } from '@/hooks/queries';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import { getSafeErrorMessage } from '@/api';
 
 type VerifyCodeClientProps = {
   initialEmail?: string | null;
@@ -22,26 +22,20 @@ type VerifyCodeClientProps = {
 };
 
 const OTP_LENGTH = 6;
-const OTP_SLOT_CLASS =
-  "w-12 h-12 text-lg rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20";
+const OTP_SLOT_CLASS = 'h-12 w-12 rounded-lg border-input text-lg';
 
 function isValidOtp(value: string | null | undefined): value is string {
-  return typeof value === "string" && /^\d{6}$/.test(value);
+  return typeof value === 'string' && /^\d{6}$/.test(value);
 }
 
-export default function VerifyCodeClient({
-  initialEmail,
-  initialCode,
-}: VerifyCodeClientProps) {
+export default function VerifyCodeClient({ initialEmail, initialCode }: VerifyCodeClientProps) {
   const router = useRouter();
   const verifyCodeMutation = useVerifyCode();
 
-  const email = useMemo(() => (initialEmail ?? "").trim(), [initialEmail]);
+  const email = useMemo(() => (initialEmail ?? '').trim(), [initialEmail]);
   const canVerify = email.length > 0;
 
-  const [otp, setOtp] = useState<string>(() =>
-    isValidOtp(initialCode) ? initialCode : "",
-  );
+  const [otp, setOtp] = useState<string>(() => (isValidOtp(initialCode) ? initialCode : ''));
   const isLoading = verifyCodeMutation.isPending;
 
   const otpInputRef = useRef<HTMLInputElement>(null);
@@ -51,17 +45,17 @@ export default function VerifyCodeClient({
   const submitVerification = useCallback(
     async (code: string) => {
       if (!canVerify) {
-        toast.error("Thiếu email để xác thực. Vui lòng nhập lại email.");
+        toast.error('Thiếu email để xác thực. Vui lòng nhập lại email.');
         return;
       }
       if (!/^\d{6}$/.test(code)) return;
 
       try {
         await verifyCodeMutation.mutateAsync({ email, code });
-        toast.success("Xác thực email thành công!");
-        router.replace("/login");
+        toast.success('Xác thực email thành công!');
+        router.replace('/login');
       } catch (error: unknown) {
-        toast.error(getSafeErrorMessage(error, "Xác thực email thất bại"));
+        toast.error(getSafeErrorMessage(error, 'Xác thực email thất bại'));
       }
     },
     [canVerify, email, router, verifyCodeMutation],
@@ -83,22 +77,20 @@ export default function VerifyCodeClient({
 
   const handleOtpChange = (value: string) => {
     // Be defensive: keep digits only, max length 6.
-    const digits = value.replace(/[^\d]/g, "").slice(0, OTP_LENGTH);
+    const digits = value.replace(/[^\d]/g, '').slice(0, OTP_LENGTH);
     setOtp(digits);
   };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
-          Kiểm tra email
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Kiểm tra email</h1>
         <p className="text-sm text-muted-foreground">
-          Chúng tôi đã gửi mã xác nhận đến{" "}
+          Chúng tôi đã gửi mã xác nhận đến{' '}
           {canVerify ? (
-            <span className="font-medium text-gray-900">{email}</span>
+            <span className="font-medium text-foreground">{email}</span>
           ) : (
-            "email của bạn"
+            'email của bạn'
           )}
         </p>
       </div>
@@ -109,7 +101,7 @@ export default function VerifyCodeClient({
           <div className="mt-2">
             <Link
               href="/send-code"
-              className="text-[#E53935] hover:underline underline-offset-4 font-medium"
+              className="font-medium text-primary underline-offset-4 hover:underline"
             >
               Đi đến trang gửi mã
             </Link>
@@ -134,33 +126,29 @@ export default function VerifyCodeClient({
                 <InputOTPSlot key={i} index={i} className={OTP_SLOT_CLASS} />
               ))}
             </InputOTPGroup>
-            <InputOTPSeparator className="text-gray-300" />
+            <InputOTPSeparator className="text-muted-foreground" />
             <InputOTPGroup>
               {[3, 4, 5].map((i) => (
                 <InputOTPSlot key={i} index={i} className={OTP_SLOT_CLASS} />
               ))}
             </InputOTPGroup>
           </InputOTP>
-          <p className="text-xs text-muted-foreground">
-            Vui lòng nhập mã 6 số đã được gửi
-          </p>
+          <p className="text-xs text-muted-foreground">Vui lòng nhập mã 6 số đã được gửi</p>
         </div>
 
         <Button
           type="submit"
           disabled={!canVerify || isLoading || otp.length !== OTP_LENGTH}
-          className="w-full h-11 bg-[#E53935] hover:bg-[#D32F2F] rounded-full text-base font-medium"
+          className="h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
-          {isLoading ? (
-            <SpinnerLoading noWrapper size={18} className="mr-2 text-white" />
-          ) : null}
+          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
           Xác nhận
         </Button>
       </form>
 
       <Link
         href="/login"
-        className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-[#E53935] transition-colors"
+        className="flex items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
         Quay lại đăng nhập

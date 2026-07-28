@@ -1,44 +1,39 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Check, Eye, EyeOff } from "lucide-react";
-import { toast } from "sonner";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeft, Check, Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { useResetPassword } from "@/hooks/queries";
+import { useResetPassword } from '@/hooks/queries';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { cn } from "@/utils/cn";
-import { getSafeErrorMessage } from "@/api";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { cn } from '@/utils/cn';
+import { getSafeErrorMessage } from '@/api';
 
 const resetPasswordSchema = z
   .object({
-    email: z.string().email("Email không hợp lệ"),
+    email: z.string().email('Email không hợp lệ'),
     code: z
       .string()
-      .length(6, "Mã xác nhận phải có 6 ký tự")
-      .regex(/^\d+$/, "Mã xác nhận chỉ được chứa số"),
+      .length(6, 'Mã xác nhận phải có 6 ký tự')
+      .regex(/^\d+$/, 'Mã xác nhận chỉ được chứa số'),
     newPassword: z
       .string()
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Mật khẩu phải chứa chữ hoa, chữ thường và số",
-      ),
-    confirmPassword: z
-      .string()
-      .min(8, "Xác nhận mật khẩu phải có ít nhất 8 ký tự"),
+      .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Mật khẩu phải chứa chữ hoa, chữ thường và số'),
+    confirmPassword: z.string().min(8, 'Xác nhận mật khẩu phải có ít nhất 8 ký tự'),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Mật khẩu không khớp",
-    path: ["confirmPassword"],
+    message: 'Mật khẩu không khớp',
+    path: ['confirmPassword'],
   });
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
@@ -47,8 +42,8 @@ function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-1.5 text-xs transition-colors",
-        met ? "text-green-600" : "text-gray-400",
+        'flex items-center gap-1.5 text-xs transition-colors',
+        met ? 'text-green-600' : 'text-gray-400',
       )}
     >
       {met ? (
@@ -66,7 +61,7 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const resetPasswordMutation = useResetPassword();
 
-  const emailFromUrl = (searchParams.get("email") ?? "").trim();
+  const emailFromUrl = (searchParams.get('email') ?? '').trim();
 
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -81,15 +76,15 @@ export default function ResetPasswordPage() {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       email: emailFromUrl,
-      code: "",
-      newPassword: "",
-      confirmPassword: "",
+      code: '',
+      newPassword: '',
+      confirmPassword: '',
     },
   });
 
   const newPassword = useWatch({
     control,
-    name: "newPassword",
+    name: 'newPassword',
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
@@ -100,22 +95,18 @@ export default function ResetPasswordPage() {
         newPassword: data.newPassword,
       });
 
-      toast.success("Đặt lại mật khẩu thành công!");
-      router.replace("/login");
+      toast.success('Đặt lại mật khẩu thành công!');
+      router.replace('/login');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể đặt lại mật khẩu"));
+      toast.error(getSafeErrorMessage(error, 'Không thể đặt lại mật khẩu'));
     }
   };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
-          Đặt lại mật khẩu
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Tạo mật khẩu mới cho tài khoản của bạn
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Đặt lại mật khẩu</h1>
+        <p className="text-sm text-muted-foreground">Tạo mật khẩu mới cho tài khoản của bạn</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
@@ -124,16 +115,14 @@ export default function ResetPasswordPage() {
             Email
           </Label>
           <Input
-            {...register("email")}
+            {...register('email')}
             id="email"
             type="email"
             placeholder="name@example.com"
-            className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
+            className="h-11 rounded-lg border-input"
             disabled={isLoading}
           />
-          {errors.email ? (
-            <p className="text-sm text-red-500">{errors.email.message}</p>
-          ) : null}
+          {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
         </div>
 
         <div className="grid gap-2">
@@ -141,17 +130,15 @@ export default function ResetPasswordPage() {
             Mã xác nhận
           </Label>
           <Input
-            {...register("code")}
+            {...register('code')}
             id="code"
             placeholder="Nhập mã 6 số"
             maxLength={6}
             inputMode="numeric"
-            className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
+            className="h-11 rounded-lg border-input"
             disabled={isLoading}
           />
-          {errors.code ? (
-            <p className="text-sm text-red-500">{errors.code.message}</p>
-          ) : null}
+          {errors.code ? <p className="text-sm text-destructive">{errors.code.message}</p> : null}
         </div>
 
         <div className="grid gap-2">
@@ -160,40 +147,33 @@ export default function ResetPasswordPage() {
           </Label>
           <div className="relative">
             <Input
-              {...register("newPassword")}
+              {...register('newPassword')}
               id="newPassword"
-              type={showNewPassword ? "text" : "password"}
+              type={showNewPassword ? 'text' : 'password'}
               placeholder="••••••••"
-              className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20 pr-11"
+              className="h-11 rounded-lg border-input pr-11"
               disabled={isLoading}
             />
             <button
               type="button"
               onClick={() => setShowNewPassword((v) => !v)}
-              aria-label={showNewPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showNewPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
               aria-pressed={showNewPassword}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             >
-              {showNewPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
+              {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
           {newPassword ? (
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-1">
               <PasswordRequirement met={newPassword.length >= 8} text="8+ ký tự" />
               <PasswordRequirement met={/[A-Z]/.test(newPassword)} text="Chữ hoa" />
-              <PasswordRequirement
-                met={/[a-z]/.test(newPassword)}
-                text="Chữ thường"
-              />
+              <PasswordRequirement met={/[a-z]/.test(newPassword)} text="Chữ thường" />
               <PasswordRequirement met={/\d/.test(newPassword)} text="Số" />
             </div>
           ) : null}
           {errors.newPassword ? (
-            <p className="text-sm text-red-500">{errors.newPassword.message}</p>
+            <p className="text-sm text-destructive">{errors.newPassword.message}</p>
           ) : null}
         </div>
 
@@ -203,49 +183,41 @@ export default function ResetPasswordPage() {
           </Label>
           <div className="relative">
             <Input
-              {...register("confirmPassword")}
+              {...register('confirmPassword')}
               id="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
+              type={showConfirmPassword ? 'text' : 'password'}
               placeholder="••••••••"
-              className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20 pr-11"
+              className="h-11 rounded-lg border-input pr-11"
               disabled={isLoading}
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword((v) => !v)}
-              aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
               aria-pressed={showConfirmPassword}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             >
-              {showConfirmPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
+              {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
           {errors.confirmPassword ? (
-            <p className="text-sm text-red-500">
-              {errors.confirmPassword.message}
-            </p>
+            <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
           ) : null}
         </div>
 
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-11 bg-[#E53935] hover:bg-[#D32F2F] rounded-full text-base font-medium mt-2"
+          className="mt-2 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
-          {isLoading ? (
-            <SpinnerLoading noWrapper size={18} className="mr-2 text-white" />
-          ) : null}
+          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
           Đặt lại mật khẩu
         </Button>
       </form>
 
       <Link
         href="/login"
-        className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-[#E53935] transition-colors"
+        className="flex items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
         Quay lại đăng nhập

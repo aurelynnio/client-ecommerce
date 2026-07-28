@@ -1,4 +1,4 @@
-import { AdminPageHeader } from "@/components/admin/shared/AdminPrimitives";
+import { AdminPageHeader } from '@/components/admin/shared/AdminPrimitives';
 
 export function OrdersHeader() {
   return (

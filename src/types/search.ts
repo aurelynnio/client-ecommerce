@@ -1,6 +1,6 @@
-import { Product, Category } from "./product";
-import { Shop } from "./shop";
-import { PaginationData } from "./common";
+import { Product, Category } from './product';
+import { Shop } from './shop';
+import { PaginationData } from './common';
 
 // Search suggestions response
 export interface SearchSuggestions {
@@ -9,16 +9,16 @@ export interface SearchSuggestions {
     name: string;
     slug: string;
     images: string[];
-    price: Product["price"];
+    price: Product['price'];
   }[];
-  categories: Pick<Category, "_id" | "name" | "slug">[];
-  shops: Pick<Shop, "_id" | "name" | "slug" | "logo">[];
+  categories: Pick<Category, '_id' | 'name' | 'slug'>[];
+  shops: Pick<Shop, '_id' | 'name' | 'slug' | 'logo'>[];
 }
 
 // Trending search item
 export interface TrendingSearch {
   keyword: string;
-  type: "product" | "category" | "shop";
+  type: 'product' | 'category' | 'shop';
 }
 
 // Search facets for filtering
@@ -53,13 +53,7 @@ export interface SearchParams {
   minPrice?: number;
   maxPrice?: number;
   rating?: number;
-  sort?:
-    | "relevance"
-    | "price_asc"
-    | "price_desc"
-    | "newest"
-    | "bestselling"
-    | "rating";
+  sort?: 'relevance' | 'price_asc' | 'price_desc' | 'newest' | 'bestselling' | 'rating';
   page?: number;
   limit?: number;
 }

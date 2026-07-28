@@ -2,20 +2,15 @@
  * User/Profile React Query Hooks
  * Replaces userAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { userKeys } from "@/lib/queryKeys";
-import { User } from "@/types/user";
-import { Address } from "@/types/address";
-import { PaginationData } from "@/types/common";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { userKeys } from '@/lib/queryKeys';
+import { User } from '@/types/user';
+import { Address } from '@/types/address';
+import { PaginationData } from '@/types/common';
 
 // ============ Types ============
 export interface UserListParams {
@@ -32,7 +27,7 @@ export interface UpdateProfileData {
   avatar?: string;
 }
 
-export type TwoFactorAction = "enable" | "disable";
+export type TwoFactorAction = 'enable' | 'disable';
 
 export interface CreateAddressData {
   fullName: string;
@@ -94,25 +89,25 @@ function invalidateAddressAndProfile(queryClient: QueryClient) {
 // ============ API Functions ============
 const userApi = {
   getProfile: async (): Promise<User> => {
-    const response = await instance.get("/users/profile");
+    const response = await instance.get('/users/profile');
     return extractApiData(response);
   },
 
   getAddresses: async (): Promise<Address[]> => {
-    const response = await instance.get("/users/addresses");
+    const response = await instance.get('/users/addresses');
     return extractApiData(response);
   },
 
   // Admin: Get all users
   getAll: async (
-    params: UserListParams = {}
+    params: UserListParams = {},
   ): Promise<{
     users: User[];
     pagination: PaginationData | null;
     statistics: UserListStatistics | null;
   }> => {
     const { page = 1, limit = 10, search, role, isVerifiedEmail } = params;
-    const response = await instance.get("/users", {
+    const response = await instance.get('/users', {
       params: { page, limit, search, role, isVerifiedEmail },
     });
     const data = extractApiData<{
@@ -129,53 +124,46 @@ const userApi = {
 
   // Mutations
   updateProfile: async (data: UpdateProfileData): Promise<User> => {
-    const response = await instance.put("/users/profile", data);
+    const response = await instance.put('/users/profile', data);
     return extractApiData(response);
   },
 
   uploadAvatar: async (formData: FormData): Promise<{ avatar: string }> => {
-    const response = await instance.post("/users/upload-avatar", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await instance.post('/users/upload-avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
-  changePassword: async (data: {
-    oldPassword: string;
-    newPassword: string;
-  }): Promise<void> => {
-    await instance.put("/users/change-password", data);
+  changePassword: async (data: { oldPassword: string; newPassword: string }): Promise<void> => {
+    await instance.put('/users/change-password', data);
   },
 
-  sendTwoFactorCode: async (action: TwoFactorAction): Promise<{
+  sendTwoFactorCode: async (
+    action: TwoFactorAction,
+  ): Promise<{
     action: TwoFactorAction;
     email: string;
     expiresIn: string;
   }> => {
-    const response = await instance.post("/auth/2fa/send-code", { action });
+    const response = await instance.post('/auth/2fa/send-code', { action });
     return extractApiData(response);
   },
 
-  confirmTwoFactor: async (data: {
-    action: TwoFactorAction;
-    code: string;
-  }): Promise<User> => {
-    const response = await instance.post("/auth/2fa/confirm", data);
+  confirmTwoFactor: async (data: { action: TwoFactorAction; code: string }): Promise<User> => {
+    const response = await instance.post('/auth/2fa/confirm', data);
     return extractApiData(response);
   },
 
   // Address mutations
   createAddress: async (data: CreateAddressData): Promise<Address> => {
-    const response = await instance.post("/users/addresses", data);
+    const response = await instance.post('/users/addresses', data);
     return extractApiData(response);
   },
 
   updateAddress: async (data: UpdateAddressData): Promise<Address> => {
     const { addressId, ...updateData } = data;
-    const response = await instance.put(
-      `/users/addresses/${addressId}`,
-      updateData
-    );
+    const response = await instance.put(`/users/addresses/${addressId}`, updateData);
     return extractApiData(response);
   },
 
@@ -192,12 +180,12 @@ const userApi = {
   createUser: async (data: CreateUserData): Promise<User> => {
     const payload = { ...data };
     delete payload.phone;
-    const response = await instance.post("/users", payload);
+    const response = await instance.post('/users', payload);
     return extractApiData(response);
   },
 
   updateUser: async (data: UpdateUserData): Promise<User> => {
-    const response = await instance.put("/users", data);
+    const response = await instance.put('/users', data);
     return extractApiData(response);
   },
 
@@ -205,7 +193,6 @@ const userApi = {
     await instance.delete(`/users/${userId}`);
   },
 };
-
 
 // ============ Query Hooks ============
 
@@ -258,7 +245,7 @@ export function useUpdateProfile() {
       queryClient.setQueryData(userKeys.profile(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update profile failed" });
+      errorHandler.log(error, { context: 'Update profile failed' });
     },
   });
 }
@@ -275,7 +262,7 @@ export function useUploadAvatar() {
       invalidateProfile(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Upload avatar failed" });
+      errorHandler.log(error, { context: 'Upload avatar failed' });
     },
   });
 }
@@ -287,7 +274,7 @@ export function useChangePassword() {
   return useMutation({
     mutationFn: userApi.changePassword,
     onError: (error) => {
-      errorHandler.log(error, { context: "Change password failed" });
+      errorHandler.log(error, { context: 'Change password failed' });
     },
   });
 }
@@ -296,7 +283,7 @@ export function useSendTwoFactorCode() {
   return useMutation({
     mutationFn: userApi.sendTwoFactorCode,
     onError: (error) => {
-      errorHandler.log(error, { context: "Send two-factor code failed" });
+      errorHandler.log(error, { context: 'Send two-factor code failed' });
     },
   });
 }
@@ -310,7 +297,7 @@ export function useConfirmTwoFactor() {
       queryClient.setQueryData(userKeys.profile(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Confirm two-factor failed" });
+      errorHandler.log(error, { context: 'Confirm two-factor failed' });
     },
   });
 }
@@ -329,7 +316,7 @@ export function useCreateAddress() {
       invalidateAddressAndProfile(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create address failed" });
+      errorHandler.log(error, { context: 'Create address failed' });
     },
   });
 }
@@ -346,7 +333,7 @@ export function useUpdateAddress() {
       invalidateAddressAndProfile(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update address failed" });
+      errorHandler.log(error, { context: 'Update address failed' });
     },
   });
 }
@@ -363,7 +350,7 @@ export function useDeleteAddress() {
       invalidateAddressAndProfile(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete address failed" });
+      errorHandler.log(error, { context: 'Delete address failed' });
     },
   });
 }
@@ -381,7 +368,7 @@ export function useSetDefaultAddress() {
       invalidateProfile(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Set default address failed" });
+      errorHandler.log(error, { context: 'Set default address failed' });
     },
   });
 }
@@ -400,7 +387,7 @@ export function useCreateUser() {
       invalidateUsers(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create user failed" });
+      errorHandler.log(error, { context: 'Create user failed' });
     },
   });
 }
@@ -417,7 +404,7 @@ export function useUpdateUser() {
       invalidateUsers(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update user failed" });
+      errorHandler.log(error, { context: 'Update user failed' });
     },
   });
 }
@@ -434,7 +421,7 @@ export function useDeleteUser() {
       invalidateUsers(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete user failed" });
+      errorHandler.log(error, { context: 'Delete user failed' });
     },
   });
 }

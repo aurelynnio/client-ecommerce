@@ -9,7 +9,7 @@ export const USER_ROLES = {
   USER: 'user',
 } as const;
 
-export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
+export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 /**
  * Check if a role is admin
@@ -24,5 +24,3 @@ export function isAdmin(role: string): boolean {
 export function isSeller(role: string): boolean {
   return role === USER_ROLES.SELLER;
 }
-
-

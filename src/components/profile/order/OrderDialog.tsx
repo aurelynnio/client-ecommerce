@@ -1,14 +1,14 @@
-"use client";
+'use client';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Order } from "@/types/order";
+} from '@/components/ui/dialog';
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
+import { Order } from '@/types/order';
 import {
   Package,
   Clock,
@@ -19,14 +19,14 @@ import {
   MapPin,
   CreditCard,
   Calendar,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useCreatePaymentUrl } from "@/hooks/queries";
-import { toast } from "sonner";
-import { cn } from "@/utils/cn";
-import { Separator } from "@/components/ui/separator";
-import { formatCurrency, formatDate } from "@/utils/format";
-import { getSafeErrorMessage } from "@/api";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useCreatePaymentUrl } from '@/hooks/queries';
+import { toast } from 'sonner';
+import { cn } from '@/utils/cn';
+import { Separator } from '@/components/ui/separator';
+import { formatCurrency, formatDate } from '@/utils/format';
+import { getSafeErrorMessage } from '@/api';
 
 interface OrderDialogProps {
   order: Order | null;
@@ -35,18 +35,14 @@ interface OrderDialogProps {
 }
 
 const ORDER_DATE_TIME_OPTIONS: Intl.DateTimeFormatOptions = {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
 };
 
-export default function OrderDialog({
-  order,
-  open,
-  onClose,
-}: OrderDialogProps) {
+export default function OrderDialog({ order, open, onClose }: OrderDialogProps) {
   const paymentMutation = useCreatePaymentUrl();
   const isPaying = paymentMutation.isPending;
 
@@ -55,60 +51,60 @@ export default function OrderDialog({
   const handlePayment = async () => {
     if (!order) return;
     try {
-      toast.loading("Đang chuyển hướng đến VNPay...");
+      toast.loading('Đang chuyển hướng đến VNPay...');
       const result = await paymentMutation.mutateAsync(order._id);
       if (result.paymentUrl) {
         window.location.href = result.paymentUrl;
       }
     } catch (error: unknown) {
-      console.error("Payment error:", error);
-      toast.error(getSafeErrorMessage(error, "Không thể tạo thanh toán. Vui lòng thử lại."));
+      console.error('Payment error:', error);
+      toast.error(getSafeErrorMessage(error, 'Không thể tạo thanh toán. Vui lòng thử lại.'));
     }
   };
 
-  const getStatusConfig = (status: Order["status"]) => {
+  const getStatusConfig = (status: Order['status']) => {
     switch (status) {
-      case "pending":
+      case 'pending':
         return {
           icon: Clock,
-          color: "text-amber-500",
-          bg: "bg-amber-50",
-          label: "Chờ xử lý",
+          color: 'text-amber-500',
+          bg: 'bg-amber-50',
+          label: 'Chờ xử lý',
         };
-      case "confirmed":
-      case "processing":
+      case 'confirmed':
+      case 'processing':
         return {
           icon: RefreshCw,
-          color: "text-blue-500",
-          bg: "bg-blue-50",
-          label: "Đang xử lý",
+          color: 'text-blue-500',
+          bg: 'bg-blue-50',
+          label: 'Đang xử lý',
         };
-      case "shipped":
+      case 'shipped':
         return {
           icon: Truck,
-          color: "text-purple-500",
-          bg: "bg-purple-50",
-          label: "Đang giao hàng",
+          color: 'text-purple-500',
+          bg: 'bg-purple-50',
+          label: 'Đang giao hàng',
         };
-      case "delivered":
+      case 'delivered':
         return {
           icon: CheckCircle,
-          color: "text-green-500",
-          bg: "bg-green-50",
-          label: "Đã giao hàng",
+          color: 'text-green-500',
+          bg: 'bg-green-50',
+          label: 'Đã giao hàng',
         };
-      case "cancelled":
+      case 'cancelled':
         return {
           icon: XCircle,
-          color: "text-red-500",
-          bg: "bg-red-50",
-          label: "Đã hủy",
+          color: 'text-red-500',
+          bg: 'bg-red-50',
+          label: 'Đã hủy',
         };
       default:
         return {
           icon: Package,
-          color: "text-gray-500",
-          bg: "bg-gray-50",
+          color: 'text-gray-500',
+          bg: 'bg-gray-50',
           label: status,
         };
     }
@@ -137,9 +133,9 @@ export default function OrderDialog({
             </div>
             <div
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium w-fit",
+                'flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium w-fit',
                 statusConfig.bg,
-                statusConfig.color
+                statusConfig.color,
               )}
             >
               <StatusIcon className="h-4 w-4" />
@@ -161,9 +157,9 @@ export default function OrderDialog({
                     key={product.productId + index}
                     className="flex gap-4 sm:gap-6 items-center group"
                   >
-                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border border-border/60 bg-[#f7f7f7] flex-shrink-0">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:h-24 sm:w-24">
                       <Image
-                        src={product.image || "/images/placeholder-product.svg"}
+                        src={product.image || '/images/placeholder-product.svg'}
                         alt={product.name}
                         fill
                         className="object-cover"
@@ -178,16 +174,12 @@ export default function OrderDialog({
                           </p>
                           {(product.color || product.size) && (
                             <p className="text-sm text-muted-foreground">
-                              {[product.color, product.size]
-                                .filter(Boolean)
-                                .join(" • ")}
+                              {[product.color, product.size].filter(Boolean).join(' • ')}
                             </p>
                           )}
                         </div>
                         <div className="text-left sm:text-right flex-shrink-0">
-                          <p className="font-semibold text-base">
-                            {formatCurrency(product.price)}
-                          </p>
+                          <p className="font-semibold text-base">{formatCurrency(product.price)}</p>
                           <p className="text-sm text-muted-foreground mt-0.5">
                             x{product.quantity}
                           </p>
@@ -208,43 +200,38 @@ export default function OrderDialog({
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
                 Thanh toán
               </h3>
-              <div className="bg-[#f7f7f7] rounded-2xl p-4 border border-border/60 space-y-4">
+              <div className="space-y-4 rounded-lg border border-border bg-muted/50 p-4">
                 <div className="flex justify-between text-sm items-center">
                   <span className="text-muted-foreground">Phương thức</span>
                   <span className="font-medium">
-                    {order.paymentMethod === "cod"
-                      ? "Thanh toán khi nhận hàng"
-                      : "Ví VNPay"}
+                    {order.paymentMethod === 'cod' ? 'Thanh toán khi nhận hàng' : 'Ví VNPay'}
                   </span>
                 </div>
                 <Separator className="bg-border/50" />
                 <div className="flex justify-between text-sm items-center">
                   <span className="text-muted-foreground">Trạng thái</span>
                   <Badge
-                    variant={
-                      order.paymentStatus === "paid" ? "outline" : "secondary"
-                    }
+                    variant={order.paymentStatus === 'paid' ? 'outline' : 'secondary'}
                     className={cn(
-                      "rounded-lg px-2.5 font-medium border-0",
-                      order.paymentStatus === "paid"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-zinc-100 text-zinc-900"
+                      'rounded-lg px-2.5 font-medium border-0',
+                      order.paymentStatus === 'paid'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-zinc-100 text-zinc-900',
                     )}
                   >
-                    {order.paymentStatus === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
+                    {order.paymentStatus === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
                   </Badge>
                 </div>
-                {order.paymentMethod === "vnpay" &&
-                  order.paymentStatus === "unpaid" && (
-                    <Button
-                      onClick={handlePayment}
-                      disabled={isPaying}
-                      className="w-full rounded-xl mt-2"
-                      size="sm"
-                    >
-                      {isPaying ? "Đang xử lý..." : "Thanh toán ngay"}
-                    </Button>
-                  )}
+                {order.paymentMethod === 'vnpay' && order.paymentStatus === 'unpaid' && (
+                  <Button
+                    onClick={handlePayment}
+                    disabled={isPaying}
+                    className="w-full rounded-xl mt-2"
+                    size="sm"
+                  >
+                    {isPaying ? 'Đang xử lý...' : 'Thanh toán ngay'}
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -269,7 +256,7 @@ export default function OrderDialog({
                     order.shippingAddress.city,
                   ]
                     .filter(Boolean)
-                    .join(", ")}
+                    .join(', ')}
                 </p>
               </div>
             </div>
@@ -282,15 +269,11 @@ export default function OrderDialog({
                 <span>Tạm tính</span>
                 <span>{formatCurrency(order.subtotal)}</span>
               </div>
-              {(order.discountShop ?? 0) + (order.discountPlatform ?? 0) >
-                0 && (
+              {(order.discountShop ?? 0) + (order.discountPlatform ?? 0) > 0 && (
                 <div className="flex justify-between text-sm text-emerald-600 font-medium">
                   <span>Giảm giá</span>
                   <span>
-                    -
-                    {formatCurrency(
-                      (order.discountShop ?? 0) + (order.discountPlatform ?? 0)
-                    )}
+                    -{formatCurrency((order.discountShop ?? 0) + (order.discountPlatform ?? 0))}
                   </span>
                 </div>
               )}

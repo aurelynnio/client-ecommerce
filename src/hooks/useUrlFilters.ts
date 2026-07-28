@@ -1,5 +1,5 @@
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useMemo } from 'react';
 
 /**
  * Type for filter values - can be string, number, boolean, or undefined
@@ -27,7 +27,7 @@ interface UseUrlFiltersOptions<T extends Filters> {
 
 /**
  * Custom hook to manage URL parameters for filters and search
- * 
+ *
  * @example
  * ```tsx
  * const { filters, updateFilter, updateFilters, resetFilters } = useUrlFilters({
@@ -38,13 +38,13 @@ interface UseUrlFiltersOptions<T extends Filters> {
  *     limit: 10,
  *   }
  * });
- * 
+ *
  * // Update single filter
  * updateFilter('search', 'laptop');
- * 
+ *
  * // Update multiple filters
  * updateFilters({ category: 'electronics', page: 1 });
- * 
+ *
  * // Reset all filters
  * resetFilters();
  * ```
@@ -64,10 +64,10 @@ export function useUrlFilters<T extends Filters>({
 
     Object.keys(defaultFilters).forEach((key) => {
       const urlValue = searchParams.get(key);
-      
+
       if (urlValue !== null) {
         const defaultValue = defaultFilters[key];
-        
+
         // Parse based on default value type
         if (typeof defaultValue === 'number') {
           parsed[key] = Number(urlValue);
@@ -94,17 +94,12 @@ export function useUrlFilters<T extends Filters>({
   const createSearchParams = useCallback(
     (newFilters: Partial<T>): URLSearchParams => {
       const params = new URLSearchParams();
-      
+
       Object.entries(newFilters).forEach(([key, value]) => {
         const defaultValue = defaultFilters[key as keyof T];
-        
+
         // Skip if value is empty, null, undefined, or equals default
-        if (
-          value === undefined ||
-          value === null ||
-          value === '' ||
-          value === defaultValue
-        ) {
+        if (value === undefined || value === null || value === '' || value === defaultValue) {
           return;
         }
 
@@ -114,7 +109,7 @@ export function useUrlFilters<T extends Filters>({
 
       return params;
     },
-    [defaultFilters]
+    [defaultFilters],
   );
 
   /**
@@ -126,10 +121,10 @@ export function useUrlFilters<T extends Filters>({
       const params = createSearchParams(mergedFilters);
       const queryString = params.toString();
       const url = basePath || window.location.pathname;
-      
+
       router.push(queryString ? `${url}?${queryString}` : url, { scroll: false });
     },
-    [filters, createSearchParams, router, basePath]
+    [filters, createSearchParams, router, basePath],
   );
 
   /**
@@ -139,7 +134,7 @@ export function useUrlFilters<T extends Filters>({
     (key: keyof T, value: FilterValue) => {
       updateUrl({ [key]: value } as Partial<T>);
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   /**
@@ -149,7 +144,7 @@ export function useUrlFilters<T extends Filters>({
     (newFilters: Partial<T>) => {
       updateUrl(newFilters);
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   /**
@@ -194,4 +189,3 @@ export function useUrlFilters<T extends Filters>({
     createSearchParams,
   };
 }
-

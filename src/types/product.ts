@@ -1,9 +1,8 @@
-import { BaseEntity, PaginationData } from "./common";
-import { Shop } from "./shop";
-import { ShopCategory } from "./shopCategory";
+import { BaseEntity, PaginationData } from './common';
+import { Shop } from './shop';
+import { ShopCategory } from './shopCategory';
 
 export interface Category {
-
   _id: string;
   name: string;
   slug: string;
@@ -47,11 +46,9 @@ export interface Variant {
   images: string[];
 }
 
-
-export type ProductStatus = "draft" | "published" | "suspended" | "deleted";
+export type ProductStatus = 'draft' | 'published' | 'suspended' | 'deleted';
 
 export interface Product extends BaseEntity {
-
   name: string;
   slug: string;
   description: string;
@@ -94,19 +91,15 @@ export interface Product extends BaseEntity {
   effectivePrice?: number;
 }
 
-
 // ============ Helpers ============
 
 export function getVariantDisplay(variant: Variant): string {
   if (variant.name) return variant.name;
   if (variant.color) return variant.color;
-  return "Mặc định";
+  return 'Mặc định';
 }
 
-
-
 export interface ProductState {
-
   all: Product[];
   featured: Product[];
   newArrivals: Product[];
@@ -183,4 +176,3 @@ export interface VariantFormUpdate {
 }
 
 export type VariantForm = VariantFormCreate | VariantFormUpdate;
-

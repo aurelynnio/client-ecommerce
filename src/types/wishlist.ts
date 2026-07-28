@@ -1,5 +1,5 @@
-import { Product } from "./product";
-import { PaginationData } from "./common";
+import { Product } from './product';
+import { PaginationData } from './common';
 
 // Wishlist item (product in wishlist)
 export type WishlistItem = Product;

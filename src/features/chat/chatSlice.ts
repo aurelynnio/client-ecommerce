@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ChatUiState {
   isOpen: boolean;
@@ -9,7 +9,7 @@ const initialState: ChatUiState = {
 };
 
 export const chatSlice = createSlice({
-  name: "chat",
+  name: 'chat',
   initialState,
   reducers: {
     toggleChat: (state) => {

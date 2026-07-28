@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import { useAppDispatch } from "@/hooks/hooks";
-import { authSlice } from "@/features/auth/authSlice";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from 'react';
+import { useAppDispatch } from '@/hooks/hooks';
+import { authSlice } from '@/features/auth/authSlice';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   cartKeys,
   notificationKeys,
@@ -9,8 +9,8 @@ import {
   shopKeys,
   userKeys,
   wishlistKeys,
-} from "@/lib/queryKeys";
-import instance from "@/api/api";
+} from '@/lib/queryKeys';
+import instance from '@/api/api';
 
 export const useAuthPersistence = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ export const useAuthPersistence = () => {
     const checkAuthStatus = async () => {
       try {
         // Attempt to fetch profile. If cookies are valid, this will succeed.
-        const response = await instance.get("/users/profile");
+        const response = await instance.get('/users/profile');
         const result = response?.data?.data;
 
         if (result) {

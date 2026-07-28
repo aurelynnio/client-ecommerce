@@ -1,6 +1,6 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { authSlice } from "@/features/auth/authSlice";
-import type { Store } from "@reduxjs/toolkit";
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { authSlice } from '@/features/auth/authSlice';
+import type { Store } from '@reduxjs/toolkit';
 
 // Type for the Redux store
 type AppStore = Store;
@@ -36,11 +36,11 @@ const processQueue = (error: unknown, token: string | null = null) => {
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
     ? `${process.env.NEXT_PUBLIC_API_URL}/api`
-    : "http://localhost:5000/api",
+    : 'http://localhost:5000/api',
   timeout: 10000,
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -70,7 +70,7 @@ instance.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url?.includes("/auth/refresh-token")
+      !originalRequest.url?.includes('/auth/refresh-token')
     ) {
       if (isRefreshing) {
         // If already refreshing, add request to queue
@@ -90,7 +90,7 @@ instance.interceptors.response.use(
 
       try {
         // Attempt to refresh token via cookie
-        await instance.post("/auth/refresh-token");
+        await instance.post('/auth/refresh-token');
 
         // If successful, the server has set a new access token cookie
         // We just need to retry the original request
@@ -108,9 +108,9 @@ instance.interceptors.response.use(
         processQueue(refreshError, null);
 
         // If refresh fails, clear everything
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
           // Send event to let app know to redirect to login
-          window.dispatchEvent(new Event("auth-logout"));
+          window.dispatchEvent(new Event('auth-logout'));
         }
 
         if (store) {

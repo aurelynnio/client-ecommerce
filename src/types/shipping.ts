@@ -1,5 +1,5 @@
 // Shipping rule type
-export type ShippingRuleType = "fixed" | "weight_based" | "quantity_based";
+export type ShippingRuleType = 'fixed' | 'weight_based' | 'quantity_based';
 
 // Shipping rule interface
 export interface ShippingRule {
@@ -25,14 +25,14 @@ export interface ShippingTemplate {
 // Create shipping template payload
 export interface CreateShippingTemplatePayload {
   name: string;
-  rules: Omit<ShippingRule, "_id">[];
+  rules: Omit<ShippingRule, '_id'>[];
   isDefault?: boolean;
 }
 
 // Update shipping template payload
 export interface UpdateShippingTemplatePayload {
   name?: string;
-  rules?: Omit<ShippingRule, "_id">[];
+  rules?: Omit<ShippingRule, '_id'>[];
   isDefault?: boolean;
 }
 
@@ -46,5 +46,3 @@ export interface ShippingState {
   isDeleting: boolean;
   error: string | null;
 }
-
-

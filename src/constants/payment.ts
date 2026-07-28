@@ -12,7 +12,7 @@ export const PAYMENT_METHODS = {
   MOMO: 'momo',
 } as const;
 
-export type PaymentMethod = typeof PAYMENT_METHODS[keyof typeof PAYMENT_METHODS];
+export type PaymentMethod = (typeof PAYMENT_METHODS)[keyof typeof PAYMENT_METHODS];
 
 /**
  * Payment status constants
@@ -23,7 +23,7 @@ export const PAYMENT_STATUS = {
   REFUNDED: 'refunded',
 } as const;
 
-export type PaymentStatus = typeof PAYMENT_STATUS[keyof typeof PAYMENT_STATUS];
+export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
 /**
  * Payment method display names (Vietnamese)
@@ -42,5 +42,3 @@ export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
   [PAYMENT_STATUS.PAID]: 'Đã thanh toán',
   [PAYMENT_STATUS.REFUNDED]: 'Đã hoàn tiền',
 };
-
-

@@ -4,21 +4,21 @@
  */
 
 export const ENDPOINT_AUTH = {
-  LOGIN: "/auth/login",
-  REGISTER: "/auth/register",
-  REFRESH: "/auth/refresh-token",
-  LOGOUT: "/auth/logout",
+  LOGIN: '/auth/login',
+  REGISTER: '/auth/register',
+  REFRESH: '/auth/refresh-token',
+  LOGOUT: '/auth/logout',
 } as const;
 
 export const ENDPOINT_PERMISSION = {
-  GET_ALL: "/permissions",
-  GET_ROLE_PERMISSIONS: "/permissions/roles",
-  GET_MY_PERMISSIONS: "/permissions/me",
+  GET_ALL: '/permissions',
+  GET_ROLE_PERMISSIONS: '/permissions/roles',
+  GET_MY_PERMISSIONS: '/permissions/me',
   getUserPermissions: (userId: string) => `/permissions/user/${userId}`,
   updateUserPermissions: (userId: string) => `/permissions/user/${userId}`,
   grantPermission: (userId: string) => `/permissions/user/${userId}/grant`,
   revokePermission: (userId: string) => `/permissions/user/${userId}/revoke`,
-  GET_AUDIT_LOGS: "/permissions/audit",
+  GET_AUDIT_LOGS: '/permissions/audit',
 } as const;
 
 // Legacy exports for backward compatibility

@@ -1,36 +1,36 @@
-"use client";
-import { useUploadAvatar } from "@/hooks/queries/useProfile";
-import { useState } from "react";
-import Image from "next/image";
-import { Plus, User, Mail, MapPin, Check } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { Address, ProfileTabProps } from "@/types/address";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { useUploadAvatar } from '@/hooks/queries/useProfile';
+import { useState } from 'react';
+import Image from 'next/image';
+import { Plus, User, Mail, MapPin, Check } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import { Address, ProfileTabProps } from '@/types/address';
+import { getSafeErrorMessage } from '@/api';
 
 export default function ProfileTab({ user }: ProfileTabProps) {
   const uploadAvatarMutation = useUploadAvatar();
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const handleUploadAvatar = () => {
-    const file = document.createElement("input");
-    file.type = "file";
-    file.accept = "image/*";
+    const file = document.createElement('input');
+    file.type = 'file';
+    file.accept = 'image/*';
     file.onchange = async () => {
       const selectedFile = file.files?.item(0);
       if (!selectedFile) return;
 
       setIsUploadingAvatar(true);
       const formData = new FormData();
-      formData.append("avatar", selectedFile);
+      formData.append('avatar', selectedFile);
 
       try {
         await uploadAvatarMutation.mutateAsync(formData);
-        toast.success("Cập nhật ảnh đại diện thành công");
+        toast.success('Cập nhật ảnh đại diện thành công');
       } catch (error: unknown) {
-        toast.error(getSafeErrorMessage(error, "Cập nhật ảnh đại diện thất bại"));
+        toast.error(getSafeErrorMessage(error, 'Cập nhật ảnh đại diện thất bại'));
       } finally {
         setIsUploadingAvatar(false);
       }
@@ -47,7 +47,7 @@ export default function ProfileTab({ user }: ProfileTabProps) {
         <div className="relative group">
           <div className="w-28 h-28 rounded-full ring-2 ring-border overflow-hidden transition-transform duration-200 group-hover:scale-105 relative">
             <Image
-              src={user.avatar || "/images/placeholder-avatar.svg"}
+              src={user.avatar || '/images/placeholder-avatar.svg'}
               alt={user.username}
               fill
               className="object-cover rounded-full"
@@ -67,9 +67,7 @@ export default function ProfileTab({ user }: ProfileTabProps) {
           </Button>
         </div>
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            {user.username}
-          </h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{user.username}</h2>
           <p className="text-muted-foreground text-sm">
             Thành viên từ năm {new Date(user.createdAt).getFullYear()}
           </p>
@@ -113,18 +111,18 @@ export default function ProfileTab({ user }: ProfileTabProps) {
           value={
             user.addresses && user.addresses.length > 0
               ? `${
-                  user.addresses.find((addr: Address) => addr.isDefault)
-                    ?.district || user.addresses[0]?.district
+                  user.addresses.find((addr: Address) => addr.isDefault)?.district ||
+                  user.addresses[0]?.district
                 }, ${
-                  user.addresses.find((addr: Address) => addr.isDefault)
-                    ?.city || user.addresses[0]?.city
+                  user.addresses.find((addr: Address) => addr.isDefault)?.city ||
+                  user.addresses[0]?.city
                 }`
-              : "Chưa thiết lập địa chỉ"
+              : 'Chưa thiết lập địa chỉ'
           }
           sublabel={
             user.addresses && user.addresses.length > 0
-              ? "Địa điểm giao hàng chính"
-              : "Thêm địa chỉ để thanh toán nhanh hơn"
+              ? 'Địa điểm giao hàng chính'
+              : 'Thêm địa chỉ để thanh toán nhanh hơn'
           }
         />
       </div>
@@ -140,13 +138,7 @@ interface InfoRowProps {
   action?: React.ReactNode;
 }
 
-const InfoRow = ({
-  icon: Icon,
-  label,
-  value,
-  sublabel,
-  action,
-}: InfoRowProps) => (
+const InfoRow = ({ icon: Icon, label, value, sublabel, action }: InfoRowProps) => (
   <div className="flex items-center justify-between p-4 bg-muted/50 rounded-md transition-colors duration-200 hover:bg-muted">
     <div className="flex items-center gap-4">
       <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center text-muted-foreground">
@@ -158,9 +150,7 @@ const InfoRow = ({
           <p className="font-medium text-foreground">{value}</p>
           {action}
         </div>
-        {sublabel && (
-          <p className="text-xs text-muted-foreground mt-0.5">{sublabel}</p>
-        )}
+        {sublabel && <p className="text-xs text-muted-foreground mt-0.5">{sublabel}</p>}
       </div>
     </div>
   </div>

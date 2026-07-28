@@ -1,8 +1,5 @@
-import { Plus } from "lucide-react";
-import {
-  AdminActionButton,
-  AdminPageHeader,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Plus } from 'lucide-react';
+import { AdminActionButton, AdminPageHeader } from '@/components/admin/shared/AdminPrimitives';
 
 interface CategoriesHeaderProps {
   onAddCategory: () => void;

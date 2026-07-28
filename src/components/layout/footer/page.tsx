@@ -1,20 +1,16 @@
-"use client";
-import { type FormEvent, useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  ArrowRight,
-} from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
-import { useCategoryTree, useSubscribeNewsletter } from "@/hooks/queries";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { type FormEvent, useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { Facebook, Twitter, Instagram, Youtube, ArrowRight, Globe } from 'lucide-react';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useCategoryTree, useSubscribeNewsletter } from '@/hooks/queries';
+import { getSafeErrorMessage } from '@/api';
+
+import { BRAND_CONFIG } from '@/constants';
 
 const FooterSection = ({
   title,
@@ -24,9 +20,7 @@ const FooterSection = ({
   links: { label: string; href: string }[];
 }) => (
   <div className="space-y-4">
-    <h4 className="font-semibold tracking-wide text-xs uppercase text-foreground/70">
-      {title}
-    </h4>
+    <h4 className="font-semibold tracking-wide text-xs uppercase text-foreground/70">{title}</h4>
     <ul className="space-y-3 text-xs text-muted-foreground">
       {links.map((link) => (
         <li key={link.label}>
@@ -46,7 +40,7 @@ export default function FooterLayout() {
   const path = usePathname();
   const { data: categoryTree = [] } = useCategoryTree();
   const subscribeNewsletterMutation = useSubscribeNewsletter();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   const categoryLinks = useMemo(
     () =>
@@ -60,51 +54,64 @@ export default function FooterLayout() {
     [categoryTree],
   );
 
-  const socialLinks = [
-    { icon: Instagram, href: "https://www.instagram.com" },
-    { icon: Facebook, href: "https://www.facebook.com" },
-    { icon: Twitter, href: "https://www.x.com" },
-    { icon: Youtube, href: "https://www.youtube.com" },
-  ];
+  const socialLinks = useMemo(() => {
+    const iconMap: Record<string, typeof Instagram> = {
+      Facebook: Facebook,
+      Instagram: Instagram,
+      Twitter: Twitter,
+      Youtube: Youtube,
+    };
+
+    return BRAND_CONFIG.socials
+      .filter((social): social is { name: string; href: string } => Boolean(social.href))
+      .map((social) => ({
+        icon: iconMap[social.name] || Globe,
+        href: social.href,
+        name: social.name,
+      }));
+  }, []);
 
   const handleSubscribe = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const normalizedEmail = email.trim();
     if (!normalizedEmail) {
-      toast.error("Vui lòng nhập email");
+      toast.error('Vui lòng nhập email');
       return;
     }
 
     try {
       const result = await subscribeNewsletterMutation.mutateAsync({
         email: normalizedEmail,
-        source: "footer",
+        source: 'footer',
       });
       toast.success(
         result.alreadySubscribed
-          ? "Email này đã đăng ký bản tin trước đó"
-          : "Đăng ký nhận bản tin thành công",
+          ? 'Email này đã đăng ký bản tin trước đó'
+          : 'Đăng ký nhận bản tin thành công',
       );
-      setEmail("");
+      setEmail('');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể đăng ký bản tin"));
+      toast.error(getSafeErrorMessage(error, 'Không thể đăng ký bản tin'));
     }
   };
 
-  if (path.startsWith("/admin")) return null;
+  if (path.startsWith('/admin')) return null;
 
   return (
-    <footer className="w-full bg-[#FAFAFC] border-t border-border/40">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+    <footer className="w-full bg-muted/30 border-t border-border">
+      <div className="aura-container py-12 sm:py-14">
+        <div className="mb-12 grid grid-cols-1 gap-9 md:grid-cols-4">
           {/* Brand & Newsletter */}
           <div className="md:col-span-1 space-y-6">
             <Link href="/" className="block">
-              <span className="text-lg font-bold tracking-tight"> STORE</span>
+              <span className="text-lg font-bold tracking-tight text-primary">
+                {BRAND_CONFIG.name.toUpperCase()}
+              </span>
             </Link>
             <p className="text-muted-foreground text-xs leading-relaxed max-w-[280px]">
-              Đăng ký bản tin của chúng tôi để cập nhật những thông tin mới nhất, ưu đãi độc quyền và nhiều hơn thế nữa.
+              Đăng ký bản tin của chúng tôi để cập nhật những thông tin mới nhất, ưu đãi độc quyền
+              và nhiều hơn thế nữa.
             </p>
             <form className="flex gap-2 max-w-[280px]" onSubmit={handleSubscribe}>
               <Input
@@ -112,20 +119,20 @@ export default function FooterLayout() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={subscribeNewsletterMutation.isPending}
-                className="bg-background/50 border-border/50 focus-visible:ring-1 text-xs h-9 rounded-full px-4"
+                className="bg-card border-border focus-visible:ring-primary text-xs h-9 rounded-lg px-4"
               />
               <Button
                 type="submit"
                 size="icon"
                 disabled={subscribeNewsletterMutation.isPending}
-                className="h-9 w-9 rounded-full shrink-0"
+                className="h-9 w-9 rounded-lg shrink-0"
               >
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </form>
 
             <div className="flex gap-1 pt-2">
-              {socialLinks.map(({ icon: Icon, href }) => (
+              {socialLinks.map(({ icon: Icon, href, name }) => (
                 <Button
                   key={href}
                   asChild
@@ -133,7 +140,7 @@ export default function FooterLayout() {
                   size="icon"
                   className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-transparent"
                 >
-                  <Link href={href} target="_blank" rel="noreferrer">
+                  <Link href={href} target="_blank" rel="noreferrer" aria-label={name}>
                     <Icon className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -146,37 +153,35 @@ export default function FooterLayout() {
             links={
               categoryLinks.length > 0
                 ? categoryLinks
-                : [{ label: "Tất cả sản phẩm", href: "/products" }]
+                : [{ label: 'Tất cả sản phẩm', href: '/products' }]
             }
           />
 
           <FooterSection
             title="Tài khoản"
             links={[
-              { label: "Quản lý tài khoản", href: "/profile" },
-              { label: "Đơn hàng", href: "/profile?tab=orders" },
-              { label: "Đổi trả", href: "/returns" },
-              { label: "Yêu thích", href: "/wishlist" },
+              { label: 'Quản lý tài khoản', href: '/profile' },
+              { label: 'Đơn hàng', href: '/profile?tab=orders' },
+              { label: 'Đổi trả', href: '/returns' },
+              { label: 'Yêu thích', href: '/wishlist' },
             ]}
           />
 
           <FooterSection
             title="Chính sách"
             links={[
-              { label: "Điều khoản sử dụng", href: "/terms" },
-              { label: "Chính sách bảo mật", href: "/privacy" },
-              { label: "Chính sách Cookie", href: "/cookies" },
-              { label: "Chính sách vận chuyển", href: "/shipping" },
+              { label: 'Điều khoản sử dụng', href: '/terms' },
+              { label: 'Chính sách bảo mật', href: '/privacy' },
+              { label: 'Chính sách Cookie', href: '/cookies' },
+              { label: 'Chính sách vận chuyển', href: '/shipping' },
             ]}
           />
         </div>
 
-        <Separator className="bg-border/40" />
+        <Separator className="bg-border" />
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-muted-foreground pt-8">
-          <p>
-            &copy; {new Date().getFullYear()} Apple Store Inc. Bảo lưu mọi quyền.
-          </p>
+          <p>{BRAND_CONFIG.copyright}</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:underline">
               Chính sách bảo mật

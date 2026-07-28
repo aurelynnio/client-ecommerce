@@ -4,25 +4,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { useState, useEffect } from "react";
-import { Plus, ChevronDown, ChevronUp, Shield } from "lucide-react";
-import { RESOURCES, ACTIONS } from "@/constants/permissions";
-import { getRolePermissions } from "@/api/permission";
-import { UserRole } from "@/types/user";
-import { CreateUserData } from "@/hooks/queries/useProfile";
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from 'react';
+import { Plus, ChevronDown, ChevronUp, Shield } from 'lucide-react';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
+import { getRolePermissions } from '@/api/permission';
+import { UserRole } from '@/types/user';
+import { CreateUserData } from '@/hooks/queries/useProfile';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -30,8 +30,8 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 interface CreateModelUserProps {
   open: boolean;
@@ -47,12 +47,12 @@ export function CreateModelUser({
   isLoading = false,
 }: CreateModelUserProps) {
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    phone: "",
-    roles: "user",
+    username: '',
+    email: '',
+    phone: '',
+    roles: 'user',
     isVerifiedEmail: false,
-    password: "",
+    password: '',
     permissions: [] as string[],
   });
   const [showPermissions, setShowPermissions] = useState(false);
@@ -65,7 +65,7 @@ export function CreateModelUser({
         const perms = await getRolePermissions();
         setRolePermissions(perms?.rolePermissions || {});
       } catch (error) {
-        console.error("Failed to load role permissions:", error);
+        console.error('Failed to load role permissions:', error);
       }
     };
     if (open) {
@@ -86,9 +86,7 @@ export function CreateModelUser({
   };
 
   const handleSelectAllResource = (resource: string, checked: boolean) => {
-    const resourcePermissions = Object.values(ACTIONS).map(
-      (action) => `${resource}:${action}`
-    );
+    const resourcePermissions = Object.values(ACTIONS).map((action) => `${resource}:${action}`);
     if (checked) {
       setFormData((prev) => ({
         ...prev,
@@ -119,12 +117,12 @@ export function CreateModelUser({
   const handleClose = () => {
     onOpenChange(false);
     setFormData({
-      username: "",
-      email: "",
-      phone: "",
-      roles: "user",
+      username: '',
+      email: '',
+      phone: '',
+      roles: 'user',
       isVerifiedEmail: false,
-      password: "",
+      password: '',
       permissions: [],
     });
     setShowPermissions(false);
@@ -132,9 +130,16 @@ export function CreateModelUser({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-       <DialogContent className={cn(adminDialogContentClass, "max-w-lg max-h-[90vh] overflow-y-auto no-scrollbar p-6")}>
+      <DialogContent
+        className={cn(
+          adminDialogContentClass,
+          'max-w-lg max-h-[90vh] overflow-y-auto no-scrollbar p-6',
+        )}
+      >
         <DialogHeader className="border-b border-border/50 pb-6">
-          <DialogTitle className="text-2xl font-bold tracking-tight">Thêm người dùng mới</DialogTitle>
+          <DialogTitle className="text-2xl font-bold tracking-tight">
+            Thêm người dùng mới
+          </DialogTitle>
           <DialogDescription className="text-muted-foreground">
             Nhập thông tin người dùng mới bên dưới
           </DialogDescription>
@@ -142,120 +147,110 @@ export function CreateModelUser({
 
         <form onSubmit={handleSubmit} className="space-y-5 pt-6">
           <div className="space-y-4">
-             <div className="space-y-2">
-                <Label htmlFor="username" className="text-sm font-medium">
+            <div className="space-y-2">
+              <Label htmlFor="username" className="text-sm font-medium">
                 Họ và tên
-                </Label>
-                <Input
+              </Label>
+              <Input
                 id="username"
                 value={formData.username}
-                onChange={(e) =>
-                    setFormData({ ...formData, username: e.target.value })
-                }
-                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập họ và tên"
-                />
+              />
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
+              <Label htmlFor="email" className="text-sm font-medium">
                 Email
-                </Label>
-                <Input
+              </Label>
+              <Input
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                }
-                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập địa chỉ email"
-                />
+              />
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-medium">
+              <Label htmlFor="phone" className="text-sm font-medium">
                 Số điện thoại
-                </Label>
-                <Input
+              </Label>
+              <Input
                 id="phone"
                 type="tel"
                 value={formData.phone}
-                onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                }
-                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập số điện thoại"
-                />
+              />
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
+              <Label htmlFor="password" className="text-sm font-medium">
                 Mật khẩu
-                </Label>
-                <Input
+              </Label>
+              <Input
                 id="password"
                 type="password"
                 value={formData.password}
-                onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                }
-                className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập mật khẩu (ít nhất 6 ký tự)"
                 minLength={6}
-                />
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="roles" className="text-sm font-medium">
-                    Vai trò
-                    </Label>
-                    <Select
-                    value={formData.roles}
-                    onValueChange={(value) =>
-                        setFormData({ ...formData, roles: value })
-                    }
-                    disabled={isLoading}
-                    >
-                    <SelectTrigger className={cn(adminFieldSurfaceClass, "h-10")}>
-                        <SelectValue placeholder="Chọn vai trò" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
-                        <SelectItem value="user">Người dùng</SelectItem>
-                        <SelectItem value="admin">Quản trị viên</SelectItem>
-                    </SelectContent>
-                    </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="roles" className="text-sm font-medium">
+                  Vai trò
+                </Label>
+                <Select
+                  value={formData.roles}
+                  onValueChange={(value) => setFormData({ ...formData, roles: value })}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-10')}>
+                    <SelectValue placeholder="Chọn vai trò" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg border-border shadow-lg">
+                    <SelectItem value="user">Người dùng</SelectItem>
+                    <SelectItem value="admin">Quản trị viên</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="isVerifiedEmail" className="text-sm font-medium">
-                    Xác minh
-                    </Label>
-                    <Select
-                    value={formData.isVerifiedEmail.toString()}
-                    onValueChange={(value) =>
-                        setFormData({ ...formData, isVerifiedEmail: value === "true" })
-                    }
-                    disabled={isLoading}
-                    >
-                    <SelectTrigger className={cn(adminFieldSurfaceClass, "h-10")}>
-                        <SelectValue placeholder="Trạng thái" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-[#ebe2d8] shadow-lg">
-                        <SelectItem value="true">Đã xác minh</SelectItem>
-                        <SelectItem value="false">Chưa xác minh</SelectItem>
-                    </SelectContent>
-                    </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="isVerifiedEmail" className="text-sm font-medium">
+                  Xác minh
+                </Label>
+                <Select
+                  value={formData.isVerifiedEmail.toString()}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, isVerifiedEmail: value === 'true' })
+                  }
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-10')}>
+                    <SelectValue placeholder="Trạng thái" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg border-border shadow-lg">
+                    <SelectItem value="true">Đã xác minh</SelectItem>
+                    <SelectItem value="false">Chưa xác minh</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Permissions Section */}
@@ -264,7 +259,7 @@ export function CreateModelUser({
                 type="button"
                 variant="outline"
                 onClick={() => setShowPermissions(!showPermissions)}
-                className={cn("h-10 w-full justify-between", adminSecondaryButtonClass)}
+                className={cn('h-10 w-full justify-between', adminSecondaryButtonClass)}
               >
                 <span className="flex items-center gap-2">
                   <Shield className="h-4 w-4" />
@@ -283,10 +278,15 @@ export function CreateModelUser({
               </Button>
 
               {showPermissions && (
-                <div className={cn(adminInsetPanelClass, "max-h-[200px] space-y-3 overflow-y-auto p-3")}>
+                <div
+                  className={cn(
+                    adminInsetPanelClass,
+                    'max-h-[200px] space-y-3 overflow-y-auto p-3',
+                  )}
+                >
                   <p className="text-xs text-muted-foreground">
-                    Role <Badge variant="outline">{formData.roles}</Badge> đã có {defaultRolePerms.length} quyền mặc định.
-                    Chọn thêm quyền bổ sung bên dưới:
+                    Role <Badge variant="outline">{formData.roles}</Badge> đã có{' '}
+                    {defaultRolePerms.length} quyền mặc định. Chọn thêm quyền bổ sung bên dưới:
                   </p>
                   {Object.values(RESOURCES).map((resource) => (
                     <div key={resource} className="space-y-1">
@@ -306,10 +306,10 @@ export function CreateModelUser({
                           return (
                             <Badge
                               key={perm}
-                              variant={formData.permissions.includes(perm) ? "default" : "outline"}
+                              variant={formData.permissions.includes(perm) ? 'default' : 'outline'}
                               className={cn(
-                                "cursor-pointer text-xs",
-                                isFromRole && "border-[#d8473c]/35 text-[#d8473c]",
+                                'cursor-pointer text-xs',
+                                isFromRole && 'border-primary/35 text-primary',
                               )}
                               onClick={() => handleTogglePermission(perm)}
                             >
@@ -331,22 +331,24 @@ export function CreateModelUser({
               type="button"
               variant="outline"
               onClick={handleClose}
-              className={cn("h-10 px-5 sm:min-w-28", adminSecondaryButtonClass)}
+              className={cn('h-10 px-5 sm:min-w-28', adminSecondaryButtonClass)}
               disabled={isLoading}
             >
               Hủy
             </Button>
             <Button
               type="submit"
-              className={cn("h-10 px-6 shadow-sm", adminPrimaryButtonClass)}
+              className={cn('h-10 px-6 shadow-sm', adminPrimaryButtonClass)}
               disabled={isLoading}
             >
-               {isLoading ? "Đang tạo..." : (
-                   <>
-                    <Plus className="h-4 w-4" />
-                    Tạo người dùng
-                   </>
-               )}
+              {isLoading ? (
+                'Đang tạo...'
+              ) : (
+                <>
+                  <Plus className="h-4 w-4" />
+                  Tạo người dùng
+                </>
+              )}
             </Button>
           </div>
         </form>

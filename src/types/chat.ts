@@ -1,9 +1,9 @@
-import { BaseEntity } from "./common";
+import { BaseEntity } from './common';
 
-export type MessageType = "text" | "image" | "product";
-export type ExtendedMessageType = MessageType | "file";
+export type MessageType = 'text' | 'image' | 'product';
+export type ExtendedMessageType = MessageType | 'file';
 
-export type SenderType = "user" | "shop";
+export type SenderType = 'user' | 'shop';
 
 export interface ChatAttachment {
   url: string;
@@ -55,7 +55,7 @@ export interface SendMessagePayload {
   productRef?: string;
 }
 
-export type ChatbotRole = "user" | "assistant";
+export type ChatbotRole = 'user' | 'assistant';
 
 export interface ChatbotMessage {
   role: ChatbotRole;
@@ -94,4 +94,3 @@ export interface ChatState {
   isSending: boolean;
   error: string | null;
 }
-

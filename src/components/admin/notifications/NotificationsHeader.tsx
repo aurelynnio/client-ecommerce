@@ -1,8 +1,5 @@
-import { Plus } from "lucide-react";
-import {
-  AdminActionButton,
-  AdminPageHeader,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Plus } from 'lucide-react';
+import { AdminActionButton, AdminPageHeader } from '@/components/admin/shared/AdminPrimitives';
 
 interface NotificationsHeaderProps {
   onOpenCreate: () => void;
@@ -10,7 +7,11 @@ interface NotificationsHeaderProps {
   onClearAll: () => void;
 }
 
-export function NotificationsHeader({ onOpenCreate, onMarkAllRead, onClearAll }: NotificationsHeaderProps) {
+export function NotificationsHeader({
+  onOpenCreate,
+  onMarkAllRead,
+  onClearAll,
+}: NotificationsHeaderProps) {
   return (
     <AdminPageHeader
       title="Thông báo"

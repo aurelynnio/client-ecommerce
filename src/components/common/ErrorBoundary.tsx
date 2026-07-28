@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Component, ErrorInfo, ReactNode } from "react";
-import { AlertTriangle, RefreshCw, Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { errorHandler } from "@/services/errorHandler";
+import { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { errorHandler } from '@/services/errorHandler';
 
 interface Props {
   children: ReactNode;
@@ -19,12 +19,12 @@ interface State {
 /**
  * Error Boundary Component
  * Catches JavaScript errors anywhere in child component tree and displays fallback UI
- * 
+ *
  * @example
  * <ErrorBoundary>
  *   <MyComponent />
  * </ErrorBoundary>
- * 
+ *
  * @example with custom fallback
  * <ErrorBoundary fallback={<CustomErrorUI />}>
  *   <MyComponent />
@@ -55,7 +55,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = (): void => {
-    window.location.href = "/";
+    window.location.href = '/';
   };
 
   render(): ReactNode {
@@ -69,40 +69,33 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-[400px] flex items-center justify-center p-6">
           <div className="text-center max-w-md">
-            <div className="mx-auto w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
-              <AlertTriangle className="h-8 w-8 text-red-600" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-destructive/10">
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
-            
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Đã xảy ra lỗi
-            </h2>
-            
-            <p className="text-gray-600 mb-6">
-              Xin lỗi, đã có lỗi xảy ra khi tải trang này. 
-              Vui lòng thử lại hoặc quay về trang chủ.
+
+            <h2 className="mb-2 text-xl font-semibold text-foreground">Đã xảy ra lỗi</h2>
+
+            <p className="mb-6 text-muted-foreground">
+              Xin lỗi, đã có lỗi xảy ra khi tải trang này. Vui lòng thử lại hoặc quay về trang chủ.
             </p>
 
-            {process.env.NODE_ENV === "development" && this.state.error && (
-              <div className="mb-6 p-4 bg-gray-100 rounded-lg text-left">
-                <p className="text-sm font-mono text-red-600 break-all">
+            {process.env.NODE_ENV === 'development' && this.state.error && (
+              <div className="mb-6 rounded-lg bg-muted p-4 text-left">
+                <p className="break-all font-mono text-sm text-destructive">
                   {this.state.error.message}
                 </p>
               </div>
             )}
 
             <div className="flex gap-3 justify-center">
-              <Button
-                variant="outline"
-                onClick={this.handleReset}
-                className="gap-2"
-              >
+              <Button variant="outline" onClick={this.handleReset} className="gap-2">
                 <RefreshCw className="h-4 w-4" />
                 Thử lại
               </Button>
-              
+
               <Button
                 onClick={this.handleGoHome}
-                className="gap-2 bg-[#E53935] hover:bg-[#D32F2F]"
+                className="gap-2 bg-primary hover:bg-primary-hover"
               >
                 <Home className="h-4 w-4" />
                 Trang chủ

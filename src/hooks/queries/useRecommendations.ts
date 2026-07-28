@@ -2,67 +2,55 @@
  * Recommendation React Query Hooks
  * Replaces recommendationAction.ts async thunks with React Query
  */
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useRef } from "react";
-import instance from "@/api/api";
-import { extractApiData, getSafeErrorMessage } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { recommendationKeys } from "@/lib/queryKeys";
-import { Product } from "@/types/product";
-import { HomepageRecommendations } from "@/types/recommendation";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useRef } from 'react';
+import instance from '@/api/api';
+import { extractApiData, getSafeErrorMessage } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { recommendationKeys } from '@/lib/queryKeys';
+import { Product } from '@/types/product';
+import { HomepageRecommendations } from '@/types/recommendation';
 
 // ============ API Functions ============
 const recommendationApi = {
   getForYou: async (limit?: number): Promise<Product[]> => {
-    const response = await instance.get("/recommendations/for-you", {
+    const response = await instance.get('/recommendations/for-you', {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getRecentlyViewed: async (limit?: number): Promise<Product[]> => {
-    const response = await instance.get("/recommendations/recently-viewed", {
+    const response = await instance.get('/recommendations/recently-viewed', {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getSimilar: async (productId: string, limit?: number): Promise<Product[]> => {
-    const response = await instance.get(
-      `/recommendations/similar/${productId}`,
-      {
-        params: { limit },
-      }
-    );
+    const response = await instance.get(`/recommendations/similar/${productId}`, {
+      params: { limit },
+    });
     return extractApiData(response);
   },
 
-  getFrequentlyBoughtTogether: async (
-    productId: string,
-    limit?: number
-  ): Promise<Product[]> => {
+  getFrequentlyBoughtTogether: async (productId: string, limit?: number): Promise<Product[]> => {
     const response = await instance.get(`/recommendations/fbt/${productId}`, {
       params: { limit },
     });
     return extractApiData(response);
   },
 
-  getCategoryRecommendations: async (
-    categoryId: string,
-    limit?: number
-  ): Promise<Product[]> => {
-    const response = await instance.get(
-      `/recommendations/category/${categoryId}`,
-      {
-        params: { limit },
-      }
-    );
+  getCategoryRecommendations: async (categoryId: string, limit?: number): Promise<Product[]> => {
+    const response = await instance.get(`/recommendations/category/${categoryId}`, {
+      params: { limit },
+    });
     return extractApiData(response);
   },
 
   getHomepage: async (): Promise<HomepageRecommendations> => {
-    const response = await instance.get("/recommendations/homepage");
+    const response = await instance.get('/recommendations/homepage');
     return extractApiData(response);
   },
 
@@ -102,7 +90,7 @@ export function useRecentlyViewed(limit?: number) {
 export function useSimilarProducts(
   productId: string,
   limit?: number,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ) {
   return useQuery({
     queryKey: recommendationKeys.similar(productId, limit),
@@ -118,12 +106,11 @@ export function useSimilarProducts(
 export function useFrequentlyBoughtTogether(
   productId: string,
   limit?: number,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ) {
   return useQuery({
     queryKey: recommendationKeys.frequentlyBoughtTogether(productId, limit),
-    queryFn: () =>
-      recommendationApi.getFrequentlyBoughtTogether(productId, limit),
+    queryFn: () => recommendationApi.getFrequentlyBoughtTogether(productId, limit),
     enabled: options?.enabled ?? !!productId,
     staleTime: STALE_TIME.STATIC,
   });
@@ -135,12 +122,11 @@ export function useFrequentlyBoughtTogether(
 export function useCategoryRecommendations(
   categoryId: string,
   limit?: number,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ) {
   return useQuery({
     queryKey: recommendationKeys.category(categoryId, limit),
-    queryFn: () =>
-      recommendationApi.getCategoryRecommendations(categoryId, limit),
+    queryFn: () => recommendationApi.getCategoryRecommendations(categoryId, limit),
     enabled: options?.enabled ?? !!categoryId,
     staleTime: STALE_TIME.STATIC,
   });
@@ -176,7 +162,7 @@ export function useTrackProductView() {
     },
     onError: (error) => {
       // Silent fail - don't interrupt user experience for tracking
-      errorHandler.log(error, { context: "Track view failed" });
+      errorHandler.log(error, { context: 'Track view failed' });
     },
   });
 }
@@ -187,10 +173,7 @@ export function useTrackProductView() {
  * Composite hook for all recommendation operations
  * Combines multiple query hooks for comprehensive recommendation functionality
  */
-export function useRecommendation(options?: {
-  productId?: string;
-  limit?: number;
-}) {
+export function useRecommendation(options?: { productId?: string; limit?: number }) {
   const queryClient = useQueryClient();
   const { productId, limit } = options || {};
 
@@ -201,10 +184,10 @@ export function useRecommendation(options?: {
   // React Query hooks
   const forYouQuery = useForYouRecommendations(limit);
   const recentlyViewedQuery = useRecentlyViewed(limit);
-  const similarQuery = useSimilarProducts(productId || "", limit, {
+  const similarQuery = useSimilarProducts(productId || '', limit, {
     enabled: !!productId,
   });
-  const fbtQuery = useFrequentlyBoughtTogether(productId || "", limit, {
+  const fbtQuery = useFrequentlyBoughtTogether(productId || '', limit, {
     enabled: !!productId,
   });
   const homepageQuery = useHomepageRecommendations();
@@ -220,26 +203,20 @@ export function useRecommendation(options?: {
   const homepage = homepageQuery.data || null;
 
   // Refetch functions
-  const fetchForYou = useCallback(
-    () => forYouQuery.refetch(),
-    [forYouQuery]
-  );
+  const fetchForYou = useCallback(() => forYouQuery.refetch(), [forYouQuery]);
 
   const fetchRecentlyViewed = useCallback(
     () => recentlyViewedQuery.refetch(),
-    [recentlyViewedQuery]
+    [recentlyViewedQuery],
   );
 
   const fetchFBT = useCallback(
     (targetProductId: string, newLimit?: number) => {
       queryClient.invalidateQueries({
-        queryKey: recommendationKeys.frequentlyBoughtTogether(
-          targetProductId,
-          newLimit
-        ),
+        queryKey: recommendationKeys.frequentlyBoughtTogether(targetProductId, newLimit),
       });
     },
-    [queryClient]
+    [queryClient],
   );
 
   const fetchSimilar = useCallback(
@@ -248,7 +225,7 @@ export function useRecommendation(options?: {
         queryKey: recommendationKeys.similar(targetProductId, newLimit),
       });
     },
-    [queryClient]
+    [queryClient],
   );
 
   const fetchHomepage = useCallback(() => {
@@ -273,7 +250,7 @@ export function useRecommendation(options?: {
         trackingQueue.current.clear();
       }, 500);
     },
-    [trackMutate]
+    [trackMutate],
   );
 
   // Reset cache
@@ -304,7 +281,7 @@ export function useRecommendation(options?: {
     similar,
     homepage,
     isLoading,
-    error: error ? getSafeErrorMessage(error, "Không thể tải gợi ý") : null,
+    error: error ? getSafeErrorMessage(error, 'Không thể tải gợi ý') : null,
     fetchForYou,
     fetchRecentlyViewed,
     fetchFBT,

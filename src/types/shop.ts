@@ -1,6 +1,5 @@
-import { BaseEntity } from "./common";
-import { User } from "./user";
-
+import { BaseEntity } from './common';
+import { User } from './user';
 
 // Pickup address for shop - all fields optional per backend schema
 export interface PickupAddress {
@@ -20,7 +19,7 @@ export interface ShopMetrics {
 }
 
 // Shop status type
-export type ShopStatus = "active" | "inactive" | "banned";
+export type ShopStatus = 'active' | 'inactive' | 'banned';
 
 // Shop owner interface for populated owner field
 export interface ShopOwner {

@@ -2,31 +2,21 @@
  * Order React Query Hooks
  * Replaces orderAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { orderKeys, cartKeys } from "@/lib/queryKeys";
-import {
-  Order,
-  OrderStatus,
-  OrderStatistics,
-  OrderStatusCount,
-} from "@/types/order";
-import { PaginationData } from "@/types/common";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { orderKeys, cartKeys } from '@/lib/queryKeys';
+import { Order, OrderStatus, OrderStatistics, OrderStatusCount } from '@/types/order';
+import { PaginationData } from '@/types/common';
 
 export interface OrderListParams {
   page?: number;
   limit?: number;
   status?: OrderStatus;
-  paymentStatus?: "unpaid" | "paid" | "refunded";
-  paymentMethod?: "cod" | "vnpay" | "momo";
+  paymentStatus?: 'unpaid' | 'paid' | 'refunded';
+  paymentMethod?: 'cod' | 'vnpay' | 'momo';
   userId?: string;
   shop?: string;
   search?: string;
@@ -37,7 +27,7 @@ export interface OrderListParams {
 export interface CreateOrderData {
   cartItemIds: string[];
   addressId: string;
-  paymentMethod: "cod" | "vnpay" | "momo";
+  paymentMethod: 'cod' | 'vnpay' | 'momo';
   platformVoucher?: string;
   shopVouchers?: Array<{ shopId: string; code: string }>;
   voucherShopCode?: string;
@@ -65,59 +55,48 @@ interface ServerOrderStatisticsResponse {
 function normalizeOrderStatistics(
   data: ServerOrderStatisticsResponse | OrderStatistics,
 ): OrderStatistics {
-  const summary = "summary" in data ? data.summary : undefined;
-  const ordersByStatusRaw =
-    "ordersByStatus" in data ? data.ordersByStatus : undefined;
+  const summary = 'summary' in data ? data.summary : undefined;
+  const ordersByStatusRaw = 'ordersByStatus' in data ? data.ordersByStatus : undefined;
 
   const ordersByStatus: OrderStatusCount[] = Array.isArray(ordersByStatusRaw)
     ? ordersByStatusRaw
-    : ordersByStatusRaw && typeof ordersByStatusRaw === "object"
+    : ordersByStatusRaw && typeof ordersByStatusRaw === 'object'
       ? Object.entries(ordersByStatusRaw).map(([status, value]) => ({
           _id: status,
           count: value?.count || 0,
         }))
       : [];
 
-  const countsByStatus = new Map(
-    ordersByStatus.map((item) => [item._id, item.count]),
-  );
+  const countsByStatus = new Map(ordersByStatus.map((item) => [item._id, item.count]));
 
   return {
-    totalOrders:
-      summary?.totalOrders ??
-      ("totalOrders" in data ? data.totalOrders : 0) ??
-      0,
+    totalOrders: summary?.totalOrders ?? ('totalOrders' in data ? data.totalOrders : 0) ?? 0,
     pendingOrders:
       summary?.pendingOrders ??
-      ("pendingOrders" in data ? data.pendingOrders : 0) ??
-      countsByStatus.get("pending") ??
+      ('pendingOrders' in data ? data.pendingOrders : 0) ??
+      countsByStatus.get('pending') ??
       0,
     confirmedOrders:
-      ("confirmedOrders" in data ? data.confirmedOrders : 0) ??
-      countsByStatus.get("confirmed") ??
+      ('confirmedOrders' in data ? data.confirmedOrders : 0) ??
+      countsByStatus.get('confirmed') ??
       0,
     processingOrders:
-      ("processingOrders" in data ? data.processingOrders : 0) ??
-      countsByStatus.get("processing") ??
+      ('processingOrders' in data ? data.processingOrders : 0) ??
+      countsByStatus.get('processing') ??
       0,
     shippedOrders:
-      ("shippedOrders" in data ? data.shippedOrders : 0) ??
-      countsByStatus.get("shipped") ??
-      0,
+      ('shippedOrders' in data ? data.shippedOrders : 0) ?? countsByStatus.get('shipped') ?? 0,
     deliveredOrders:
-      ("deliveredOrders" in data ? data.deliveredOrders : 0) ??
+      ('deliveredOrders' in data ? data.deliveredOrders : 0) ??
       summary?.completedOrders ??
-      countsByStatus.get("delivered") ??
+      countsByStatus.get('delivered') ??
       0,
     cancelledOrders:
       summary?.cancelledOrders ??
-      ("cancelledOrders" in data ? data.cancelledOrders : 0) ??
-      countsByStatus.get("cancelled") ??
+      ('cancelledOrders' in data ? data.cancelledOrders : 0) ??
+      countsByStatus.get('cancelled') ??
       0,
-    totalRevenue:
-      summary?.totalRevenue ??
-      ("totalRevenue" in data ? data.totalRevenue : 0) ??
-      0,
+    totalRevenue: summary?.totalRevenue ?? ('totalRevenue' in data ? data.totalRevenue : 0) ?? 0,
     ordersByStatus,
   };
 }
@@ -132,17 +111,9 @@ function invalidateOrdersAndCart(queryClient: QueryClient) {
 }
 
 const orderApi = {
-  getUserOrders: async (
-    params: OrderListParams = {},
-  ): Promise<OrderListResponse> => {
-    const {
-      page = 1,
-      limit = 10,
-      status,
-      paymentStatus,
-      paymentMethod,
-    } = params;
-    const response = await instance.get("/orders", {
+  getUserOrders: async (params: OrderListParams = {}): Promise<OrderListResponse> => {
+    const { page = 1, limit = 10, status, paymentStatus, paymentMethod } = params;
+    const response = await instance.get('/orders', {
       params: {
         page,
         limit,
@@ -168,20 +139,10 @@ const orderApi = {
   },
 
   // Admin: Get all orders
-  getAllOrders: async (
-    params: OrderListParams = {},
-  ): Promise<OrderListResponse> => {
-    const {
-      page = 1,
-      limit = 10,
-      status,
-      paymentStatus,
-      paymentMethod,
-      userId,
-      shop,
-    } = params;
+  getAllOrders: async (params: OrderListParams = {}): Promise<OrderListResponse> => {
+    const { page = 1, limit = 10, status, paymentStatus, paymentMethod, userId, shop } = params;
 
-    const response = await instance.get("/orders/all/list", {
+    const response = await instance.get('/orders/all/list', {
       params: {
         page,
         limit,
@@ -209,7 +170,7 @@ const orderApi = {
     params: OrderListParams = {},
   ): Promise<OrderListResponse> => {
     const { page = 1, limit = 10, status, paymentStatus } = params;
-    const response = await instance.get("/orders/seller/list", {
+    const response = await instance.get('/orders/seller/list', {
       params: {
         page,
         limit,
@@ -229,21 +190,15 @@ const orderApi = {
   },
 
   getStatistics: async (): Promise<OrderStatistics> => {
-    const response = await instance.get("/orders/statistics/overview");
+    const response = await instance.get('/orders/statistics/overview');
     const data = extractApiData<ServerOrderStatisticsResponse>(response);
     return normalizeOrderStatistics(data);
   },
 
   // Mutations
   create: async (data: CreateOrderData): Promise<Order> => {
-    const {
-      voucherPlatformCode,
-      discountCode,
-      platformVoucher,
-      shopVouchers,
-      ...orderData
-    } = data;
-    const response = await instance.post("/orders", {
+    const { voucherPlatformCode, discountCode, platformVoucher, shopVouchers, ...orderData } = data;
+    const response = await instance.post('/orders', {
       ...orderData,
       platformVoucher: platformVoucher ?? voucherPlatformCode ?? discountCode,
       shopVouchers: shopVouchers ?? [],
@@ -256,10 +211,7 @@ const orderApi = {
     return extractApiData(response);
   },
 
-  updateStatus: async (params: {
-    orderId: string;
-    status: OrderStatus;
-  }): Promise<Order> => {
+  updateStatus: async (params: { orderId: string; status: OrderStatus }): Promise<Order> => {
     const { orderId, status } = params;
     const response = await instance.put(`/orders/${orderId}/status`, {
       status,
@@ -276,10 +228,7 @@ const orderApi = {
 /**
  * Get current user's orders
  */
-export function useUserOrders(
-  params?: OrderListParams,
-  options?: { enabled?: boolean },
-) {
+export function useUserOrders(params?: OrderListParams, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: orderKeys.list(params),
     queryFn: () => orderApi.getUserOrders(params),
@@ -295,8 +244,7 @@ export function useOrder(orderId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: orderKeys.detail(orderId),
     queryFn: () => orderApi.getById(orderId),
-    enabled:
-      options?.enabled ?? (!!orderId && /^[0-9a-fA-F]{24}$/.test(orderId)),
+    enabled: options?.enabled ?? (!!orderId && /^[0-9a-fA-F]{24}$/.test(orderId)),
   });
 }
 
@@ -346,7 +294,7 @@ export function useCreateOrder() {
       invalidateOrdersAndCart(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create order failed" });
+      errorHandler.log(error, { context: 'Create order failed' });
     },
   });
 }
@@ -364,7 +312,7 @@ export function useCancelOrder() {
       invalidateOrderLists(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Cancel order failed" });
+      errorHandler.log(error, { context: 'Cancel order failed' });
     },
   });
 }
@@ -382,7 +330,7 @@ export function useUpdateOrderStatus() {
       invalidateOrderLists(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update order status failed" });
+      errorHandler.log(error, { context: 'Update order status failed' });
     },
   });
 }
@@ -400,7 +348,7 @@ export function useConfirmDelivery() {
       invalidateOrderLists(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Confirm delivery failed" });
+      errorHandler.log(error, { context: 'Confirm delivery failed' });
     },
   });
 }

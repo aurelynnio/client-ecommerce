@@ -2,18 +2,13 @@
  * Category React Query Hooks
  * Replaces categoryAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME, GC_TIME } from "@/constants/cache";
-import { categoryKeys } from "@/lib/queryKeys";
-import { Category, CategoriesResponse } from "@/types/category";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME, GC_TIME } from '@/constants/cache';
+import { categoryKeys } from '@/lib/queryKeys';
+import { Category, CategoriesResponse } from '@/types/category';
 
 // ============ Types ============
 export interface CategoryListParams {
@@ -58,31 +53,23 @@ function invalidateCategoryListAndTree(queryClient: QueryClient) {
 // ============ API Functions ============
 const categoryApi = {
   getTree: async (): Promise<CategoryTree[]> => {
-    const response = await instance.get("/categories/tree");
+    const response = await instance.get('/categories/tree');
     return extractApiData(response);
   },
 
-  getAll: async (
-    params: CategoryListParams = {}
-  ): Promise<CategoriesResponse> => {
-    const { page = 1, limit = 10, search = "", parentCategory } = params;
-    let url = `/categories?page=${page}&limit=${limit}&search=${search}`;
-    if (parentCategory !== undefined) {
-      url += `&parentCategory=${parentCategory}`;
-    }
-    const response = await instance.get(url);
+  getAll: async (params: CategoryListParams = {}): Promise<CategoriesResponse> => {
+    const { page = 1, limit = 10, search = '', parentCategory } = params;
+    const response = await instance.get('/categories', {
+      params: { page, limit, search, ...(parentCategory !== undefined && { parentCategory }) },
+    });
     return extractApiData(response);
   },
 
-  getActive: async (
-    params: CategoryListParams = {}
-  ): Promise<CategoriesResponse> => {
-    const { page = 1, limit = 100, search = "", parentCategory } = params;
-    let url = `/categories/active?page=${page}&limit=${limit}&search=${search}`;
-    if (parentCategory !== undefined) {
-      url += `&parentCategory=${parentCategory}`;
-    }
-    const response = await instance.get(url);
+  getActive: async (params: CategoryListParams = {}): Promise<CategoriesResponse> => {
+    const { page = 1, limit = 100, search = '', parentCategory } = params;
+    const response = await instance.get('/categories/active', {
+      params: { page, limit, search, ...(parentCategory !== undefined && { parentCategory }) },
+    });
     return extractApiData(response);
   },
 
@@ -95,13 +82,13 @@ const categoryApi = {
     categories: Category[];
     totalProducts: number;
   }> => {
-    const response = await instance.get("/categories/statistics");
+    const response = await instance.get('/categories/statistics');
     return extractApiData(response);
   },
 
   // Mutations
   create: async (data: CreateCategoryData): Promise<Category> => {
-    const response = await instance.post("/categories", data);
+    const response = await instance.post('/categories', data);
     return extractApiData(response);
   },
 
@@ -156,10 +143,7 @@ export function useActiveCategories(params: CategoryListParams = {}) {
 /**
  * Get category by ID
  */
-export function useCategory(
-  categoryId: string,
-  options?: { enabled?: boolean }
-) {
+export function useCategory(categoryId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: categoryKeys.detail(categoryId),
     queryFn: () => categoryApi.getById(categoryId),
@@ -174,7 +158,7 @@ export function useCategoryStatistics() {
   return useQuery({
     queryKey: categoryKeys.statistics(),
     queryFn: categoryApi.getStatistics,
-    staleTime: 5 * 60 * 1000,
+    staleTime: STALE_TIME.VERY_LONG,
   });
 }
 
@@ -192,7 +176,7 @@ export function useCreateCategory() {
       invalidateAllCategoryQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create category failed" });
+      errorHandler.log(error, { context: 'Create category failed' });
     },
   });
 }
@@ -210,7 +194,7 @@ export function useUpdateCategory() {
       invalidateCategoryListAndTree(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update category failed" });
+      errorHandler.log(error, { context: 'Update category failed' });
     },
   });
 }
@@ -227,7 +211,7 @@ export function useDeleteCategory() {
       invalidateAllCategoryQueries(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete category failed" });
+      errorHandler.log(error, { context: 'Delete category failed' });
     },
   });
 }

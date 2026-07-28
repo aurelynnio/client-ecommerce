@@ -1,60 +1,42 @@
-"use client";
-import { useState, useRef, useEffect, useMemo } from "react";
-import Image from "next/image";
-import {
-  MessageSquare,
-  Search,
-  Send,
-  User,
-  Image as ImageIcon,
-  Paperclip,
-  X,
-} from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useMyShop } from "@/hooks/queries";
-import { cn } from "@/utils/cn";
-import { useAppSelector } from "@/hooks/hooks";
+'use client';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import Image from 'next/image';
+import { MessageSquare, Search, Send, User, Image as ImageIcon, Paperclip, X } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useMyShop } from '@/hooks/queries';
+import { cn } from '@/utils/cn';
+import { useAppSelector } from '@/hooks/hooks';
 import {
   useChatConversations,
   useChatMessages,
   useSendChatMessage,
   useMarkConversationAsRead,
-} from "@/hooks/queries";
-import { Conversation } from "@/types/chat";
-import { useSocket } from "@/context/SocketContext";
-import { joinConversation, leaveConversation } from "@/socket/chat.socket";
-import { toast } from "sonner";
-import { getSafeErrorMessage } from "@/api";
-import ChatAttachments from "@/components/chat/ChatAttachments";
+} from '@/hooks/queries';
+import { Conversation } from '@/types/chat';
+import { useSocket } from '@/context/SocketContext';
+import { joinConversation, leaveConversation } from '@/socket/chat.socket';
+import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/api';
+import ChatAttachments from '@/components/chat/ChatAttachments';
 
 export default function SellerChatPage() {
   const { data: myShop } = useMyShop();
-  const { data: conversations = [], isLoading: isLoadingConversations } =
-    useChatConversations();
-  const [selectedConversationId, setSelectedConversationId] = useState<
-    string | null
-  >(null);
+  const { data: conversations = [], isLoading: isLoadingConversations } = useChatConversations();
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const activeConversationId = useMemo(() => {
     if (!selectedConversationId) return null;
-    return conversations.some(
-      (conversation) => conversation._id === selectedConversationId,
-    )
+    return conversations.some((conversation) => conversation._id === selectedConversationId)
       ? selectedConversationId
       : null;
   }, [conversations, selectedConversationId]);
   const currentConversation = useMemo(
-    () =>
-      conversations.find((conversation) => conversation._id === activeConversationId) ??
-      null,
+    () => conversations.find((conversation) => conversation._id === activeConversationId) ?? null,
     [conversations, activeConversationId],
   );
-  const {
-    data: messageData,
-    isLoading: isLoadingMessages,
-  } = useChatMessages(
-    { conversationId: activeConversationId ?? "" },
+  const { data: messageData, isLoading: isLoadingMessages } = useChatMessages(
+    { conversationId: activeConversationId ?? '' },
     { enabled: !!activeConversationId },
   );
   const messages = useMemo(() => messageData?.messages ?? [], [messageData?.messages]);
@@ -64,9 +46,9 @@ export default function SellerChatPage() {
   const { data: user } = useAppSelector((state) => state.auth);
   const { socket } = useSocket();
 
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -80,7 +62,7 @@ export default function SellerChatPage() {
   }, [socket, activeConversationId]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSelectConversation = (conversation: Conversation) => {
@@ -98,12 +80,12 @@ export default function SellerChatPage() {
         content: newMessage.trim(),
         files: selectedFiles,
       });
-      setNewMessage("");
+      setNewMessage('');
       setSelectedFiles([]);
-      if (imageInputRef.current) imageInputRef.current.value = "";
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (imageInputRef.current) imageInputRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể gửi tin nhắn"));
+      toast.error(getSafeErrorMessage(error, 'Không thể gửi tin nhắn'));
     }
   };
 
@@ -121,9 +103,9 @@ export default function SellerChatPage() {
   };
 
   const formatTime = (date: string) =>
-    new Date(date).toLocaleTimeString("vi-VN", {
-      hour: "2-digit",
-      minute: "2-digit",
+    new Date(date).toLocaleTimeString('vi-VN', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
 
   const filteredConversations = conversations.filter((conversation) =>
@@ -133,38 +115,38 @@ export default function SellerChatPage() {
   if (!myShop) return null;
 
   return (
-    <div className="bg-[#f7f7f7] rounded-2xl overflow-hidden min-h-[70vh] lg:h-[calc(100vh-180px)]">
+    <section className="min-h-[70vh] overflow-hidden rounded-lg border border-border bg-card lg:h-[calc(100dvh-11rem)]">
       <div className="flex h-full flex-col lg:flex-row">
-        <div className="w-full lg:w-80 bg-white flex flex-col border-b lg:border-b-0 lg:border-r border-[#f0f0f0]">
+        <div className="flex w-full flex-col border-b border-border bg-card lg:w-80 lg:border-b-0 lg:border-r">
           <div className="p-4">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-[#f7f7f7] rounded-xl flex items-center justify-center">
-                <MessageSquare className="h-5 w-5 text-blue-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <MessageSquare className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h2 className="font-semibold text-gray-800">Tin nhắn</h2>
-                <p className="text-xs text-gray-500">
+                <h2 className="font-semibold text-foreground">Tin nhắn</h2>
+                <p className="text-xs text-muted-foreground">
                   {conversations.length} cuộc hội thoại
                 </p>
               </div>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Tìm kiếm..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-10 rounded-xl bg-[#f7f7f7] border-0"
+                className="h-10 rounded-lg bg-muted/40 pl-10"
               />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto">
             {isLoadingConversations ? (
               <div className="flex items-center justify-center h-32">
-                <SpinnerLoading noWrapper size={24} className="text-blue-600" />
+                <SpinnerLoading noWrapper size={24} className="text-info" />
               </div>
             ) : filteredConversations.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400 p-6">
+              <div className="flex h-full flex-col items-center justify-center p-6 text-muted-foreground">
                 <MessageSquare className="h-12 w-12 mb-3 opacity-50" />
                 <p className="text-sm text-center">Chưa có tin nhắn nào</p>
               </div>
@@ -174,12 +156,12 @@ export default function SellerChatPage() {
                   key={conversation._id}
                   onClick={() => handleSelectConversation(conversation)}
                   className={cn(
-                    "w-full p-4 flex items-center gap-3 hover:bg-[#f7f7f7] transition-colors text-left",
-                    currentConversation?._id === conversation._id && "bg-[#f7f7f7]",
+                    'flex w-full items-center gap-3 border-t border-border p-4 text-left transition-colors hover:bg-muted/60',
+                    currentConversation?._id === conversation._id && 'bg-primary/10',
                   )}
                 >
                   <div className="relative">
-                    <div className="w-12 h-12 rounded-full overflow-hidden bg-[#f7f7f7]">
+                    <div className="size-12 overflow-hidden rounded-full bg-muted">
                       {conversation.user.avatar ? (
                         <Image
                           src={conversation.user.avatar}
@@ -190,7 +172,7 @@ export default function SellerChatPage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-gray-400" />
+                          <User className="h-5 w-5 text-muted-foreground" />
                         </div>
                       )}
                     </div>
@@ -202,17 +184,17 @@ export default function SellerChatPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <p className="font-medium text-gray-800 truncate">
+                      <p className="truncate font-medium text-foreground">
                         {conversation.user.name}
                       </p>
                       {conversation.lastMessage && (
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           {formatTime(conversation.lastMessage.createdAt)}
                         </span>
                       )}
                     </div>
                     {conversation.lastMessage && (
-                      <p className="text-sm text-gray-500 truncate">
+                      <p className="truncate text-sm text-muted-foreground">
                         {conversation.lastMessage.content}
                       </p>
                     )}
@@ -223,12 +205,12 @@ export default function SellerChatPage() {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col bg-[#f7f7f7]">
+        <div className="flex min-w-0 flex-1 flex-col bg-muted/30">
           {currentConversation ? (
             <>
-              <div className="p-4 bg-white flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 border-b border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-[#f7f7f7]">
+                  <div className="size-10 overflow-hidden rounded-full bg-muted">
                     {currentConversation.user.avatar ? (
                       <Image
                         src={currentConversation.user.avatar}
@@ -239,25 +221,23 @@ export default function SellerChatPage() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <User className="h-4 w-4 text-gray-400" />
+                        <User className="h-4 w-4 text-muted-foreground" />
                       </div>
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-800">
-                      {currentConversation.user.name}
-                    </p>
-                    <p className="text-xs text-gray-500">Khách hàng của shop</p>
+                    <p className="font-medium text-foreground">{currentConversation.user.name}</p>
+                    <p className="text-xs text-muted-foreground">Khách hàng của shop</p>
                   </div>
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {isLoadingMessages ? (
                   <div className="flex items-center justify-center h-full">
-                    <SpinnerLoading noWrapper size={24} className="text-blue-600" />
+                    <SpinnerLoading noWrapper size={24} className="text-info" />
                   </div>
                 ) : messages.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                  <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
                     <MessageSquare className="h-8 w-8 mb-2 opacity-50" />
                     <p className="text-sm">Bắt đầu cuộc trò chuyện</p>
                   </div>
@@ -266,31 +246,29 @@ export default function SellerChatPage() {
                     <div
                       key={message._id}
                       className={cn(
-                        "flex",
-                        message.sender === user?._id ? "justify-end" : "justify-start",
+                        'flex',
+                        message.sender === user?._id ? 'justify-end' : 'justify-start',
                       )}
                     >
                       <div
                         className={cn(
-                          "max-w-[70%] px-4 py-2.5 rounded-2xl",
+                          'max-w-[70%] rounded-lg px-4 py-2.5',
                           message.sender === user?._id
-                            ? "bg-primary text-white rounded-br-md"
-                            : "bg-white text-gray-800 rounded-bl-md",
+                            ? 'rounded-br-md bg-primary text-primary-foreground'
+                            : 'rounded-bl-md border border-border bg-card text-foreground',
                         )}
                       >
                         <ChatAttachments
                           attachments={message.attachments}
                           isOwnMessage={message.sender === user?._id}
                         />
-                        {message.content ? (
-                          <p className="text-sm">{message.content}</p>
-                        ) : null}
+                        {message.content ? <p className="text-sm">{message.content}</p> : null}
                         <p
                           className={cn(
-                            "text-[10px] mt-1",
+                            'text-[10px] mt-1',
                             message.sender === user?._id
-                              ? "text-white/70"
-                              : "text-gray-400",
+                              ? 'text-primary-foreground/70'
+                              : 'text-muted-foreground',
                           )}
                         >
                           {formatTime(message.createdAt)}
@@ -301,19 +279,20 @@ export default function SellerChatPage() {
                 )}
                 <div ref={messagesEndRef} />
               </div>
-              <div className="p-4 bg-white">
+              <div className="border-t border-border bg-card p-4">
                 {selectedFiles.length > 0 && (
                   <div className="mb-3 flex flex-wrap gap-2">
                     {selectedFiles.map((file, index) => (
                       <div
                         key={`${file.name}-${index}`}
-                        className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-xs text-gray-700"
+                        className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-xs text-foreground"
                       >
                         <span className="max-w-[220px] truncate">{file.name}</span>
                         <button
                           type="button"
                           onClick={() => removeSelectedFile(index)}
-                          className="text-gray-400 hover:text-gray-700"
+                          aria-label={`Bỏ tệp ${file.name}`}
+                          className="text-muted-foreground hover:text-foreground"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
@@ -344,8 +323,9 @@ export default function SellerChatPage() {
                     size="icon"
                     className="rounded-lg shrink-0"
                     onClick={() => imageInputRef.current?.click()}
+                    aria-label="Đính kèm ảnh"
                   >
-                    <ImageIcon className="h-5 w-5 text-gray-400" />
+                    <ImageIcon className="h-5 w-5 text-muted-foreground" />
                   </Button>
                   <Button
                     type="button"
@@ -353,21 +333,22 @@ export default function SellerChatPage() {
                     size="icon"
                     className="rounded-lg shrink-0"
                     onClick={() => fileInputRef.current?.click()}
+                    aria-label="Đính kèm tệp"
                   >
-                    <Paperclip className="h-5 w-5 text-gray-400" />
+                    <Paperclip className="h-5 w-5 text-muted-foreground" />
                   </Button>
                   <Input
                     placeholder="Nhập tin nhắn..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && void handleSendMessage()}
-                    className="flex-1 min-w-[200px] h-11 rounded-xl bg-[#f7f7f7] border-0"
+                    onKeyDown={(e) => e.key === 'Enter' && void handleSendMessage()}
+                    className="h-10 min-w-[200px] flex-1 rounded-lg bg-muted/40"
                     disabled={isSending}
                   />
                   <Button
                     onClick={() => void handleSendMessage()}
                     disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
-                    className="bg-primary hover:bg-primary/90 rounded-xl h-11 px-4"
+                    className="h-10 rounded-lg bg-primary px-4 hover:bg-primary-hover"
                   >
                     {isSending ? (
                       <SpinnerLoading noWrapper size={16} className="text-white" />
@@ -379,20 +360,16 @@ export default function SellerChatPage() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
-              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-4">
+            <div className="flex flex-1 flex-col items-center justify-center text-muted-foreground">
+              <div className="mb-4 flex size-20 items-center justify-center rounded-full bg-muted">
                 <MessageSquare className="h-10 w-10 opacity-50" />
               </div>
-              <p className="text-lg font-medium text-gray-600">
-                Chọn một cuộc hội thoại
-              </p>
-              <p className="text-sm mt-1">
-                Chọn từ danh sách bên trái để bắt đầu chat
-              </p>
+              <p className="text-lg font-medium text-foreground">Chọn một cuộc hội thoại</p>
+              <p className="text-sm mt-1">Chọn từ danh sách bên trái để bắt đầu chat</p>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

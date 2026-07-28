@@ -1,44 +1,43 @@
-"use client";
-import { useState, useMemo } from "react";
-import { useUrlFilters } from "@/hooks/useUrlFilters";
+'use client';
+import { useState, useMemo } from 'react';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
 import {
   useAllOrders,
   useOrder,
   useUpdateOrderStatus,
   useCancelOrder,
   useOrderStatistics,
-} from "@/hooks/queries/useOrders";
-import { useAllShops } from "@/hooks/queries/useShop";
-import { toast } from "sonner";
-import { PaginationControls } from "@/components/common/Pagination";
-import { Order, OrderFilters } from "@/types/order";
-import { Shop } from "@/types/shop";
-import { OrdersHeader } from "@/components/admin/orders/OrdersHeader";
-import { OrdersStats } from "@/components/admin/orders/OrderStats";
-import { OrdersTable } from "@/components/admin/orders/OrderTable";
-import { EditOrderModal } from "@/components/admin/orders/UpdateOrderModel";
-import { ViewOrderModal } from "@/components/admin/orders/ViewOrderModel";
-import { Button } from "@/components/ui/button";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { getSafeErrorMessage } from "@/api";
+} from '@/hooks/queries/useOrders';
+import { useAllShops } from '@/hooks/queries/useShop';
+import { toast } from 'sonner';
+import { PaginationControls } from '@/components/common/Pagination';
+import { Order, OrderFilters } from '@/types/order';
+import { Shop } from '@/types/shop';
+import { OrdersHeader } from '@/components/admin/orders/OrdersHeader';
+import { OrdersStats } from '@/components/admin/orders/OrderStats';
+import { OrdersTable } from '@/components/admin/orders/OrderTable';
+import { EditOrderModal } from '@/components/admin/orders/UpdateOrderModel';
+import { ViewOrderModal } from '@/components/admin/orders/ViewOrderModel';
+import { Button } from '@/components/ui/button';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { getSafeErrorMessage } from '@/api';
 
 export default function OrdersAdminPage() {
-  const { filters, updateFilter, updateFilters, resetFilters } =
-    useUrlFilters<OrderFilters>({
-      defaultFilters: {
-        page: 1,
-        limit: 10,
-        search: "",
-        status: "",
-        paymentStatus: "",
-        paymentMethod: "",
-        userId: "",
-        shop: "",
-        startDate: "",
-        endDate: "",
-      },
-      basePath: "/admin/orders",
-    });
+  const { filters, updateFilter, updateFilters, resetFilters } = useUrlFilters<OrderFilters>({
+    defaultFilters: {
+      page: 1,
+      limit: 10,
+      search: '',
+      status: '',
+      paymentStatus: '',
+      paymentMethod: '',
+      userId: '',
+      shop: '',
+      startDate: '',
+      endDate: '',
+    },
+    basePath: '/admin/orders',
+  });
 
   const currentPage = Number(filters.page);
   const pageSize = Number(filters.limit);
@@ -57,11 +56,11 @@ export default function OrdersAdminPage() {
       limit: pageSize,
     };
     if (searchTerm) params.search = searchTerm;
-    if (statusFilter && statusFilter !== "all") params.status = statusFilter;
+    if (statusFilter && statusFilter !== 'all') params.status = statusFilter;
     if (paymentStatusFilter) params.paymentStatus = paymentStatusFilter;
     if (paymentMethodFilter) params.paymentMethod = paymentMethodFilter;
     if (userIdFilter) params.userId = userIdFilter;
-    if (shopFilter && shopFilter !== "all") params.shop = shopFilter;
+    if (shopFilter && shopFilter !== 'all') params.shop = shopFilter;
     if (startDate) params.startDate = startDate;
     if (endDate) params.endDate = endDate;
     return params;
@@ -78,12 +77,7 @@ export default function OrdersAdminPage() {
     endDate,
   ]);
 
-  const {
-    data: ordersData,
-    isLoading,
-    error,
-    refetch,
-  } = useAllOrders(queryParams);
+  const { data: ordersData, isLoading, error, refetch } = useAllOrders(queryParams);
   const { data: shopsData } = useAllShops();
   const { data: statistics } = useOrderStatistics();
   const updateOrderMutation = useUpdateOrderStatus();
@@ -98,7 +92,7 @@ export default function OrdersAdminPage() {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [viewingOrderId, setViewingOrderId] = useState<string | null>(null);
 
-  const { data: orderDetail } = useOrder(viewingOrderId || "", {
+  const { data: orderDetail } = useOrder(viewingOrderId || '', {
     enabled: !!viewingOrderId,
   });
 
@@ -121,19 +115,13 @@ export default function OrdersAdminPage() {
   const handleSaveOrder = async (orderData: { status: string }) => {
     if (!selectedOrder) return;
 
-    if (
-      selectedOrder.status === "cancelled" &&
-      orderData.status !== "cancelled"
-    ) {
-      toast.error("Cannot change status of cancelled order");
+    if (selectedOrder.status === 'cancelled' && orderData.status !== 'cancelled') {
+      toast.error('Cannot change status of cancelled order');
       return;
     }
 
-    if (
-      selectedOrder.status === "delivered" &&
-      orderData.status === "cancelled"
-    ) {
-      toast.error("Cannot cancel delivered order");
+    if (selectedOrder.status === 'delivered' && orderData.status === 'cancelled') {
+      toast.error('Cannot cancel delivered order');
       return;
     }
 
@@ -141,25 +129,20 @@ export default function OrdersAdminPage() {
       await updateOrderMutation.mutateAsync({
         orderId: selectedOrder._id,
         status: orderData.status as
-          | "pending"
-          | "confirmed"
-          | "processing"
-          | "shipped"
-          | "delivered"
-          | "cancelled",
+          'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled',
       });
 
       handleCloseEditModal();
-      toast.success("Order status updated successfully");
+      toast.success('Order status updated successfully');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to update status. Please try again."));
+      toast.error(getSafeErrorMessage(error, 'Failed to update status. Please try again.'));
     }
   };
 
   const isUpdating = updateOrderMutation.isPending;
 
   const handlePageChange = (page: number) => {
-    updateFilter("page", page);
+    updateFilter('page', page);
   };
 
   const handlePageSizeChange = (size: number) => {
@@ -187,7 +170,7 @@ export default function OrdersAdminPage() {
   };
 
   const handleShopFilter = (shop: string) => {
-    updateFilters({ shop: shop === "all" ? "" : shop, page: 1 });
+    updateFilters({ shop: shop === 'all' ? '' : shop, page: 1 });
   };
 
   const handleDateFilter = (start: string, end: string) => {
@@ -205,9 +188,9 @@ export default function OrdersAdminPage() {
     if (confirm(`Are you sure you want to cancel order ${order._id}?`)) {
       try {
         await cancelOrderMutation.mutateAsync(order._id);
-        toast.success("Order cancelled successfully");
+        toast.success('Order cancelled successfully');
       } catch (error: unknown) {
-        toast.error(getSafeErrorMessage(error, "Failed to cancel order"));
+        toast.error(getSafeErrorMessage(error, 'Failed to cancel order'));
       }
     }
   };
@@ -226,7 +209,7 @@ export default function OrdersAdminPage() {
     return (
       <div className="space-y-6">
         <OrdersHeader />
-        <div className="flex items-center justify-center h-64 rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E]">
+        <div className="flex h-64 items-center justify-center rounded-lg border border-border bg-muted/50">
           <SpinnerLoading />
         </div>
       </div>
@@ -237,16 +220,11 @@ export default function OrdersAdminPage() {
     return (
       <div className="space-y-6">
         <OrdersHeader />
-        <div className="flex items-center justify-center h-64 rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E]">
+        <div className="flex h-64 items-center justify-center rounded-lg border border-border bg-muted/50">
           <div className="text-red-500 text-center">
-            <div className="text-lg font-semibold mb-2">
-              Error loading orders
-            </div>
-            <div>{getSafeErrorMessage(error, "Không thể tải danh sách đơn hàng")}</div>
-            <Button
-              onClick={() => refetch()}
-              className="mt-4 rounded-xl bg-[#E53935] hover:bg-[#D32F2F] text-white"
-            >
+            <div className="text-lg font-semibold mb-2">Error loading orders</div>
+            <div>{getSafeErrorMessage(error, 'Không thể tải danh sách đơn hàng')}</div>
+            <Button onClick={() => refetch()} className="mt-4">
               Try Again
             </Button>
           </div>
@@ -285,7 +263,7 @@ export default function OrdersAdminPage() {
           onDateFilter={handleDateFilter}
           startDate={startDate}
           endDate={endDate}
-          selectedShop={shopFilter || "all"}
+          selectedShop={shopFilter || 'all'}
           shops={shops}
         />
 

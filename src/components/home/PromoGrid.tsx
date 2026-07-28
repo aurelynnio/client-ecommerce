@@ -1,98 +1,52 @@
-"use client";
-import { useMemo } from "react";
-import Link from "next/link";
-import {
-  ArrowRight,
-  Sparkles,
-  TicketPercent,
-  Truck,
-  Zap,
-} from "lucide-react";
-import { usePlatformVouchers } from "@/hooks/queries/useVoucher";
-import { useActiveFlashSale } from "@/hooks/queries/useFlashSale";
-import { useNewArrivals } from "@/hooks/queries/useProducts";
+import Link from 'next/link';
+import { CreditCard, Headphones, RotateCcw, Truck } from 'lucide-react';
 
+const services = [
+  {
+    title: 'Giao hàng rõ ràng',
+    description: 'Theo dõi chính sách và trạng thái giao hàng.',
+    href: '/shipping',
+    icon: Truck,
+  },
+  {
+    title: 'Đổi trả dễ hiểu',
+    description: 'Xem hướng dẫn đổi trả trước khi mua.',
+    href: '/returns',
+    icon: RotateCcw,
+  },
+  {
+    title: 'Thanh toán an toàn',
+    description: 'Lựa chọn phương thức phù hợp ở bước thanh toán.',
+    href: '/payment/success',
+    icon: CreditCard,
+  },
+  {
+    title: 'Cần hỗ trợ?',
+    description: 'Tìm câu trả lời hoặc gửi yêu cầu hỗ trợ.',
+    href: '/support',
+    icon: Headphones,
+  },
+];
+
+/** A compact service row, deliberately not another promo-card grid. */
 export default function PromoGrid() {
-  const { data: platformVouchers = [] } = usePlatformVouchers();
-  const { data: flashSaleData } = useActiveFlashSale({ page: 1, limit: 1 });
-  const { data: newArrivals } = useNewArrivals();
-
-  const voucherCount = platformVouchers.length;
-  const flashSaleCount =
-    flashSaleData?.pagination?.totalItems || flashSaleData?.data?.length || 0;
-  const newArrivalsCount = newArrivals?.length || 0;
-
-  const promoItems = useMemo(
-    () => [
-      {
-        id: 1,
-        title: "Mã giảm giá",
-        subtitle:
-          voucherCount > 0
-            ? `${voucherCount} mã toàn sàn đang hoạt động`
-            : "Xem voucher công khai mới nhất",
-        icon: TicketPercent,
-        iconClass: "bg-rose-50 text-rose-600",
-        href: "/vouchers",
-      },
-      {
-        id: 2,
-        title: "Hàng mới về",
-        subtitle:
-          newArrivalsCount > 0
-            ? `${newArrivalsCount} sản phẩm mới`
-            : "Cập nhật mỗi ngày",
-        icon: Sparkles,
-        iconClass: "bg-blue-50 text-blue-600",
-        href: "/new-arrivals",
-      },
-      {
-        id: 3,
-        title: "Vận chuyển",
-        subtitle: "Xem chính sách giao hàng",
-        icon: Truck,
-        iconClass: "bg-emerald-50 text-emerald-600",
-        href: "/shipping",
-      },
-      {
-        id: 4,
-        title: "Giá sốc",
-        subtitle:
-          flashSaleCount > 0
-            ? `${flashSaleCount} sản phẩm đang sale`
-            : "Giá tốt theo khung giờ",
-        icon: Zap,
-        iconClass: "bg-amber-50 text-amber-600",
-        href: "/flash-sale",
-      },
-    ],
-    [flashSaleCount, newArrivalsCount, voucherCount],
-  );
-
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 h-full">
-      {promoItems.map((item) => (
+    <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
+      {services.map(({ title, description, href, icon: Icon }) => (
         <Link
-          key={item.id}
-          href={item.href}
-          className="group relative bg-[#f7f7f7] rounded-lg overflow-hidden hover:bg-[#f0f0f0] transition-all duration-200 flex items-center p-3 gap-3"
+          key={title}
+          href={href}
+          className="group flex gap-3 px-0 py-4 first:pt-0 last:pb-0 sm:px-5 sm:py-1 sm:first:pl-0 sm:last:pr-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-gray-900 group-hover:text-[#E53935] transition-colors">
-              {item.title}
-            </h3>
-            <p className="text-[11px] text-gray-500 mt-0.5">{item.subtitle}</p>
-            <span className="inline-flex items-center gap-0.5 text-[10px] text-[#E53935] mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              Xem ngay <ArrowRight className="w-3 h-3" />
+          <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+          <span>
+            <span className="block text-sm font-medium text-foreground group-hover:text-primary">
+              {title}
             </span>
-          </div>
-
-          <div
-            className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center ${item.iconClass}`}
-          >
-            <item.icon className="w-5 h-5" />
-          </div>
+            <span className="mt-1 block text-sm leading-5 text-muted-foreground">
+              {description}
+            </span>
+          </span>
         </Link>
       ))}
     </div>

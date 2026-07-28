@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
-import { Order } from "@/types/order";
-import { Shop } from "@/types/shop";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect, useRef } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
+import { Order } from '@/types/order';
+import { Shop } from '@/types/shop';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -11,25 +11,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Search, MoreHorizontal, Eye, Edit, Trash2, Store, Calendar } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import Image from "next/image";
-import { formatCurrency, formatDate } from "@/utils/format";
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Search, MoreHorizontal, Eye, Edit, Trash2, Store, Calendar } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import Image from 'next/image';
+import { formatCurrency, formatDate } from '@/utils/format';
 import {
   adminFieldSurfaceClass,
   adminFilterBarClass,
@@ -40,7 +40,7 @@ import {
   adminSmallIconButtonClass,
   adminTableHeaderClass,
   adminTableShellClass,
-} from "@/components/admin/shared/AdminPrimitives";
+} from '@/components/admin/shared/AdminPrimitives';
 
 export interface OrdersTableProps {
   orders: Order[];
@@ -73,8 +73,8 @@ export function OrdersTable({
   orders,
   searchTerm,
   statusFilter,
-  startDate = "",
-  endDate = "",
+  startDate = '',
+  endDate = '',
   pageSize,
   onSearch,
   onStatusFilter,
@@ -84,7 +84,7 @@ export function OrdersTable({
   onDelete,
   onView,
   onShopFilterChange,
-  selectedShop = "all",
+  selectedShop = 'all',
   shops = [],
   isLoading = false,
 }: OrdersTableProps) {
@@ -105,46 +105,46 @@ export function OrdersTable({
     const statusConfig: {
       [key: string]: {
         label: string;
-        variant: "default" | "secondary" | "destructive" | "outline";
+        variant: 'default' | 'secondary' | 'destructive' | 'outline';
         className?: string;
       };
     } = {
       pending: {
-        label: "Chờ xử lý",
-        variant: "secondary",
-        className: "bg-gray-100 text-gray-700 hover:bg-gray-100",
+        label: 'Chờ xử lý',
+        variant: 'secondary',
+        className: 'bg-gray-100 text-gray-700 hover:bg-gray-100',
       },
       confirmed: {
-        label: "Đã xác nhận",
-        variant: "outline",
-        className: "bg-blue-50 text-blue-700 border-blue-200",
+        label: 'Đã xác nhận',
+        variant: 'outline',
+        className: 'bg-blue-50 text-blue-700 border-blue-200',
       },
       processing: {
-        label: "Đang xử lý",
-        variant: "default",
-        className: "bg-indigo-100 text-indigo-700 hover:bg-indigo-100",
+        label: 'Đang xử lý',
+        variant: 'default',
+        className: 'bg-indigo-100 text-indigo-700 hover:bg-indigo-100',
       },
       shipped: {
-        label: "Đang giao",
-        variant: "default",
-        className: "bg-purple-100 text-purple-700 hover:bg-purple-100",
+        label: 'Đang giao',
+        variant: 'default',
+        className: 'bg-purple-100 text-purple-700 hover:bg-purple-100',
       },
       delivered: {
-        label: "Đã giao",
-        variant: "outline",
-        className: "bg-green-50 text-green-700 border-green-200",
+        label: 'Đã giao',
+        variant: 'outline',
+        className: 'bg-green-50 text-green-700 border-green-200',
       },
       cancelled: {
-        label: "Đã hủy",
-        variant: "destructive",
-        className: "bg-red-50 text-red-700 border-red-200 hover:bg-red-50",
+        label: 'Đã hủy',
+        variant: 'destructive',
+        className: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-50',
       },
     };
 
     const config = statusConfig[status] || {
       label: status,
-      variant: "secondary",
-      className: "bg-gray-100 text-gray-700",
+      variant: 'secondary',
+      className: 'bg-gray-100 text-gray-700',
     };
 
     return (
@@ -161,26 +161,26 @@ export function OrdersTable({
     const statusConfig: {
       [key: string]: {
         label: string;
-        variant: "default" | "secondary" | "destructive" | "outline";
+        variant: 'default' | 'secondary' | 'destructive' | 'outline';
         className?: string; // Add className property
       };
     } = {
       unpaid: {
-        label: "Chưa thanh toán",
-        variant: "secondary",
-        className: "bg-yellow-50 text-yellow-700 border border-yellow-200",
+        label: 'Chưa thanh toán',
+        variant: 'secondary',
+        className: 'bg-yellow-50 text-yellow-700 border border-yellow-200',
       },
       paid: {
-        label: "Đã thanh toán",
-        variant: "outline",
-        className: "bg-green-50 text-green-700 border border-green-200",
+        label: 'Đã thanh toán',
+        variant: 'outline',
+        className: 'bg-green-50 text-green-700 border border-green-200',
       },
-      refunded: { label: "Hoàn tiền", variant: "destructive" },
+      refunded: { label: 'Hoàn tiền', variant: 'destructive' },
     };
 
     const config = statusConfig[status] || {
       label: status,
-      variant: "secondary",
+      variant: 'secondary',
     };
 
     return (
@@ -193,12 +193,10 @@ export function OrdersTable({
     );
   };
 
-  const getShopInfo = (
-    shopId: string | Shop | undefined,
-  ): { name: string; logo?: string } => {
-    if (!shopId) return { name: "Không có" };
-    if (typeof shopId === "string") return { name: shopId };
-    return { name: shopId.name || "Không có", logo: shopId.logo };
+  const getShopInfo = (shopId: string | Shop | undefined): { name: string; logo?: string } => {
+    if (!shopId) return { name: 'Không có' };
+    if (typeof shopId === 'string') return { name: shopId };
+    return { name: shopId.name || 'Không có', logo: shopId.logo };
   };
 
   return (
@@ -211,7 +209,7 @@ export function OrdersTable({
               placeholder="Tìm kiếm theo mã đơn hàng, tên khách hàng..."
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              className={`pl-9 transition-all ${adminSearchInputClass}`}
+              className={`pl-9 transition-[border-color,background-color,box-shadow] ${adminSearchInputClass}`}
             />
           </div>
 
@@ -328,10 +326,7 @@ export function OrdersTable({
               )}
               {!isLoading && orders.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="text-center py-12 text-muted-foreground"
-                  >
+                  <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">
                     Không tìm thấy đơn hàng
                   </TableCell>
                 </TableRow>
@@ -342,7 +337,7 @@ export function OrdersTable({
                     <TableRow
                       key={order._id}
                       className={`${adminRowHoverClass} border-0 ${
-                        isLoading ? "opacity-50 pointer-events-none" : ""
+                        isLoading ? 'opacity-50 pointer-events-none' : ''
                       }`}
                     >
                       <TableCell className="font-medium pl-6 text-sm">
@@ -361,7 +356,9 @@ export function OrdersTable({
                       <TableCell>
                         <div className="flex items-center gap-2 max-w-[140px]">
                           {shopInfo.logo ? (
-                            <div className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}>
+                            <div
+                              className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}
+                            >
                               <Image
                                 src={shopInfo.logo}
                                 alt={shopInfo.name}
@@ -371,7 +368,9 @@ export function OrdersTable({
                               />
                             </div>
                           ) : (
-                            <div className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}>
+                            <div
+                              className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}
+                            >
                               <Store className="h-3 w-3 text-muted-foreground" />
                             </div>
                           )}
@@ -390,23 +389,15 @@ export function OrdersTable({
                         {formatCurrency(order.totalAmount)}
                       </TableCell>
                       <TableCell>{getStatusBadge(order.status)}</TableCell>
-                      <TableCell>
-                        {getPaymentStatusBadge(order.paymentStatus)}
-                      </TableCell>
+                      <TableCell>{getPaymentStatusBadge(order.paymentStatus)}</TableCell>
                       <TableCell className="pr-6 text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className={`p-0 ${adminSmallIconButtonClass}`}
-                            >
+                            <Button variant="ghost" className={`p-0 ${adminSmallIconButtonClass}`}>
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className={adminMenuContentClass}
-                          >
+                          <DropdownMenuContent align="end" className={adminMenuContentClass}>
                             <DropdownMenuItem
                               onClick={() => onView(order)}
                               className="cursor-pointer gap-2"

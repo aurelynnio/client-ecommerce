@@ -1,22 +1,18 @@
-"use client";
-import { useState, useMemo } from "react";
-import { useUrlFilters } from "@/hooks/useUrlFilters";
-import { toast } from "sonner";
-import {
-  useProducts,
-  useUpdateProduct,
-  useDeleteProduct,
-} from "@/hooks/queries/useProducts";
-import { useAllShops } from "@/hooks/queries/useShop";
-import { Product, AdminProductFilters } from "@/types/product";
-import { Shop } from "@/types/shop";
-import { ProductsHeader } from "@/components/admin/products/ProductHeader";
-import { ProductsStats } from "@/components/admin/products/ProductStats";
-import { ProductsTable } from "@/components/admin/products/ProductTable";
-import { PaginationControls } from "@/components/common/Pagination";
-import { UpdateModelProduct } from "@/components/product/forms/UpdateModelProduct";
-import { ViewModelProduct } from "@/components/product/forms/ViewModelProduct";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { useState, useMemo } from 'react';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
+import { toast } from 'sonner';
+import { useProducts, useUpdateProduct, useDeleteProduct } from '@/hooks/queries/useProducts';
+import { useAllShops } from '@/hooks/queries/useShop';
+import { Product, AdminProductFilters } from '@/types/product';
+import { Shop } from '@/types/shop';
+import { ProductsHeader } from '@/components/admin/products/ProductHeader';
+import { ProductsStats } from '@/components/admin/products/ProductStats';
+import { ProductsTable } from '@/components/admin/products/ProductTable';
+import { PaginationControls } from '@/components/common/Pagination';
+import { UpdateModelProduct } from '@/components/product/forms/UpdateModelProduct';
+import { ViewModelProduct } from '@/components/product/forms/ViewModelProduct';
+import { getSafeErrorMessage } from '@/api';
 
 export default function AdminProductsPage() {
   const { data: shopsData } = useAllShops();
@@ -26,10 +22,10 @@ export default function AdminProductsPage() {
     () => ({
       page: 1,
       limit: 10,
-      search: "",
-      category: "",
-      brand: "",
-      shop: "",
+      search: '',
+      category: '',
+      brand: '',
+      shop: '',
       minPrice: null,
       maxPrice: null,
       isActive: null,
@@ -37,23 +33,21 @@ export default function AdminProductsPage() {
     [],
   );
 
-  const { filters, updateFilter, updateFilters } =
-    useUrlFilters<AdminProductFilters>({
-      defaultFilters,
-      basePath: "/admin/products",
-    });
+  const { filters, updateFilter, updateFilters } = useUrlFilters<AdminProductFilters>({
+    defaultFilters,
+    basePath: '/admin/products',
+  });
 
   const currentPage = Number(filters.page) || 1;
   const pageSize = Number(filters.limit) || 10;
 
-  const searchTerm = (filters.search as string) || "";
-  const selectedCategory = (filters.category as string) || "";
-  const selectedBrand = (filters.brand as string) || "";
-  const selectedShop = (filters.shop as string) || "";
+  const searchTerm = (filters.search as string) || '';
+  const selectedCategory = (filters.category as string) || '';
+  const selectedBrand = (filters.brand as string) || '';
+  const selectedShop = (filters.shop as string) || '';
   const selectedMinPrice = filters.minPrice as number | null;
   const selectedMaxPrice = filters.maxPrice as number | null;
   const selectedStatus = filters.isActive as boolean | null;
-
 
   const queryParams = useMemo(() => {
     const params: Record<string, string | number | boolean> = {
@@ -82,11 +76,7 @@ export default function AdminProductsPage() {
     selectedStatus,
   ]);
 
-  const {
-    data: productsData,
-    isLoading,
-    refetch: fetchProducts,
-  } = useProducts(queryParams);
+  const { data: productsData, isLoading, refetch: fetchProducts } = useProducts(queryParams);
   const products: Product[] = productsData?.products || [];
 
   // Transform pagination to match PaginationData interface
@@ -100,10 +90,7 @@ export default function AdminProductsPage() {
       totalItems: paginationRaw.total,
       hasNextPage: paginationRaw.page < paginationRaw.totalPages,
       hasPrevPage: paginationRaw.page > 1,
-      nextPage:
-        paginationRaw.page < paginationRaw.totalPages
-          ? paginationRaw.page + 1
-          : null,
+      nextPage: paginationRaw.page < paginationRaw.totalPages ? paginationRaw.page + 1 : null,
       prevPage: paginationRaw.page > 1 ? paginationRaw.page - 1 : null,
     };
   }, [productsData?.pagination]);
@@ -124,19 +111,19 @@ export default function AdminProductsPage() {
       });
       setUpdateModalOpen(false);
       setSelectedProduct(null);
-      toast.success("Cập nhật sản phẩm thành công");
+      toast.success('Cập nhật sản phẩm thành công');
     } catch (error) {
-      toast.error(getSafeErrorMessage(error, "Không thể cập nhật sản phẩm"));
+      toast.error(getSafeErrorMessage(error, 'Không thể cập nhật sản phẩm'));
     }
   };
 
   const handleDeleteProduct = async (product: Product) => {
-    if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+    if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
     try {
       await deleteProductMutation.mutateAsync(product._id);
-      toast.success("Xóa sản phẩm thành công");
+      toast.success('Xóa sản phẩm thành công');
     } catch (error) {
-      toast.error(getSafeErrorMessage(error, "Không thể xóa sản phẩm"));
+      toast.error(getSafeErrorMessage(error, 'Không thể xóa sản phẩm'));
     }
   };
 
@@ -174,25 +161,20 @@ export default function AdminProductsPage() {
 
   // Calculate total categories and on sale products for the stats component
   const totalCategories = new Set(
-    products.map((p) =>
-      typeof p.category === "object" ? p.category?._id : p.category,
-    ),
+    products.map((p) => (typeof p.category === 'object' ? p.category?._id : p.category)),
   ).size;
   const productsOnSale = products.filter((p) => p.onSale).length;
 
   // Handlers for table filters
   const handleCategoryFilterChange = (category: string) => {
-    updateFilter("category", category === "all" ? "" : category);
+    updateFilter('category', category === 'all' ? '' : category);
   };
 
   const handleBrandFilterChange = (brand: string) => {
-    updateFilters({ brand: brand === "all" ? "" : brand, page: 1 });
+    updateFilters({ brand: brand === 'all' ? '' : brand, page: 1 });
   };
 
-  const handlePriceFilterChange = (
-    min: number | undefined,
-    max: number | undefined,
-  ) => {
+  const handlePriceFilterChange = (min: number | undefined, max: number | undefined) => {
     updateFilters({ minPrice: min || null, maxPrice: max || null, page: 1 });
   };
 
@@ -201,7 +183,7 @@ export default function AdminProductsPage() {
   };
 
   const handleShopFilterChange = (shop: string) => {
-    updateFilters({ shop: shop === "all" ? "" : shop, page: 1 });
+    updateFilters({ shop: shop === 'all' ? '' : shop, page: 1 });
   };
 
   return (
@@ -232,8 +214,8 @@ export default function AdminProductsPage() {
           onStatusFilterChange={handleStatusFilterChange}
           onShopFilterChange={handleShopFilterChange}
           selectedCategory={selectedCategory}
-          selectedBrand={(filters.brand as string) || ""}
-          selectedShop={selectedShop || "all"}
+          selectedBrand={(filters.brand as string) || ''}
+          selectedShop={selectedShop || 'all'}
           selectedMinPrice={filters.minPrice as number | undefined}
           selectedMaxPrice={filters.maxPrice as number | undefined}
           selectedStatus={filters.isActive as boolean | null}
@@ -243,7 +225,7 @@ export default function AdminProductsPage() {
         <div className="mt-6 flex justify-center">
           <PaginationControls
             pagination={pagination}
-            onPageChange={(page) => updateFilter("page", page)}
+            onPageChange={(page) => updateFilter('page', page)}
             itemName="sản phẩm"
           />
         </div>

@@ -1,8 +1,8 @@
-"use client";
-import { useState, useRef } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+'use client';
+import { useState, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -19,20 +19,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Plus, Upload, Trash2 } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import Image from "next/image";
-import { CreateBannerPayload } from "@/types/banner";
+} from '@/components/ui/select';
+import { Plus, Upload, Trash2 } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import Image from 'next/image';
+import { CreateBannerPayload } from '@/types/banner';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -40,16 +40,15 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
-
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 const createBannerSchema = z.object({
-  title: z.string().min(1, { message: "Tiêu đề là bắt buộc" }),
-  subtitle: z.string().min(1, { message: "Phụ đề là bắt buộc" }),
-  imageUrl: z.string().min(1, { message: "Hình ảnh là bắt buộc" }),
+  title: z.string().min(1, { message: 'Tiêu đề là bắt buộc' }),
+  subtitle: z.string().min(1, { message: 'Phụ đề là bắt buộc' }),
+  imageUrl: z.string().min(1, { message: 'Hình ảnh là bắt buộc' }),
   link: z.string().optional(),
-  theme: z.enum(["light", "dark"]),
+  theme: z.enum(['light', 'dark']),
   isActive: z.boolean(),
   order: z.number(),
 });
@@ -72,15 +71,14 @@ export function CreateBannerModal({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-
   const form = useForm<CreateBannerData>({
     resolver: zodResolver(createBannerSchema),
     defaultValues: {
-      title: "",
-      subtitle: "",
-      imageUrl: "",
-      link: "",
-      theme: "dark",
+      title: '',
+      subtitle: '',
+      imageUrl: '',
+      link: '',
+      theme: 'dark',
       isActive: true,
       order: 0,
     },
@@ -94,15 +92,15 @@ export function CreateBannerModal({
 
     setSelectedFile(file);
     const previewUrl = URL.createObjectURL(file);
-    form.setValue("imageUrl", previewUrl, { shouldValidate: true });
+    form.setValue('imageUrl', previewUrl, { shouldValidate: true });
     // Reset input value to allow re-uploading the same file
-    event.target.value = "";
+    event.target.value = '';
   };
 
   const removeImage = () => {
     setSelectedFile(null);
-    form.setValue("imageUrl", "", { shouldValidate: true });
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    form.setValue('imageUrl', '', { shouldValidate: true });
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const onSubmit = (data: CreateBannerData) => {
@@ -112,7 +110,12 @@ export function CreateBannerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[550px] max-h-[90vh] flex flex-col no-scrollbar p-6")}>
+      <DialogContent
+        className={cn(
+          adminDialogContentClass,
+          'sm:max-w-[550px] max-h-[90vh] flex flex-col no-scrollbar p-6',
+        )}
+      >
         <DialogHeader className="shrink-0 pb-6 border-b border-border/50">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold tracking-tight">
             Tạo Banner
@@ -133,14 +136,12 @@ export function CreateBannerModal({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Tiêu đề Banner
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Tiêu đề Banner</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="VD: Tương lai của sự mượt mà"
                         {...field}
-                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                       />
                     </FormControl>
                     <FormMessage />
@@ -153,14 +154,12 @@ export function CreateBannerModal({
                 name="subtitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Phụ đề
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Phụ đề</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="VD: Trải nghiệm bộ sưu tập tối thượng..."
                         {...field}
-                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                       />
                     </FormControl>
                     <FormMessage />
@@ -174,14 +173,12 @@ export function CreateBannerModal({
                   name="link"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">
-                        Liên kết hành động
-                      </FormLabel>
+                      <FormLabel className="text-sm font-medium">Liên kết hành động</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="/shop"
                           {...field}
-                          className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                          className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                         />
                       </FormControl>
                       <FormMessage />
@@ -194,25 +191,16 @@ export function CreateBannerModal({
                   name="theme"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">
-                        Chủ đề văn bản
-                      </FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
+                      <FormLabel className="text-sm font-medium">Chủ đề văn bản</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger className={adminFieldSurfaceClass}>
                             <SelectValue placeholder="Chọn chủ đề" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-2xl border-[#ebe2d8]">
-                          <SelectItem value="dark">
-                            Tối (Chữ trắng)
-                          </SelectItem>
-                          <SelectItem value="light">
-                            Sáng (Chữ đen)
-                          </SelectItem>
+                        <SelectContent className="rounded-lg border-border">
+                          <SelectItem value="dark">Tối (Chữ trắng)</SelectItem>
+                          <SelectItem value="light">Sáng (Chữ đen)</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -226,13 +214,11 @@ export function CreateBannerModal({
                 name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Hình ảnh Slide
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Hình ảnh Slide</FormLabel>
                     <FormControl>
                       <div className="space-y-3">
                         <div
-                          className="cursor-pointer rounded-2xl border-2 border-dashed border-[#e7ddd2] p-8 text-center transition-all hover:border-[#d8473c]/40 hover:bg-[#fbf6f0]"
+                          className="cursor-pointer rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-primary/40 hover:bg-muted/60"
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <input
@@ -291,17 +277,13 @@ export function CreateBannerModal({
                   name="order"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">
-                        Thứ tự hiển thị
-                      </FormLabel>
+                      <FormLabel className="text-sm font-medium">Thứ tự hiển thị</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
                           {...field}
-                          onChange={(e) =>
-                            field.onChange(parseInt(e.target.value) || 0)
-                          }
-                          className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white transition-all shadow-sm"
+                          onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                          className="rounded-xl border-input bg-muted/40 shadow-sm transition-[border-color,background-color,box-shadow] focus:bg-card"
                         />
                       </FormControl>
                       <FormMessage />
@@ -313,17 +295,19 @@ export function CreateBannerModal({
                   control={form.control}
                   name="isActive"
                   render={({ field }) => (
-                    <FormItem className={cn(adminInsetPanelClass, "mt-2 flex items-center justify-between p-4")}>
+                    <FormItem
+                      className={cn(
+                        adminInsetPanelClass,
+                        'mt-2 flex items-center justify-between p-4',
+                      )}
+                    >
                       <div className="space-y-0.5">
                         <FormLabel className="text-sm font-medium block">
                           Trạng thái hoạt động
                         </FormLabel>
                       </div>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -331,20 +315,20 @@ export function CreateBannerModal({
               </div>
             </div>
 
-            <DialogFooter className={cn(adminDialogFooterClass, "mt-4 shrink-0")}>
+            <DialogFooter className={cn(adminDialogFooterClass, 'mt-4 shrink-0')}>
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
                 disabled={isLoading}
-                className={cn("h-11 flex-1", adminSecondaryButtonClass)}
+                className={cn('h-11 flex-1', adminSecondaryButtonClass)}
               >
                 Hủy
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading}
-                className={cn("h-11 flex-1 shadow-sm", adminPrimaryButtonClass)}
+                className={cn('h-11 flex-1 shadow-sm', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />

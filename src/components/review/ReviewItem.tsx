@@ -1,6 +1,6 @@
-import { Star, CheckCircle } from "lucide-react";
-import { Badge } from "../ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Star, CheckCircle } from 'lucide-react';
+import { Badge } from '../ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 // Review Item Component
 export default function ReviewItem({
@@ -30,23 +30,25 @@ export default function ReviewItem({
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                 <h4 className="font-semibold text-sm">{name}</h4>
-                   {verified && (
-                     <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-green-50 text-green-700 hover:bg-green-100 gap-1 rounded-sm font-normal">
-                       <CheckCircle className="h-3 w-3" />
-                       Đã xác minh
-                     </Badge>
-                 )}
+                <h4 className="font-semibold text-sm">{name}</h4>
+                {verified && (
+                  <Badge
+                    variant="secondary"
+                    className="h-5 px-1.5 text-[10px] bg-green-50 text-green-700 hover:bg-green-100 gap-1 rounded-sm font-normal"
+                  >
+                    <CheckCircle className="h-3 w-3" />
+                    Đã xác minh
+                  </Badge>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-3 w-3 ${i < rating
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-muted-foreground/30"
-                        }`}
+                      className={`h-3 w-3 ${
+                        i < rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30'
+                      }`}
                     />
                   ))}
                 </div>

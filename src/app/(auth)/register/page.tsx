@@ -1,35 +1,33 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Check, Eye, EyeOff } from "lucide-react";
-import { toast } from "sonner";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Check, Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { useRegister } from "@/hooks/queries";
+import { useRegister } from '@/hooks/queries';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { cn } from "@/utils/cn";
-import { getSafeErrorMessage } from "@/api";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { cn } from '@/utils/cn';
+import { getSafeErrorMessage } from '@/api';
 
 const registerSchema = z
   .object({
-    username: z.string().min(3, "Tên người dùng phải có ít nhất 3 ký tự"),
-    email: z.string().email("Email không hợp lệ"),
-    password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
-    confirmPassword: z
-      .string()
-      .min(6, "Xác nhận mật khẩu phải có ít nhất 6 ký tự"),
+    username: z.string().min(3, 'Tên người dùng phải có ít nhất 3 ký tự'),
+    email: z.string().email('Email không hợp lệ'),
+    password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
+    confirmPassword: z.string().min(6, 'Xác nhận mật khẩu phải có ít nhất 6 ký tự'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu không khớp",
-    path: ["confirmPassword"],
+    message: 'Mật khẩu không khớp',
+    path: ['confirmPassword'],
   });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -38,8 +36,8 @@ function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-1.5 text-xs transition-colors",
-        met ? "text-green-600" : "text-gray-400",
+        'flex items-center gap-1.5 text-xs transition-colors',
+        met ? 'text-green-600' : 'text-gray-400',
       )}
     >
       {met ? (
@@ -63,36 +61,30 @@ export default function RegisterPage() {
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
-  const password = useWatch({ control: form.control, name: "password" }) ?? "";
+  const password = useWatch({ control: form.control, name: 'password' }) ?? '';
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await registerMutation.mutateAsync(data);
-      toast.success(
-        "Tạo tài khoản thành công! Vui lòng kiểm tra email để lấy mã xác thực.",
-      );
+      toast.success('Tạo tài khoản thành công! Vui lòng kiểm tra email để lấy mã xác thực.');
       router.push(`/verify-code?email=${encodeURIComponent(data.email)}`);
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Đăng ký thất bại"));
+      toast.error(getSafeErrorMessage(error, 'Đăng ký thất bại'));
     }
   };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
-          Tạo tài khoản
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Nhập thông tin để tạo tài khoản mới
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Tạo tài khoản</h1>
+        <p className="text-sm text-muted-foreground">Nhập thông tin để tạo tài khoản mới</p>
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
@@ -106,13 +98,11 @@ export default function RegisterPage() {
             autoComplete="username"
             autoCorrect="off"
             disabled={loading}
-            {...form.register("username")}
-            className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
+            {...form.register('username')}
+            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
           />
           {form.formState.errors.username ? (
-            <p className="text-sm text-red-500">
-              {form.formState.errors.username.message}
-            </p>
+            <p className="text-sm text-red-500">{form.formState.errors.username.message}</p>
           ) : null}
         </div>
 
@@ -128,13 +118,11 @@ export default function RegisterPage() {
             autoComplete="email"
             autoCorrect="off"
             disabled={loading}
-            {...form.register("email")}
-            className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20"
+            {...form.register('email')}
+            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
           />
           {form.formState.errors.email ? (
-            <p className="text-sm text-red-500">
-              {form.formState.errors.email.message}
-            </p>
+            <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
           ) : null}
         </div>
 
@@ -146,24 +134,20 @@ export default function RegisterPage() {
             <Input
               id="password"
               placeholder="••••••••"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               disabled={loading}
-              {...form.register("password")}
-              className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20 pr-11"
+              {...form.register('password')}
+              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
               aria-pressed={showPassword}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >
-              {showPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
           {password ? (
@@ -172,9 +156,7 @@ export default function RegisterPage() {
             </div>
           ) : null}
           {form.formState.errors.password ? (
-            <p className="text-sm text-red-500">
-              {form.formState.errors.password.message}
-            </p>
+            <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
           ) : null}
         </div>
 
@@ -186,51 +168,40 @@ export default function RegisterPage() {
             <Input
               id="confirmPassword"
               placeholder="••••••••"
-              type={showConfirmPassword ? "text" : "password"}
+              type={showConfirmPassword ? 'text' : 'password'}
               autoComplete="new-password"
               disabled={loading}
-              {...form.register("confirmPassword")}
-              className="h-11 rounded-xl border-gray-200 focus:border-[#E53935] focus:ring-[#E53935]/20 pr-11"
+              {...form.register('confirmPassword')}
+              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword((v) => !v)}
-              aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
               aria-pressed={showConfirmPassword}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >
-              {showConfirmPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
+              {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
           {form.formState.errors.confirmPassword ? (
-            <p className="text-sm text-red-500">
-              {form.formState.errors.confirmPassword.message}
-            </p>
+            <p className="text-sm text-red-500">{form.formState.errors.confirmPassword.message}</p>
           ) : null}
         </div>
 
         <Button
           type="submit"
           disabled={loading}
-          className="w-full h-11 bg-[#E53935] hover:bg-[#D32F2F] rounded-full text-base font-medium mt-2"
+          className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-white"
         >
-          {loading ? (
-            <SpinnerLoading noWrapper size={18} className="mr-2 text-white" />
-          ) : null}
+          {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
           Tạo tài khoản
         </Button>
       </form>
 
       <p className="text-center text-sm text-muted-foreground">
-        Đã có tài khoản?{" "}
-        <Link
-          href="/login"
-          className="text-[#E53935] hover:underline underline-offset-4 font-medium"
-        >
+        Đã có tài khoản?{' '}
+        <Link href="/login" className="text-primary hover:underline underline-offset-4 font-medium">
           Đăng nhập
         </Link>
       </p>

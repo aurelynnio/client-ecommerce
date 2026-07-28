@@ -1,5 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
+import { BRAND_CONFIG } from '@/constants';
 
 export default function AuthLayout({
   children,
@@ -7,21 +8,21 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50/50">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
       <div className="mb-8">
         <Link href="/" className="flex flex-col items-center">
-          <div className="relative w-[180px] h-[60px] overflow-hidden">
+          <div className="relative h-14 w-44">
             <Image
-              src="/images/logo.png"
-              alt="Logo"
+              src="/images/logo-aura-light.png"
+              alt={BRAND_CONFIG.name}
               fill
-              className="object-cover object-center scale-110 mix-blend-multiply"
+              className="object-contain"
               priority
             />
           </div>
         </Link>
       </div>
-      <div className="w-full max-w-[400px] bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+      <div className="w-full max-w-[400px] rounded-lg border border-border bg-card p-8 text-card-foreground shadow-sm">
         {children}
       </div>
     </div>

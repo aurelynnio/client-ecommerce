@@ -2,24 +2,24 @@
  * Product React Query Hooks
  * Replaces productAction.ts async thunks with React Query
  */
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   QueryClient,
   useQuery,
   useMutation,
   useQueryClient,
   useInfiniteQuery,
-} from "@tanstack/react-query";
-import { toast } from "sonner";
-import instance from "@/api/api";
-import { extractApiData, getSafeErrorMessage } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { productKeys } from "@/lib/queryKeys";
-import { Product, Variant, Price } from "@/types/product";
-import { Shop } from "@/types/shop";
-import { useAddToCart } from "./useCart";
+} from '@tanstack/react-query';
+import { toast } from 'sonner';
+import instance from '@/api/api';
+import { extractApiData, getSafeErrorMessage } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { productKeys } from '@/lib/queryKeys';
+import { Product, Variant, Price } from '@/types/product';
+import { Shop } from '@/types/shop';
+import { useAddToCart } from './useCart';
 
 export interface ProductListParams {
   page?: number;
@@ -32,7 +32,7 @@ export interface ProductListParams {
   tags?: string[];
   search?: string;
   isActive?: boolean;
-  status?: "draft" | "published" | "suspended" | "all";
+  status?: 'draft' | 'published' | 'suspended' | 'all';
   rating?: string;
   colors?: string;
   sizes?: string;
@@ -71,9 +71,7 @@ function hasValue<T>(value: T | undefined | null): value is T {
   return value !== undefined && value !== null;
 }
 
-function normalizeProductListResponse(
-  serverData: ServerProductListResponse,
-): ProductListResponse {
+function normalizeProductListResponse(serverData: ServerProductListResponse): ProductListResponse {
   const pagination = serverData.pagination;
 
   return {
@@ -87,20 +85,18 @@ function normalizeProductListResponse(
   };
 }
 
-function buildProductQueryParams(
-  params: ProductListParams,
-): Record<string, QueryParamValue> {
+function buildProductQueryParams(params: ProductListParams): Record<string, QueryParamValue> {
   const queryParams: Record<string, QueryParamValue> = {};
 
   if (hasValue(params.page)) queryParams.page = params.page;
   if (hasValue(params.limit)) queryParams.limit = params.limit;
   if (params.sort) {
     const sortMap: Record<string, string> = {
-      newest: "-createdAt",
-      popular: "-soldCount",
-      best_selling: "-soldCount",
-      price_asc: "price.currentPrice",
-      price_desc: "-price.currentPrice",
+      newest: '-createdAt',
+      popular: '-soldCount',
+      best_selling: '-soldCount',
+      price_asc: 'price.currentPrice',
+      price_desc: '-price.currentPrice',
     };
     queryParams.sort = sortMap[params.sort] || params.sort;
   }
@@ -108,12 +104,12 @@ function buildProductQueryParams(
   if (params.brand) queryParams.brand = params.brand;
   if (hasValue(params.minPrice)) queryParams.minPrice = params.minPrice;
   if (hasValue(params.maxPrice)) queryParams.maxPrice = params.maxPrice;
-  if (params.tags?.length) queryParams.tags = params.tags.join(",");
+  if (params.tags?.length) queryParams.tags = params.tags.join(',');
   if (params.search?.trim()) queryParams.search = params.search.trim();
   if (params.status) {
     queryParams.status = params.status;
   } else if (hasValue(params.isActive)) {
-    queryParams.status = params.isActive ? "published" : "suspended";
+    queryParams.status = params.isActive ? 'published' : 'suspended';
   }
   if (params.rating) queryParams.rating = params.rating;
   if (params.colors) queryParams.colors = params.colors;
@@ -133,10 +129,7 @@ function invalidateProductLists(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: productKeys.lists() });
 }
 
-function invalidateProductDetailById(
-  queryClient: QueryClient,
-  productId: string,
-) {
+function invalidateProductDetailById(queryClient: QueryClient, productId: string) {
   return queryClient.invalidateQueries({
     queryKey: productKeys.detailById(productId),
   });
@@ -150,7 +143,7 @@ function syncProductDetailBySlug(queryClient: QueryClient, product: Product) {
 
 const productApi = {
   getAll: async (params: ProductListParams): Promise<ProductListResponse> => {
-    const response = await instance.get("/products", {
+    const response = await instance.get('/products', {
       params: buildProductQueryParams(params),
     });
     const serverData = extractApiData<ServerProductListResponse>(response);
@@ -168,25 +161,23 @@ const productApi = {
   },
 
   getFeatured: async (): Promise<Product[]> => {
-    const response = await instance.get("/products/featured");
+    const response = await instance.get('/products/featured');
     return extractApiData(response);
   },
 
   getNewArrivals: async (): Promise<Product[]> => {
-    const response = await instance.get("/products/new-arrivals");
+    const response = await instance.get('/products/new-arrivals');
     return extractApiData(response);
   },
 
   getOnSale: async (): Promise<Product[]> => {
-    const response = await instance.get("/products/on-sale");
+    const response = await instance.get('/products/on-sale');
     return extractApiData(response);
   },
 
   getByCategory: async (categorySlug: string): Promise<Product[]> => {
     const response = await instance.get(`/products/category/${categorySlug}`);
-    const result = extractApiData<{ data?: Product[]; products?: Product[] } | Product[]>(
-      response,
-    );
+    const result = extractApiData<{ data?: Product[]; products?: Product[] } | Product[]>(response);
     if (Array.isArray(result)) {
       return result;
     }
@@ -196,7 +187,7 @@ const productApi = {
   getByCategoryPaginated: async (
     categorySlug: string,
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
   ): Promise<ProductListResponse> => {
     const response = await instance.get(`/products/category/${categorySlug}`, {
       params: { page, limit },
@@ -210,11 +201,8 @@ const productApi = {
     return extractApiData(response);
   },
 
-  search: async (params: {
-    keyword: string;
-    limit?: number;
-  }): Promise<Product[]> => {
-    const response = await instance.get("/products/search", {
+  search: async (params: { keyword: string; limit?: number }): Promise<Product[]> => {
+    const response = await instance.get('/products/search', {
       params: { q: params.keyword, limit: params.limit || 10 },
     });
     return extractApiData(response);
@@ -222,8 +210,8 @@ const productApi = {
 
   // Mutations
   create: async (formData: FormData): Promise<Product> => {
-    const response = await instance.post("/products", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await instance.post('/products', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
@@ -237,7 +225,7 @@ const productApi = {
   }): Promise<Product> => {
     // Admin uses seller endpoint now as per server refactor
     const response = await instance.put(`/products/seller/${productId}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
@@ -254,13 +242,9 @@ const productApi = {
     productId: string;
     formData: FormData;
   }): Promise<Product> => {
-    const response = await instance.put(
-      `/products/seller/${productId}`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      },
-    );
+    const response = await instance.put(`/products/seller/${productId}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return extractApiData(response);
   },
 
@@ -282,23 +266,16 @@ const productApi = {
     return extractApiData(response);
   },
 
-  deleteModel: async (params: {
-    productId: string;
-    modelId: string;
-  }): Promise<void> => {
+  deleteModel: async (params: { productId: string; modelId: string }): Promise<void> => {
     const { productId, modelId } = params;
-    await instance.delete(
-      `/products/seller/${productId}/variants/${modelId}`,
-    );
+    await instance.delete(`/products/seller/${productId}/variants/${modelId}`);
   },
 };
 
 /**
  * Get all products with filters and pagination
  */
-export function useProducts(
-  params: ProductListParams = { page: 1, limit: 20 },
-) {
+export function useProducts(params: ProductListParams = { page: 1, limit: 20 }) {
   return useQuery({
     queryKey: productKeys.list(params),
     queryFn: () => productApi.getAll(params),
@@ -310,13 +287,10 @@ export function useProducts(
  * Infinite scroll products hook
  * Uses useInfiniteQuery for paginated data fetching
  */
-export function useInfiniteProducts(
-  params: Omit<ProductListParams, "page"> = { limit: 20 },
-) {
+export function useInfiniteProducts(params: Omit<ProductListParams, 'page'> = { limit: 20 }) {
   return useInfiniteQuery({
     queryKey: productKeys.infinite(params),
-    queryFn: ({ pageParam = 1 }) =>
-      productApi.getAll({ ...params, page: pageParam }),
+    queryFn: ({ pageParam = 1 }) => productApi.getAll({ ...params, page: pageParam }),
     initialPageParam: 1,
     getNextPageParam,
     staleTime: STALE_TIME.LONG,
@@ -338,10 +312,7 @@ export function useProduct(slug: string, options?: { enabled?: boolean }) {
 /**
  * Get product by ID
  */
-export function useProductById(
-  productId: string,
-  options?: { enabled?: boolean },
-) {
+export function useProductById(productId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: productKeys.detailById(productId),
     queryFn: () => productApi.getById(productId),
@@ -385,10 +356,7 @@ export function useOnSaleProducts() {
 /**
  * Get products by category
  */
-export function useProductsByCategory(
-  categorySlug: string,
-  options?: { enabled?: boolean },
-) {
+export function useProductsByCategory(categorySlug: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: productKeys.byCategory(categorySlug),
     queryFn: () => productApi.getByCategory(categorySlug),
@@ -419,10 +387,7 @@ export function useInfiniteProductsByCategory(
 /**
  * Get related products
  */
-export function useRelatedProducts(
-  productId: string,
-  options?: { enabled?: boolean },
-) {
+export function useRelatedProducts(productId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: productKeys.related(productId),
     queryFn: () => productApi.getRelated(productId),
@@ -434,10 +399,7 @@ export function useRelatedProducts(
 /**
  * Get shop products
  */
-export function useShopProducts(
-  shopId: string,
-  params?: Omit<ProductListParams, "shop">,
-) {
+export function useShopProducts(shopId: string, params?: Omit<ProductListParams, 'shop'>) {
   return useQuery({
     queryKey: productKeys.shopProducts(shopId, params),
     queryFn: () => productApi.getAll({ ...params, shop: shopId }),
@@ -450,7 +412,7 @@ export function useShopProducts(
  */
 export function useInfiniteShopProducts(
   shopId: string,
-  params?: Omit<ProductListParams, "shop" | "page">,
+  params?: Omit<ProductListParams, 'shop' | 'page'>,
 ) {
   const limit = params?.limit || 20;
 
@@ -491,7 +453,7 @@ export function useCreateProduct() {
       invalidateProductLists(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create product failed" });
+      errorHandler.log(error, { context: 'Create product failed' });
     },
   });
 }
@@ -510,7 +472,7 @@ export function useUpdateProduct() {
       syncProductDetailBySlug(queryClient, data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update product failed" });
+      errorHandler.log(error, { context: 'Update product failed' });
     },
   });
 }
@@ -527,7 +489,7 @@ export function useDeleteProduct() {
       invalidateProductLists(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete product failed" });
+      errorHandler.log(error, { context: 'Delete product failed' });
     },
   });
 }
@@ -546,7 +508,7 @@ export function useUpdateSellerProduct() {
       syncProductDetailBySlug(queryClient, data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Seller update product failed" });
+      errorHandler.log(error, { context: 'Seller update product failed' });
     },
   });
 }
@@ -563,7 +525,7 @@ export function useDeleteSellerProduct() {
       invalidateProductLists(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Seller delete product failed" });
+      errorHandler.log(error, { context: 'Seller delete product failed' });
     },
   });
 }
@@ -580,7 +542,7 @@ export function useUpdateProductModel() {
       invalidateProductDetailById(queryClient, variables.productId);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update model failed" });
+      errorHandler.log(error, { context: 'Update model failed' });
     },
   });
 }
@@ -597,7 +559,7 @@ export function useDeleteProductModel() {
       invalidateProductDetailById(queryClient, variables.productId);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete model failed" });
+      errorHandler.log(error, { context: 'Delete model failed' });
     },
   });
 }
@@ -642,29 +604,21 @@ export interface UseProductDetailReturn {
  * Composite hook for product detail page
  * Handles product data fetching, variant selection, and cart operations
  */
-export function useProductDetail({
-  slug,
-}: UseProductDetailOptions): UseProductDetailReturn {
+export function useProductDetail({ slug }: UseProductDetailOptions): UseProductDetailReturn {
   const router = useRouter();
 
   // Use React Query for product data
-  const {
-    data: currentProduct,
-    isLoading,
-    error: queryError,
-  } = useProduct(slug);
+  const { data: currentProduct, isLoading, error: queryError } = useProduct(slug);
   const addToCartMutation = useAddToCart();
 
   // Convert error to string
   const safeErrorMessage = queryError
-    ? getSafeErrorMessage(queryError, "Không thể tải thông tin sản phẩm")
+    ? getSafeErrorMessage(queryError, 'Không thể tải thông tin sản phẩm')
     : null;
 
   // Local state
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [selectedSizeInternal, setSelectedSizeInternal] = useState<
-    string | null
-  >(null);
+  const [selectedSizeInternal, setSelectedSizeInternal] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -683,17 +637,12 @@ export function useProductDetail({
   // Get selected variant
   const selectedVariant = useMemo(() => {
     if (!currentProduct?.variants?.length) return null;
-    return (
-      currentProduct.variants[selectedVariantIndex] ||
-      currentProduct.variants[0]
-    );
+    return currentProduct.variants[selectedVariantIndex] || currentProduct.variants[0];
   }, [currentProduct, selectedVariantIndex]);
 
   // Check if product has variants
   const hasVariants = useMemo(() => {
-    return Boolean(
-      currentProduct?.variants && currentProduct.variants.length > 0,
-    );
+    return Boolean(currentProduct?.variants && currentProduct.variants.length > 0);
   }, [currentProduct]);
 
   // Check if product has sizes
@@ -712,7 +661,7 @@ export function useProductDetail({
       return {
         currentPrice: selectedVariant.price,
         discountPrice: null,
-        currency: "VND",
+        currency: 'VND',
       };
     }
     return currentProduct?.price || null;
@@ -721,8 +670,8 @@ export function useProductDetail({
   // Get shop info
   const shop = useMemo((): Shop | null => {
     if (!currentProduct?.shop) return null;
-    if (typeof currentProduct.shop === "string") {
-      return { _id: currentProduct.shop, name: "Shop" } as Shop;
+    if (typeof currentProduct.shop === 'string') {
+      return { _id: currentProduct.shop, name: 'Shop' } as Shop;
     }
     return currentProduct.shop;
   }, [currentProduct]);
@@ -779,12 +728,12 @@ export function useProductDetail({
     if (!currentProduct || addToCartMutation.isPending) return false;
 
     if (currentProduct.variants?.length && !selectedVariant) {
-      toast.error("Vui lòng chọn màu sắc");
+      toast.error('Vui lòng chọn màu sắc');
       return false;
     }
 
     if (selectedVariant && selectedVariant.stock <= 0) {
-      toast.error("Sản phẩm đã hết hàng");
+      toast.error('Sản phẩm đã hết hàng');
       return false;
     }
 
@@ -794,39 +743,32 @@ export function useProductDetail({
     }
 
     if (currentProduct.sizes?.length && !selectedSize) {
-      toast.error("Vui lòng chọn kích thước");
+      toast.error('Vui lòng chọn kích thước');
       return false;
     }
 
     try {
       await addToCartMutation.mutateAsync({
         productId: currentProduct._id,
-        shopId: shop?._id || "",
+        shopId: shop?._id || '',
         quantity,
         modelId: selectedVariant?._id ?? undefined,
         size: selectedSize ?? undefined,
       });
 
-      toast.success("Đã thêm vào giỏ hàng");
+      toast.success('Đã thêm vào giỏ hàng');
       return true;
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể thêm vào giỏ hàng"));
+      toast.error(getSafeErrorMessage(error, 'Không thể thêm vào giỏ hàng'));
       return false;
     }
-  }, [
-    currentProduct,
-    addToCartMutation,
-    quantity,
-    selectedVariant,
-    selectedSize,
-    shop,
-  ]);
+  }, [currentProduct, addToCartMutation, quantity, selectedVariant, selectedSize, shop]);
 
   // Handle buy now
   const handleBuyNow = useCallback(async () => {
     const success = await handleAddToCart();
     if (success) {
-      router.push("/checkout");
+      router.push('/checkout');
     }
   }, [handleAddToCart, router]);
 

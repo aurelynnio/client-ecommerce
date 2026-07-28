@@ -13,8 +13,6 @@ export function formatCurrency(value: number): string {
   return `₫${value.toLocaleString('vi-VN')}`;
 }
 
-
-
 /**
  * Format date to Vietnamese locale
  * @param date - Date string or Date object
@@ -27,9 +25,7 @@ export function formatDate(
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }
+  },
 ): string {
   return new Date(date).toLocaleDateString('vi-VN', options);
 }
-
-

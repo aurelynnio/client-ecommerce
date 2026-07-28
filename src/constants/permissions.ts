@@ -41,8 +41,7 @@ export const ACTIONS = {
 /**
  * Generate permission string from resource and action
  */
-export const permission = (resource: string, action: string): string => 
-  `${resource}:${action}`;
+export const permission = (resource: string, action: string): string => `${resource}:${action}`;
 
 /**
  * Special permissions
@@ -74,9 +73,9 @@ export const PERMISSIONS = {
 } as Record<string, string>;
 
 // Type definitions
-export type Resource = typeof RESOURCES[keyof typeof RESOURCES];
-export type Action = typeof ACTIONS[keyof typeof ACTIONS];
-export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
+export type Resource = (typeof RESOURCES)[keyof typeof RESOURCES];
+export type Action = (typeof ACTIONS)[keyof typeof ACTIONS];
+export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
 const ALL_PERMISSIONS = [...new Set(Object.values(PERMISSIONS))];
 const ALL_PERMISSIONS_SET = new Set(ALL_PERMISSIONS);
@@ -91,7 +90,7 @@ export const getAllPermissions = (): string[] => [...ALL_PERMISSIONS];
  */
 export const getPermissionsByResource = (): Record<string, string[]> => {
   const grouped: Record<string, string[]> = {};
-  
+
   for (const perm of ALL_PERMISSIONS) {
     if (perm.includes(':')) {
       const [resource] = perm.split(':');
@@ -101,7 +100,7 @@ export const getPermissionsByResource = (): Record<string, string[]> => {
       grouped[resource].push(perm);
     }
   }
-  
+
   return grouped;
 };
 

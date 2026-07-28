@@ -1,7 +1,7 @@
-import { BaseEntity } from "./common";
+import { BaseEntity } from './common';
 
 // Banner theme type
-export type BannerTheme = "light" | "dark";
+export type BannerTheme = 'light' | 'dark';
 
 // Banner item interface - matches backend bannerSchema
 export interface BannerItem extends BaseEntity {

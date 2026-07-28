@@ -2,24 +2,19 @@
  * Wishlist React Query Hooks
  * Replaces wishlistAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useCallback, useRef, useState } from "react";
-import instance from "@/api/api";
-import { extractApiData, getSafeErrorMessage } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { wishlistKeys } from "@/lib/queryKeys";
-import { toast } from "sonner";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useRef, useState } from 'react';
+import instance from '@/api/api';
+import { extractApiData, getSafeErrorMessage } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { wishlistKeys } from '@/lib/queryKeys';
+import { toast } from 'sonner';
 import {
   WishlistResponse,
   CheckWishlistResponse,
   CheckMultipleWishlistResponse,
-} from "@/types/wishlist";
+} from '@/types/wishlist';
 
 function invalidateWishlistListAndCount(queryClient: QueryClient) {
   queryClient.invalidateQueries({ queryKey: wishlistKeys.lists() });
@@ -29,12 +24,11 @@ function invalidateWishlistListAndCount(queryClient: QueryClient) {
 function syncCheckMultipleWishlistCaches(
   queryClient: QueryClient,
   productId: string,
-  isInWishlist: boolean
+  isInWishlist: boolean,
 ) {
-  const cachedQueries =
-    queryClient.getQueriesData<CheckMultipleWishlistResponse>({
-      queryKey: wishlistKeys.checkMultipleRoot(),
-    });
+  const cachedQueries = queryClient.getQueriesData<CheckMultipleWishlistResponse>({
+    queryKey: wishlistKeys.checkMultipleRoot(),
+  });
 
   cachedQueries.forEach(([queryKey, cachedMap]) => {
     if (!cachedMap || !(productId in cachedMap)) return;
@@ -52,16 +46,13 @@ function invalidateWishlistAll(queryClient: QueryClient) {
 
 // ============ API Functions ============
 const wishlistApi = {
-  getAll: async (params?: {
-    page?: number;
-    limit?: number;
-  }): Promise<WishlistResponse> => {
-    const response = await instance.get("/wishlist", { params });
+  getAll: async (params?: { page?: number; limit?: number }): Promise<WishlistResponse> => {
+    const response = await instance.get('/wishlist', { params });
     return extractApiData(response);
   },
 
   getCount: async (): Promise<number> => {
-    const response = await instance.get("/wishlist/count");
+    const response = await instance.get('/wishlist/count');
     const data = extractApiData<{ count?: number }>(response);
     return data?.count || 0;
   },
@@ -72,32 +63,26 @@ const wishlistApi = {
     return data?.isInWishlist || false;
   },
 
-  checkMultiple: async (
-    productIds: string[]
-  ): Promise<CheckMultipleWishlistResponse> => {
-    const response = await instance.post("/wishlist/check-multiple", {
+  checkMultiple: async (productIds: string[]): Promise<CheckMultipleWishlistResponse> => {
+    const response = await instance.post('/wishlist/check-multiple', {
       productIds,
     });
     return extractApiData(response) || {};
   },
 
   // Mutations
-  add: async (
-    productId: string
-  ): Promise<{ productId: string; wishlistCount: number }> => {
+  add: async (productId: string): Promise<{ productId: string; wishlistCount: number }> => {
     const response = await instance.post(`/wishlist/${productId}`);
     return { ...extractApiData(response), productId };
   },
 
-  remove: async (
-    productId: string
-  ): Promise<{ productId: string; wishlistCount: number }> => {
+  remove: async (productId: string): Promise<{ productId: string; wishlistCount: number }> => {
     const response = await instance.delete(`/wishlist/${productId}`);
     return { ...extractApiData(response), productId };
   },
 
   clear: async (): Promise<void> => {
-    await instance.delete("/wishlist");
+    await instance.delete('/wishlist');
   },
 };
 
@@ -129,10 +114,7 @@ export function useWishlistCount(options?: { enabled?: boolean }) {
 /**
  * Check if single product is in wishlist
  */
-export function useCheckInWishlist(
-  productId: string,
-  options?: { enabled?: boolean }
-) {
+export function useCheckInWishlist(productId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: wishlistKeys.check(productId),
     queryFn: () => wishlistApi.check(productId),
@@ -144,10 +126,7 @@ export function useCheckInWishlist(
 /**
  * Check multiple products in wishlist (batch check)
  */
-export function useCheckMultipleInWishlist(
-  productIds: string[],
-  options?: { enabled?: boolean }
-) {
+export function useCheckMultipleInWishlist(productIds: string[], options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: wishlistKeys.checkMultiple(productIds),
     queryFn: () => wishlistApi.checkMultiple(productIds),
@@ -159,41 +138,97 @@ export function useCheckMultipleInWishlist(
 // ============ Mutation Hooks ============
 
 /**
- * Add product to wishlist
+ * Add product to wishlist (with optimistic update)
  */
 export function useAddToWishlist() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: wishlistApi.add,
+    onMutate: async (productId) => {
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.check(productId) });
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.count() });
+
+      const previousCheck = queryClient.getQueryData<boolean>(wishlistKeys.check(productId));
+      const previousCount = queryClient.getQueryData<number>(wishlistKeys.count());
+
+      // Optimistically mark as in-wishlist
+      queryClient.setQueryData(wishlistKeys.check(productId), true);
+      if (typeof previousCount === 'number') {
+        queryClient.setQueryData(wishlistKeys.count(), previousCount + 1);
+      }
+      syncCheckMultipleWishlistCaches(queryClient, productId, true);
+
+      return { previousCheck, previousCount };
+    },
     onSuccess: ({ wishlistCount }, productId) => {
       queryClient.setQueryData(wishlistKeys.check(productId), true);
       queryClient.setQueryData(wishlistKeys.count(), wishlistCount);
       syncCheckMultipleWishlistCaches(queryClient, productId, true);
       invalidateWishlistListAndCount(queryClient);
     },
-    onError: (error) => {
-      errorHandler.log(error, { context: "Add to wishlist failed" });
+    onError: (error, productId, context) => {
+      // Rollback optimistic changes
+      if (context?.previousCheck !== undefined) {
+        queryClient.setQueryData(wishlistKeys.check(productId), context.previousCheck);
+      }
+      if (context?.previousCount !== undefined) {
+        queryClient.setQueryData(wishlistKeys.count(), context.previousCount);
+      }
+      syncCheckMultipleWishlistCaches(queryClient, productId, false);
+      errorHandler.log(error, { context: 'Add to wishlist failed' });
+    },
+    onSettled: (_data, _error, productId) => {
+      queryClient.invalidateQueries({ queryKey: wishlistKeys.check(productId) });
+      queryClient.invalidateQueries({ queryKey: wishlistKeys.count() });
     },
   });
 }
 
 /**
- * Remove product from wishlist
+ * Remove product from wishlist (with optimistic update)
  */
 export function useRemoveFromWishlist() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: wishlistApi.remove,
+    onMutate: async (productId) => {
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.check(productId) });
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.count() });
+
+      const previousCheck = queryClient.getQueryData<boolean>(wishlistKeys.check(productId));
+      const previousCount = queryClient.getQueryData<number>(wishlistKeys.count());
+
+      // Optimistically mark as removed
+      queryClient.setQueryData(wishlistKeys.check(productId), false);
+      if (typeof previousCount === 'number') {
+        queryClient.setQueryData(wishlistKeys.count(), Math.max(0, previousCount - 1));
+      }
+      syncCheckMultipleWishlistCaches(queryClient, productId, false);
+
+      return { previousCheck, previousCount };
+    },
     onSuccess: ({ productId, wishlistCount }) => {
       queryClient.setQueryData(wishlistKeys.check(productId), false);
       queryClient.setQueryData(wishlistKeys.count(), wishlistCount);
       syncCheckMultipleWishlistCaches(queryClient, productId, false);
       invalidateWishlistListAndCount(queryClient);
     },
-    onError: (error) => {
-      errorHandler.log(error, { context: "Remove from wishlist failed" });
+    onError: (error, productId, context) => {
+      // Rollback optimistic changes
+      if (context?.previousCheck !== undefined) {
+        queryClient.setQueryData(wishlistKeys.check(productId), context.previousCheck);
+      }
+      if (context?.previousCount !== undefined) {
+        queryClient.setQueryData(wishlistKeys.count(), context.previousCount);
+      }
+      syncCheckMultipleWishlistCaches(queryClient, productId, true);
+      errorHandler.log(error, { context: 'Remove from wishlist failed' });
+    },
+    onSettled: (_data, _error, productId) => {
+      queryClient.invalidateQueries({ queryKey: wishlistKeys.check(productId) });
+      queryClient.invalidateQueries({ queryKey: wishlistKeys.count() });
     },
   });
 }
@@ -210,7 +245,7 @@ export function useClearWishlist() {
       invalidateWishlistAll(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Clear wishlist failed" });
+      errorHandler.log(error, { context: 'Clear wishlist failed' });
     },
   });
 }
@@ -261,19 +296,16 @@ export function useWishlistManager(isAuthenticated: boolean) {
   const checkTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Use React Query to check multiple products
-  const { data: wishlistMap = {} } = useCheckMultipleInWishlist(
-    checkedProductIds,
-    { enabled: checkedProductIds.length > 0 }
-  );
+  const { data: wishlistMap = {} } = useCheckMultipleInWishlist(checkedProductIds, {
+    enabled: checkedProductIds.length > 0,
+  });
 
   // Batch check products - debounced
   const batchCheckProducts = useCallback(
     (productIds: string[]) => {
       if (!isAuthenticated) return;
 
-      pendingCheckedIds.current = [
-        ...new Set([...pendingCheckedIds.current, ...productIds]),
-      ];
+      pendingCheckedIds.current = [...new Set([...pendingCheckedIds.current, ...productIds])];
 
       if (checkTimeout.current) {
         clearTimeout(checkTimeout.current);
@@ -288,26 +320,24 @@ export function useWishlistManager(isAuthenticated: boolean) {
         setCheckedProductIds((prev) => [...new Set([...prev, ...next])]);
       }, 100);
     },
-    [isAuthenticated]
+    [isAuthenticated],
   );
 
   // Check if product is in wishlist
   const isInWishlist = useCallback(
     (productId: string): boolean => {
-      const cached = queryClient.getQueryData<boolean>(
-        wishlistKeys.check(productId)
-      );
+      const cached = queryClient.getQueryData<boolean>(wishlistKeys.check(productId));
       if (cached !== undefined) return cached;
       return wishlistMap[productId] === true;
     },
-    [wishlistMap, queryClient]
+    [wishlistMap, queryClient],
   );
 
   // Toggle wishlist with toast notifications
   const toggleWishlist = useCallback(
     async (productId: string, productName?: string) => {
       if (!isAuthenticated) {
-        toast.error("Vui lòng đăng nhập để sử dụng tính năng này");
+        toast.error('Vui lòng đăng nhập để sử dụng tính năng này');
         return false;
       }
 
@@ -316,27 +346,24 @@ export function useWishlistManager(isAuthenticated: boolean) {
       try {
         if (currentlyInWishlist) {
           await removeMutation.mutateAsync(productId);
-          toast.success("Đã xóa khỏi yêu thích");
+          toast.success('Đã xóa khỏi yêu thích');
           return false;
         } else {
           await addMutation.mutateAsync(productId);
           toast.success(
-            productName
-              ? `Đã thêm "${productName}" vào yêu thích`
-              : "Đã thêm vào yêu thích"
+            productName ? `Đã thêm "${productName}" vào yêu thích` : 'Đã thêm vào yêu thích',
           );
           return true;
         }
       } catch (error: unknown) {
-        toast.error(getSafeErrorMessage(error, "Có lỗi xảy ra"));
+        toast.error(getSafeErrorMessage(error, 'Có lỗi xảy ra'));
         return currentlyInWishlist;
       }
     },
-    [isAuthenticated, isInWishlist, addMutation, removeMutation]
+    [isAuthenticated, isInWishlist, addMutation, removeMutation],
   );
 
-  const isLoading =
-    isLoadingCount || addMutation.isPending || removeMutation.isPending;
+  const isLoading = isLoadingCount || addMutation.isPending || removeMutation.isPending;
 
   return {
     isInWishlist,

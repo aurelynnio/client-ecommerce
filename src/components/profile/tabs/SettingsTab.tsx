@@ -1,22 +1,22 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   useChangePassword,
   useConfirmTwoFactor,
   useSendTwoFactorCode,
-} from "@/hooks/queries/useProfile";
-import { useSendVerificationCode } from "@/hooks/queries/useAuth";
-import { Shield, Key, Eye, EyeOff, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { User } from "@/types/user";
-import { cn } from "@/utils/cn";
-import { getSafeErrorMessage } from "@/api";
+} from '@/hooks/queries/useProfile';
+import { useSendVerificationCode } from '@/hooks/queries/useAuth';
+import { Shield, Key, Eye, EyeOff, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import { User } from '@/types/user';
+import { cn } from '@/utils/cn';
+import { getSafeErrorMessage } from '@/api';
 
 interface SettingsTabProps {
   user: User;
@@ -27,9 +27,9 @@ export default function SettingsTab({ user }: SettingsTabProps) {
   const changePasswordMutation = useChangePassword();
   const sendVerificationCodeMutation = useSendVerificationCode();
   const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
@@ -38,13 +38,11 @@ export default function SettingsTab({ user }: SettingsTabProps) {
   });
   const sendTwoFactorCodeMutation = useSendTwoFactorCode();
   const confirmTwoFactorMutation = useConfirmTwoFactor();
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    user?.isTwoFactorEnabled || false,
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(user?.isTwoFactorEnabled || false);
+  const [pendingTwoFactorAction, setPendingTwoFactorAction] = useState<'enable' | 'disable' | null>(
+    null,
   );
-  const [pendingTwoFactorAction, setPendingTwoFactorAction] = useState<
-    "enable" | "disable" | null
-  >(null);
-  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   useEffect(() => {
@@ -60,25 +58,25 @@ export default function SettingsTab({ user }: SettingsTabProps) {
       !passwordData.newPassword ||
       !passwordData.confirmPassword
     ) {
-      toast.error("Vui lòng điền đầy đủ các trường");
+      toast.error('Vui lòng điền đầy đủ các trường');
       setIsChangingPassword(false);
       return;
     }
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("Mật khẩu mới không khớp");
+      toast.error('Mật khẩu mới không khớp');
       setIsChangingPassword(false);
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      toast.error("Mật khẩu phải có ít nhất 6 ký tự");
+      toast.error('Mật khẩu phải có ít nhất 6 ký tự');
       setIsChangingPassword(false);
       return;
     }
 
     if (passwordData.currentPassword === passwordData.newPassword) {
-      toast.error("Mật khẩu mới phải khác mật khẩu hiện tại");
+      toast.error('Mật khẩu mới phải khác mật khẩu hiện tại');
       setIsChangingPassword(false);
       return;
     }
@@ -89,20 +87,20 @@ export default function SettingsTab({ user }: SettingsTabProps) {
         newPassword: passwordData.newPassword,
       });
 
-      toast.success("Đổi mật khẩu thành công");
+      toast.success('Đổi mật khẩu thành công');
       setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
       });
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Đổi mật khẩu thất bại"));
+      toast.error(getSafeErrorMessage(error, 'Đổi mật khẩu thất bại'));
     } finally {
       setIsChangingPassword(false);
     }
   };
 
-  const togglePasswordVisibility = (field: "current" | "new" | "confirm") => {
+  const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
     setShowPasswords((prev) => ({
       ...prev,
       [field]: !prev[field],
@@ -111,23 +109,23 @@ export default function SettingsTab({ user }: SettingsTabProps) {
 
   const handleTwoFactorToggle = async () => {
     if (!user?.isVerifiedEmail) {
-      toast.error("Bạn cần xác minh email trước khi bật xác thực 2 yếu tố");
+      toast.error('Bạn cần xác minh email trước khi bật xác thực 2 yếu tố');
       return;
     }
 
-    const action = twoFactorEnabled ? "disable" : "enable";
+    const action = twoFactorEnabled ? 'disable' : 'enable';
 
     try {
       await sendTwoFactorCodeMutation.mutateAsync(action);
       setPendingTwoFactorAction(action);
-      setTwoFactorCode("");
+      setTwoFactorCode('');
       toast.success(
-        action === "enable"
-          ? "Mã xác minh đã được gửi để bật 2FA"
-          : "Mã xác minh đã được gửi để tắt 2FA",
+        action === 'enable'
+          ? 'Mã xác minh đã được gửi để bật 2FA'
+          : 'Mã xác minh đã được gửi để tắt 2FA',
       );
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể gửi mã xác thực 2 yếu tố"));
+      toast.error(getSafeErrorMessage(error, 'Không thể gửi mã xác thực 2 yếu tố'));
     }
   };
 
@@ -135,7 +133,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
     if (!pendingTwoFactorAction) return;
 
     if (!/^\d{6}$/.test(twoFactorCode.trim())) {
-      toast.error("Vui lòng nhập mã gồm 6 chữ số");
+      toast.error('Vui lòng nhập mã gồm 6 chữ số');
       return;
     }
 
@@ -147,39 +145,29 @@ export default function SettingsTab({ user }: SettingsTabProps) {
       const enabled = !!updatedUser.isTwoFactorEnabled;
       setTwoFactorEnabled(enabled);
       setPendingTwoFactorAction(null);
-      setTwoFactorCode("");
-      toast.success(
-        enabled
-          ? "Đã bật xác thực 2 yếu tố"
-          : "Đã tắt xác thực 2 yếu tố",
-      );
+      setTwoFactorCode('');
+      toast.success(enabled ? 'Đã bật xác thực 2 yếu tố' : 'Đã tắt xác thực 2 yếu tố');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể xác nhận mã 2FA"));
+      toast.error(getSafeErrorMessage(error, 'Không thể xác nhận mã 2FA'));
     }
   };
 
   const handleSendVerificationCode = async () => {
     if (!user?.email) {
-      toast.error("Không tìm thấy email để xác minh");
+      toast.error('Không tìm thấy email để xác minh');
       return;
     }
 
     try {
       await sendVerificationCodeMutation.mutateAsync({ email: user.email.trim() });
-      toast.success("Đã gửi mã xác minh đến email của bạn");
+      toast.success('Đã gửi mã xác minh đến email của bạn');
       router.push(`/verify-code?email=${encodeURIComponent(user.email.trim())}`);
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Không thể gửi mã xác minh email"));
+      toast.error(getSafeErrorMessage(error, 'Không thể gửi mã xác minh email'));
     }
   };
 
-  const SectionHeader = ({
-    title,
-    description,
-  }: {
-    title: string;
-    description: string;
-  }) => (
+  const SectionHeader = ({ title, description }: { title: string; description: string }) => (
     <div className="mb-4">
       <h3 className="text-lg font-medium tracking-tight">{title}</h3>
       <p className="text-sm text-muted-foreground">{description}</p>
@@ -222,16 +210,13 @@ export default function SettingsTab({ user }: SettingsTabProps) {
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div className="grid gap-4">
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="currentPassword"
-                      className="text-sm font-medium"
-                    >
+                    <Label htmlFor="currentPassword" className="text-sm font-medium">
                       Mật khẩu hiện tại
                     </Label>
                     <div className="relative">
                       <Input
                         id="currentPassword"
-                        type={showPasswords.current ? "text" : "password"}
+                        type={showPasswords.current ? 'text' : 'password'}
                         value={passwordData.currentPassword}
                         onChange={(e) =>
                           setPasswordData({
@@ -244,7 +229,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       <button
                         type="button"
                         className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                        onClick={() => togglePasswordVisibility("current")}
+                        onClick={() => togglePasswordVisibility('current')}
                       >
                         {showPasswords.current ? (
                           <EyeOff className="h-4 w-4" />
@@ -256,16 +241,13 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label
-                        htmlFor="newPassword"
-                        className="text-sm font-medium"
-                      >
+                      <Label htmlFor="newPassword" className="text-sm font-medium">
                         Mật khẩu mới
                       </Label>
                       <div className="relative">
                         <Input
                           id="newPassword"
-                          type={showPasswords.new ? "text" : "password"}
+                          type={showPasswords.new ? 'text' : 'password'}
                           value={passwordData.newPassword}
                           onChange={(e) =>
                             setPasswordData({
@@ -278,7 +260,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                         <button
                           type="button"
                           className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                          onClick={() => togglePasswordVisibility("new")}
+                          onClick={() => togglePasswordVisibility('new')}
                         >
                           {showPasswords.new ? (
                             <EyeOff className="h-4 w-4" />
@@ -289,16 +271,13 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label
-                        htmlFor="confirmPassword"
-                        className="text-sm font-medium"
-                      >
+                      <Label htmlFor="confirmPassword" className="text-sm font-medium">
                         Xác nhận mật khẩu
                       </Label>
                       <div className="relative">
                         <Input
                           id="confirmPassword"
-                          type={showPasswords.confirm ? "text" : "password"}
+                          type={showPasswords.confirm ? 'text' : 'password'}
                           value={passwordData.confirmPassword}
                           onChange={(e) =>
                             setPasswordData({
@@ -311,7 +290,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                         <button
                           type="button"
                           className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                          onClick={() => togglePasswordVisibility("confirm")}
+                          onClick={() => togglePasswordVisibility('confirm')}
                         >
                           {showPasswords.confirm ? (
                             <EyeOff className="h-4 w-4" />
@@ -328,7 +307,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                   disabled={isChangingPassword}
                   className="mt-2 text-white rounded-sm"
                 >
-                  {isChangingPassword ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
+                  {isChangingPassword ? 'Đang cập nhật...' : 'Cập nhật mật khẩu'}
                 </Button>
               </form>
             </div>
@@ -338,18 +317,16 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                 <div className="flex items-center gap-3">
                   <div
                     className={cn(
-                      "h-10 w-10 rounded-full flex items-center justify-center transition-colors duration-200",
+                      'h-10 w-10 rounded-full flex items-center justify-center transition-colors duration-200',
                       twoFactorEnabled
-                        ? "bg-green-50 text-green-600"
-                        : "bg-muted text-muted-foreground",
+                        ? 'bg-green-50 text-green-600'
+                        : 'bg-muted text-muted-foreground',
                     )}
                   >
                     <Shield className="h-5 w-5" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-base">
-                      Xác thực 2 yếu tố
-                    </h4>
+                    <h4 className="font-medium text-base">Xác thực 2 yếu tố</h4>
                     <p className="text-xs text-muted-foreground">
                       Nhận mã xác minh qua email mỗi khi đăng nhập để tăng bảo mật tài khoản.
                     </p>
@@ -373,10 +350,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                     Đang bật
                   </Badge>
                 ) : (
-                  <Badge
-                    variant="outline"
-                    className="border-slate-200 bg-slate-50 text-slate-600"
-                  >
+                  <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">
                     Chưa bật
                   </Badge>
                 )}
@@ -389,21 +363,15 @@ export default function SettingsTab({ user }: SettingsTabProps) {
               {pendingTwoFactorAction ? (
                 <div className="mt-4 rounded-md border border-border/40 bg-background p-4">
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">
-                      Nhập mã xác thực đã gửi tới {user.email}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Mã có hiệu lực trong 10 phút.
-                    </p>
+                    <p className="text-sm font-medium">Nhập mã xác thực đã gửi tới {user.email}</p>
+                    <p className="text-xs text-muted-foreground">Mã có hiệu lực trong 10 phút.</p>
                   </div>
                   <div className="mt-3 flex flex-col gap-3 sm:flex-row">
                     <Input
                       inputMode="numeric"
                       maxLength={6}
                       value={twoFactorCode}
-                      onChange={(e) =>
-                        setTwoFactorCode(e.target.value.replace(/\D/g, ""))
-                      }
+                      onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, ''))}
                       placeholder="Nhập 6 chữ số"
                       className="sm:max-w-[220px]"
                     />
@@ -417,10 +385,10 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                         className="text-white"
                       >
                         {confirmTwoFactorMutation.isPending
-                          ? "Đang xác nhận..."
-                          : pendingTwoFactorAction === "enable"
-                            ? "Bật 2FA"
-                            : "Tắt 2FA"}
+                          ? 'Đang xác nhận...'
+                          : pendingTwoFactorAction === 'enable'
+                            ? 'Bật 2FA'
+                            : 'Tắt 2FA'}
                       </Button>
                       <Button
                         type="button"
@@ -431,13 +399,13 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                           void sendTwoFactorCodeMutation
                             .mutateAsync(pendingTwoFactorAction)
                             .then(() => {
-                              toast.success("Đã gửi lại mã xác thực");
+                              toast.success('Đã gửi lại mã xác thực');
                             })
                             .catch((error: unknown) => {
                               toast.error(
                                 getSafeErrorMessage(
                                   error,
-                                  "Không thể gửi lại mã xác thực 2 yếu tố",
+                                  'Không thể gửi lại mã xác thực 2 yếu tố',
                                 ),
                               );
                             });
@@ -450,7 +418,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                         variant="outline"
                         onClick={() => {
                           setPendingTwoFactorAction(null);
-                          setTwoFactorCode("");
+                          setTwoFactorCode('');
                         }}
                       >
                         Hủy
@@ -466,19 +434,17 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                 <div className="flex items-center gap-3">
                   <div
                     className={cn(
-                      "h-10 w-10 rounded-full flex items-center justify-center transition-colors duration-200",
+                      'h-10 w-10 rounded-full flex items-center justify-center transition-colors duration-200',
                       user?.isVerifiedEmail
-                        ? "bg-blue-50 text-blue-600"
-                        : "bg-amber-50 text-amber-600",
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'bg-amber-50 text-amber-600',
                     )}
                   >
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-medium text-base">
-                        Xác minh Email
-                      </h4>
+                      <h4 className="font-medium text-base">Xác minh Email</h4>
                       {user?.isVerifiedEmail ? (
                         <Badge
                           variant="secondary"
@@ -497,8 +463,8 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                     </div>
                     <p className="text-xs text-muted-foreground">
                       {user?.isVerifiedEmail
-                        ? "Email của bạn đã được xác minh và bảo mật."
-                        : "Vui lòng xác minh địa chỉ email của bạn."}
+                        ? 'Email của bạn đã được xác minh và bảo mật.'
+                        : 'Vui lòng xác minh địa chỉ email của bạn.'}
                     </p>
                   </div>
                 </div>
@@ -512,9 +478,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       void handleSendVerificationCode();
                     }}
                   >
-                    {sendVerificationCodeMutation.isPending
-                      ? "Đang gửi..."
-                      : "Gửi mã xác minh"}
+                    {sendVerificationCodeMutation.isPending ? 'Đang gửi...' : 'Gửi mã xác minh'}
                   </Button>
                 )}
               </div>

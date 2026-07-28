@@ -19,6 +19,7 @@ Dự án Frontend cho hệ thống thương mại điện tử, được xây d�
 ## ✨ Tính năng chính
 
 ### Người dùng (Customer)
+
 - **Authentication**: Đăng nhập, Đăng ký, Quên mật khẩu.
 - **Sản phẩm**:
   - Xem danh sách sản phẩm, lọc theo danh mục, giá.
@@ -33,6 +34,7 @@ Dự án Frontend cho hệ thống thương mại điện tử, được xây d�
 - **Thông báo**: Hệ thống thông báo realtime (Socket.io).
 
 ### Quản trị viên (Admin)
+
 - **Dashboard**: Thống kê doanh thu, đơn hàng, người dùng.
 - **Quản lý sản phẩm**: Thêm, sửa, xóa, quản lý biến thể (variants).
 - **Quản lý đơn hàng**: Cập nhật trạng thái đơn hàng.
@@ -41,6 +43,7 @@ Dự án Frontend cho hệ thống thương mại điện tử, được xây d�
 ## 🚀 Cài đặt và chạy dự án
 
 1. **Cài đặt dependencies**:
+
    ```bash
    npm install
    # hoặc
@@ -51,9 +54,11 @@ Dự án Frontend cho hệ thống thương mại điện tử, được xây d�
    Tạo file `.env.local` và cấu hình các biến môi trường cần thiết (API URL, Google Maps Key, etc.).
 
 3. **Chạy server development**:
+
    ```bash
    npm run dev
    ```
+
    Truy cập [http://localhost:3000](http://localhost:3000).
 
 4. **Build production**:

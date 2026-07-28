@@ -1,6 +1,6 @@
-import { Product } from "./product";
+import { Product } from './product';
 
-import { PaginationData } from "./common";
+import { PaginationData } from './common';
 
 // Flash sale info for a product
 export interface FlashSaleInfo {
@@ -23,7 +23,7 @@ export interface FlashSaleProduct extends Product {
 export interface FlashSaleSlot {
   startTime: string;
   endTime: string;
-  status: "upcoming" | "active" | "ended";
+  status: 'upcoming' | 'active' | 'ended';
   label: string;
 }
 

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
 export default function NewArrivalsPage() {
-  redirect("/products?sortBy=newest");
+  redirect('/products?sortBy=newest');
 }

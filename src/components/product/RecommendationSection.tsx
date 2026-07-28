@@ -1,11 +1,11 @@
-"use client";
-import { memo, useEffect } from "react";
-import { Sparkles, TrendingUp, Clock, Star } from "lucide-react";
-import { useRecommendation } from "@/hooks/queries/useRecommendations";
-import { ProductCard } from "@/components/product/ProductCard";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Product } from "@/types/product";
-import { cn } from "@/utils/cn";
+'use client';
+import { memo, useEffect } from 'react';
+import { Sparkles, TrendingUp, Clock, Star } from 'lucide-react';
+import { useRecommendation } from '@/hooks/queries/useRecommendations';
+import { ProductCard } from '@/components/product/ProductCard';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Product } from '@/types/product';
+import { cn } from '@/utils/cn';
 
 interface RecommendationSectionProps {
   className?: string;
@@ -15,7 +15,7 @@ interface RecommendationSectionProps {
 const SectionHeader = memo(function SectionHeader({
   icon: Icon,
   title,
-  iconColor = "text-[#E53935]",
+  iconColor = 'text-primary',
 }: {
   icon: React.ElementType;
   title: string;
@@ -23,7 +23,7 @@ const SectionHeader = memo(function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-2 mb-4">
-      <Icon className={cn("h-5 w-5", iconColor)} />
+      <Icon className={cn('h-5 w-5', iconColor)} />
       <h2 className="font-bold text-lg text-gray-800">{title}</h2>
     </div>
   );
@@ -38,18 +38,13 @@ const ProductGrid = memo(function ProductGrid({
   columns?: number;
 }) {
   const gridCols = {
-    4: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4",
-    5: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
-    6: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6",
+    4: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4',
+    5: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5',
+    6: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6',
   };
 
   return (
-    <div
-      className={cn(
-        "grid gap-3",
-        gridCols[columns as keyof typeof gridCols] || gridCols[6]
-      )}
-    >
+    <div className={cn('grid gap-3', gridCols[columns as keyof typeof gridCols] || gridCols[6])}>
       {products.map((product) => (
         <ProductCard key={product._id} product={product} />
       ))}
@@ -65,7 +60,7 @@ export const ForYouSection = memo(function ForYouSection({
 
   if (isLoading && forYou.length === 0) {
     return (
-      <section className={cn("py-6", className)}>
+      <section className={cn('py-6', className)}>
         <SectionHeader icon={Sparkles} title="Gợi ý cho bạn" />
         <div className="flex items-center justify-center py-12">
           <SpinnerLoading size={24} />
@@ -77,7 +72,7 @@ export const ForYouSection = memo(function ForYouSection({
   if (forYou.length === 0) return null;
 
   return (
-    <section className={cn("py-6", className)}>
+    <section className={cn('py-6', className)}>
       <SectionHeader icon={Sparkles} title="Gợi ý cho bạn" />
       <ProductGrid products={forYou} />
     </section>
@@ -93,12 +88,8 @@ export const RecentlyViewedSection = memo(function RecentlyViewedSection({
   if (recentlyViewed.length === 0) return null;
 
   return (
-    <section className={cn("py-6", className)}>
-      <SectionHeader
-        icon={Clock}
-        title="Đã xem gần đây"
-        iconColor="text-blue-500"
-      />
+    <section className={cn('py-6', className)}>
+      <SectionHeader icon={Clock} title="Đã xem gần đây" iconColor="text-blue-500" />
       <ProductGrid products={recentlyViewed} columns={5} />
     </section>
   );
@@ -116,7 +107,7 @@ export const HomepageRecommendations = memo(function HomepageRecommendations({
 
   if (isLoading && !homepage) {
     return (
-      <div className={cn("py-6", className)}>
+      <div className={cn('py-6', className)}>
         <div className="flex items-center justify-center py-12">
           <SpinnerLoading size={24} />
         </div>
@@ -127,15 +118,11 @@ export const HomepageRecommendations = memo(function HomepageRecommendations({
   if (!homepage) return null;
 
   return (
-    <div className={cn("space-y-8", className)}>
+    <div className={cn('space-y-8', className)}>
       {/* Popular Products */}
       {homepage.popular && homepage.popular.length > 0 && (
         <section>
-          <SectionHeader
-            icon={TrendingUp}
-            title="Sản phẩm bán chạy"
-            iconColor="text-orange-500"
-          />
+          <SectionHeader icon={TrendingUp} title="Sản phẩm bán chạy" iconColor="text-orange-500" />
           <ProductGrid products={homepage.popular} columns={5} />
         </section>
       )}
@@ -143,11 +130,7 @@ export const HomepageRecommendations = memo(function HomepageRecommendations({
       {/* Top Rated */}
       {homepage.topRated && homepage.topRated.length > 0 && (
         <section>
-          <SectionHeader
-            icon={Star}
-            title="Đánh giá cao"
-            iconColor="text-yellow-500"
-          />
+          <SectionHeader icon={Star} title="Đánh giá cao" iconColor="text-yellow-500" />
           <ProductGrid products={homepage.topRated} columns={5} />
         </section>
       )}

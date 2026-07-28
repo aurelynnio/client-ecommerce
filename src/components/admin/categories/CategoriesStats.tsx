@@ -1,8 +1,5 @@
-import { Folder, Layers, Package } from "lucide-react";
-import {
-  AdminStatCard,
-  AdminStatsGrid,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Folder, Layers, Package } from 'lucide-react';
+import { AdminStatCard, AdminStatsGrid } from '@/components/admin/shared/AdminPrimitives';
 
 interface CategoriesStatsProps {
   totalCategories: number;
@@ -19,27 +16,27 @@ export function CategoriesStats({
 }: CategoriesStatsProps) {
   const stats = [
     {
-      title: "Tổng Danh mục",
+      title: 'Tổng Danh mục',
       value: totalCategories,
-      description: "Tất cả danh mục trong hệ thống",
+      description: 'Tất cả danh mục trong hệ thống',
       icon: Folder,
     },
     {
-      title: "Danh mục Hoạt động",
+      title: 'Danh mục Hoạt động',
       value: activeCategories,
-      description: "Danh mục đang hiển thị",
+      description: 'Danh mục đang hiển thị',
       icon: Folder,
     },
     {
-      title: "Danh mục Con",
+      title: 'Danh mục Con',
       value: childCategories,
-      description: "Danh mục cấp 2, 3",
+      description: 'Danh mục cấp 2, 3',
       icon: Layers,
     },
     {
-      title: "Tổng Sản phẩm",
+      title: 'Tổng Sản phẩm',
       value: totalProducts,
-      description: "Sản phẩm trong các danh mục",
+      description: 'Sản phẩm trong các danh mục',
       icon: Package,
     },
   ];
@@ -53,7 +50,7 @@ export function CategoriesStats({
           value={stat.value}
           description={stat.description}
           icon={stat.icon}
-          accent={index === 2 ? "blue" : index === 3 ? "green" : "brand"}
+          accent={index === 2 ? 'blue' : index === 3 ? 'green' : 'brand'}
         />
       ))}
     </AdminStatsGrid>

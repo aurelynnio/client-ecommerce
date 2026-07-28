@@ -1,11 +1,11 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import { authSlice } from "@/features/auth/authSlice";
-import { cartSlice } from "@/features/cart/cartSlice";
-import { chatSlice } from "@/features/chat/chatSlice";
-import { shippingSlice } from "@/features/shipping/shippingSlice";
-import { injectStore } from "@/api/api";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import { authSlice } from '@/features/auth/authSlice';
+import { cartSlice } from '@/features/cart/cartSlice';
+import { chatSlice } from '@/features/chat/chatSlice';
+import { shippingSlice } from '@/features/shipping/shippingSlice';
+import { injectStore } from '@/api/api';
 
 const createNoopStorage = () => {
   return {
@@ -24,10 +24,7 @@ const createNoopStorage = () => {
   };
 };
 
-const storage =
-  typeof window !== "undefined"
-    ? createWebStorage("local")
-    : createNoopStorage();
+const storage = typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage();
 
 export const rootReducer = combineReducers({
   auth: authSlice.reducer,
@@ -37,9 +34,9 @@ export const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: "root_ecommerce_v1",
+  key: 'root_ecommerce_v1',
   storage,
-  whitelist: ["auth", "cart"],
+  whitelist: ['auth', 'cart'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -49,11 +46,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [
-          "persist/PERSIST",
-          "persist/REHYDRATE",
-          "persist/REGISTER",
-        ],
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/REGISTER'],
       },
     }),
 });

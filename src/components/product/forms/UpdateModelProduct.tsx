@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { toast } from "sonner";
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogClose,
@@ -7,28 +7,28 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Plus, X, Trash2, Upload } from "lucide-react";
-import { Product, VariantFormUpdate } from "@/types/product";
-import { TagItem } from "@/components/product/forms/TagItem";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Plus, X, Trash2, Upload } from 'lucide-react';
+import { Product, VariantFormUpdate } from '@/types/product';
+import { TagItem } from '@/components/product/forms/TagItem';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import Image from "next/image";
-import { useCategoryTree } from "@/hooks/queries/useCategories";
-import { useMyShop, useShopCategories } from "@/hooks/queries/useShop";
-import { flattenCategories } from "@/utils/category";
-import { STATUS_OPTIONS } from "@/constants/product";
-import { validateProductForm } from "@/utils/productFormValidation";
+} from '@/components/ui/select';
+import Image from 'next/image';
+import { useCategoryTree } from '@/hooks/queries/useCategories';
+import { useMyShop, useShopCategories } from '@/hooks/queries/useShop';
+import { flattenCategories } from '@/utils/category';
+import { STATUS_OPTIONS } from '@/constants/product';
+import { validateProductForm } from '@/utils/productFormValidation';
 
 interface UpdateModelProductProps {
   open: boolean;
@@ -47,7 +47,7 @@ export function UpdateModelProduct({
 }: UpdateModelProductProps) {
   const { data: categories = [] } = useCategoryTree();
   const { data: myShop } = useMyShop();
-  const { data: shopCategoriesData } = useShopCategories(myShop?._id || "", {
+  const { data: shopCategoriesData } = useShopCategories(myShop?._id || '', {
     enabled: !!myShop?._id,
   });
   const shopCategories = shopCategoriesData?.categories || [];
@@ -56,47 +56,41 @@ export function UpdateModelProduct({
   const productPrice = product?.price || {
     currentPrice: 0,
     discountPrice: 0,
-    currency: "VND",
+    currency: 'VND',
   };
 
-  const variantsWithFiles: VariantFormUpdate[] = (product?.variants || []).map(
-    (v) => ({
-      _id: v._id,
-      name: v.name,
-      color: v.color || "",
-      price: v.price,
-      stock: v.stock,
-      sold: v.sold || 0,
-      images: {
-        existing: v.images || [],
-        newFiles: [],
-        newPreviews: [],
-      },
-    }),
-  );
+  const variantsWithFiles: VariantFormUpdate[] = (product?.variants || []).map((v) => ({
+    _id: v._id,
+    name: v.name,
+    color: v.color || '',
+    price: v.price,
+    stock: v.stock,
+    sold: v.sold || 0,
+    images: {
+      existing: v.images || [],
+      newFiles: [],
+      newPreviews: [],
+    },
+  }));
 
   const [formData, setFormData] = useState({
-    name: product?.name || "",
-    description: product?.description || "",
-    slug: product?.slug || "",
+    name: product?.name || '',
+    description: product?.description || '',
+    slug: product?.slug || '',
     category:
-      typeof product?.category === "string"
-        ? product.category
-        : product?.category?._id || "",
+      typeof product?.category === 'string' ? product.category : product?.category?._id || '',
     shopCategory:
-      typeof product?.shopCategory === "string"
+      typeof product?.shopCategory === 'string'
         ? product.shopCategory
-        : product?.shopCategory?._id || "",
-    brand: product?.brand || "",
-    status:
-      product?.status ||
-      ("published" as "draft" | "published" | "suspended"),
+        : product?.shopCategory?._id || '',
+    brand: product?.brand || '',
+    status: product?.status || ('published' as 'draft' | 'published' | 'suspended'),
     isNewArrival: product?.isNewArrival || false,
     isFeatured: product?.isFeatured || false,
     price: {
       currentPrice: productPrice.currentPrice ?? 0,
       discountPrice: productPrice.discountPrice ?? 0,
-      currency: productPrice.currency ?? "VND",
+      currency: productPrice.currency ?? 'VND',
     },
     stock: product?.stock || 0,
     weight: product?.weight || 0,
@@ -116,16 +110,15 @@ export function UpdateModelProduct({
     },
   });
 
-
-  const [newTag, setNewTag] = useState("");
-  const [newAttribute, setNewAttribute] = useState({ name: "", value: "" });
-  const [newSize, setNewSize] = useState("");
+  const [newTag, setNewTag] = useState('');
+  const [newAttribute, setNewAttribute] = useState({ name: '', value: '' });
+  const [newSize, setNewSize] = useState('');
 
   const addVariant = () => {
     const newVariant: VariantFormUpdate = {
       _id: `temp-${Date.now()}`,
-      name: "",
-      color: "",
+      name: '',
+      color: '',
       price: formData.price.currentPrice,
       stock: 0,
       sold: 0,
@@ -137,11 +130,7 @@ export function UpdateModelProduct({
     }));
   };
 
-  const updateVariant = (
-    index: number,
-    field: keyof VariantFormUpdate,
-    value: unknown,
-  ) => {
+  const updateVariant = (index: number, field: keyof VariantFormUpdate, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       variants: prev.variants.map((v, i) => {
@@ -157,7 +146,7 @@ export function UpdateModelProduct({
         ...prev,
         sizes: [...prev.sizes, newSize.trim()],
       }));
-      setNewSize("");
+      setNewSize('');
     }
   };
 
@@ -186,11 +175,9 @@ export function UpdateModelProduct({
 
     const currentImages = formData.variants[variantIndex]?.images;
     const totalImages =
-      (currentImages?.existing.length || 0) +
-      (currentImages?.newFiles.length || 0) +
-      files.length;
+      (currentImages?.existing.length || 0) + (currentImages?.newFiles.length || 0) + files.length;
     if (totalImages > 8) {
-      alert("Mỗi variant tối đa 8 ảnh");
+      alert('Mỗi variant tối đa 8 ảnh');
       return;
     }
 
@@ -212,10 +199,7 @@ export function UpdateModelProduct({
     }));
   };
 
-  const removeExistingVariantImage = (
-    variantIndex: number,
-    imageIndex: number,
-  ) => {
+  const removeExistingVariantImage = (variantIndex: number, imageIndex: number) => {
     setFormData((prev) => ({
       ...prev,
       variants: prev.variants.map((v, i) => {
@@ -242,18 +226,14 @@ export function UpdateModelProduct({
           images: {
             ...v.images,
             newFiles: v.images.newFiles.filter((_, idx) => idx !== imageIndex),
-            newPreviews: v.images.newPreviews.filter(
-              (_, idx) => idx !== imageIndex,
-            ),
+            newPreviews: v.images.newPreviews.filter((_, idx) => idx !== imageIndex),
           },
         };
       }),
     }));
   };
 
-  const handleDescriptionImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleDescriptionImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
@@ -262,7 +242,7 @@ export function UpdateModelProduct({
       formData.descriptionImages.newFiles.length +
       files.length;
     if (totalImages > 20) {
-      alert("Tối đa 20 ảnh mô tả chi tiết");
+      alert('Tối đa 20 ảnh mô tả chi tiết');
       return;
     }
 
@@ -295,12 +275,8 @@ export function UpdateModelProduct({
         ...prev,
         descriptionImages: {
           ...prev.descriptionImages,
-          newFiles: prev.descriptionImages.newFiles.filter(
-            (_, i) => i !== index,
-          ),
-          newPreviews: prev.descriptionImages.newPreviews.filter(
-            (_, i) => i !== index,
-          ),
+          newFiles: prev.descriptionImages.newFiles.filter((_, i) => i !== index),
+          newPreviews: prev.descriptionImages.newPreviews.filter((_, i) => i !== index),
         },
       };
     });
@@ -330,13 +306,13 @@ export function UpdateModelProduct({
     }
 
     const formDataToSend = new FormData();
-    formDataToSend.append("id", product._id);
+    formDataToSend.append('id', product._id);
     const normalizedName = formData.name.trim();
     const normalizedDescription = formData.description.trim();
     const normalizedVariants = formData.variants.map((variant) => ({
-      _id: variant._id.startsWith("temp-") ? undefined : variant._id,
+      _id: variant._id.startsWith('temp-') ? undefined : variant._id,
       name: variant.name.trim(),
-      color: variant.color?.trim() || "",
+      color: variant.color?.trim() || '',
       price: variant.price,
       stock: variant.stock,
       sold: variant.sold || 0,
@@ -357,74 +333,61 @@ export function UpdateModelProduct({
       ? normalizedVariants.reduce((sum, variant) => sum + variant.stock, 0)
       : formData.stock;
 
-    if (normalizedName !== product.name)
-      formDataToSend.append("name", normalizedName);
+    if (normalizedName !== product.name) formDataToSend.append('name', normalizedName);
     if (normalizedDescription !== product.description)
-      formDataToSend.append("description", normalizedDescription);
-    if (formData.slug !== product.slug)
-      formDataToSend.append("slug", formData.slug);
+      formDataToSend.append('description', normalizedDescription);
+    if (formData.slug !== product.slug) formDataToSend.append('slug', formData.slug);
 
     const originalCategory =
-      typeof product.category === "string"
-        ? product.category
-        : product.category?._id || "";
+      typeof product.category === 'string' ? product.category : product.category?._id || '';
     if (formData.category !== originalCategory)
-      formDataToSend.append("category", formData.category);
+      formDataToSend.append('category', formData.category);
 
     const originalShopCategory =
-      typeof product.shopCategory === "string"
+      typeof product.shopCategory === 'string'
         ? product.shopCategory
-        : product.shopCategory?._id || "";
+        : product.shopCategory?._id || '';
     if (formData.shopCategory !== originalShopCategory)
-      formDataToSend.append("shopCategory", formData.shopCategory);
+      formDataToSend.append('shopCategory', formData.shopCategory);
 
-    if (formData.brand !== product.brand)
-      formDataToSend.append("brand", formData.brand);
-    if (formData.status !== product.status)
-      formDataToSend.append("status", formData.status);
+    if (formData.brand !== product.brand) formDataToSend.append('brand', formData.brand);
+    if (formData.status !== product.status) formDataToSend.append('status', formData.status);
     if (formData.isNewArrival !== product.isNewArrival)
-      formDataToSend.append("isNewArrival", formData.isNewArrival.toString());
+      formDataToSend.append('isNewArrival', formData.isNewArrival.toString());
     if (formData.isFeatured !== product.isFeatured)
-      formDataToSend.append("isFeatured", formData.isFeatured.toString());
+      formDataToSend.append('isFeatured', formData.isFeatured.toString());
     if (aggregatedStock !== product.stock || normalizedVariants.length > 0)
-      formDataToSend.append("stock", aggregatedStock.toString());
+      formDataToSend.append('stock', aggregatedStock.toString());
     if (formData.weight !== product.weight)
-      formDataToSend.append("weight", formData.weight.toString());
+      formDataToSend.append('weight', formData.weight.toString());
 
     const productPrice = product.price || {
       currentPrice: 0,
       discountPrice: 0,
-      currency: "VND",
+      currency: 'VND',
     };
     if (
       formData.price.currentPrice !== productPrice.currentPrice ||
       formData.price.discountPrice !== productPrice.discountPrice
     ) {
-      formDataToSend.append("price", JSON.stringify(formData.price));
+      formDataToSend.append('price', JSON.stringify(formData.price));
     }
 
-    if (
-      JSON.stringify(formData.dimensions) !== JSON.stringify(product.dimensions)
-    ) {
-      formDataToSend.append("dimensions", JSON.stringify(formData.dimensions));
+    if (JSON.stringify(formData.dimensions) !== JSON.stringify(product.dimensions)) {
+      formDataToSend.append('dimensions', JSON.stringify(formData.dimensions));
     }
 
-    formDataToSend.append("variants", JSON.stringify(normalizedVariants));
+    formDataToSend.append('variants', JSON.stringify(normalizedVariants));
 
-    if (
-      JSON.stringify(normalizedSizes) !== JSON.stringify(product.sizes || [])
-    ) {
-      formDataToSend.append("sizes", JSON.stringify(normalizedSizes));
+    if (JSON.stringify(normalizedSizes) !== JSON.stringify(product.sizes || [])) {
+      formDataToSend.append('sizes', JSON.stringify(normalizedSizes));
     }
 
     const existingVariantImagesMapping = formData.variants.map((v, idx) => ({
       variantIndex: idx,
       existing: v.images.existing,
     }));
-    formDataToSend.append(
-      "existingVariantImages",
-      JSON.stringify(existingVariantImagesMapping),
-    );
+    formDataToSend.append('existingVariantImages', JSON.stringify(existingVariantImagesMapping));
 
     formData.variants.forEach((variant, idx) => {
       variant.images.newFiles.forEach((file) => {
@@ -432,34 +395,26 @@ export function UpdateModelProduct({
       });
     });
 
-
-    if (
-      JSON.stringify(normalizedAttributes) !==
-      JSON.stringify(product.attributes)
-    ) {
-      formDataToSend.append(
-        "attributes",
-        JSON.stringify(normalizedAttributes),
-      );
+    if (JSON.stringify(normalizedAttributes) !== JSON.stringify(product.attributes)) {
+      formDataToSend.append('attributes', JSON.stringify(normalizedAttributes));
     }
 
     if (JSON.stringify(normalizedTags) !== JSON.stringify(product.tags)) {
-      formDataToSend.append("tags", JSON.stringify(normalizedTags));
+      formDataToSend.append('tags', JSON.stringify(normalizedTags));
     }
 
     const originalDescImages = product.descriptionImages || [];
     const hasDescImageChanges =
-      JSON.stringify(formData.descriptionImages.existing) !==
-        JSON.stringify(originalDescImages) ||
+      JSON.stringify(formData.descriptionImages.existing) !== JSON.stringify(originalDescImages) ||
       formData.descriptionImages.newFiles.length > 0;
 
     if (hasDescImageChanges) {
       formDataToSend.append(
-        "existingDescriptionImages",
+        'existingDescriptionImages',
         JSON.stringify(formData.descriptionImages.existing),
       );
       formData.descriptionImages.newFiles.forEach((file) => {
-        formDataToSend.append("descriptionImages", file);
+        formDataToSend.append('descriptionImages', file);
       });
     }
 
@@ -472,7 +427,7 @@ export function UpdateModelProduct({
         if (prev.tags.includes(newTag.trim())) return prev;
         return { ...prev, tags: [...prev.tags, newTag.trim()] };
       });
-      setNewTag("");
+      setNewTag('');
     }
   }, [newTag, setFormData, setNewTag]);
 
@@ -492,7 +447,7 @@ export function UpdateModelProduct({
         ...prev,
         attributes: [...prev.attributes, { ...newAttribute }],
       }));
-      setNewAttribute({ name: "", value: "" });
+      setNewAttribute({ name: '', value: '' });
     }
   };
 
@@ -509,7 +464,7 @@ export function UpdateModelProduct({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="sm:max-w-[1000px] rounded-4xl border-border/50 bg-white/80 p-6 shadow-2xl backdrop-blur-xl dark:bg-[#1C1C1E]/80 max-h-[90vh] overflow-y-auto no-scrollbar"
+        className="max-h-[90vh] overflow-y-auto rounded-xl border-border bg-card p-6 shadow-lg sm:max-w-[1000px]"
       >
         <DialogHeader>
           <div className="flex items-start justify-between gap-4">
@@ -545,9 +500,7 @@ export function UpdateModelProduct({
                 </Label>
                 <Input
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, name: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
@@ -557,9 +510,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Slug (URL)</Label>
                 <Input
                   value={formData.slug}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, slug: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                 />
@@ -572,9 +523,7 @@ export function UpdateModelProduct({
                 </Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, category: value }))
-                  }
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   disabled={isLoading}
                 >
                   <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
@@ -618,9 +567,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Thương hiệu</Label>
                 <Input
                   value={formData.brand}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, brand: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
                   disabled={isLoading}
                   className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
                 />
@@ -651,9 +598,7 @@ export function UpdateModelProduct({
               <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
                 Ảnh mô tả chi tiết
               </h3>
-              <p className="text-xs text-muted-foreground mt-1">
-                Tối đa 20 ảnh.
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Tối đa 20 ảnh.</p>
             </div>
             <div className="flex flex-wrap gap-3">
               {/* Existing images from server */}
@@ -662,12 +607,7 @@ export function UpdateModelProduct({
                   key={`existing-${index}`}
                   className="relative w-24 h-24 rounded-xl overflow-hidden border group"
                 >
-                  <Image
-                    src={url}
-                    alt={`Mô tả ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={url} alt={`Mô tả ${index + 1}`} fill className="object-cover" />
                   <button
                     type="button"
                     onClick={() => removeExistingDescriptionImage(index)}
@@ -704,7 +644,7 @@ export function UpdateModelProduct({
               {formData.descriptionImages.existing.length +
                 formData.descriptionImages.newFiles.length <
                 20 && (
-                <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#E53935] hover:bg-red-50/50 transition-colors">
+                <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
                   <Upload className="h-6 w-6 text-gray-400" />
                   <span className="text-xs text-gray-400 mt-1">Thêm ảnh</span>
                   <input
@@ -729,7 +669,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Giá bán (VND)</Label>
                 <Input
                   type="number"
-                  value={formData.price.currentPrice || ""}
+                  value={formData.price.currentPrice || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -747,7 +687,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Giá khuyến mãi</Label>
                 <Input
                   type="number"
-                  value={formData.price.discountPrice || ""}
+                  value={formData.price.discountPrice || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -765,7 +705,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Tồn kho</Label>
                 <Input
                   type="number"
-                  value={formData.stock || ""}
+                  value={formData.stock || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -810,9 +750,7 @@ export function UpdateModelProduct({
                   }
                   disabled={isLoading}
                 />
-                <Label className="text-sm font-medium cursor-pointer">
-                  Sản phẩm mới
-                </Label>
+                <Label className="text-sm font-medium cursor-pointer">Sản phẩm mới</Label>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-border/50">
                 <Switch
@@ -822,9 +760,7 @@ export function UpdateModelProduct({
                   }
                   disabled={isLoading}
                 />
-                <Label className="text-sm font-medium cursor-pointer">
-                  Sản phẩm nổi bật
-                </Label>
+                <Label className="text-sm font-medium cursor-pointer">Sản phẩm nổi bật</Label>
               </div>
             </div>
           </div>
@@ -838,7 +774,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Cân nặng (gram)</Label>
                 <Input
                   type="number"
-                  value={formData.weight || ""}
+                  value={formData.weight || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -853,7 +789,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Dài (cm)</Label>
                 <Input
                   type="number"
-                  value={formData.dimensions.length || ""}
+                  value={formData.dimensions.length || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -871,7 +807,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Rộng (cm)</Label>
                 <Input
                   type="number"
-                  value={formData.dimensions.width || ""}
+                  value={formData.dimensions.width || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -889,7 +825,7 @@ export function UpdateModelProduct({
                 <Label className="text-sm font-medium">Cao (cm)</Label>
                 <Input
                   type="number"
-                  value={formData.dimensions.height || ""}
+                  value={formData.dimensions.height || ''}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -934,16 +870,12 @@ export function UpdateModelProduct({
               <Label className="text-sm font-medium text-blue-700">
                 Kích thước sản phẩm (áp dụng cho tất cả variants)
               </Label>
-              <p className="text-xs text-blue-600 mb-2">
-                VD: S, M, L, XL hoặc 36, 37, 38, 39, 40
-              </p>
+              <p className="text-xs text-blue-600 mb-2">VD: S, M, L, XL hoặc 36, 37, 38, 39, 40</p>
               <div className="flex gap-2 mb-2">
                 <Input
                   value={newSize}
                   onChange={(e) => setNewSize(e.target.value)}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && (e.preventDefault(), addSize())
-                  }
+                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSize())}
                   placeholder="Nhập size và nhấn Enter"
                   disabled={isLoading}
                   className="rounded-lg text-sm h-9 bg-white"
@@ -990,14 +922,11 @@ export function UpdateModelProduct({
             ) : (
               <div className="space-y-4">
                 {formData.variants.map((variant, idx) => (
-                  <div
-                    key={variant._id}
-                    className="border rounded-xl p-4 space-y-4 bg-gray-50/30"
-                  >
+                  <div key={variant._id} className="border rounded-xl p-4 space-y-4 bg-gray-50/30">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-700">
                         Variant #{idx + 1}
-                        {!variant._id.startsWith("temp-") && (
+                        {!variant._id.startsWith('temp-') && (
                           <span className="text-xs text-gray-400 ml-2">
                             (ID: {variant._id.slice(-6)})
                           </span>
@@ -1022,9 +951,7 @@ export function UpdateModelProduct({
                         </Label>
                         <Input
                           value={variant.name}
-                          onChange={(e) =>
-                            updateVariant(idx, "name", e.target.value)
-                          }
+                          onChange={(e) => updateVariant(idx, 'name', e.target.value)}
                           placeholder="VD: Đỏ, Xanh Navy, Đen"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
@@ -1034,9 +961,7 @@ export function UpdateModelProduct({
                         <Label className="text-xs">Màu sắc</Label>
                         <Input
                           value={variant.color}
-                          onChange={(e) =>
-                            updateVariant(idx, "color", e.target.value)
-                          }
+                          onChange={(e) => updateVariant(idx, 'color', e.target.value)}
                           placeholder="VD: Đỏ, Xanh, Đen"
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
@@ -1050,10 +975,8 @@ export function UpdateModelProduct({
                         <Label className="text-xs">Giá (VND)</Label>
                         <Input
                           type="number"
-                          value={variant.price || ""}
-                          onChange={(e) =>
-                            updateVariant(idx, "price", Number(e.target.value))
-                          }
+                          value={variant.price || ''}
+                          onChange={(e) => updateVariant(idx, 'price', Number(e.target.value))}
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
                         />
@@ -1062,10 +985,8 @@ export function UpdateModelProduct({
                         <Label className="text-xs">Tồn kho</Label>
                         <Input
                           type="number"
-                          value={variant.stock || ""}
-                          onChange={(e) =>
-                            updateVariant(idx, "stock", Number(e.target.value))
-                          }
+                          value={variant.stock || ''}
+                          onChange={(e) => updateVariant(idx, 'stock', Number(e.target.value))}
                           className="rounded-lg text-sm h-9"
                           disabled={isLoading}
                         />
@@ -1074,9 +995,7 @@ export function UpdateModelProduct({
 
                     {/* Variant Images */}
                     <div className="space-y-2">
-                      <Label className="text-xs">
-                        Ảnh variant (tối đa 8 ảnh)
-                      </Label>
+                      <Label className="text-xs">Ảnh variant (tối đa 8 ảnh)</Label>
                       <div className="flex flex-wrap gap-2">
                         {/* Existing images */}
                         {variant.images.existing.map((url, imgIdx) => (
@@ -1092,9 +1011,7 @@ export function UpdateModelProduct({
                             />
                             <button
                               type="button"
-                              onClick={() =>
-                                removeExistingVariantImage(idx, imgIdx)
-                              }
+                              onClick={() => removeExistingVariantImage(idx, imgIdx)}
                               className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               <X className="h-2.5 w-2.5" />
@@ -1125,10 +1042,8 @@ export function UpdateModelProduct({
                             </button>
                           </div>
                         ))}
-                        {variant.images.existing.length +
-                          variant.images.newFiles.length <
-                          8 && (
-                          <label className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#E53935] hover:bg-red-50/50 transition-colors">
+                        {variant.images.existing.length + variant.images.newFiles.length < 8 && (
+                          <label className="flex size-16 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
                             <Upload className="h-4 w-4 text-gray-400" />
                             <input
                               type="file"
@@ -1155,18 +1070,14 @@ export function UpdateModelProduct({
             <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
               <Input
                 value={newAttribute.name}
-                onChange={(e) =>
-                  setNewAttribute({ ...newAttribute, name: e.target.value })
-                }
+                onChange={(e) => setNewAttribute({ ...newAttribute, name: e.target.value })}
                 placeholder="Tên thông số"
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
               />
               <Input
                 value={newAttribute.value}
-                onChange={(e) =>
-                  setNewAttribute({ ...newAttribute, value: e.target.value })
-                }
+                onChange={(e) => setNewAttribute({ ...newAttribute, value: e.target.value })}
                 placeholder="Giá trị"
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
@@ -1211,9 +1122,7 @@ export function UpdateModelProduct({
               <Input
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && (e.preventDefault(), addTag())
-                }
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Nhập tag và nhấn Enter"
                 disabled={isLoading}
                 className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
@@ -1250,9 +1159,9 @@ export function UpdateModelProduct({
             <Button
               type="submit"
               disabled={isLoading}
-              className="rounded-xl bg-[#E53935] hover:bg-[#D32F2F]"
+              className="rounded-lg bg-primary hover:bg-primary-hover"
             >
-              {isLoading ? "Đang cập nhật..." : "Cập nhật sản phẩm"}
+              {isLoading ? 'Đang cập nhật...' : 'Cập nhật sản phẩm'}
             </Button>
           </div>
         </form>

@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 // Custom hook
-import { useProductDetail } from "@/hooks/queries";
+import { useProductDetail } from '@/hooks/queries';
 
 // Local components
-import { ProductGallery } from "./_components/ProductGallery";
-import { ProductInfo } from "./_components/ProductInfo";
-import { VariantSelector } from "./_components/VariantSelector";
-import { QuantitySelector } from "./_components/QuantitySelector";
-import { ProductActions } from "./_components/ProductActions";
-import { ProductTabs, TabId } from "./_components/ProductTabs";
-import { ProductSpecs } from "./_components/ProductSpecs";
-import { ProductDescription } from "./_components/ProductDescription";
-import { ProductReviews } from "./_components/ProductReviews";
+import { ProductGallery } from './_components/ProductGallery';
+import { ProductInfo } from './_components/ProductInfo';
+import { VariantSelector } from './_components/VariantSelector';
+import { QuantitySelector } from './_components/QuantitySelector';
+import { ProductActions } from './_components/ProductActions';
+import { ProductTabs, TabId } from './_components/ProductTabs';
+import { ProductSpecs } from './_components/ProductSpecs';
+import { ProductDescription } from './_components/ProductDescription';
+import { ProductReviews } from './_components/ProductReviews';
 
 // Shared components
-import RelatedProducts from "@/components/product/RelatedProducts";
-import { RecentlyViewedSection } from "@/components/product/RecommendationSection";
-import { useRecommendation } from "@/hooks/queries/useRecommendations";
+import RelatedProducts from '@/components/product/RelatedProducts';
+import { RecentlyViewedSection } from '@/components/product/RecommendationSection';
+import { useRecommendation } from '@/hooks/queries/useRecommendations';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -61,12 +61,12 @@ export default function ProductDetailPage() {
   }, [product?._id, trackView]);
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<TabId>("reviews");
+  const [activeTab, setActiveTab] = useState<TabId>('reviews');
 
   // Update active tab on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["reviews", "specs", "description", "related"] as const;
+      const sections = ['reviews', 'specs', 'description', 'related'] as const;
       const headerOffset = 150;
 
       for (const sectionId of sections) {
@@ -81,8 +81,8 @@ export default function ProductDetailPage() {
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   if (isLoading || !product) {
@@ -90,25 +90,23 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="bg-white min-h-screen text-[#333] font-sans pb-20 lg:pb-0">
-      <div className="max-w-[1240px] mx-auto px-4 lg:py-6">
+    <div className="bg-background min-h-screen text-foreground font-sans pb-20 lg:pb-0">
+      <div className="aura-container py-5 lg:py-7">
         {/* Main Layout Section */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Left: Gallery */}
-          <ProductGallery
-            images={displayImages}
-            productName={product.name}
-            selectedIndex={selectedImageIndex}
-            onIndexChange={setSelectedImageIndex}
-          />
+          <div className="min-w-0 lg:col-span-7">
+            <ProductGallery
+              images={displayImages}
+              productName={product.name}
+              selectedIndex={selectedImageIndex}
+              onIndexChange={setSelectedImageIndex}
+            />
+          </div>
 
           {/* Right: Product Info */}
-          <div className="flex-1 min-w-0 space-y-6">
-            <ProductInfo
-              product={product}
-              activePrice={activePrice}
-              shop={shop}
-            />
+          <div className="min-w-0 space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
+            <ProductInfo product={product} activePrice={activePrice} shop={shop} />
 
             {/* Variant Selection */}
             {(hasVariants || hasSizes) && (
@@ -150,7 +148,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Content Sections */}
-        <div className="py-8 space-y-8 max-w-[900px]">
+        <div className="max-w-[900px] space-y-8 py-8">
           {/* Reviews Section */}
           <ProductReviews
             productId={product._id}
@@ -158,12 +156,12 @@ export default function ProductDetailPage() {
             reviewCount={product.reviewCount}
           />
 
-          <Separator className="bg-gray-100" />
+          <Separator className="bg-border" />
 
           {/* Specs Section */}
           <ProductSpecs product={product} />
 
-          <Separator className="bg-gray-100" />
+          <Separator className="bg-border" />
 
           {/* Description Section */}
           <ProductDescription product={product} />
@@ -184,17 +182,17 @@ export default function ProductDetailPage() {
 // Skeleton component for loading state
 function ProductDetailSkeleton() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-background min-h-screen">
       <div className="max-w-[1240px] mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
           {/* Gallery Skeleton */}
           <div className="hidden lg:flex gap-4">
             <div className="flex flex-col gap-2 w-[60px]">
               {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="w-[60px] h-[60px] rounded-sm" />
+                <Skeleton key={i} className="w-[60px] h-[60px] rounded-lg" />
               ))}
             </div>
-            <Skeleton className="w-[420px] h-[420px] rounded-sm" />
+            <Skeleton className="w-[420px] h-[420px] rounded-lg" />
           </div>
           <div className="lg:hidden">
             <Skeleton className="aspect-square w-full" />
@@ -210,8 +208,8 @@ function ProductDetailSkeleton() {
               <Skeleton className="h-10 w-full" />
             </div>
             <div className="flex gap-4 pt-8">
-              <Skeleton className="h-12 w-[180px] rounded-full" />
-              <Skeleton className="h-12 w-[180px] rounded-full" />
+              <Skeleton className="h-12 w-[180px] rounded-lg" />
+              <Skeleton className="h-12 w-[180px] rounded-lg" />
             </div>
           </div>
         </div>

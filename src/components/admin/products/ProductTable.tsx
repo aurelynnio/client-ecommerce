@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useState, useEffect } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
   Table,
   TableBody,
@@ -7,39 +7,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Category, Price } from "@/types/product";
-import { Shop } from "@/types/shop";
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Category, Price } from '@/types/product';
+import { Shop } from '@/types/shop';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Search,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Eye,
-  Filter,
-  Package,
-  Store,
-} from "lucide-react";
-import { Product } from "@/types/product";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import Image from "next/image";
+} from '@/components/ui/dropdown-menu';
+import { Search, MoreHorizontal, Edit, Trash2, Eye, Filter, Package, Store } from 'lucide-react';
+import { Product } from '@/types/product';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import Image from 'next/image';
 import {
   adminFieldSurfaceClass,
   adminFilterBarClass,
@@ -51,7 +42,7 @@ import {
   adminSmallIconButtonClass,
   adminTableHeaderClass,
   adminTableShellClass,
-} from "@/components/admin/shared/AdminPrimitives";
+} from '@/components/admin/shared/AdminPrimitives';
 
 interface ProductsTableProps {
   products: Product[];
@@ -65,10 +56,7 @@ interface ProductsTableProps {
   onView: (product: Product) => void;
   onCategoryFilterChange: (category: string) => void;
   onBrandFilterChange: (brand: string) => void;
-  onPriceFilterChange: (
-    min: number | undefined,
-    max: number | undefined
-  ) => void;
+  onPriceFilterChange: (min: number | undefined, max: number | undefined) => void;
   onStatusFilterChange: (isActive: boolean | null) => void;
   onShopFilterChange?: (shopId: string) => void;
   selectedCategory: string;
@@ -99,16 +87,12 @@ export function ProductsTable({
   selectedMinPrice,
   selectedMaxPrice,
   selectedStatus,
-  selectedShop = "all",
+  selectedShop = 'all',
   shops = [],
   isLoading = false,
 }: ProductsTableProps) {
-  const [localMinPrice, setLocalMinPrice] = useState(
-    selectedMinPrice?.toString() || ""
-  );
-  const [localMaxPrice, setLocalMaxPrice] = useState(
-    selectedMaxPrice?.toString() || ""
-  );
+  const [localMinPrice, setLocalMinPrice] = useState(selectedMinPrice?.toString() || '');
+  const [localMaxPrice, setLocalMaxPrice] = useState(selectedMaxPrice?.toString() || '');
 
   const [localSearch, setLocalSearch] = useState(searchTerm);
   const debouncedSearch = useDebounce(localSearch, 500);
@@ -132,7 +116,7 @@ export function ProductsTable({
   const categories = products
     .map((p) => {
       if (!p.category) return null;
-      return typeof p.category === "string"
+      return typeof p.category === 'string'
         ? { id: p.category, name: p.category, slug: p.category }
         : {
             id: p.category._id,
@@ -140,44 +124,32 @@ export function ProductsTable({
             slug: p.category.slug,
           };
     })
-    .filter(
-      (category): category is { id: string; name: string; slug: string } =>
-        !!category
-    )
-    .filter(
-      (category, index, self) =>
-        index === self.findIndex((c) => c.id === category.id)
-    );
+    .filter((category): category is { id: string; name: string; slug: string } => !!category)
+    .filter((category, index, self) => index === self.findIndex((c) => c.id === category.id));
 
   const brands = Array.from(
-    new Set(
-      products.map((p) => p.brand).filter((brand): brand is string => !!brand)
-    )
+    new Set(products.map((p) => p.brand).filter((brand): brand is string => !!brand)),
   );
 
   const getCategoryName = (category: string | Category | null): string => {
-    if (!category) return "Không";
-    return typeof category === "string" ? category : category.name || "Không";
+    if (!category) return 'Không';
+    return typeof category === 'string' ? category : category.name || 'Không';
   };
 
-  const getShopInfo = (
-    shop: string | Shop | undefined
-  ): { name: string; logo?: string } => {
-    if (!shop) return { name: "Không có" };
-    if (typeof shop === "string") return { name: shop };
-    return { name: shop.name || "Không có", logo: shop.logo };
+  const getShopInfo = (shop: string | Shop | undefined): { name: string; logo?: string } => {
+    if (!shop) return { name: 'Không có' };
+    if (typeof shop === 'string') return { name: shop };
+    return { name: shop.name || 'Không có', logo: shop.logo };
   };
 
   const getPriceDisplay = (price: Price | null) => {
-    if (!price) return "0₫";
+    if (!price) return '0₫';
     const currentPrice = price.currentPrice || 0;
     const discountPrice = price.discountPrice || 0;
 
     return (
       <div className="flex flex-col">
-        <span className="font-medium text-foreground">
-          {currentPrice.toLocaleString()}₫
-        </span>
+        <span className="font-medium text-foreground">{currentPrice.toLocaleString()}₫</span>
         {discountPrice > 0 && discountPrice !== currentPrice && (
           <span className="text-xs text-muted-foreground line-through">
             {discountPrice.toLocaleString()}₫
@@ -212,14 +184,11 @@ export function ProductsTable({
               placeholder="Tìm kiếm sản phẩm..."
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              className={`pl-9 transition-all ${adminSearchInputClass}`}
+              className={`pl-9 transition-[border-color,background-color,box-shadow] ${adminSearchInputClass}`}
             />
           </div>
 
-          <Select
-            value={selectedCategory}
-            onValueChange={onCategoryFilterChange}
-          >
+          <Select value={selectedCategory} onValueChange={onCategoryFilterChange}>
             <SelectTrigger className={`w-full sm:w-[160px] ${adminFieldSurfaceClass}`}>
               <SelectValue placeholder="Danh mục" />
             </SelectTrigger>
@@ -289,12 +258,12 @@ export function ProductsTable({
           </DropdownMenu>
 
           <Select
-            value={selectedStatus === null ? "all" : selectedStatus.toString()}
+            value={selectedStatus === null ? 'all' : selectedStatus.toString()}
             onValueChange={(value) => {
-              if (value === "all") {
+              if (value === 'all') {
                 onStatusFilterChange(null);
               } else {
-                onStatusFilterChange(value === "true");
+                onStatusFilterChange(value === 'true');
               }
             }}
           >
@@ -395,10 +364,7 @@ export function ProductsTable({
               )}
               {!isLoading && products.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={11}
-                    className="h-32 text-center text-muted-foreground"
-                  >
+                  <TableCell colSpan={11} className="h-32 text-center text-muted-foreground">
                     Không tìm thấy sản phẩm.
                   </TableCell>
                 </TableRow>
@@ -407,12 +373,14 @@ export function ProductsTable({
                   <TableRow
                     key={product._id}
                     className={`${adminRowHoverClass} border-0 ${
-                      isLoading ? "opacity-50 pointer-events-none" : ""
+                      isLoading ? 'opacity-50 pointer-events-none' : ''
                     }`}
                   >
                     <TableCell className="pl-6">
                       {getMainImage(product) ? (
-                        <div className={`relative h-12 w-12 rounded-xl overflow-hidden ${adminMediaPlaceholderClass}`}>
+                        <div
+                          className={`relative h-12 w-12 rounded-xl overflow-hidden ${adminMediaPlaceholderClass}`}
+                        >
                           <Image
                             src={getMainImage(product)!}
                             alt={product.name}
@@ -422,7 +390,9 @@ export function ProductsTable({
                           />
                         </div>
                       ) : (
-                        <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${adminMediaPlaceholderClass}`}>
+                        <div
+                          className={`h-12 w-12 rounded-xl flex items-center justify-center ${adminMediaPlaceholderClass}`}
+                        >
                           <Package className="h-5 w-5 text-muted-foreground" />
                         </div>
                       )}
@@ -437,30 +407,30 @@ export function ProductsTable({
                             {product.name}
                           </div>
                           <div className="flex items-center gap-1 shrink-0">
-                             {product.isNewArrival && (
-                               <Badge
-                                 variant="secondary"
-                                 className="h-5 px-1.5 text-[10px] rounded-md bg-blue-50 text-blue-600 border-0"
-                               >
-                                 Mới
-                               </Badge>
-                             )}
-                             {product.isFeatured && (
-                               <Badge
-                                 variant="secondary"
-                                 className="h-5 px-1.5 text-[10px] rounded-md bg-purple-50 text-purple-600 border-0"
-                               >
-                                 Hot
-                               </Badge>
-                             )}
-                             {product.onSale && (
-                               <Badge
-                                 variant="secondary"
-                                 className="h-5 px-1.5 text-[10px] rounded-md bg-red-50 text-red-600 border-0"
-                               >
-                                 Giảm giá
-                               </Badge>
-                             )}
+                            {product.isNewArrival && (
+                              <Badge
+                                variant="secondary"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-blue-50 text-blue-600 border-0"
+                              >
+                                Mới
+                              </Badge>
+                            )}
+                            {product.isFeatured && (
+                              <Badge
+                                variant="secondary"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-purple-50 text-purple-600 border-0"
+                              >
+                                Hot
+                              </Badge>
+                            )}
+                            {product.onSale && (
+                              <Badge
+                                variant="secondary"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-red-50 text-red-600 border-0"
+                              >
+                                Giảm giá
+                              </Badge>
+                            )}
                           </div>
                         </div>
                         <div
@@ -474,7 +444,9 @@ export function ProductsTable({
                     <TableCell>
                       <div className="flex items-center gap-2 max-w-[140px]">
                         {getShopInfo(product.shop).logo ? (
-                          <div className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}>
+                          <div
+                            className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}
+                          >
                             <Image
                               src={getShopInfo(product.shop).logo!}
                               alt={getShopInfo(product.shop).name}
@@ -484,7 +456,9 @@ export function ProductsTable({
                             />
                           </div>
                         ) : (
-                          <div className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}>
+                          <div
+                            className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${adminMediaPlaceholderClass}`}
+                          >
                             <Store className="h-3 w-3 text-muted-foreground" />
                           </div>
                         )}
@@ -505,19 +479,13 @@ export function ProductsTable({
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm">
-                      <div
-                        className="max-w-[120px] truncate"
-                        title={product.brand || "Không"}
-                      >
-                        {product.brand || "Không"}
+                      <div className="max-w-[120px] truncate" title={product.brand || 'Không'}>
+                        {product.brand || 'Không'}
                       </div>
                     </TableCell>
                     <TableCell>{getPriceDisplay(product.price)}</TableCell>
                     <TableCell>
-                      <Badge
-                        variant="outline"
-                        className="rounded-lg border-0 font-normal bg-[#f7f7f7]"
-                      >
+                      <Badge variant="outline" className="border-0 bg-muted font-normal">
                         {getStockCount(product)}
                       </Badge>
                     </TableCell>
@@ -528,33 +496,27 @@ export function ProductsTable({
                     </TableCell>
                     <TableCell>
                       <Badge
-                        variant={product.isActive ? "default" : "secondary"}
+                        variant={product.isActive ? 'default' : 'secondary'}
                         className={`rounded-lg font-medium px-2.5 py-0.5 shadow-none border-0 ${
                           product.isActive
-                            ? "bg-green-100 text-green-700 hover:bg-green-100"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-100"
+                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
                         }`}
                       >
-                        {product.isActive ? "Đang bán" : "Ngừng bán"}
+                        {product.isActive ? 'Đang bán' : 'Ngừng bán'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
-                      {new Date(product.createdAt).toLocaleDateString("vi-VN")}
+                      {new Date(product.createdAt).toLocaleDateString('vi-VN')}
                     </TableCell>
                     <TableCell className="text-right pr-6">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className={`p-0 ${adminSmallIconButtonClass}`}
-                          >
+                          <Button variant="ghost" className={`p-0 ${adminSmallIconButtonClass}`}>
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          align="end"
-                          className={adminMenuContentClass}
-                        >
+                        <DropdownMenuContent align="end" className={adminMenuContentClass}>
                           <DropdownMenuItem
                             onClick={() => onView(product)}
                             className="cursor-pointer gap-2"

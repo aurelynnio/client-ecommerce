@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { cn } from "@/utils/cn";
-import { Product } from "@/types/product";
+import { useState } from 'react';
+import Image from 'next/image';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { cn } from '@/utils/cn';
+import { Product } from '@/types/product';
 
 interface ProductDescriptionProps {
   product: Product;
@@ -12,7 +12,7 @@ interface ProductDescriptionProps {
 
 export function ProductDescription({ product }: ProductDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   const hasImages = product.descriptionImages && product.descriptionImages.length > 0;
   const hasText = product.description && product.description.trim().length > 0;
 
@@ -28,29 +28,27 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
   return (
     <section id="section-description" className="py-8">
       <h2 className="text-lg font-bold mb-6">Mô tả chi tiết</h2>
-      
+
       {/* Text Description - Always show if available */}
       {hasText && (
         <div className="prose prose-sm max-w-none p-6 bg-gray-50 rounded-lg mb-6">
-          <p className="text-gray-600 whitespace-pre-wrap leading-relaxed">
-            {product.description}
-          </p>
+          <p className="text-gray-600 whitespace-pre-wrap leading-relaxed">{product.description}</p>
         </div>
       )}
 
       {/* Description Images */}
       {hasImages && (
-        <div 
+        <div
           className={cn(
-            "flex flex-col relative overflow-hidden transition-all duration-300",
-            !isExpanded && "max-h-[600px] lg:max-h-none"
+            'relative flex flex-col overflow-hidden transition-[max-height] duration-300 motion-reduce:transition-none',
+            !isExpanded && 'max-h-[600px] lg:max-h-none',
           )}
         >
           {product.descriptionImages!.map((img, index) => (
             <div key={index} className="w-full relative">
-              <Image 
-                src={img} 
-                alt={`${product.name} - Mô tả ${index + 1}`} 
+              <Image
+                src={img}
+                alt={`${product.name} - Mô tả ${index + 1}`}
                 width={900}
                 height={0}
                 style={{ height: 'auto' }}
@@ -59,7 +57,7 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
               />
             </div>
           ))}
-          
+
           {/* Gradient overlay for collapsed state on mobile */}
           {!isExpanded && (
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent lg:hidden" />
@@ -71,7 +69,7 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
       {hasImages && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="lg:hidden w-full mt-4 py-3 text-sm text-[#E53935] font-medium flex items-center justify-center gap-1 border border-gray-200 rounded-sm hover:bg-gray-50 transition-colors"
+          className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-border py-3 text-sm font-medium text-primary transition-colors hover:bg-muted lg:hidden"
         >
           {isExpanded ? (
             <>
@@ -86,24 +84,21 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
       )}
 
       {/* Price Explanation Block */}
-      <div className="bg-[#fcfcfc] p-6 lg:p-10 space-y-6 text-xs text-gray-500 leading-relaxed border-t border-gray-100 mt-8">
-        <h3 className="font-bold text-gray-800 text-sm tracking-wide uppercase">
-          Giải thích giá:
-        </h3>
+      <div className="mt-8 space-y-6 border-t border-border bg-muted/30 p-6 text-xs leading-relaxed text-muted-foreground lg:p-10">
+        <h3 className="font-bold text-gray-800 text-sm tracking-wide uppercase">Giải thích giá:</h3>
         <div className="space-y-4">
           <div>
             <strong className="text-gray-800 block mb-1">Giá gạch ngang</strong>
             <p>
-              Giá gạch ngang là giá bán lẻ đề xuất, giá hướng dẫn của nhà sản xuất, 
-              hoặc giá bán trước đó. Đây không phải giá gốc và chỉ mang tính tham khảo.
+              Giá gạch ngang là giá bán lẻ đề xuất, giá hướng dẫn của nhà sản xuất, hoặc giá bán
+              trước đó. Đây không phải giá gốc và chỉ mang tính tham khảo.
             </p>
           </div>
           <div>
             <strong className="text-gray-800 block mb-1">Giá hiện tại</strong>
             <p>
-              Đây là giá bán thực tế của sản phẩm. Giá có thể thay đổi tùy theo 
-              chương trình khuyến mãi hoặc mã giảm giá. Giá cuối cùng sẽ được 
-              hiển thị tại trang thanh toán.
+              Đây là giá bán thực tế của sản phẩm. Giá có thể thay đổi tùy theo chương trình khuyến
+              mãi hoặc mã giảm giá. Giá cuối cùng sẽ được hiển thị tại trang thanh toán.
             </p>
           </div>
         </div>

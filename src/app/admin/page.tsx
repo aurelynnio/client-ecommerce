@@ -1,13 +1,13 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
 
 export default function AdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/admin/dashboard");
+    router.replace('/admin/dashboard');
   }, [router]);
 
   return (

@@ -2,17 +2,12 @@
  * Voucher React Query Hooks
  * Replaces voucherAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { voucherKeys } from "@/lib/queryKeys";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { voucherKeys } from '@/lib/queryKeys';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
 import {
   Voucher,
   CreateVoucherData,
@@ -22,7 +17,7 @@ import {
   AvailableVouchersResponse,
   ApplyVoucherResult,
   VoucherStatistics,
-} from "@/types/voucher";
+} from '@/types/voucher';
 
 // ============ Types ============
 export interface VoucherListResponse {
@@ -49,10 +44,8 @@ function invalidateVoucherStatistics(queryClient: QueryClient) {
 
 // ============ API Functions ============
 const voucherApi = {
-  getAdminList: async (
-    params?: Partial<VoucherFilters>
-  ): Promise<VoucherListResponse> => {
-    const response = await instance.get("/vouchers", { params });
+  getAdminList: async (params?: Partial<VoucherFilters>): Promise<VoucherListResponse> => {
+    const response = await instance.get('/vouchers', { params });
     const data = extractApiData(response);
     // Handle different response formats
     if (Array.isArray(data)) {
@@ -78,7 +71,7 @@ const voucherApi = {
   },
 
   getPlatform: async (): Promise<Voucher[]> => {
-    const response = await instance.get("/vouchers/platform");
+    const response = await instance.get('/vouchers/platform');
     return extractApiData(response);
   },
 
@@ -97,24 +90,21 @@ const voucherApi = {
     shopId?: string;
     scope?: VoucherScope;
   }): Promise<AvailableVouchersResponse> => {
-    const response = await instance.get("/vouchers/available", { params });
+    const response = await instance.get('/vouchers/available', { params });
     return extractApiData(response);
   },
 
   getStatistics: async (): Promise<VoucherStatistics> => {
-    const response = await instance.get("/vouchers/statistics");
+    const response = await instance.get('/vouchers/statistics');
     return extractApiData(response);
   },
 
   create: async (data: CreateVoucherData): Promise<Voucher> => {
-    const response = await instance.post("/vouchers", data);
+    const response = await instance.post('/vouchers', data);
     return extractApiData(response);
   },
 
-  update: async ({
-    id,
-    ...data
-  }: UpdateVoucherData & { id: string }): Promise<Voucher> => {
+  update: async ({ id, ...data }: UpdateVoucherData & { id: string }): Promise<Voucher> => {
     const response = await instance.put(`/vouchers/${id}`, data);
     return extractApiData(response);
   },
@@ -130,7 +120,7 @@ const voucherApi = {
     orderTotal: number;
     shopId?: string;
   }): Promise<ApplyVoucherResult> => {
-    const response = await instance.post("/vouchers/apply", {
+    const response = await instance.post('/vouchers/apply', {
       code: params.code,
       orderValue: params.orderTotal,
       shopId: params.shopId,
@@ -144,10 +134,7 @@ const voucherApi = {
 /**
  * Get all vouchers with pagination and filters (Admin)
  */
-export function useAdminVouchers(
-  params?: Partial<VoucherFilters>,
-  options?: QueryOptions
-) {
+export function useAdminVouchers(params?: Partial<VoucherFilters>, options?: QueryOptions) {
   return useQuery({
     queryKey: voucherKeys.list(params),
     queryFn: () => voucherApi.getAdminList(params),
@@ -196,7 +183,7 @@ export function useVoucher(id: string, options?: { enabled?: boolean }) {
  */
 export function useAvailableVouchers(
   params: { orderTotal: number; shopId?: string; scope?: VoucherScope },
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ) {
   return useQuery({
     queryKey: voucherKeys.available(params),
@@ -233,7 +220,7 @@ export function useCreateVoucher() {
       invalidateVoucherStatistics(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create voucher failed" });
+      errorHandler.log(error, { context: 'Create voucher failed' });
     },
   });
 }
@@ -251,7 +238,7 @@ export function useUpdateVoucher() {
       queryClient.setQueryData(voucherKeys.detail(data._id), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update voucher failed" });
+      errorHandler.log(error, { context: 'Update voucher failed' });
     },
   });
 }
@@ -269,7 +256,7 @@ export function useDeleteVoucher() {
       invalidateVoucherStatistics(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete voucher failed" });
+      errorHandler.log(error, { context: 'Delete voucher failed' });
     },
   });
 }
@@ -281,7 +268,7 @@ export function useApplyVoucher() {
   return useMutation({
     mutationFn: voucherApi.apply,
     onError: (error) => {
-      errorHandler.log(error, { context: "Apply voucher failed" });
+      errorHandler.log(error, { context: 'Apply voucher failed' });
     },
   });
 }

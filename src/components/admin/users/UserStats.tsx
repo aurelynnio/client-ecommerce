@@ -1,8 +1,5 @@
-import { Users, UserCheck, MailCheck, MapPin } from "lucide-react";
-import {
-  AdminStatCard,
-  AdminStatsGrid,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Users, UserCheck, MailCheck, MapPin } from 'lucide-react';
+import { AdminStatCard, AdminStatsGrid } from '@/components/admin/shared/AdminPrimitives';
 
 interface UsersStatsProps {
   totalUsers: number;
@@ -19,36 +16,36 @@ export function UsersStats({
 }: UsersStatsProps) {
   const stats = [
     {
-      title: "Tổng người dùng",
+      title: 'Tổng người dùng',
       value: totalUsers,
       icon: Users,
-      description: "Quản trị & Người dùng",
-      percentage: "+12.5%",
-      trend: "up",
+      description: 'Quản trị & Người dùng',
+      percentage: '+12.5%',
+      trend: 'up',
     },
     {
-      title: "Đã xác minh",
+      title: 'Đã xác minh',
       value: verifiedUsers,
       icon: MailCheck,
-      description: "Đã xác minh email",
-      percentage: "+4.2%",
-      trend: "up",
+      description: 'Đã xác minh email',
+      percentage: '+4.2%',
+      trend: 'up',
     },
     {
-      title: "Địa chỉ hoạt động",
+      title: 'Địa chỉ hoạt động',
       value: usersWithAddress,
       icon: MapPin,
-      description: "Người dùng có địa chỉ",
-      percentage: "+2.1%",
-      trend: "up",
+      description: 'Người dùng có địa chỉ',
+      percentage: '+2.1%',
+      trend: 'up',
     },
     {
-      title: "Người dùng mới",
+      title: 'Người dùng mới',
       value: recentUsers,
       icon: UserCheck,
-      description: "Đăng ký tuần này",
-      percentage: "+10.3%",
-      trend: "up",
+      description: 'Đăng ký tuần này',
+      percentage: '+10.3%',
+      trend: 'up',
     },
   ];
 
@@ -61,7 +58,7 @@ export function UsersStats({
           value={stat.value.toLocaleString()}
           description={stat.description}
           icon={stat.icon}
-          accent={index === 0 ? "brand" : index === 1 ? "blue" : "green"}
+          accent={index === 0 ? 'brand' : index === 1 ? 'blue' : 'green'}
           meta={
             <span className="inline-flex rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600">
               {stat.percentage}

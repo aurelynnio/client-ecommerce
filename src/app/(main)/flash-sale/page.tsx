@@ -1,60 +1,51 @@
-"use client";
-import FlashSaleSection from "@/components/product/FlashSaleSection";
-import { useAppSelector } from "@/hooks/hooks";
-import { cn } from "@/utils/cn";
-import { Zap } from "lucide-react";
-import { ProductCard } from "@/components/product/ProductCard";
-import { useFlashSaleWithCountdown } from "@/hooks/queries/useFlashSale";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
+'use client';
+
+import { Zap } from 'lucide-react';
+import FlashSaleSection from '@/components/product/FlashSaleSection';
+import ProductGrid from '@/components/product/ProductGrid';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { useFlashSaleWithCountdown } from '@/hooks/queries/useFlashSale';
 
 export default function FlashSalePage() {
-  const { isOpen: isChatOpen } = useAppSelector((state) => state.chat);
-  const { products = [], isLoading, error } = useFlashSaleWithCountdown();
-
+  const { products = [], isLoading, error, formattedCountdown } = useFlashSaleWithCountdown();
   return (
-    <main className="w-full min-h-screen bg-gray-50 py-8">
-      <div
-        className={cn(
-          "mx-auto px-4 transition-all duration-300",
-          isChatOpen ? "max-w-full" : "container max-w-[1400px]",
-        )}
-      >
-        <div className="flex items-center gap-3 mb-8 bg-linear-to-r from-[#E53935] to-[#FF5722] p-6 rounded-2xl text-white shadow-lg">
-          <Zap className="h-10 w-10 fill-current" />
+    <main className="min-h-screen bg-background">
+      <div className="aura-container py-7 sm:py-10">
+        <header className="flex flex-col gap-3 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold">FLASH SALE</h1>
-            <p className="opacity-90">Săn deal hời, giá cực sốc mỗi ngày</p>
+            <p className="text-sm font-medium text-primary">Ưu đãi có thời hạn</p>
+            <h1 className="mt-1 text-3xl font-semibold tracking-tight">Ưu đãi chớp nhoáng</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Sản phẩm giảm giá trong khoảng thời gian hiện tại.
+            </p>
           </div>
-        </div>
-
-        <FlashSaleSection />
-
-        <div className="mt-12">
-          <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-            <span className="w-1.5 h-6 bg-[#E53935] rounded-full"></span>
-            Tất cả sản phẩm đang giảm giá
-          </h2>
-
+          <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm">
+            <Zap className="h-4 w-4 text-primary" />
+            <span className="font-medium">
+              Kết thúc sau {formattedCountdown.hours}:{formattedCountdown.minutes}:
+              {formattedCountdown.seconds}
+            </span>
+          </div>
+        </header>
+        <section className="py-7">
+          <FlashSaleSection />
+        </section>
+        <section className="border-t border-border pt-7">
+          <h2 className="text-xl font-semibold">Tất cả sản phẩm ưu đãi</h2>
           {isLoading ? (
-            <div className="flex justify-center py-20">
-              <SpinnerLoading size={40} />
+            <div className="flex min-h-72 items-center justify-center">
+              <SpinnerLoading />
             </div>
           ) : error ? (
-            <div className="text-center py-20 text-gray-500">
-              Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại sau.
-            </div>
-          ) : products.length === 0 ? (
-            <div className="text-center py-20 text-gray-500">
-              Hiện không có sản phẩm nào trong chương trình Flash Sale.
-            </div>
+            <p className="py-16 text-center text-sm text-muted-foreground">
+              Không thể tải ưu đãi lúc này. Vui lòng thử lại.
+            </p>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
+            <div className="pt-5">
+              <ProductGrid products={products} />
             </div>
           )}
-        </div>
+        </section>
       </div>
     </main>
   );

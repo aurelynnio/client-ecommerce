@@ -39,6 +39,6 @@ export const ANIMATION_DURATION = {
   SLOW: 500,
 } as const;
 
-export type DebounceDelay = typeof DEBOUNCE_DELAY[keyof typeof DEBOUNCE_DELAY];
-export type Timeout = typeof TIMEOUT[keyof typeof TIMEOUT];
-export type AnimationDuration = typeof ANIMATION_DURATION[keyof typeof ANIMATION_DURATION];
+export type DebounceDelay = (typeof DEBOUNCE_DELAY)[keyof typeof DEBOUNCE_DELAY];
+export type Timeout = (typeof TIMEOUT)[keyof typeof TIMEOUT];
+export type AnimationDuration = (typeof ANIMATION_DURATION)[keyof typeof ANIMATION_DURATION];

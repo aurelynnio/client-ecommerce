@@ -1,4 +1,3 @@
-"use client";
+'use client';
 
-export { usePermissions } from "@/context/PermissionContext";
-
+export { usePermissions } from '@/context/PermissionContext';

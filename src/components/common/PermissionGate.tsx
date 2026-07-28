@@ -23,19 +23,19 @@ interface PermissionGateProps {
 /**
  * PermissionGate Component
  * Conditionally renders children based on user permissions
- * 
+ *
  * @example
  * // Single permission
  * <PermissionGate permission="product:create">
  *   <CreateProductButton />
  * </PermissionGate>
- * 
+ *
  * @example
  * // Multiple permissions with OR logic
  * <PermissionGate permissions={['product:create', 'product:update']} mode="any">
  *   <ProductActions />
  * </PermissionGate>
- * 
+ *
  * @example
  * // With fallback
  * <PermissionGate permission="admin:access" fallback={<AccessDenied />}>
@@ -55,11 +55,12 @@ export const PermissionGate: React.FC<PermissionGateProps> = ({
   const permsToCheck = permission ? [permission] : permissions;
 
   // Check permissions based on mode
-  const hasAccess = mode === 'any'
-    ? hasAnyPermission(permsToCheck)
-    : permsToCheck.length === 1
-      ? hasPermission(permsToCheck[0])
-      : hasAllPermissions(permsToCheck);
+  const hasAccess =
+    mode === 'any'
+      ? hasAnyPermission(permsToCheck)
+      : permsToCheck.length === 1
+        ? hasPermission(permsToCheck[0])
+        : hasAllPermissions(permsToCheck);
 
   if (!hasAccess) {
     return <>{fallback}</>;
@@ -85,7 +86,7 @@ interface RequirePermissionProps {
 /**
  * RequirePermission Component
  * Redirects unauthorized users to specified URL
- * 
+ *
  * @example
  * <RequirePermission permission="admin:access" redirectTo="/unauthorized">
  *   <AdminDashboard />
@@ -143,25 +144,18 @@ interface RequireRoleProps {
 /**
  * RequireRole Component
  * Redirects users without required role
- * 
+ *
  * @example
  * <RequireRole roles={['admin', 'seller']} redirectTo="/unauthorized">
  *   <Dashboard />
  * </RequireRole>
  */
-export const RequireRole: React.FC<RequireRoleProps> = ({
-  roles,
-  redirectTo = '/',
-  children,
-}) => {
+export const RequireRole: React.FC<RequireRoleProps> = ({ roles, redirectTo = '/', children }) => {
   const router = useRouter();
   const { role, isAuthenticated } = usePermissions();
   const [isChecking, setIsChecking] = React.useState(true);
 
-  const allowedRoles = React.useMemo(
-    () => (Array.isArray(roles) ? roles : [roles]),
-    [roles],
-  );
+  const allowedRoles = React.useMemo(() => (Array.isArray(roles) ? roles : [roles]), [roles]);
 
   React.useEffect(() => {
     if (!isAuthenticated) {
@@ -197,16 +191,13 @@ interface AdminOnlyProps {
 /**
  * AdminOnly Component
  * Shorthand for checking admin access
- * 
+ *
  * @example
  * <AdminOnly fallback={<p>Admin access required</p>}>
  *   <AdminControls />
  * </AdminOnly>
  */
-export const AdminOnly: React.FC<AdminOnlyProps> = ({
-  fallback = null,
-  children,
-}) => {
+export const AdminOnly: React.FC<AdminOnlyProps> = ({ fallback = null, children }) => {
   const { isAdmin } = usePermissions();
 
   if (!isAdmin) {
@@ -220,10 +211,7 @@ export const AdminOnly: React.FC<AdminOnlyProps> = ({
  * SellerOnly Component
  * Shorthand for checking seller access
  */
-export const SellerOnly: React.FC<AdminOnlyProps> = ({
-  fallback = null,
-  children,
-}) => {
+export const SellerOnly: React.FC<AdminOnlyProps> = ({ fallback = null, children }) => {
   const { isSeller, isAdmin } = usePermissions();
 
   // Admin can also access seller features

@@ -1,20 +1,17 @@
-import instance from "@/api/api";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AddToCartPayload, UpdateCartItemPayload } from "@/types/cart";
-import { extractApiData, extractApiError } from "@/api";
+import instance from '@/api/api';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AddToCartPayload, UpdateCartItemPayload } from '@/types/cart';
+import { extractApiData, extractApiError } from '@/api';
 
 // Add to cart
 export const addToCart = createAsyncThunk(
-  "add/cart",
-  async ({
-    productId,
-    shopId,
-    modelId,
-    quantity = 1,
-    size,
-  }: AddToCartPayload, { rejectWithValue }) => {
+  'add/cart',
+  async (
+    { productId, shopId, modelId, quantity = 1, size }: AddToCartPayload,
+    { rejectWithValue },
+  ) => {
     try {
-      const response = await instance.post("/cart", {
+      const response = await instance.post('/cart', {
         productId,
         shopId,
         modelId,
@@ -25,12 +22,12 @@ export const addToCart = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(extractApiError(error));
     }
-  }
+  },
 );
 
 // Remove item from cart
 export const removeFromCart = createAsyncThunk(
-  "remove/cart",
+  'remove/cart',
   async ({ itemId }: { itemId: string }, { rejectWithValue }) => {
     try {
       const response = await instance.delete(`/cart/${itemId}`);
@@ -38,13 +35,13 @@ export const removeFromCart = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(extractApiError(error));
     }
-  }
+  },
 );
 
 // Clear entire cart
-export const clearCart = createAsyncThunk("clear/cart", async (_, { rejectWithValue }) => {
+export const clearCart = createAsyncThunk('clear/cart', async (_, { rejectWithValue }) => {
   try {
-    const response = await instance.delete("/cart");
+    const response = await instance.delete('/cart');
     return extractApiData(response);
   } catch (error) {
     return rejectWithValue(extractApiError(error));
@@ -53,7 +50,7 @@ export const clearCart = createAsyncThunk("clear/cart", async (_, { rejectWithVa
 
 // Update cart item quantity
 export const updateCartItem = createAsyncThunk(
-  "update/cart",
+  'update/cart',
   async ({ itemId, quantity }: UpdateCartItemPayload, { rejectWithValue }) => {
     try {
       const response = await instance.put(`/cart/${itemId}`, { quantity });
@@ -61,13 +58,13 @@ export const updateCartItem = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(extractApiError(error));
     }
-  }
+  },
 );
 
 // Get cart
-export const getCart = createAsyncThunk("get/cart", async (_, { rejectWithValue }) => {
+export const getCart = createAsyncThunk('get/cart', async (_, { rejectWithValue }) => {
   try {
-    const response = await instance.get("/cart");
+    const response = await instance.get('/cart');
     return extractApiData(response);
   } catch (error) {
     return rejectWithValue(extractApiError(error));
@@ -76,27 +73,26 @@ export const getCart = createAsyncThunk("get/cart", async (_, { rejectWithValue 
 
 // NEW: Remove items by shop
 export const removeItemsByShop = createAsyncThunk(
-  "remove/cart/shop",
+  'remove/cart/shop',
   async ({ shopId }: { shopId: string }, { rejectWithValue }) => {
     try {
-      const cartResponse = await instance.get("/cart");
+      const cartResponse = await instance.get('/cart');
       const cart = extractApiData<{
         items?: Array<{ _id: string; shopId?: string | { _id?: string } }>;
       }>(cartResponse);
       const itemIds =
         cart.items
           ?.filter((item) => {
-            const itemShopId =
-              typeof item.shopId === "string" ? item.shopId : item.shopId?._id;
+            const itemShopId = typeof item.shopId === 'string' ? item.shopId : item.shopId?._id;
             return itemShopId === shopId;
           })
           .map((item) => item._id) ?? [];
 
       await Promise.all(itemIds.map((itemId) => instance.delete(`/cart/${itemId}`)));
-      const response = await instance.get("/cart");
+      const response = await instance.get('/cart');
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));
     }
-  }
+  },
 );

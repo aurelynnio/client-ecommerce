@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { ShippingState } from "@/types/shipping";
+import { createSlice } from '@reduxjs/toolkit';
+import { ShippingState } from '@/types/shipping';
 import {
   getMyShippingTemplates,
   createShippingTemplate,
   updateShippingTemplate,
   deleteShippingTemplate,
-} from "./shippingAction";
+} from './shippingAction';
 
 const initialState: ShippingState = {
   templates: [],
@@ -18,7 +18,7 @@ const initialState: ShippingState = {
 };
 
 export const shippingSlice = createSlice({
-  name: "shipping",
+  name: 'shipping',
   initialState,
   reducers: {
     clearShippingError: (state) => {
@@ -42,7 +42,8 @@ export const shippingSlice = createSlice({
       })
       .addCase(getMyShippingTemplates.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = (action.payload as { message: string })?.message || "Lỗi khi lấy shipping templates";
+        state.error =
+          (action.payload as { message: string })?.message || 'Lỗi khi lấy shipping templates';
       });
 
     // Create Shipping Template
@@ -58,7 +59,7 @@ export const shippingSlice = createSlice({
       })
       .addCase(createShippingTemplate.rejected, (state, action) => {
         state.isCreating = false;
-        state.error = (action.payload as { message: string })?.message || "Tạo template thất bại";
+        state.error = (action.payload as { message: string })?.message || 'Tạo template thất bại';
       });
 
     // Update Shipping Template
@@ -77,7 +78,8 @@ export const shippingSlice = createSlice({
       })
       .addCase(updateShippingTemplate.rejected, (state, action) => {
         state.isUpdating = false;
-        state.error = (action.payload as { message: string })?.message || "Cập nhật template thất bại";
+        state.error =
+          (action.payload as { message: string })?.message || 'Cập nhật template thất bại';
       });
 
     // Delete Shipping Template
@@ -93,7 +95,7 @@ export const shippingSlice = createSlice({
       })
       .addCase(deleteShippingTemplate.rejected, (state, action) => {
         state.isDeleting = false;
-        state.error = (action.payload as { message: string })?.message || "Xóa template thất bại";
+        state.error = (action.payload as { message: string })?.message || 'Xóa template thất bại';
       });
   },
 });

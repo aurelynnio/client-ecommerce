@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { cn } from "@/utils/cn";
-import { ChevronLeft, ChevronRight, Store } from "lucide-react";
+import { useState } from 'react';
+import Image from 'next/image';
+import { cn } from '@/utils/cn';
+import { ChevronLeft, ChevronRight, Store } from 'lucide-react';
 
 interface ProductGalleryProps {
   images: string[];
@@ -12,11 +12,11 @@ interface ProductGalleryProps {
   onIndexChange: (index: number) => void;
 }
 
-export function ProductGallery({ 
-  images, 
-  productName, 
-  selectedIndex, 
-  onIndexChange 
+export function ProductGallery({
+  images,
+  productName,
+  selectedIndex,
+  onIndexChange,
 }: ProductGalleryProps) {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [failedImageIndex, setFailedImageIndex] = useState<number | null>(null);
@@ -29,10 +29,10 @@ export function ProductGallery({
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return;
-    
+
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStart - touchEnd;
-    
+
     if (Math.abs(diff) > 50) {
       if (diff > 0 && selectedIndex < images.length - 1) {
         onIndexChange(selectedIndex + 1);
@@ -88,15 +88,15 @@ export function ProductGallery({
               onMouseEnter={() => onIndexChange(idx)}
               onClick={() => onIndexChange(idx)}
               className={cn(
-                "w-[60px] h-[60px] border-2 rounded-sm overflow-hidden relative transition-all",
-                selectedIndex === idx ? "border-[#E53935]" : "border-transparent hover:border-gray-300"
+                'relative h-[60px] w-[60px] overflow-hidden rounded-sm border-2 transition-[border-color,box-shadow]',
+                selectedIndex === idx ? 'border-primary' : 'border-transparent hover:border-border',
               )}
             >
-              <Image 
-                src={img} 
-                alt={`${productName} - ${idx + 1}`} 
-                fill 
-                className="object-cover" 
+              <Image
+                src={img}
+                alt={`${productName} - ${idx + 1}`}
+                fill
+                className="object-cover"
                 sizes="60px"
               />
             </button>
@@ -125,7 +125,7 @@ export function ProductGallery({
       </div>
 
       {/* Mobile Gallery - Swipeable */}
-      <div 
+      <div
         className="lg:hidden -mx-4 relative"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -147,7 +147,7 @@ export function ProductGallery({
               <span className="text-sm">Không có ảnh</span>
             </div>
           )}
-          
+
           {/* Navigation Arrows */}
           {images.length > 1 && (
             <>
@@ -155,8 +155,8 @@ export function ProductGallery({
                 onClick={handlePrev}
                 disabled={selectedIndex === 0}
                 className={cn(
-                  "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white transition-opacity",
-                  selectedIndex === 0 ? "opacity-30" : "opacity-70 hover:opacity-100"
+                  'absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white transition-opacity',
+                  selectedIndex === 0 ? 'opacity-30' : 'opacity-70 hover:opacity-100',
                 )}
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -165,15 +165,17 @@ export function ProductGallery({
                 onClick={handleNext}
                 disabled={selectedIndex === images.length - 1}
                 className={cn(
-                  "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white transition-opacity",
-                  selectedIndex === images.length - 1 ? "opacity-30" : "opacity-70 hover:opacity-100"
+                  'absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white transition-opacity',
+                  selectedIndex === images.length - 1
+                    ? 'opacity-30'
+                    : 'opacity-70 hover:opacity-100',
                 )}
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </>
           )}
-          
+
           {/* Image Counter */}
           <div className="absolute bottom-4 right-4 bg-black/30 text-white text-[10px] px-2 py-0.5 rounded-full">
             {selectedIndex + 1} / {images.length}
@@ -188,8 +190,8 @@ export function ProductGallery({
                 key={idx}
                 onClick={() => onIndexChange(idx)}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-all",
-                  selectedIndex === idx ? "bg-[#E53935] w-4" : "bg-gray-300"
+                  'h-2 w-2 rounded-full transition-[width,background-color] duration-200 motion-reduce:transition-none',
+                  selectedIndex === idx ? 'w-4 bg-primary' : 'bg-muted-foreground/40',
                 )}
               />
             ))}

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Shield, Users, History, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Shield, Users, History, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -14,19 +14,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { getSafeErrorMessage } from "@/api";
-import { RESOURCES } from "@/constants/permissions";
+} from '@/components/ui/table';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { getSafeErrorMessage } from '@/api';
+import { RESOURCES } from '@/constants/permissions';
 import {
   getAllPermissions,
   getRolePermissions,
   getAuditLogs,
   type AuditLogEntry,
-} from "@/api/permission";
+} from '@/api/permission';
+import {
+  AdminPageHeader,
+  adminFilterBarClass,
+  adminRowHoverClass,
+  adminSubtleSurfaceClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 export default function AdminPermissionsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const {
     data: permsData,
@@ -34,7 +43,7 @@ export default function AdminPermissionsPage() {
     error: permsError,
     refetch: refetchPerms,
   } = useQuery({
-    queryKey: ["admin-permissions-all"],
+    queryKey: ['admin-permissions-all'],
     queryFn: getAllPermissions,
   });
 
@@ -44,7 +53,7 @@ export default function AdminPermissionsPage() {
     error: rolesError,
     refetch: refetchRoles,
   } = useQuery({
-    queryKey: ["admin-permissions-roles"],
+    queryKey: ['admin-permissions-roles'],
     queryFn: getRolePermissions,
   });
 
@@ -54,7 +63,7 @@ export default function AdminPermissionsPage() {
     error: logsError,
     refetch: refetchLogs,
   } = useQuery({
-    queryKey: ["admin-permissions-audit"],
+    queryKey: ['admin-permissions-audit'],
     queryFn: () => getAuditLogs({ limit: 50 }),
   });
 
@@ -66,16 +75,12 @@ export default function AdminPermissionsPage() {
 
   // Ensure allPermissions is always an array before filtering
   const filteredPermissions = Array.isArray(allPermissions)
-    ? allPermissions.filter((p) =>
-        p.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
+    ? allPermissions.filter((p) => p.toLowerCase().includes(searchTerm.toLowerCase()))
     : [];
 
   const groupedPermissions = Object.values(RESOURCES).reduce(
     (acc, resource) => {
-      acc[resource] = filteredPermissions.filter((p) =>
-        p.startsWith(`${resource}:`),
-      );
+      acc[resource] = filteredPermissions.filter((p) => p.startsWith(`${resource}:`));
       return acc;
     },
     {} as Record<string, string[]>,
@@ -92,18 +97,13 @@ export default function AdminPermissionsPage() {
   if (hasError) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="h-6 w-6 text-primary" />
-            Permission Management
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Quản lý quyền hạn và xem lịch sử thay đổi
-          </p>
-        </div>
-        <div className="rounded-2xl bg-[#f7f7f7] dark:bg-[#1C1C1E] p-8 text-center space-y-4">
-          <p className="text-red-500">
-            {getSafeErrorMessage(hasError, "Không thể tải dữ liệu permissions")}
+        <AdminPageHeader
+          title="Phân quyền"
+          description="Kiểm tra quyền truy cập theo vai trò và lịch sử thay đổi vận hành."
+        />
+        <div className={cn(adminSubtleSurfaceClass, 'space-y-4 p-8 text-center')}>
+          <p className="text-destructive">
+            {getSafeErrorMessage(hasError, 'Không thể tải dữ liệu permissions')}
           </p>
           <div className="flex items-center justify-center gap-2">
             <Button onClick={() => refetchPerms()} variant="outline">
@@ -112,9 +112,7 @@ export default function AdminPermissionsPage() {
             <Button onClick={() => refetchRoles()} variant="outline">
               Reload Role Defaults
             </Button>
-            <Button onClick={() => refetchLogs()}>
-              Reload Audit Logs
-            </Button>
+            <Button onClick={() => refetchLogs()}>Reload Audit Logs</Button>
           </div>
         </div>
       </div>
@@ -123,21 +121,13 @@ export default function AdminPermissionsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="h-6 w-6 text-primary" />
-            Permission Management
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Quản lý quyền hạn và xem lịch sử thay đổi
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Phân quyền"
+        description="Kiểm tra quyền truy cập theo vai trò và lịch sử thay đổi vận hành."
+      />
 
-      <Tabs defaultValue="permissions" className="w-full">
-        <TabsList>
+      <Tabs defaultValue="permissions" className="space-y-6">
+        <TabsList className="w-full justify-start rounded-lg border border-border bg-muted/50 p-1 sm:w-fit">
           <TabsTrigger value="permissions" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             All Permissions
@@ -154,7 +144,7 @@ export default function AdminPermissionsPage() {
 
         {/* All Permissions Tab */}
         <TabsContent value="permissions" className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className={adminFilterBarClass}>
             <div className="relative w-full sm:flex-1 sm:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -169,27 +159,23 @@ export default function AdminPermissionsPage() {
             </Badge>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             {Object.entries(groupedPermissions).map(
               ([resource, perms]) =>
                 perms.length > 0 && (
-                  <div key={resource} className="border rounded-lg p-4">
+                  <section key={resource} className="rounded-lg border border-border bg-card p-4">
                     <h3 className="font-semibold capitalize mb-3 flex items-center gap-2">
                       {resource}
                       <Badge variant="secondary">{perms.length}</Badge>
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {perms.map((perm) => (
-                        <Badge
-                          key={perm}
-                          variant="outline"
-                          className="font-mono text-xs"
-                        >
+                        <Badge key={perm} variant="outline" className="font-mono text-xs">
                           {perm}
                         </Badge>
                       ))}
                     </div>
-                  </div>
+                  </section>
                 ),
             )}
           </div>
@@ -197,99 +183,84 @@ export default function AdminPermissionsPage() {
 
         {/* Role Defaults Tab */}
         <TabsContent value="roles" className="space-y-4">
-          <div className="grid gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             {Object.entries(rolePermissions).map(([role, perms]) => (
-              <div key={role} className="border rounded-lg p-4">
+              <section key={role} className="rounded-lg border border-border bg-card p-4">
                 <h3 className="font-semibold capitalize mb-3 flex items-center gap-2">
                   <Badge
                     className={
-                      role === "admin"
-                        ? "bg-purple-100 text-purple-700"
-                        : role === "seller"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-gray-100 text-gray-700"
+                      role === 'admin'
+                        ? 'bg-info/15 text-foreground'
+                        : role === 'seller'
+                          ? 'bg-primary/15 text-foreground'
+                          : ''
                     }
                   >
                     {role}
                   </Badge>
-                  <span className="text-sm text-muted-foreground">
-                    {perms.length} permissions
-                  </span>
+                  <span className="text-sm text-muted-foreground">{perms.length} permissions</span>
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {perms.map((perm) => (
-                    <Badge
-                      key={perm}
-                      variant="outline"
-                      className="font-mono text-xs"
-                    >
+                    <Badge key={perm} variant="outline" className="font-mono text-xs">
                       {perm}
                     </Badge>
                   ))}
                 </div>
-              </div>
+              </section>
             ))}
           </div>
         </TabsContent>
 
         {/* Audit Logs Tab */}
         <TabsContent value="audit">
-          <div className="border rounded-lg overflow-hidden">
+          <div className={adminTableShellClass}>
             <div className="overflow-x-auto no-scrollbar">
               <Table className="min-w-[640px]">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Thời gian</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Admin</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead>Permission</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {auditLogs.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={5}
-                      className="text-center py-8 text-muted-foreground"
-                    >
-                      Chưa có lịch sử thay đổi permission
-                    </TableCell>
+                <TableHeader className={adminTableHeaderClass}>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead>Thời gian</TableHead>
+                    <TableHead>Action</TableHead>
+                    <TableHead>Admin</TableHead>
+                    <TableHead>User</TableHead>
+                    <TableHead>Permission</TableHead>
                   </TableRow>
-                ) : (
-                  auditLogs.map((log) => (
-                    <TableRow key={log._id}>
-                      <TableCell className="text-sm">
-                        {new Date(log.createdAt).toLocaleString("vi-VN")}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            log.action === "grant" ? "default" : "destructive"
-                          }
-                        >
-                          {log.action}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm">
-                        {typeof log.adminId === "object"
-                          ? log.adminId.username
-                          : log.adminId}
-                      </TableCell>
-                      <TableCell className="text-sm">
-                        {typeof log.targetUserId === "object"
-                          ? log.targetUserId.username
-                          : log.targetUserId}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="font-mono text-xs">
-                          {log.permission}
-                        </Badge>
+                </TableHeader>
+                <TableBody>
+                  {auditLogs.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                        Chưa có lịch sử thay đổi permission
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
+                  ) : (
+                    auditLogs.map((log) => (
+                      <TableRow key={log._id} className={adminRowHoverClass}>
+                        <TableCell className="text-sm">
+                          {new Date(log.createdAt).toLocaleString('vi-VN')}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={log.action === 'grant' ? 'default' : 'destructive'}>
+                            {log.action}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          {typeof log.adminId === 'object' ? log.adminId.username : log.adminId}
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          {typeof log.targetUserId === 'object'
+                            ? log.targetUserId.username
+                            : log.targetUserId}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="font-mono text-xs">
+                            {log.permission}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
               </Table>
             </div>
           </div>

@@ -1,23 +1,18 @@
-"use client";
-import { useState } from "react";
-import { useUrlFilters } from "@/hooks/useUrlFilters";
-import { toast } from "sonner";
-import { UsersHeader } from "@/components/admin/users/UsersHeader";
-import { UsersStats } from "@/components/admin/users/UserStats";
-import { UsersTable } from "@/components/admin/users/UserTable";
-import { PaginationControls } from "@/components/common/Pagination";
-import { CreateModelUser } from "@/components/admin/users/CreateModelUser";
-import { UpdateModelUser } from "@/components/admin/users/UpdateModelUser";
-import { ViewModelUser } from "@/components/admin/users/ViewModelUser";
-import {
-  useAllUsers,
-  useCreateUser,
-  useUpdateUser,
-  useDeleteUser,
-} from "@/hooks/queries";
-import { User, UserFilters, UpdateUserData } from "@/types/user";
-import { CreateUserData } from "@/hooks/queries/useProfile";
-import { getSafeErrorMessage } from "@/api";
+'use client';
+import { useState } from 'react';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
+import { toast } from 'sonner';
+import { UsersHeader } from '@/components/admin/users/UsersHeader';
+import { UsersStats } from '@/components/admin/users/UserStats';
+import { UsersTable } from '@/components/admin/users/UserTable';
+import { PaginationControls } from '@/components/common/Pagination';
+import { CreateModelUser } from '@/components/admin/users/CreateModelUser';
+import { UpdateModelUser } from '@/components/admin/users/UpdateModelUser';
+import { ViewModelUser } from '@/components/admin/users/ViewModelUser';
+import { useAllUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/queries';
+import { User, UserFilters, UpdateUserData } from '@/types/user';
+import { CreateUserData } from '@/hooks/queries/useProfile';
+import { getSafeErrorMessage } from '@/api';
 
 export default function AdminUsersPage() {
   // Use URL filters hook
@@ -25,13 +20,12 @@ export default function AdminUsersPage() {
     defaultFilters: {
       page: 1,
       limit: 10,
-      search: "",
-      role: "",
+      search: '',
+      role: '',
       isVerifiedEmail: null,
     },
-    basePath: "/admin/users",
+    basePath: '/admin/users',
   });
-
 
   const currentPage = Number(filters.page);
   const pageSize = Number(filters.limit);
@@ -39,17 +33,13 @@ export default function AdminUsersPage() {
   const selectedRole = filters.role as string;
   const selectedVerified = filters.isVerifiedEmail as boolean | null;
 
-
   const queryParams = {
     page: currentPage,
     limit: pageSize,
-    ...(searchTerm &&
-      searchTerm.trim() !== "" && { search: searchTerm.trim() }),
-    ...(selectedRole &&
-      selectedRole.trim() !== "" && { role: selectedRole.trim() }),
+    ...(searchTerm && searchTerm.trim() !== '' && { search: searchTerm.trim() }),
+    ...(selectedRole && selectedRole.trim() !== '' && { role: selectedRole.trim() }),
     ...(selectedVerified !== null && { isVerifiedEmail: selectedVerified }),
   };
-
 
   const { data: usersData, isLoading, error } = useAllUsers(queryParams);
   const createMutation = useCreateUser();
@@ -75,11 +65,11 @@ export default function AdminUsersPage() {
     try {
       await createMutation.mutateAsync(userData);
       setCreateModalOpen(false);
-      toast.success("User created successfully");
+      toast.success('User created successfully');
     } catch (error) {
       const err = error as Error;
-      console.error("Create user error:", err);
-      toast.error(getSafeErrorMessage(error, "Error creating user. Please try again."));
+      console.error('Create user error:', err);
+      toast.error(getSafeErrorMessage(error, 'Error creating user. Please try again.'));
     }
   };
 
@@ -107,21 +97,20 @@ export default function AdminUsersPage() {
         id: selectedUser._id,
         username: userData.username || selectedUser.username,
         email: userData.email || selectedUser.email,
-        isVerifiedEmail:
-          userData.isVerifiedEmail ?? selectedUser.isVerifiedEmail,
+        isVerifiedEmail: userData.isVerifiedEmail ?? selectedUser.isVerifiedEmail,
         roles: userData.roles || selectedUser.roles,
         permissions: userData.permissions,
       });
       handleCloseEditModal();
-      toast.success("User updated successfully");
+      toast.success('User updated successfully');
     } catch (error) {
-      toast.error(getSafeErrorMessage(error, "Failed to update user. Please try again."));
+      toast.error(getSafeErrorMessage(error, 'Failed to update user. Please try again.'));
     }
   };
 
   // Filter handlers
   const handlePageChange = (page: number) => {
-    updateFilter("page", page);
+    updateFilter('page', page);
   };
 
   const handlePageSizeChange = (size: number) => {
@@ -149,9 +138,9 @@ export default function AdminUsersPage() {
   const handleDeleteUser = async (user: User) => {
     try {
       await deleteMutation.mutateAsync(user._id);
-      toast.success("User deleted successfully");
+      toast.success('User deleted successfully');
     } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, "Failed to delete user. Please try again."));
+      toast.error(getSafeErrorMessage(error, 'Failed to delete user. Please try again.'));
     }
   };
 
@@ -164,7 +153,7 @@ export default function AdminUsersPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-destructive">
-          Error: {getSafeErrorMessage(error, "Failed to load users")}
+          Error: {getSafeErrorMessage(error, 'Failed to load users')}
         </div>
       </div>
     );

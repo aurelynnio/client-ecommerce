@@ -1,19 +1,15 @@
-"use client";
-import { memo } from "react";
+'use client';
+import { memo } from 'react';
 
-import Link from "next/link";
-import Image from "next/image";
-import { Zap, ChevronRight } from "lucide-react";
-import { useFlashSaleWithCountdown } from "@/hooks/queries/useFlashSale";
-import { FlashSaleProduct } from "@/types/flash-sale";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
+import Link from 'next/link';
+import Image from 'next/image';
+import { Zap, ChevronRight } from 'lucide-react';
+import { useFlashSaleWithCountdown } from '@/hooks/queries/useFlashSale';
+import { FlashSaleProduct } from '@/types/flash-sale';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
 
 // Countdown Timer Component
-const CountdownTimer = memo(function CountdownTimer({
-  seconds,
-}: {
-  seconds: number;
-}) {
+const CountdownTimer = memo(function CountdownTimer({ seconds }: { seconds: number }) {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
@@ -21,9 +17,9 @@ const CountdownTimer = memo(function CountdownTimer({
   return (
     <div className="flex items-center gap-1">
       <TimeBox value={hours} />
-      <span className="text-[#E53935] font-bold">:</span>
+      <span className="font-bold text-primary">:</span>
       <TimeBox value={minutes} />
-      <span className="text-[#E53935] font-bold">:</span>
+      <span className="font-bold text-primary">:</span>
       <TimeBox value={secs} />
     </div>
   );
@@ -31,45 +27,36 @@ const CountdownTimer = memo(function CountdownTimer({
 
 const TimeBox = memo(function TimeBox({ value }: { value: number }) {
   return (
-    <span className="bg-[#E53935] text-white text-xs font-bold px-1.5 py-0.5 rounded min-w-6 text-center">
-      {value.toString().padStart(2, "0")}
+    <span className="min-w-6 rounded bg-primary px-1.5 py-0.5 text-center text-xs font-bold text-primary-foreground">
+      {value.toString().padStart(2, '0')}
     </span>
   );
 });
 
 // Progress Bar Component
-const SoldProgress = memo(function SoldProgress({
-  percent,
-}: {
-  percent: number;
-}) {
+const SoldProgress = memo(function SoldProgress({ percent }: { percent: number }) {
   return (
-    <div className="relative h-4 bg-[#FFCDD2] rounded-full overflow-hidden">
+    <div className="relative h-4 overflow-hidden rounded-full bg-secondary">
       <div
-        className="absolute inset-y-0 left-0 bg-linear-to-r from-[#FF5722] to-[#E53935] rounded-full transition-all duration-300"
+        className="absolute inset-y-0 left-0 rounded-full bg-primary transition-[width] duration-300 motion-reduce:transition-none"
         style={{ width: `${Math.min(percent, 100)}%` }}
       />
       <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white">
-        {percent >= 50 ? `Đã bán ${percent}%` : "Đang bán chạy"}
+        {percent >= 50 ? `Đã bán ${percent}%` : 'Đang bán chạy'}
       </span>
     </div>
   );
 });
 
 // Flash Sale Product Card
-const FlashSaleCard = memo(function FlashSaleCard({
-  product,
-}: {
-  product: FlashSaleProduct;
-}) {
+const FlashSaleCard = memo(function FlashSaleCard({ product }: { product: FlashSaleProduct }) {
   const { flashSaleInfo } = product;
-  const productImage =
-    product.variants?.[0]?.images?.[0] || "/images/placeholder-product.svg";
+  const productImage = product.variants?.[0]?.images?.[0] || '/images/placeholder-product.svg';
 
   return (
     <Link
       href={`/products/${product.slug || product._id}`}
-      className="shrink-0 w-[140px] sm:w-40 bg-white rounded-lg overflow-hidden border border-transparent hover:border-[#FFCDD2] transition-all group"
+      className="group w-[140px] shrink-0 overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30 sm:w-40"
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-50">
@@ -82,7 +69,7 @@ const FlashSaleCard = memo(function FlashSaleCard({
         />
         {/* Discount Badge */}
         {flashSaleInfo?.discount > 0 && (
-          <div className="absolute top-0 right-0 bg-[#E53935] text-white text-[10px] font-bold px-2 py-1">
+          <div className="absolute top-0 right-0 bg-primary px-2 py-1 text-[10px] font-bold text-primary-foreground">
             -{flashSaleInfo.discount}%
           </div>
         )}
@@ -92,14 +79,14 @@ const FlashSaleCard = memo(function FlashSaleCard({
       <div className="p-2">
         {/* Price */}
         <div className="flex items-baseline gap-1">
-          <span className="text-[10px] text-[#E53935]">₫</span>
-          <span className="font-bold text-sm text-[#E53935]">
-            {(flashSaleInfo?.salePrice || 0).toLocaleString("vi-VN")}
+          <span className="text-[10px] text-primary">₫</span>
+          <span className="text-sm font-bold text-primary">
+            {(flashSaleInfo?.salePrice || 0).toLocaleString('vi-VN')}
           </span>
         </div>
         {flashSaleInfo?.originalPrice > flashSaleInfo?.salePrice && (
           <span className="text-[10px] text-gray-400 line-through">
-            ₫{flashSaleInfo.originalPrice.toLocaleString("vi-VN")}
+            ₫{flashSaleInfo.originalPrice.toLocaleString('vi-VN')}
           </span>
         )}
 
@@ -124,11 +111,11 @@ export const FlashSaleSection = memo(function FlashSaleSection() {
   }
 
   return (
-    <section className="bg-linear-to-r from-[#FFEBEE] to-[#FCE4EC] rounded-lg p-4 mb-6">
+    <section className="mb-6 rounded-lg border border-border bg-muted/40 p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-[#E53935]">
+          <div className="flex items-center gap-1.5 text-primary">
             <Zap className="h-5 w-5 fill-current" />
             <span className="font-bold text-lg">GIÁ SỐC</span>
           </div>
@@ -143,7 +130,7 @@ export const FlashSaleSection = memo(function FlashSaleSection() {
 
         <Link
           href="/flash-sale"
-          className="flex items-center gap-1 text-sm text-[#E53935] hover:underline"
+          className="flex items-center gap-1 text-sm text-primary hover:underline"
         >
           Xem tất cả
           <ChevronRight className="h-4 w-4" />

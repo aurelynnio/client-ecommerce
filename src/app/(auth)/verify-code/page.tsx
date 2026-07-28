@@ -1,4 +1,4 @@
-import VerifyCodeClient from "./VerifyCodeClient";
+import VerifyCodeClient from './VerifyCodeClient';
 
 type VerifyCodePageProps = {
   searchParams: Promise<{
@@ -10,10 +10,6 @@ type VerifyCodePageProps = {
 export default async function VerifyCodePage({ searchParams }: VerifyCodePageProps) {
   const params = await searchParams;
   return (
-    <VerifyCodeClient
-      initialEmail={params?.email ?? null}
-      initialCode={params?.code ?? null}
-    />
+    <VerifyCodeClient initialEmail={params?.email ?? null} initialCode={params?.code ?? null} />
   );
 }
-

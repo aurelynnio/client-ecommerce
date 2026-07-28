@@ -1,7 +1,7 @@
-"use client";
-import { useState } from "react";
-import Image from "next/image";
-import { toast } from "sonner";
+'use client';
+import { useState } from 'react';
+import Image from 'next/image';
+import { toast } from 'sonner';
 import {
   ShoppingCart,
   Search,
@@ -14,18 +14,18 @@ import {
   CheckCircle2,
   XCircle,
   RefreshCw,
-} from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+} from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -33,71 +33,67 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  useMyShop,
-  useShopOrders,
-  useUpdateOrderStatus,
-} from "@/hooks/queries";
-import { formatCurrency, formatDate } from "@/utils/format";
-import { Order } from "@/types/order";
-import { getSafeErrorMessage } from "@/api";
+} from '@/components/ui/select';
+import { useMyShop, useShopOrders, useUpdateOrderStatus } from '@/hooks/queries';
+import { formatCurrency, formatDate } from '@/utils/format';
+import { Order } from '@/types/order';
+import { getSafeErrorMessage } from '@/api';
 
 const statusConfig: Record<
   string,
   { label: string; color: string; bg: string; icon: React.ElementType }
 > = {
   pending: {
-    label: "Chờ xác nhận",
-    color: "text-yellow-600",
-    bg: "bg-yellow-50",
+    label: 'Chờ xác nhận',
+    color: 'text-warning',
+    bg: 'bg-warning/15',
     icon: Clock,
   },
   confirmed: {
-    label: "Đã xác nhận",
-    color: "text-blue-600",
-    bg: "bg-blue-50",
+    label: 'Đã xác nhận',
+    color: 'text-info',
+    bg: 'bg-info/15',
     icon: CheckCircle2,
   },
   processing: {
-    label: "Đang xử lý",
-    color: "text-indigo-600",
-    bg: "bg-indigo-50",
+    label: 'Đang xử lý',
+    color: 'text-primary',
+    bg: 'bg-primary/15',
     icon: Package,
   },
   shipped: {
-    label: "Đang giao",
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    label: 'Đang giao',
+    color: 'text-primary',
+    bg: 'bg-primary/15',
     icon: Truck,
   },
   delivered: {
-    label: "Hoàn thành",
-    color: "text-green-600",
-    bg: "bg-green-50",
+    label: 'Hoàn thành',
+    color: 'text-success',
+    bg: 'bg-success/15',
     icon: CheckCircle2,
   },
   cancelled: {
-    label: "Đã hủy",
-    color: "text-red-600",
-    bg: "bg-red-50",
+    label: 'Đã hủy',
+    color: 'text-destructive',
+    bg: 'bg-destructive/15',
     icon: XCircle,
   },
 };
 
 // Allowed status transitions for seller
 const allowedTransitions: Record<string, string[]> = {
-  pending: ["confirmed", "cancelled"],
-  confirmed: ["processing", "cancelled"],
-  processing: ["shipped"],
-  shipped: ["delivered"],
+  pending: ['confirmed', 'cancelled'],
+  confirmed: ['processing', 'cancelled'],
+  processing: ['shipped'],
+  shipped: ['delivered'],
   delivered: [],
   cancelled: [],
 };
@@ -105,40 +101,30 @@ const allowedTransitions: Record<string, string[]> = {
 export default function SellerOrdersPage() {
   const { data: myShop } = useMyShop();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [page, setPage] = useState(1);
   const limit = 10;
 
-
-  const { data: ordersData, isLoading: isLoadingShopOrders } = useShopOrders(
-    myShop?._id || "",
-    {
-      page,
-      limit,
-      status:
-        statusFilter !== "all"
-          ? (statusFilter as
-              | "pending"
-              | "confirmed"
-              | "processing"
-              | "shipped"
-              | "delivered"
-              | "cancelled")
-          : undefined,
-    },
-  );
+  const { data: ordersData, isLoading: isLoadingShopOrders } = useShopOrders(myShop?._id || '', {
+    page,
+    limit,
+    status:
+      statusFilter !== 'all'
+        ? (statusFilter as
+            'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled')
+        : undefined,
+  });
   const updateStatusMutation = useUpdateOrderStatus();
   const isUpdating = updateStatusMutation.isPending;
 
   const orders = ordersData?.orders || [];
   const shopOrdersPagination = ordersData?.pagination;
 
-
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [updateStatusModalOpen, setUpdateStatusModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [newStatus, setNewStatus] = useState<string>("");
+  const [newStatus, setNewStatus] = useState<string>('');
 
   const handleSearch = () => {
     setPage(1);
@@ -151,7 +137,7 @@ export default function SellerOrdersPage() {
 
   const handleOpenUpdateStatusModal = (order: Order) => {
     setSelectedOrder(order);
-    setNewStatus("");
+    setNewStatus('');
     setUpdateStatusModalOpen(true);
   };
 
@@ -161,20 +147,13 @@ export default function SellerOrdersPage() {
     try {
       await updateStatusMutation.mutateAsync({
         orderId: selectedOrder._id,
-        status: newStatus as
-          | "confirmed"
-          | "processing"
-          | "shipped"
-          | "delivered"
-          | "cancelled",
+        status: newStatus as 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled',
       });
-      toast.success("Cập nhật trạng thái đơn hàng thành công!");
+      toast.success('Cập nhật trạng thái đơn hàng thành công!');
       setUpdateStatusModalOpen(false);
       setSelectedOrder(null);
     } catch (error: unknown) {
-      toast.error(
-        getSafeErrorMessage(error, "Không thể cập nhật trạng thái đơn hàng"),
-      );
+      toast.error(getSafeErrorMessage(error, 'Không thể cập nhật trạng thái đơn hàng'));
     }
   };
 
@@ -183,13 +162,13 @@ export default function SellerOrdersPage() {
   };
 
   const statusTabs = [
-    { key: "all", label: "Tất cả" },
-    { key: "pending", label: "Chờ xác nhận" },
-    { key: "confirmed", label: "Đã xác nhận" },
-    { key: "processing", label: "Đang xử lý" },
-    { key: "shipped", label: "Đang giao" },
-    { key: "delivered", label: "Hoàn thành" },
-    { key: "cancelled", label: "Đã hủy" },
+    { key: 'all', label: 'Tất cả' },
+    { key: 'pending', label: 'Chờ xác nhận' },
+    { key: 'confirmed', label: 'Đã xác nhận' },
+    { key: 'processing', label: 'Đang xử lý' },
+    { key: 'shipped', label: 'Đang giao' },
+    { key: 'delivered', label: 'Hoàn thành' },
+    { key: 'cancelled', label: 'Đã hủy' },
   ];
 
   const total = shopOrdersPagination?.totalItems || 0;
@@ -198,14 +177,13 @@ export default function SellerOrdersPage() {
   // Get customer name from order
   const getCustomerName = (order: Order): string => {
     if (order.shippingAddress?.fullName) return order.shippingAddress.fullName;
-    if (typeof order.userId === "object" && order.userId?.username)
-      return order.userId.username;
-    return "Khách hàng";
+    if (typeof order.userId === 'object' && order.userId?.username) return order.userId.username;
+    return 'Khách hàng';
   };
 
   // Get customer phone from order
   const getCustomerPhone = (order: Order): string => {
-    return order.shippingAddress?.phone || "";
+    return order.shippingAddress?.phone || '';
   };
 
   if (!myShop) return null;
@@ -214,18 +192,18 @@ export default function SellerOrdersPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <div className="w-12 h-12 bg-[#f7f7f7] rounded-xl flex items-center justify-center">
-          <ShoppingCart className="h-6 w-6 text-green-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+          <ShoppingCart className="h-5 w-5 text-primary" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">Quản lý đơn hàng</h1>
-          <p className="text-sm text-gray-500">{total} đơn hàng</p>
+          <h1 className="text-xl font-semibold text-foreground">Quản lý đơn hàng</h1>
+          <p className="text-sm text-muted-foreground">{total} đơn hàng</p>
         </div>
       </div>
 
       {/* Status Tabs */}
-      <div className="bg-[#f7f7f7] rounded-2xl p-2">
-        <div className="flex gap-1 flex-wrap">
+      <div className="overflow-x-auto rounded-lg border border-border bg-muted/50 p-1">
+        <div className="flex min-w-max gap-1">
           {statusTabs.map((tab) => (
             <button
               key={tab.key}
@@ -233,10 +211,10 @@ export default function SellerOrdersPage() {
                 setStatusFilter(tab.key);
                 setPage(1);
               }}
-              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`rounded-md px-4 py-2.5 text-sm font-medium transition-colors ${
                 statusFilter === tab.key
-                  ? "bg-primary text-white"
-                  : "text-gray-600 hover:bg-white"
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-card hover:text-foreground'
               }`}
             >
               {tab.label}
@@ -246,22 +224,19 @@ export default function SellerOrdersPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-[#f7f7f7] rounded-2xl p-4">
+      <div className="rounded-lg border border-border bg-muted/40 p-4">
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Tìm theo mã đơn, tên khách hàng..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="pl-11 h-11 rounded-xl border-0 bg-white"
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="h-11 rounded-lg bg-card pl-11"
             />
           </div>
-          <Button
-            variant="outline"
-            className="h-11 rounded-xl px-4 border-0 bg-white w-full sm:w-auto"
-          >
+          <Button variant="outline" className="h-11 w-full rounded-lg px-4 sm:w-auto">
             <Filter className="h-4 w-4 mr-2" />
             Bộ lọc
           </Button>
@@ -269,7 +244,7 @@ export default function SellerOrdersPage() {
       </div>
 
       {/* Orders List */}
-      <div className="bg-[#f7f7f7] rounded-2xl overflow-hidden">
+      <div className="overflow-hidden rounded-lg border border-border bg-card">
         {isLoadingShopOrders ? (
           <div className="flex justify-center py-20">
             <SpinnerLoading size={32} />
@@ -279,36 +254,27 @@ export default function SellerOrdersPage() {
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
               <ShoppingCart className="h-10 w-10 text-gray-400" />
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">
-              Chưa có đơn hàng nào
-            </h3>
-            <p className="text-gray-500 text-sm">
-              Đơn hàng sẽ xuất hiện khi có khách đặt
-            </p>
+            <h3 className="font-semibold text-gray-800 mb-2">Chưa có đơn hàng nào</h3>
+            <p className="text-gray-500 text-sm">Đơn hàng sẽ xuất hiện khi có khách đặt</p>
           </div>
         ) : (
           <>
             <div>
               {orders.map((order, idx) => {
-                const status =
-                  statusConfig[order.status] || statusConfig.pending;
+                const status = statusConfig[order.status] || statusConfig.pending;
                 const StatusIcon = status.icon;
                 const availableStatuses = getAvailableStatuses(order.status);
 
                 return (
                   <div
                     key={order._id}
-                    className={`p-5 ${
-                      idx % 2 === 0 ? "bg-white" : "bg-white/50"
-                    }`}
+                    className={`p-5 ${idx % 2 === 0 ? 'bg-white' : 'bg-white/50'}`}
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
                       <div>
                         <div className="flex items-center gap-3">
                           <span className="font-semibold text-gray-800">
-                            #
-                            {order.orderCode ||
-                              order._id.slice(-8).toUpperCase()}
+                            #{order.orderCode || order._id.slice(-8).toUpperCase()}
                           </span>
                           <Badge
                             className={`${status.bg} ${status.color} hover:${status.bg} rounded-full`}
@@ -317,17 +283,11 @@ export default function SellerOrdersPage() {
                             {status.label}
                           </Badge>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {formatDate(order.createdAt)}
-                        </p>
+                        <p className="text-sm text-gray-500 mt-1">{formatDate(order.createdAt)}</p>
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9 rounded-lg"
-                          >
+                          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -344,9 +304,7 @@ export default function SellerOrdersPage() {
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 className="cursor-pointer"
-                                onClick={() =>
-                                  handleOpenUpdateStatusModal(order)
-                                }
+                                onClick={() => handleOpenUpdateStatusModal(order)}
                               >
                                 <RefreshCw className="h-4 w-4 mr-2" />
                                 Cập nhật trạng thái
@@ -364,7 +322,7 @@ export default function SellerOrdersPage() {
                           {order.products.slice(0, 3).map((item, i) => (
                             <div
                               key={i}
-                              className="relative w-14 h-14 rounded-lg overflow-hidden bg-[#f7f7f7]"
+                              className="relative size-14 overflow-hidden rounded-lg bg-muted"
                             >
                               {item.image ? (
                                 <Image
@@ -386,7 +344,7 @@ export default function SellerOrdersPage() {
                             </div>
                           ))}
                           {order.products.length > 3 && (
-                            <div className="w-14 h-14 rounded-lg bg-[#f7f7f7] flex items-center justify-center text-sm text-gray-500">
+                            <div className="flex size-14 items-center justify-center rounded-lg bg-muted text-sm text-muted-foreground">
                               +{order.products.length - 3}
                             </div>
                           )}
@@ -401,9 +359,7 @@ export default function SellerOrdersPage() {
                         <p className="text-sm font-medium text-gray-800">
                           {getCustomerName(order)}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          {getCustomerPhone(order)}
-                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">{getCustomerPhone(order)}</p>
                       </div>
 
                       {/* Total */}
@@ -456,9 +412,7 @@ export default function SellerOrdersPage() {
           <DialogHeader>
             <DialogTitle>Chi tiết đơn hàng</DialogTitle>
             <DialogDescription>
-              Mã đơn: #
-              {selectedOrder?.orderCode ||
-                selectedOrder?._id.slice(-8).toUpperCase()}
+              Mã đơn: #{selectedOrder?.orderCode || selectedOrder?._id.slice(-8).toUpperCase()}
             </DialogDescription>
           </DialogHeader>
           {selectedOrder && (
@@ -479,12 +433,8 @@ export default function SellerOrdersPage() {
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium mb-2">Thông tin khách hàng</h4>
                 <p className="text-sm">{getCustomerName(selectedOrder)}</p>
-                <p className="text-sm text-gray-500">
-                  {getCustomerPhone(selectedOrder)}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {selectedOrder.shippingAddress?.address}
-                </p>
+                <p className="text-sm text-gray-500">{getCustomerPhone(selectedOrder)}</p>
+                <p className="text-sm text-gray-500">{selectedOrder.shippingAddress?.address}</p>
               </div>
 
               {/* Products */}
@@ -492,18 +442,10 @@ export default function SellerOrdersPage() {
                 <h4 className="font-medium mb-2">Sản phẩm</h4>
                 <div className="space-y-2">
                   {selectedOrder.products.map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg"
-                    >
+                    <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
                       <div className="relative w-12 h-12 rounded overflow-hidden bg-white">
                         {item.image ? (
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                          />
+                          <Image src={item.image} alt={item.name} fill className="object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Package className="h-4 w-4 text-gray-400" />
@@ -512,9 +454,7 @@ export default function SellerOrdersPage() {
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium">{item.name}</p>
-                        <p className="text-xs text-gray-500">
-                          x{item.quantity}
-                        </p>
+                        <p className="text-xs text-gray-500">x{item.quantity}</p>
                       </div>
                       <p className="text-sm font-medium">
                         {formatCurrency(item.price * item.quantity)}
@@ -530,18 +470,15 @@ export default function SellerOrdersPage() {
                   <span>Tạm tính:</span>
                   <span>{formatCurrency(selectedOrder.subtotal)}</span>
                 </div>
-                {selectedOrder.discountShop &&
-                  selectedOrder.discountShop > 0 && (
-                    <div className="flex justify-between text-sm text-green-600">
-                      <span>Giảm giá shop:</span>
-                      <span>-{formatCurrency(selectedOrder.discountShop)}</span>
-                    </div>
-                  )}
+                {selectedOrder.discountShop && selectedOrder.discountShop > 0 && (
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Giảm giá shop:</span>
+                    <span>-{formatCurrency(selectedOrder.discountShop)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-bold mt-2">
                   <span>Tổng cộng:</span>
-                  <span className="text-primary">
-                    {formatCurrency(selectedOrder.totalAmount)}
-                  </span>
+                  <span className="text-primary">{formatCurrency(selectedOrder.totalAmount)}</span>
                 </div>
               </div>
             </div>
@@ -550,25 +487,19 @@ export default function SellerOrdersPage() {
       </Dialog>
 
       {/* Update Status Modal */}
-      <Dialog
-        open={updateStatusModalOpen}
-        onOpenChange={setUpdateStatusModalOpen}
-      >
+      <Dialog open={updateStatusModalOpen} onOpenChange={setUpdateStatusModalOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Cập nhật trạng thái đơn hàng</DialogTitle>
             <DialogDescription>
               Chọn trạng thái mới cho đơn hàng #
-              {selectedOrder?.orderCode ||
-                selectedOrder?._id.slice(-8).toUpperCase()}
+              {selectedOrder?.orderCode || selectedOrder?._id.slice(-8).toUpperCase()}
             </DialogDescription>
           </DialogHeader>
           {selectedOrder && (
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500 mb-2">
-                  Trạng thái hiện tại:
-                </p>
+                <p className="text-sm text-gray-500 mb-2">Trạng thái hiện tại:</p>
                 <Badge
                   className={`${statusConfig[selectedOrder.status]?.bg} ${
                     statusConfig[selectedOrder.status]?.color
@@ -578,31 +509,24 @@ export default function SellerOrdersPage() {
                 </Badge>
               </div>
               <div>
-                <p className="text-sm text-gray-500 mb-2">
-                  Chọn trạng thái mới:
-                </p>
+                <p className="text-sm text-gray-500 mb-2">Chọn trạng thái mới:</p>
                 <Select value={newStatus} onValueChange={setNewStatus}>
                   <SelectTrigger>
                     <SelectValue placeholder="Chọn trạng thái" />
                   </SelectTrigger>
                   <SelectContent>
-                    {getAvailableStatuses(selectedOrder.status).map(
-                      (status) => (
-                        <SelectItem key={status} value={status}>
-                          {statusConfig[status]?.label}
-                        </SelectItem>
-                      ),
-                    )}
+                    {getAvailableStatuses(selectedOrder.status).map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {statusConfig[status]?.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setUpdateStatusModalOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setUpdateStatusModalOpen(false)}>
               Hủy
             </Button>
             <Button
@@ -610,9 +534,7 @@ export default function SellerOrdersPage() {
               disabled={!newStatus || isUpdating}
               className="bg-primary"
             >
-              {isUpdating ? (
-                <SpinnerLoading size={16} noWrapper className="mr-2" />
-              ) : null}
+              {isUpdating ? <SpinnerLoading size={16} noWrapper className="mr-2" /> : null}
               Cập nhật
             </Button>
           </DialogFooter>

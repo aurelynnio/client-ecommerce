@@ -1,37 +1,30 @@
 /**
  * Shop React Query Hooks
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { shopCategoryKeys, shopKeys } from "@/lib/queryKeys";
-import { Shop, CreateShopPayload, UpdateShopPayload } from "@/types/shop";
-import { PaginationData } from "@/types/common";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { shopCategoryKeys, shopKeys } from '@/lib/queryKeys';
+import { Shop, CreateShopPayload, UpdateShopPayload } from '@/types/shop';
+import { PaginationData } from '@/types/common';
 
 export interface ShopListParams {
   page?: number;
   limit?: number;
   search?: string;
-  status?: "active" | "inactive" | "banned";
+  status?: 'active' | 'inactive' | 'banned';
 }
 
 const shopApi = {
   getMyShop: async (): Promise<Shop | null> => {
     try {
-      const response = await instance.get("/shops/my");
+      const response = await instance.get('/shops/my');
       return extractApiData(response);
     } catch (error: unknown) {
       // If user doesn't have a shop, return null instead of throwing
-      if (
-        (error as { response?: { status?: number } })?.response?.status === 404
-      ) {
+      if ((error as { response?: { status?: number } })?.response?.status === 404) {
         return null;
       }
       throw error;
@@ -51,19 +44,34 @@ const shopApi = {
   getCategories: async (
     shopId: string,
   ): Promise<{
-    categories: { _id: string; name: string; slug?: string; isActive?: boolean; productCount: number }[];
+    categories: {
+      _id: string;
+      name: string;
+      slug?: string;
+      isActive?: boolean;
+      productCount: number;
+    }[];
     totalProducts: number;
   }> => {
     const response = await instance.get(`/shop-categories/${shopId}`);
-    const data = extractApiData<{
-      categories?: { _id: string; name: string; slug?: string; isActive?: boolean; productCount: number }[];
-      totalProducts?: number;
-    } | { _id: string; name: string; slug?: string; isActive?: boolean; productCount?: number }[]>(response);
-    
+    const data = extractApiData<
+      | {
+          categories?: {
+            _id: string;
+            name: string;
+            slug?: string;
+            isActive?: boolean;
+            productCount: number;
+          }[];
+          totalProducts?: number;
+        }
+      | { _id: string; name: string; slug?: string; isActive?: boolean; productCount?: number }[]
+    >(response);
+
     // Handle both old format (array) and new format (object with categories)
     if (Array.isArray(data)) {
       return {
-        categories: data.map(c => ({ ...c, productCount: c.productCount || 0 })),
+        categories: data.map((c) => ({ ...c, productCount: c.productCount || 0 })),
         totalProducts: 0,
       };
     }
@@ -78,7 +86,7 @@ const shopApi = {
     params: ShopListParams = {},
   ): Promise<{ shops: Shop[]; pagination: PaginationData | null }> => {
     const { page = 1, limit = 10, search, status } = params;
-    const response = await instance.get("/shops/admin/all", {
+    const response = await instance.get('/shops/admin/all', {
       params: { page, limit, search, status },
     });
     const data = extractApiData<{
@@ -93,32 +101,32 @@ const shopApi = {
   },
 
   register: async (data: CreateShopPayload): Promise<Shop> => {
-    const response = await instance.post("/shops/register", data);
+    const response = await instance.post('/shops/register', data);
     return extractApiData(response);
   },
 
   update: async (data: UpdateShopPayload): Promise<Shop> => {
-    const response = await instance.put("/shops/my", data);
+    const response = await instance.put('/shops/my', data);
     return extractApiData(response);
   },
 
   uploadLogo: async (formData: FormData): Promise<{ logo: string }> => {
-    const response = await instance.post("/shops/upload-logo", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await instance.post('/shops/upload-logo', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   uploadBanner: async (formData: FormData): Promise<{ banner: string }> => {
-    const response = await instance.post("/shops/upload-banner", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await instance.post('/shops/upload-banner', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   updateStatus: async (params: {
     shopId: string;
-    status: "active" | "inactive" | "banned";
+    status: 'active' | 'inactive' | 'banned';
   }): Promise<Shop> => {
     const { shopId, status } = params;
     const response = await instance.put(`/shops/admin/${shopId}/status`, { status });
@@ -203,7 +211,7 @@ export function useShopStatistics(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: shopKeys.statistics(),
     queryFn: async (): Promise<ShopStatistics> => {
-      const response = await instance.get("/shops/statistics");
+      const response = await instance.get('/shops/statistics');
       return extractApiData(response);
     },
     enabled: options?.enabled,
@@ -238,10 +246,7 @@ export function useShopBySlug(slug: string, options?: { enabled?: boolean }) {
 /**
  * Get shop categories
  */
-export function useShopCategories(
-  shopId: string,
-  options?: { enabled?: boolean },
-) {
+export function useShopCategories(shopId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: shopCategoryKeys.byShopWithTotals(shopId),
     queryFn: () => shopApi.getCategories(shopId),
@@ -285,7 +290,7 @@ export function useRegisterShop() {
       queryClient.setQueryData(shopKeys.myShop(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Register shop failed" });
+      errorHandler.log(error, { context: 'Register shop failed' });
     },
   });
 }
@@ -305,7 +310,7 @@ export function useUpdateShop() {
       }
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update shop failed" });
+      errorHandler.log(error, { context: 'Update shop failed' });
     },
   });
 }
@@ -322,7 +327,7 @@ export function useUploadShopLogo() {
       invalidateMyShop(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Upload logo failed" });
+      errorHandler.log(error, { context: 'Upload logo failed' });
     },
   });
 }
@@ -339,7 +344,7 @@ export function useUploadShopBanner() {
       invalidateMyShop(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Upload banner failed" });
+      errorHandler.log(error, { context: 'Upload banner failed' });
     },
   });
 }
@@ -357,7 +362,7 @@ export function useUpdateShopStatus() {
       invalidateAllShops(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update shop status failed" });
+      errorHandler.log(error, { context: 'Update shop status failed' });
     },
   });
 }
@@ -374,7 +379,7 @@ export function useFollowShop() {
       invalidateShopDetail(queryClient, shopId);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Follow shop failed" });
+      errorHandler.log(error, { context: 'Follow shop failed' });
     },
   });
 }
@@ -391,7 +396,7 @@ export function useUnfollowShop() {
       invalidateShopDetail(queryClient, shopId);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Unfollow shop failed" });
+      errorHandler.log(error, { context: 'Unfollow shop failed' });
     },
   });
 }

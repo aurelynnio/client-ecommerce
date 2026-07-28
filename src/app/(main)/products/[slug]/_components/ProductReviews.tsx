@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { Star, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import ReviewItem from "@/components/review/ReviewItem";
-import { useProductReviews } from "@/hooks/queries/useReviews";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Review, RatingBreakdown } from "@/types/review";
-import { formatDate } from "@/utils/format";
+import { useState, useMemo } from 'react';
+import { Star, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import ReviewItem from '@/components/review/ReviewItem';
+import { useProductReviews } from '@/hooks/queries/useReviews';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Review, RatingBreakdown } from '@/types/review';
+import { formatDate } from '@/utils/format';
 
 interface ProductReviewsProps {
   productId: string;
@@ -16,9 +16,9 @@ interface ProductReviewsProps {
 }
 
 const REVIEW_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
 };
 
 // Rating Breakdown Component
@@ -39,9 +39,9 @@ function RatingBreakdownComponent({
           <div key={rating} className="flex items-center gap-2 text-xs">
             <span className="w-3 text-gray-600">{rating}</span>
             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
               <div
-                className="h-full bg-yellow-400 rounded-full transition-all"
+                className="h-full rounded-full bg-warning transition-[width] duration-300 motion-reduce:transition-none"
                 style={{ width: `${percentage}%` }}
               />
             </div>
@@ -80,18 +80,19 @@ export function ProductReviews({
     const breakdown: RatingBreakdown = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     reviews.forEach((r) => {
       if (r.rating >= 1 && r.rating <= 5) {
-        breakdown[r.rating as keyof RatingBreakdown] = (breakdown[r.rating as keyof RatingBreakdown] || 0) + 1;
+        breakdown[r.rating as keyof RatingBreakdown] =
+          (breakdown[r.rating as keyof RatingBreakdown] || 0) + 1;
       }
     });
     return breakdown;
   }, [reviews]);
 
   const getInitial = (name: string) => {
-    return name?.charAt(0)?.toUpperCase() || "U";
+    return name?.charAt(0)?.toUpperCase() || 'U';
   };
 
   const maskName = (name: string) => {
-    if (!name || name.length <= 2) return name || "User";
+    if (!name || name.length <= 2) return name || 'User';
     return `${name.charAt(0)}***${name.charAt(name.length - 1)}`;
   };
 
@@ -99,33 +100,27 @@ export function ProductReviews({
     <section id="section-reviews" className="py-8">
       <h2 className="text-lg font-bold flex items-center gap-2 mb-6">
         Đánh giá từ người mua
-        <span className="text-sm font-normal text-gray-400">
-          ({reviewCount})
-        </span>
+        <span className="text-sm font-normal text-gray-400">({reviewCount})</span>
       </h2>
 
       {/* Rating Summary */}
-      <div className="flex flex-col md:flex-row gap-6 mb-8 p-4 bg-gray-50 rounded-lg">
+      <div className="flex flex-col md:flex-row gap-6 mb-8 p-4 bg-muted/40 rounded-lg">
         {/* Average Rating */}
         <div className="flex flex-col items-center justify-center md:w-1/3 py-4">
-          <div className="text-4xl font-bold text-[#E53935]">
-            {ratingAverage.toFixed(1)}
-          </div>
+          <div className="text-4xl font-bold text-primary">{ratingAverage.toFixed(1)}</div>
           <div className="flex items-center gap-0.5 mt-2">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
                 className={`w-4 h-4 ${
                   i < Math.round(ratingAverage)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : "text-gray-300"
+                    ? 'fill-yellow-400 text-yellow-400'
+                    : 'text-gray-300'
                 }`}
               />
             ))}
           </div>
-          <div className="text-xs text-gray-500 mt-1">
-            {reviewCount} đánh giá
-          </div>
+          <div className="text-xs text-gray-500 mt-1">{reviewCount} đánh giá</div>
         </div>
 
         {/* Rating Breakdown */}
@@ -176,14 +171,12 @@ export function ProductReviews({
             <Button
               variant="ghost"
               onClick={() => setPage((p) => p + 1)}
-              className="text-xs text-gray-400 hover:text-[#E53935]"
+              className="text-xs text-gray-400 hover:text-primary"
             >
               Xem thêm đánh giá <ChevronRight className="w-3 h-3 ml-1" />
             </Button>
           ) : (
-            <span className="text-xs text-gray-400">
-              Đã hiển thị tất cả đánh giá
-            </span>
+            <span className="text-xs text-gray-400">Đã hiển thị tất cả đánh giá</span>
           )}
         </div>
       )}

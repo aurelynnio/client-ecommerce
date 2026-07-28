@@ -1,8 +1,5 @@
-import { Image as ImageIcon, CheckCircle, Eye, MousePointer2 } from "lucide-react";
-import {
-  AdminStatCard,
-  AdminStatsGrid,
-} from "@/components/admin/shared/AdminPrimitives";
+import { Image as ImageIcon, CheckCircle, Eye, MousePointer2 } from 'lucide-react';
+import { AdminStatCard, AdminStatsGrid } from '@/components/admin/shared/AdminPrimitives';
 
 interface BannersStatsProps {
   totalBanners: number;
@@ -14,32 +11,32 @@ interface BannersStatsProps {
 export function BannersStats({
   totalBanners,
   activeBanners,
-  clickThroughRate = "4.2%",
-  totalViews = "12.5k",
+  clickThroughRate = '4.2%',
+  totalViews = '12.5k',
 }: BannersStatsProps) {
   const stats = [
     {
-      title: "Tổng Banner",
+      title: 'Tổng Banner',
       value: totalBanners,
-      description: "Số lượng trong kho",
+      description: 'Số lượng trong kho',
       icon: ImageIcon,
     },
     {
-      title: "Đang hiển thị",
+      title: 'Đang hiển thị',
       value: activeBanners,
-      description: "Banner đang hoạt động",
+      description: 'Banner đang hoạt động',
       icon: CheckCircle,
     },
     {
-      title: "Tỷ lệ nhấp (CTR)",
+      title: 'Tỷ lệ nhấp (CTR)',
       value: clickThroughRate,
-      description: "Tỷ lệ người dùng nhấp",
+      description: 'Tỷ lệ người dùng nhấp',
       icon: MousePointer2,
     },
     {
-      title: "Tổng lượt xem",
+      title: 'Tổng lượt xem',
       value: totalViews,
-      description: "Lượt hiển thị tích lũy",
+      description: 'Lượt hiển thị tích lũy',
       icon: Eye,
     },
   ];
@@ -53,7 +50,7 @@ export function BannersStats({
           value={stat.value}
           description={stat.description}
           icon={stat.icon}
-          accent={index === 2 ? "amber" : index === 3 ? "blue" : "brand"}
+          accent={index === 2 ? 'amber' : index === 3 ? 'blue' : 'brand'}
         />
       ))}
     </AdminStatsGrid>

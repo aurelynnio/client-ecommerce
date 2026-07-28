@@ -43,6 +43,6 @@ export const REFETCH_INTERVAL = {
   SLOW: 5 * 60 * 1000,
 } as const;
 
-export type StaleTime = typeof STALE_TIME[keyof typeof STALE_TIME];
-export type GcTime = typeof GC_TIME[keyof typeof GC_TIME];
-export type RefetchInterval = typeof REFETCH_INTERVAL[keyof typeof REFETCH_INTERVAL];
+export type StaleTime = (typeof STALE_TIME)[keyof typeof STALE_TIME];
+export type GcTime = (typeof GC_TIME)[keyof typeof GC_TIME];
+export type RefetchInterval = (typeof REFETCH_INTERVAL)[keyof typeof REFETCH_INTERVAL];

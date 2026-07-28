@@ -1,6 +1,6 @@
-import { BaseEntity } from "./common";
-import { Product, Price, Variant } from "./product";
-import { Shop } from "./shop";
+import { BaseEntity } from './common';
+import { Product, Price, Variant } from './product';
+import { Shop } from './shop';
 
 // Price type for cart item - can be number (old) or object (new)
 // Matches backend Schema.Types.Mixed
@@ -72,65 +72,55 @@ export interface UpdateCartItemPayload {
 // Helper to get price value from CartItemPrice (handles both number and object)
 export function getCartItemPriceValue(price: CartItemPrice | undefined): number {
   if (price === undefined) return 0;
-  if (typeof price === "number") {
+  if (typeof price === 'number') {
     return Number.isFinite(price) ? price : 0;
   }
 
   const discountPrice = price.discountPrice;
-  if (typeof discountPrice === "number" && Number.isFinite(discountPrice)) {
+  if (typeof discountPrice === 'number' && Number.isFinite(discountPrice)) {
     return discountPrice;
   }
 
   const currentPrice = price.currentPrice;
-  return typeof currentPrice === "number" && Number.isFinite(currentPrice)
-    ? currentPrice
-    : 0;
+  return typeof currentPrice === 'number' && Number.isFinite(currentPrice) ? currentPrice : 0;
 }
 
 // Helper function to group cart items by shop
 export function groupCartItemsByShop(items: CartItem[]): CartItemsByShop[] {
   const shopMap = new Map<string, CartItemsByShop>();
-  const DEFAULT_SHOP_ID = "default-shop";
+  const DEFAULT_SHOP_ID = 'default-shop';
 
   items.forEach((item) => {
     let shopId: string = DEFAULT_SHOP_ID;
-    let shop: Shop = { _id: DEFAULT_SHOP_ID, name: "Shop" } as unknown as Shop;
+    let shop: Shop = { _id: DEFAULT_SHOP_ID, name: 'Shop' } as unknown as Shop;
 
     // 1. Try to get shop from populated productId
-    if (
-      typeof item.productId === "object" &&
-      item.productId !== null &&
-      "shop" in item.productId
-    ) {
+    if (typeof item.productId === 'object' && item.productId !== null && 'shop' in item.productId) {
       const productShop = item.productId.shop;
-      if (
-        typeof productShop === "object" &&
-        productShop !== null &&
-        "name" in productShop
-      ) {
+      if (typeof productShop === 'object' && productShop !== null && 'name' in productShop) {
         shopId = productShop._id;
         shop = productShop as Shop;
-      } else if (typeof productShop === "string") {
+      } else if (typeof productShop === 'string') {
         shopId = productShop;
-        shop = { _id: shopId, name: "Shop" } as unknown as Shop; // Placeholder
+        shop = { _id: shopId, name: 'Shop' } as unknown as Shop; // Placeholder
       }
     }
 
     // 2. Try to get from item.shopId (populated)
     if (
       shopId === DEFAULT_SHOP_ID &&
-      typeof item.shopId === "object" &&
+      typeof item.shopId === 'object' &&
       item.shopId !== null &&
-      "name" in item.shopId
+      'name' in item.shopId
     ) {
       shopId = item.shopId._id;
       shop = item.shopId as Shop;
     }
 
     // 3. Try to get from item.shopId (string)
-    if (shopId === DEFAULT_SHOP_ID && typeof item.shopId === "string") {
+    if (shopId === DEFAULT_SHOP_ID && typeof item.shopId === 'string') {
       shopId = item.shopId;
-      shop = { _id: shopId, name: "Shop" } as unknown as Shop;
+      shop = { _id: shopId, name: 'Shop' } as unknown as Shop;
     }
 
     if (!shopMap.has(shopId)) {
@@ -150,13 +140,12 @@ export function groupCartItemsByShop(items: CartItem[]): CartItemsByShop[] {
     if (item.price !== undefined) {
       price = getCartItemPriceValue(item.price);
     } else if (
-      typeof item.productId === "object" &&
-      "price" in item.productId &&
+      typeof item.productId === 'object' &&
+      'price' in item.productId &&
       item.productId.price
     ) {
       // Fallback to live product price
-      price =
-        item.productId.price.discountPrice || item.productId.price.currentPrice;
+      price = item.productId.price.discountPrice || item.productId.price.currentPrice;
     }
 
     group.subtotal += price * item.quantity;

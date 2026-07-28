@@ -1,23 +1,31 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 
-import { PaginationControls } from "@/components/common/Pagination";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { useUrlFilters } from "@/hooks/useUrlFilters";
+import { PaginationControls } from '@/components/common/Pagination';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
 import {
   useAdminChatbotSessions,
   useAdminChatbotHistory,
   type ChatSession,
   type ChatMessage,
-} from "@/hooks/queries";
-import { format } from "date-fns";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { cn } from "@/utils/cn";
+} from '@/hooks/queries';
+import { format } from 'date-fns';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  AdminPageHeader,
+  adminRowHoverClass,
+  adminTableHeaderClass,
+  adminTableShellClass,
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 export default function AdminChatbotPage() {
   const { filters, updateFilter } = useUrlFilters({
     defaultFilters: { page: 1, limit: 10 },
-    basePath: "/admin/chatbot",
+    basePath: '/admin/chatbot',
   });
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 10;
@@ -29,19 +37,19 @@ export default function AdminChatbotPage() {
     limit,
   });
 
-  const { data: historyData, isLoading: historyLoading } =
-    useAdminChatbotHistory(selectedSession);
+  const { data: historyData, isLoading: historyLoading } = useAdminChatbotHistory(selectedSession);
 
   const sessions = data?.data || [];
   const pagination = data?.pagination;
 
   return (
     <div className="space-y-6 p-1">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Quản lý Chatbot AI</h1>
-      </div>
+      <AdminPageHeader
+        title="Hội thoại Mia"
+        description="Theo dõi các phiên hỗ trợ để kiểm tra chất lượng và ngữ cảnh phản hồi của trợ lý."
+      />
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className={adminTableShellClass}>
         {isLoading ? (
           <div className="py-20 flex justify-center">
             <SpinnerLoading />
@@ -49,53 +57,52 @@ export default function AdminChatbotPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-sm text-left">
-            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-              <tr>
-                <th className="px-6 py-4">Session ID</th>
-                <th className="px-6 py-4">Tin nhắn cuối</th>
-                <th className="px-6 py-4">Số tin nhắn</th>
-                <th className="px-6 py-4">Cập nhật lúc</th>
-                <th className="px-6 py-4">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {sessions.length === 0 ? (
+              <thead className={adminTableHeaderClass}>
                 <tr>
-                  <td colSpan={5} className="px-6 py-10 text-center text-gray-400">
-                    Không tìm thấy phiên chat nào
-                  </td>
+                  <th className="px-6 py-4">Session ID</th>
+                  <th className="px-6 py-4">Tin nhắn cuối</th>
+                  <th className="px-6 py-4">Số tin nhắn</th>
+                  <th className="px-6 py-4">Cập nhật lúc</th>
+                  <th className="px-6 py-4">Thao tác</th>
                 </tr>
-              ) : (
-                sessions.map((session: ChatSession) => (
-                  <tr key={session.sessionId} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs text-gray-500">
-                      {session.sessionId}
-                    </td>
-                    <td className="px-6 py-4">
-                      <p className="line-clamp-2 max-w-[300px] text-gray-800">
-                        {session.lastMessage}
-                      </p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {session.messageCount}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500">
-                      {format(new Date(session.updatedAt), "HH:mm dd/MM/yyyy")}
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => setSelectedSession(session.sessionId)}
-                        className="text-[#E53935] hover:underline font-medium"
-                      >
-                        Xem chi tiết
-                      </button>
+              </thead>
+              <tbody>
+                {sessions.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-10 text-center text-muted-foreground">
+                      Không tìm thấy phiên chat nào
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
+                ) : (
+                  sessions.map((session: ChatSession) => (
+                    <tr key={session.sessionId} className={adminRowHoverClass}>
+                      <td className="px-6 py-4 font-mono text-xs text-muted-foreground">
+                        {session.sessionId}
+                      </td>
+                      <td className="px-6 py-4">
+                        <p className="line-clamp-2 max-w-[300px] text-foreground">
+                          {session.lastMessage}
+                        </p>
+                      </td>
+                      <td className="px-6 py-4">
+                        <Badge variant="info">{session.messageCount}</Badge>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        {format(new Date(session.updatedAt), 'HH:mm dd/MM/yyyy')}
+                      </td>
+                      <td className="px-6 py-4">
+                        <Button
+                          variant="link"
+                          onClick={() => setSelectedSession(session.sessionId)}
+                          className="h-auto px-0 text-primary"
+                        >
+                          Xem chi tiết
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
             </table>
           </div>
         )}
@@ -105,7 +112,7 @@ export default function AdminChatbotPage() {
         <div className="flex justify-center mt-6">
           <PaginationControls
             pagination={pagination}
-            onPageChange={(p) => updateFilter("page", p)}
+            onPageChange={(p) => updateFilter('page', p)}
             itemName="phiên chat"
           />
         </div>
@@ -113,12 +120,12 @@ export default function AdminChatbotPage() {
 
       {/* Chat History Modal */}
       <Dialog open={!!selectedSession} onOpenChange={(open) => !open && setSelectedSession(null)}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0">
-          <DialogHeader className="p-4 border-b">
+        <DialogContent className="flex h-[80dvh] max-w-2xl flex-col gap-0 overflow-hidden p-0">
+          <DialogHeader className="border-b border-border p-4">
             <DialogTitle>Lịch sử hội thoại</DialogTitle>
           </DialogHeader>
-          
-          <div className="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-4">
+
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-muted/50 p-4">
             {historyLoading ? (
               <div className="flex justify-center py-10">
                 <SpinnerLoading />
@@ -128,26 +135,28 @@ export default function AdminChatbotPage() {
                 <div
                   key={idx}
                   className={cn(
-                    "flex w-full",
-                    msg.role === "user" ? "justify-end" : "justify-start"
+                    'flex w-full',
+                    msg.role === 'user' ? 'justify-end' : 'justify-start',
                   )}
                 >
                   <div
                     className={cn(
-                      "max-w-[80%] rounded-lg px-4 py-2 text-sm",
-                      msg.role === "user"
-                        ? "bg-[#E53935] text-white rounded-br-none"
-                        : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
+                      'max-w-[80%] rounded-lg px-4 py-2 text-sm',
+                      msg.role === 'user'
+                        ? 'rounded-br-none bg-primary text-primary-foreground'
+                        : 'rounded-bl-none border border-border bg-card text-card-foreground',
                     )}
                   >
-                    <p>{msg.content?.trim() || "[Tin nhắn trống]"}</p>
+                    <p>{msg.content?.trim() || '[Tin nhắn trống]'}</p>
                     <p
                       className={cn(
-                        "text-[10px] mt-1 text-right",
-                        msg.role === "user" ? "text-white/70" : "text-gray-400"
+                        'text-[10px] mt-1 text-right',
+                        msg.role === 'user'
+                          ? 'text-primary-foreground/70'
+                          : 'text-muted-foreground',
                       )}
                     >
-                      {format(new Date(msg.timestamp), "HH:mm")}
+                      {format(new Date(msg.timestamp), 'HH:mm')}
                     </p>
                   </div>
                 </div>

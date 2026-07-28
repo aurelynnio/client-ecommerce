@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import {
   addToCart,
   clearCart,
@@ -6,14 +6,14 @@ import {
   removeFromCart,
   updateCartItem,
   removeItemsByShop,
-} from "./cartAction";
+} from './cartAction';
 import {
   Cart,
   CartItem,
   CartState,
   groupCartItemsByShop,
   getCartItemPriceValue,
-} from "@/types/cart";
+} from '@/types/cart';
 
 const initialState: CartState = {
   data: null,
@@ -38,17 +38,10 @@ const calculateCartTotals = (items: CartItem[], selectedItems: CartItem[]) => {
   return { totalAmount, checkoutTotal };
 };
 
-const getRejectedErrorMessage = (
-  action: { payload?: unknown },
-  fallback: string
-): string => {
-  if (
-    action.payload &&
-    typeof action.payload === "object" &&
-    "message" in action.payload
-  ) {
+const getRejectedErrorMessage = (action: { payload?: unknown }, fallback: string): string => {
+  if (action.payload && typeof action.payload === 'object' && 'message' in action.payload) {
     const message = (action.payload as { message?: unknown }).message;
-    if (typeof message === "string" && message.trim() !== "") {
+    if (typeof message === 'string' && message.trim() !== '') {
       return message;
     }
   }
@@ -56,7 +49,7 @@ const getRejectedErrorMessage = (
 };
 
 export const cartSlice = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {
     setCartFromQuery: (state, action: { payload: Cart | null }) => {
@@ -89,11 +82,10 @@ export const cartSlice = createSlice({
     addToCartLocal: (state, action) => {
       if (!state.data) {
         state.data = {
-          _id: "",
-          userId: "",
+          _id: '',
+          userId: '',
           items: [action.payload],
-          totalAmount:
-            action.payload.price.currentPrice * action.payload.quantity,
+          totalAmount: action.payload.price.currentPrice * action.payload.quantity,
           cartCount: 1,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
@@ -103,46 +95,36 @@ export const cartSlice = createSlice({
           (item) =>
             item._id === action.payload._id ||
             (item.productId &&
-              typeof item.productId === "object" &&
+              typeof item.productId === 'object' &&
               item.productId._id === action.payload.productId._id &&
               (item.modelId === action.payload.modelId ||
-                item.variantId === action.payload.variantId))
+                item.variantId === action.payload.variantId)),
         );
 
         if (existingItemIndex > -1) {
           // Update existing item
-          state.data.items[existingItemIndex].quantity +=
-            action.payload.quantity;
+          state.data.items[existingItemIndex].quantity += action.payload.quantity;
         } else {
           // Add new item
           state.data.items.push(action.payload);
         }
 
         // Recalculate total
-        const { totalAmount } = calculateCartTotals(
-          state.data.items,
-          state.selectedItems
-        );
+        const { totalAmount } = calculateCartTotals(state.data.items, state.selectedItems);
         state.data.totalAmount = totalAmount;
       }
     },
     removeFromCartLocal: (state, action) => {
       if (state.data) {
-        const itemToRemove = state.data.items.find(
-          (item) => item._id === action.payload
-        );
+        const itemToRemove = state.data.items.find((item) => item._id === action.payload);
         if (itemToRemove) {
-          state.data.items = state.data.items.filter(
-            (item) => item._id !== action.payload
-          );
+          state.data.items = state.data.items.filter((item) => item._id !== action.payload);
 
-          state.selectedItems = state.selectedItems.filter(
-            (item) => item._id !== action.payload
-          );
+          state.selectedItems = state.selectedItems.filter((item) => item._id !== action.payload);
 
           const { totalAmount, checkoutTotal } = calculateCartTotals(
             state.data.items,
-            state.selectedItems
+            state.selectedItems,
           );
           state.data.totalAmount = totalAmount;
           state.checkoutTotal = checkoutTotal;
@@ -160,23 +142,19 @@ export const cartSlice = createSlice({
     updateCartLocal: (state, action) => {
       if (state.data) {
         const { itemId, quantity } = action.payload;
-        const itemIndex = state.data.items.findIndex(
-          (item) => item._id === itemId
-        );
+        const itemIndex = state.data.items.findIndex((item) => item._id === itemId);
 
         if (itemIndex > -1) {
           state.data.items[itemIndex].quantity = quantity;
 
-          const selectedItemIndex = state.selectedItems.findIndex(
-            (item) => item._id === itemId
-          );
+          const selectedItemIndex = state.selectedItems.findIndex((item) => item._id === itemId);
           if (selectedItemIndex > -1) {
             state.selectedItems[selectedItemIndex].quantity = quantity;
           }
 
           const { totalAmount, checkoutTotal } = calculateCartTotals(
             state.data.items,
-            state.selectedItems
+            state.selectedItems,
           );
           state.data.totalAmount = totalAmount;
           state.checkoutTotal = checkoutTotal;
@@ -188,9 +166,7 @@ export const cartSlice = createSlice({
       const itemId = action.payload;
       if (!state.data) return;
 
-      const itemIndex = state.data.items.findIndex(
-        (item) => item._id === itemId
-      );
+      const itemIndex = state.data.items.findIndex((item) => item._id === itemId);
       if (itemIndex > -1) {
         const item = state.data.items[itemIndex];
         const isSelected = !item.selected;
@@ -201,25 +177,18 @@ export const cartSlice = createSlice({
         // Cập nhật selectedItems
         if (isSelected) {
           // Thêm vào selectedItems nếu chưa có
-          if (
-            !state.selectedItems.find(
-              (selectedItem) => selectedItem._id === itemId
-            )
-          ) {
+          if (!state.selectedItems.find((selectedItem) => selectedItem._id === itemId)) {
             state.selectedItems.push(item);
           }
         } else {
           // Xóa khỏi selectedItems
           state.selectedItems = state.selectedItems.filter(
-            (selectedItem) => selectedItem._id !== itemId
+            (selectedItem) => selectedItem._id !== itemId,
           );
         }
 
         // Tính lại checkout total
-        const { checkoutTotal } = calculateCartTotals(
-          state.data.items,
-          state.selectedItems
-        );
+        const { checkoutTotal } = calculateCartTotals(state.data.items, state.selectedItems);
         state.checkoutTotal = checkoutTotal;
       }
     },
@@ -236,10 +205,7 @@ export const cartSlice = createSlice({
       state.selectedItems = [...state.data.items];
 
       // Tính lại checkout total
-      const { checkoutTotal } = calculateCartTotals(
-        state.data.items,
-        state.selectedItems
-      );
+      const { checkoutTotal } = calculateCartTotals(state.data.items, state.selectedItems);
       state.checkoutTotal = checkoutTotal;
     },
 
@@ -259,10 +225,7 @@ export const cartSlice = createSlice({
     prepareForCheckout: (state) => {
       if (!state.data) return;
 
-      const { checkoutTotal } = calculateCartTotals(
-        state.data.items,
-        state.selectedItems
-      );
+      const { checkoutTotal } = calculateCartTotals(state.data.items, state.selectedItems);
       state.checkoutTotal = checkoutTotal;
     },
 
@@ -293,19 +256,14 @@ export const cartSlice = createSlice({
       state.data = cartData;
 
       if (cartData && cartData.items) {
-        state.selectedItems = cartData.items.filter(
-          (item: CartItem) => item.selected
-        );
-        const { checkoutTotal } = calculateCartTotals(
-          cartData.items,
-          state.selectedItems
-        );
+        state.selectedItems = cartData.items.filter((item: CartItem) => item.selected);
+        const { checkoutTotal } = calculateCartTotals(cartData.items, state.selectedItems);
         state.checkoutTotal = checkoutTotal;
       }
     });
     builder.addCase(getCart.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = getRejectedErrorMessage(action, "Không thể lấy giỏ hàng");
+      state.error = getRejectedErrorMessage(action, 'Không thể lấy giỏ hàng');
     });
 
     // Add to Cart
@@ -331,10 +289,7 @@ export const cartSlice = createSlice({
     });
     builder.addCase(addToCart.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = getRejectedErrorMessage(
-        action,
-        "Không thể thêm sản phẩm vào giỏ hàng"
-      );
+      state.error = getRejectedErrorMessage(action, 'Không thể thêm sản phẩm vào giỏ hàng');
     });
 
     // Remove from Cart
@@ -359,22 +314,14 @@ export const cartSlice = createSlice({
       state.data = cartData;
 
       if (cartData && cartData.items) {
-        state.selectedItems = cartData.items.filter(
-          (item: CartItem) => item.selected
-        );
-        const { checkoutTotal } = calculateCartTotals(
-          cartData.items,
-          state.selectedItems
-        );
+        state.selectedItems = cartData.items.filter((item: CartItem) => item.selected);
+        const { checkoutTotal } = calculateCartTotals(cartData.items, state.selectedItems);
         state.checkoutTotal = checkoutTotal;
       }
     });
     builder.addCase(removeFromCart.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = getRejectedErrorMessage(
-        action,
-        "Không thể xóa sản phẩm khỏi giỏ hàng"
-      );
+      state.error = getRejectedErrorMessage(action, 'Không thể xóa sản phẩm khỏi giỏ hàng');
     });
 
     // Clear Cart
@@ -395,7 +342,7 @@ export const cartSlice = createSlice({
     });
     builder.addCase(clearCart.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = getRejectedErrorMessage(action, "Không thể xóa giỏ hàng");
+      state.error = getRejectedErrorMessage(action, 'Không thể xóa giỏ hàng');
     });
 
     builder.addCase(updateCartItem.pending, (state) => {
@@ -413,39 +360,30 @@ export const cartSlice = createSlice({
 
       if (cartData) {
         // Optimize: Create map for O(1) lookup instead of O(N) find
-        const oldItemsMap = new Map(
-          oldItemsWithVariants.map((item) => [item._id, item])
-        );
+        const oldItemsMap = new Map(oldItemsWithVariants.map((item) => [item._id, item]));
 
-        const updatedItems = cartData.items.map(
-          (newItem: Record<string, string>) => {
-            const oldItem = oldItemsMap.get(newItem._id);
-            return {
-              ...newItem,
-              variant: oldItem?.variant,
-              selected: oldItem?.selected || false,
-            };
-          }
-        );
+        const updatedItems = cartData.items.map((newItem: Record<string, string>) => {
+          const oldItem = oldItemsMap.get(newItem._id);
+          return {
+            ...newItem,
+            variant: oldItem?.variant,
+            selected: oldItem?.selected || false,
+          };
+        });
 
         state.data = {
           ...cartData,
           items: updatedItems,
         };
 
-        state.selectedItems = updatedItems.filter(
-          (item: CartItem) => item.selected
-        );
-        const { checkoutTotal } = calculateCartTotals(
-          updatedItems,
-          state.selectedItems
-        );
+        state.selectedItems = updatedItems.filter((item: CartItem) => item.selected);
+        const { checkoutTotal } = calculateCartTotals(updatedItems, state.selectedItems);
         state.checkoutTotal = checkoutTotal;
       }
     });
     builder.addCase(updateCartItem.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = getRejectedErrorMessage(action, "Không thể cập nhật giỏ hàng");
+      state.error = getRejectedErrorMessage(action, 'Không thể cập nhật giỏ hàng');
     });
 
     // NEW: Remove items by shop
@@ -472,10 +410,7 @@ export const cartSlice = createSlice({
     });
     builder.addCase(removeItemsByShop.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = getRejectedErrorMessage(
-        action,
-        "Không thể xóa sản phẩm theo shop"
-      );
+      state.error = getRejectedErrorMessage(action, 'Không thể xóa sản phẩm theo shop');
     });
   },
 });

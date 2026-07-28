@@ -1,4 +1,4 @@
-import { Product } from "./product";
+import { Product } from './product';
 
 // Recommendation sections for homepage
 export interface HomepageRecommendations {

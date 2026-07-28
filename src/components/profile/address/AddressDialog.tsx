@@ -1,6 +1,6 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useCreateAddress, useUpdateAddress } from "@/hooks/queries/useProfile";
+'use client';
+import { useState, useEffect } from 'react';
+import { useCreateAddress, useUpdateAddress } from '@/hooks/queries/useProfile';
 import {
   Dialog,
   DialogContent,
@@ -8,16 +8,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
-import { AddressDialogProps, AddressFormData } from "@/types/address";
-import { MapPin, Navigation, Home } from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { getSafeErrorMessage } from "@/api";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { toast } from 'sonner';
+import { AddressDialogProps, AddressFormData } from '@/types/address';
+import { MapPin, Navigation, Home } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { getSafeErrorMessage } from '@/api';
 
 export default function AddressDialog({
   open,
@@ -30,40 +30,38 @@ export default function AddressDialog({
   const updateAddressMutation = useUpdateAddress();
 
   const [addressForm, setAddressForm] = useState<AddressFormData>({
-    fullName: "",
-    phone: "",
-    address: "",
-    city: "",
-    district: "",
-    ward: "",
+    fullName: '',
+    phone: '',
+    address: '',
+    city: '',
+    district: '',
+    ward: '',
     isDefault: false,
   });
 
-  const isSubmitting =
-    createAddressMutation.isPending || updateAddressMutation.isPending;
+  const isSubmitting = createAddressMutation.isPending || updateAddressMutation.isPending;
   const [isGettingLocation, setIsGettingLocation] = useState(false);
-  const [locationPermissionDenied, setLocationPermissionDenied] =
-    useState(false);
+  const [locationPermissionDenied, setLocationPermissionDenied] = useState(false);
 
   useEffect(() => {
     if (editingAddress) {
       setAddressForm({
-        fullName: editingAddress.fullName || "",
-        phone: editingAddress.phone || "",
-        address: editingAddress.address || "",
-        city: editingAddress.city || "",
-        district: editingAddress.district || "",
-        ward: editingAddress.ward || "",
+        fullName: editingAddress.fullName || '',
+        phone: editingAddress.phone || '',
+        address: editingAddress.address || '',
+        city: editingAddress.city || '',
+        district: editingAddress.district || '',
+        ward: editingAddress.ward || '',
         isDefault: editingAddress.isDefault || false,
       });
     } else {
       setAddressForm({
-        fullName: user?.username || "",
-        phone: user?.phone || "",
-        address: "",
-        city: "",
-        district: "",
-        ward: "",
+        fullName: user?.username || '',
+        phone: user?.phone || '',
+        address: '',
+        city: '',
+        district: '',
+        ward: '',
         isDefault: (user?.addresses?.length || 0) === 0,
       });
     }
@@ -71,9 +69,7 @@ export default function AddressDialog({
 
   // Hàm phân tích địa chỉ và điền vào các trường phù hợp
   const parseAndFillAddress = (fullAddress: string) => {
-    const address = fullAddress
-      .replace(/,\s*Việt Nam$/, "")
-      .replace(/,\s*Vietnam$/i, "");
+    const address = fullAddress.replace(/,\s*Việt Nam$/, '').replace(/,\s*Vietnam$/i, '');
 
     // Mẫu regex để phân tích địa chỉ Việt Nam
     const patterns = [
@@ -85,9 +81,9 @@ export default function AddressDialog({
       /(.*?),\s*(.*?),\s*(.*?),\s*(.*)/,
     ];
 
-    let city = "";
-    let district = "";
-    let ward = "";
+    let city = '';
+    let district = '';
+    let ward = '';
     let detailedAddress = address;
 
     for (const pattern of patterns) {
@@ -107,9 +103,9 @@ export default function AddressDialog({
           city = match[6].trim();
         } else {
           // Pattern đơn giản - chia thành 4 phần
-          const parts = address.split(",").map((part) => part.trim());
+          const parts = address.split(',').map((part) => part.trim());
           if (parts.length >= 4) {
-            detailedAddress = parts.slice(0, parts.length - 3).join(", ");
+            detailedAddress = parts.slice(0, parts.length - 3).join(', ');
             ward = parts[parts.length - 3];
             district = parts[parts.length - 2];
             city = parts[parts.length - 1];
@@ -121,7 +117,7 @@ export default function AddressDialog({
 
     // Nếu không phân tích được bằng regex, thử phân tích thủ công
     if (!city) {
-      const parts = address.split(",").map((part) => part.trim());
+      const parts = address.split(',').map((part) => part.trim());
 
       if (parts.length > 0) {
         // Phần cuối cùng thường là thành phố/tỉnh
@@ -138,23 +134,17 @@ export default function AddressDialog({
         }
 
         // Phần còn lại là địa chỉ chi tiết
-        detailedAddress = parts
-          .slice(0, Math.max(0, parts.length - 3))
-          .join(", ");
+        detailedAddress = parts.slice(0, Math.max(0, parts.length - 3)).join(', ');
       }
     }
 
     // Chuẩn hóa tên thành phố
-    if (
-      city.includes("Hồ Chí Minh") ||
-      city.includes("TP.HCM") ||
-      city.includes("TP HCM")
-    ) {
-      city = "Thành phố Hồ Chí Minh";
-    } else if (city.includes("Hà Nội")) {
-      city = "Thành phố Hà Nội";
-    } else if (city.includes("Đà Nẵng")) {
-      city = "Thành phố Đà Nẵng";
+    if (city.includes('Hồ Chí Minh') || city.includes('TP.HCM') || city.includes('TP HCM')) {
+      city = 'Thành phố Hồ Chí Minh';
+    } else if (city.includes('Hà Nội')) {
+      city = 'Thành phố Hà Nội';
+    } else if (city.includes('Đà Nẵng')) {
+      city = 'Thành phố Đà Nẵng';
     }
 
     return {
@@ -167,12 +157,12 @@ export default function AddressDialog({
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
-      toast.error("Trình duyệt của bạn không hỗ trợ định vị");
+      toast.error('Trình duyệt của bạn không hỗ trợ định vị');
       return;
     }
 
     if (locationPermissionDenied) {
-      toast.info("Vui lòng cấp quyền truy cập vị trí trong cài đặt trình duyệt");
+      toast.info('Vui lòng cấp quyền truy cập vị trí trong cài đặt trình duyệt');
       return;
     }
 
@@ -189,7 +179,7 @@ export default function AddressDialog({
           );
 
           if (!response.ok) {
-            throw new Error("Không thể lấy thông tin địa chỉ");
+            throw new Error('Không thể lấy thông tin địa chỉ');
           }
 
           const data = await response.json();
@@ -206,15 +196,13 @@ export default function AddressDialog({
               ward: parsedAddress.ward,
             }));
 
-            toast.success("Đã cập nhật vị trí");
+            toast.success('Đã cập nhật vị trí');
           } else {
-            toast.error("Không tìm thấy thông tin địa chỉ cho vị trí này");
+            toast.error('Không tìm thấy thông tin địa chỉ cho vị trí này');
           }
         } catch (error: unknown) {
-          console.error("Error fetching address:", error);
-          toast.error(
-            getSafeErrorMessage(error, "Không thể lấy địa chỉ từ vị trí hiện tại"),
-          );
+          console.error('Error fetching address:', error);
+          toast.error(getSafeErrorMessage(error, 'Không thể lấy địa chỉ từ vị trí hiện tại'));
         } finally {
           setIsGettingLocation(false);
         }
@@ -225,16 +213,16 @@ export default function AddressDialog({
         switch (error.code) {
           case error.PERMISSION_DENIED:
             setLocationPermissionDenied(true);
-            toast.error("Bạn đã từ chối quyền truy cập vị trí");
+            toast.error('Bạn đã từ chối quyền truy cập vị trí');
             break;
           case error.POSITION_UNAVAILABLE:
-            toast.error("Thông tin vị trí không khả dụng");
+            toast.error('Thông tin vị trí không khả dụng');
             break;
           case error.TIMEOUT:
-            toast.error("Yêu cầu vị trí quá thời gian");
+            toast.error('Yêu cầu vị trí quá thời gian');
             break;
           default:
-            toast.error("Không thể lấy vị trí hiện tại");
+            toast.error('Không thể lấy vị trí hiện tại');
             break;
         }
       },
@@ -251,14 +239,14 @@ export default function AddressDialog({
 
     // CHỈ VALIDATE CÁC TRƯỜNG TỐI THIỂU
     if (!addressForm.address.trim()) {
-      toast.error("Vui lòng nhập địa chỉ");
+      toast.error('Vui lòng nhập địa chỉ');
       return;
     }
 
     try {
       const addressDataToSend = {
-        fullName: addressForm.fullName.trim() || "Khách hàng",
-        phone: addressForm.phone.trim() || "Chưa cập nhật",
+        fullName: addressForm.fullName.trim() || 'Khách hàng',
+        phone: addressForm.phone.trim() || 'Chưa cập nhật',
         address: addressForm.address.trim(),
         city: addressForm.city.trim(),
         district: addressForm.district.trim(),
@@ -271,20 +259,20 @@ export default function AddressDialog({
           addressId: editingAddress._id,
           ...addressDataToSend,
         });
-        toast.success("Cập nhật địa chỉ thành công");
+        toast.success('Cập nhật địa chỉ thành công');
       } else {
         await createAddressMutation.mutateAsync(addressDataToSend);
-        toast.success("Thêm địa chỉ thành công");
+        toast.success('Thêm địa chỉ thành công');
       }
 
       onClose();
       onSuccess();
     } catch (error: unknown) {
-      console.error("Address operation error:", error);
-      const errorMessage = getSafeErrorMessage(error, "Đã xảy ra lỗi");
+      console.error('Address operation error:', error);
+      const errorMessage = getSafeErrorMessage(error, 'Đã xảy ra lỗi');
       toast.error(
         `${
-          editingAddress ? "Cập nhật địa chỉ thất bại" : "Thêm địa chỉ thất bại"
+          editingAddress ? 'Cập nhật địa chỉ thất bại' : 'Thêm địa chỉ thất bại'
         }: ${errorMessage}`,
       );
     }
@@ -295,12 +283,12 @@ export default function AddressDialog({
     setLocationPermissionDenied(false);
     setTimeout(() => {
       setAddressForm({
-        fullName: "",
-        phone: "",
-        address: "",
-        city: "",
-        district: "",
-        ward: "",
+        fullName: '',
+        phone: '',
+        address: '',
+        city: '',
+        district: '',
+        ward: '',
         isDefault: false,
       });
     }, 300);
@@ -312,11 +300,9 @@ export default function AddressDialog({
         <DialogHeader className="p-6 border-b bg-muted/20">
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <MapPin className="h-5 w-5" />
-            {editingAddress ? "Sửa địa chỉ" : "Thêm địa chỉ mới"}
+            {editingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới'}
           </DialogTitle>
-          <DialogDescription>
-            Điền thông tin giao hàng của bạn bên dưới.
-          </DialogDescription>
+          <DialogDescription>Điền thông tin giao hàng của bạn bên dưới.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -332,9 +318,7 @@ export default function AddressDialog({
                   id="fullName"
                   placeholder="Nguyễn Văn A"
                   value={addressForm.fullName}
-                  onChange={(e) =>
-                    setAddressForm({ ...addressForm, fullName: e.target.value })
-                  }
+                  onChange={(e) => setAddressForm({ ...addressForm, fullName: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -343,9 +327,7 @@ export default function AddressDialog({
                   id="phone"
                   placeholder="0123 456 789"
                   value={addressForm.phone}
-                  onChange={(e) =>
-                    setAddressForm({ ...addressForm, phone: e.target.value })
-                  }
+                  onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
                 />
               </div>
             </div>
@@ -382,9 +364,7 @@ export default function AddressDialog({
                 id="address"
                 placeholder="Số nhà, tên đường"
                 value={addressForm.address}
-                onChange={(e) =>
-                  setAddressForm({ ...addressForm, address: e.target.value })
-                }
+                onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
               />
             </div>
 
@@ -395,9 +375,7 @@ export default function AddressDialog({
                   id="city"
                   placeholder="Tỉnh/Thành phố"
                   value={addressForm.city}
-                  onChange={(e) =>
-                    setAddressForm({ ...addressForm, city: e.target.value })
-                  }
+                  onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -406,9 +384,7 @@ export default function AddressDialog({
                   id="district"
                   placeholder="Quận/Huyện"
                   value={addressForm.district}
-                  onChange={(e) =>
-                    setAddressForm({ ...addressForm, district: e.target.value })
-                  }
+                  onChange={(e) => setAddressForm({ ...addressForm, district: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -417,9 +393,7 @@ export default function AddressDialog({
                   id="ward"
                   placeholder="Phường/Xã"
                   value={addressForm.ward}
-                  onChange={(e) =>
-                    setAddressForm({ ...addressForm, ward: e.target.value })
-                  }
+                  onChange={(e) => setAddressForm({ ...addressForm, ward: e.target.value })}
                 />
               </div>
             </div>
@@ -432,23 +406,16 @@ export default function AddressDialog({
                 <Home className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <Label
-                  htmlFor="isDefault"
-                  className="font-medium cursor-pointer"
-                >
+                <Label htmlFor="isDefault" className="font-medium cursor-pointer">
                   Đặt làm địa chỉ mặc định
                 </Label>
-                <p className="text-xs text-muted-foreground">
-                  Địa chỉ này sẽ được chọn mặc định
-                </p>
+                <p className="text-xs text-muted-foreground">Địa chỉ này sẽ được chọn mặc định</p>
               </div>
             </div>
             <Switch
               id="isDefault"
               checked={addressForm.isDefault}
-              onCheckedChange={(checked) =>
-                setAddressForm({ ...addressForm, isDefault: checked })
-              }
+              onCheckedChange={(checked) => setAddressForm({ ...addressForm, isDefault: checked })}
             />
           </div>
 
@@ -457,7 +424,7 @@ export default function AddressDialog({
               Hủy
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Đang lưu..." : "Lưu địa chỉ"}
+              {isSubmitting ? 'Đang lưu...' : 'Lưu địa chỉ'}
             </Button>
           </DialogFooter>
         </form>

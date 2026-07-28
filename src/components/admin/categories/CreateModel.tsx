@@ -1,9 +1,8 @@
-
-"use client";
-import { useState, useEffect, useRef } from "react";
-import { useForm, Resolver } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import { useForm, Resolver } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +10,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -20,21 +19,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import {
-  Plus,
-  Folder,
-  ChevronDown,
-  Upload,
-  Trash2,
-} from "lucide-react";
-import SpinnerLoading from "@/components/common/SpinnerLoading";
-import { Category } from "@/types/category";
-import Image from "next/image";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Folder, ChevronDown, Upload, Trash2 } from 'lucide-react';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Category } from '@/types/category';
+import Image from 'next/image';
 import {
   adminDialogContentClass,
   adminDialogFooterClass,
@@ -42,21 +35,20 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-} from "@/components/admin/shared/AdminPrimitives";
-import { cn } from "@/utils/cn";
-
+} from '@/components/admin/shared/AdminPrimitives';
+import { cn } from '@/utils/cn';
 
 const createFormSchema = z.object({
-  name: z.string().min(1, { message: "Tên danh mục là bắt buộc" }),
+  name: z.string().min(1, { message: 'Tên danh mục là bắt buộc' }),
   slug: z
     .string()
-    .min(1, { message: "Slug là bắt buộc" })
+    .min(1, { message: 'Slug là bắt buộc' })
     .regex(/^[a-z0-9-]+$/, {
-      message: "Slug chỉ được chứa chữ cái thường, số và dấu gạch ngang",
+      message: 'Slug chỉ được chứa chữ cái thường, số và dấu gạch ngang',
     }),
-  description: z.string().default(""),
+  description: z.string().default(''),
   isActive: z.boolean().default(true),
-  parentCategory: z.string().default(""),
+  parentCategory: z.string().default(''),
   images: z.array(z.string()).default([]),
 });
 
@@ -83,34 +75,28 @@ export function CreateCategoryModal({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-
   const form = useForm<CreateFormData>({
     resolver: zodResolver(createFormSchema) as Resolver<CreateFormData>,
     defaultValues: {
-      name: "",
-      slug: "",
-      description: "",
+      name: '',
+      slug: '',
+      description: '',
       isActive: true,
-      parentCategory: "",
+      parentCategory: '',
       images: [],
     },
   });
 
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
 
   useEffect(() => {
     if (isOpen) {
@@ -120,45 +106,39 @@ export function CreateCategoryModal({
     }
   }, [isOpen, form]);
 
-
   const generateSlug = (name: string) => {
     return name
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9 ]/g, "")
-      .replace(/\s+/g, "-");
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9 ]/g, '')
+      .replace(/\s+/g, '-');
   };
 
-
   const handleNameChange = (name: string) => {
-    form.setValue("name", name);
+    form.setValue('name', name);
 
     // Only auto-generate slug if it hasn't been manually edited
     if (!isSlugManuallyEdited) {
-      form.setValue("slug", generateSlug(name), { shouldValidate: true });
+      form.setValue('slug', generateSlug(name), { shouldValidate: true });
     }
   };
 
-
   const handleSlugChange = (slug: string) => {
-    form.setValue("slug", slug);
+    form.setValue('slug', slug);
     if (slug && !isSlugManuallyEdited) {
       setIsSlugManuallyEdited(true);
     }
   };
 
-
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
 
     try {
-      const currentImages = form.getValues("images") || [];
+      const currentImages = form.getValues('images') || [];
       const newImageUrls: string[] = [];
 
       for (let i = 0; i < files.length; i++) {
@@ -167,19 +147,18 @@ export function CreateCategoryModal({
         newImageUrls.push(imageUrl);
       }
 
-      form.setValue("images", [...currentImages, ...newImageUrls], {
+      form.setValue('images', [...currentImages, ...newImageUrls], {
         shouldValidate: true,
       });
     } catch (error) {
-      console.error("Error uploading images:", error);
+      console.error('Error uploading images:', error);
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        fileInputRef.current.value = '';
       }
     }
   };
-
 
   const simulateImageUpload = (file: File): Promise<string> => {
     return new Promise((resolve) => {
@@ -192,11 +171,10 @@ export function CreateCategoryModal({
     });
   };
 
-
   const removeImage = (index: number) => {
-    const currentImages = form.getValues("images") || [];
+    const currentImages = form.getValues('images') || [];
     const newImages = currentImages.filter((_, i) => i !== index);
-    form.setValue("images", newImages, { shouldValidate: true });
+    form.setValue('images', newImages, { shouldValidate: true });
   };
 
   const onSubmit = (data: CreateFormData) => {
@@ -215,14 +193,19 @@ export function CreateCategoryModal({
 
   // Get selected category name for display
   const selectedCategory = availableParentCategories.find(
-    (cat) => cat._id === form.watch("parentCategory")
+    (cat) => cat._id === form.watch('parentCategory'),
   );
 
-  const currentImages = form.watch("images") || [];
+  const currentImages = form.watch('images') || [];
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className={cn(adminDialogContentClass, "sm:max-w-[500px] max-h-[90vh] flex flex-col no-scrollbar p-6")}>
+      <DialogContent
+        className={cn(
+          adminDialogContentClass,
+          'sm:max-w-[500px] max-h-[90vh] flex flex-col no-scrollbar p-6',
+        )}
+      >
         <DialogHeader className="shrink-0 pb-6 border-b border-border/50">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold tracking-tight">
             Tạo danh mục
@@ -245,9 +228,7 @@ export function CreateCategoryModal({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Tên danh mục
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Tên danh mục</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Nhập tên danh mục"
@@ -257,7 +238,7 @@ export function CreateCategoryModal({
                           handleNameChange(e.target.value);
                         }}
                         autoFocus
-                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                       />
                     </FormControl>
                     <FormMessage />
@@ -271,9 +252,7 @@ export function CreateCategoryModal({
                 name="slug"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Slug
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Slug</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="ten-danh-muc"
@@ -282,13 +261,16 @@ export function CreateCategoryModal({
                           field.onChange(e);
                           handleSlugChange(e.target.value);
                         }}
-                        className={cn(adminFieldSurfaceClass, "transition-colors focus:bg-white")}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
                       />
                     </FormControl>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1.5 ml-1">
                       <span>URL: /categories/{field.value}</span>
                       {!isSlugManuallyEdited && (
-                        <Badge variant="outline" className="text-[10px] h-5 rounded-md border-border/50">
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] h-5 rounded-md border-border/50"
+                        >
                           Tự động
                         </Badge>
                       )}
@@ -304,40 +286,35 @@ export function CreateCategoryModal({
                 name="parentCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Danh mục cha
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Danh mục cha</FormLabel>
                     <FormControl>
                       <div className="relative" ref={dropdownRef}>
                         <button
                           type="button"
-                          className={cn(adminFieldSurfaceClass, "flex h-10 w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors hover:bg-white focus:outline-none")}
+                          className={cn(
+                            adminFieldSurfaceClass,
+                            'flex h-10 w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors hover:bg-white focus:outline-none',
+                          )}
                           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
                           <span
-                            className={
-                              field.value
-                                ? "text-foreground"
-                                : "text-muted-foreground"
-                            }
+                            className={field.value ? 'text-foreground' : 'text-muted-foreground'}
                           >
-                            {selectedCategory
-                              ? selectedCategory.name
-                              : "Không có danh mục cha"}
+                            {selectedCategory ? selectedCategory.name : 'Không có danh mục cha'}
                           </span>
                           <ChevronDown
                             className={`h-4 w-4 opacity-50 transition-transform ${
-                              isDropdownOpen ? "rotate-180" : ""
+                              isDropdownOpen ? 'rotate-180' : ''
                             }`}
                           />
                         </button>
 
                         {isDropdownOpen && (
-                          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-2xl border border-[#ebe2d8] bg-white py-1 shadow-xl no-scrollbar">
+                          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-border bg-popover py-1 shadow-lg no-scrollbar">
                             <div
-                              className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-border/50"
+                              className="cursor-pointer border-b border-border/50 px-3 py-2 hover:bg-muted/60"
                               onClick={() => {
-                                field.onChange("");
+                                field.onChange('');
                                 setIsDropdownOpen(false);
                               }}
                             >
@@ -350,17 +327,15 @@ export function CreateCategoryModal({
                             {availableParentCategories.map((category) => (
                               <div
                                 key={category._id}
-                                className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-border/50 last:border-b-0"
+                                className="cursor-pointer border-b border-border/50 px-3 py-2 hover:bg-muted/60 last:border-b-0"
                                 onClick={() => {
                                   field.onChange(category._id);
                                   setIsDropdownOpen(false);
                                 }}
                               >
                                 <div className="flex items-center gap-2 text-sm">
-                                  <Folder className="h-4 w-4 text-blue-500" />
-                                  <span className="flex-1 font-medium">
-                                    {category.name}
-                                  </span>
+                                  <Folder className="h-4 w-4 text-info" />
+                                  <span className="flex-1 font-medium">{category.name}</span>
                                   {category.parentCategory && (
                                     <Badge
                                       variant="secondary"
@@ -393,8 +368,11 @@ export function CreateCategoryModal({
                         placeholder="Nhập mô tả danh mục"
                         rows={3}
                         {...field}
-                        value={field.value || ""}
-                        className={cn(adminFieldSurfaceClass, "min-h-24 resize-none transition-colors focus:bg-white")}
+                        value={field.value || ''}
+                        className={cn(
+                          adminFieldSurfaceClass,
+                          'min-h-24 resize-none transition-colors focus:bg-white',
+                        )}
                       />
                     </FormControl>
                     <FormMessage />
@@ -408,14 +386,12 @@ export function CreateCategoryModal({
                 name="images"
                 render={({}) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Hình ảnh danh mục
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Hình ảnh danh mục</FormLabel>
                     <FormControl>
                       <div className="space-y-3">
                         {/* File Upload Input */}
                         <div
-                          className="cursor-pointer rounded-2xl border-2 border-dashed border-[#e7ddd2] p-6 text-center transition-all hover:border-[#d8473c]/40 hover:bg-[#fbf6f0]"
+                          className="cursor-pointer rounded-lg border-2 border-dashed border-border p-6 text-center transition-colors hover:border-primary/40 hover:bg-muted/60"
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <input
@@ -426,13 +402,11 @@ export function CreateCategoryModal({
                             onChange={handleFileUpload}
                             className="hidden"
                           />
-                          <div className="bg-gray-100 p-3 rounded-full inline-flex mb-3">
+                          <div className="mb-3 inline-flex rounded-full bg-muted p-3">
                             <Upload className="h-5 w-5 text-muted-foreground" />
                           </div>
                           <p className="text-sm font-medium text-foreground">
-                            {isUploading
-                              ? "Đang tải lên..."
-                              : "Nhấn để tải hình ảnh"}
+                            {isUploading ? 'Đang tải lên...' : 'Nhấn để tải hình ảnh'}
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">
                             Kích thước đề xuất: 500x500px
@@ -443,7 +417,10 @@ export function CreateCategoryModal({
                         {currentImages.length > 0 && (
                           <div className="grid grid-cols-3 gap-3">
                             {currentImages.map((image, index) => (
-                              <div key={index} className="relative aspect-square group rounded-xl overflow-hidden border border-border/50">
+                              <div
+                                key={index}
+                                className="relative aspect-square group rounded-xl overflow-hidden border border-border/50"
+                              >
                                 <Image
                                   src={image}
                                   alt={`Xem trước ${index + 1}`}
@@ -454,7 +431,7 @@ export function CreateCategoryModal({
                                 <button
                                   type="button"
                                   onClick={() => removeImage(index)}
-                                  className="absolute top-1.5 right-1.5 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-black/70 backdrop-blur-sm"
+                                  className="absolute right-1.5 top-1.5 rounded-full bg-black/50 p-1 text-white opacity-0 backdrop-blur-sm transition-[opacity,background-color] hover:bg-black/70 group-hover:opacity-100"
                                 >
                                   <Trash2 className="h-3 w-3" />
                                 </button>
@@ -474,18 +451,19 @@ export function CreateCategoryModal({
                 control={form.control}
                 name="isActive"
                 render={({ field }) => (
-                  <FormItem className={cn(adminInsetPanelClass, "flex items-center justify-between p-4")}>
+                  <FormItem
+                    className={cn(adminInsetPanelClass, 'flex items-center justify-between p-4')}
+                  >
                     <div className="space-y-0.5">
-                      <FormLabel className="text-sm font-medium block">Trạng thái hoạt động</FormLabel>
+                      <FormLabel className="text-sm font-medium block">
+                        Trạng thái hoạt động
+                      </FormLabel>
                       <div className="text-xs text-muted-foreground">
                         Thiết lập hiển thị cho danh mục này
                       </div>
                     </div>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -493,20 +471,20 @@ export function CreateCategoryModal({
             </div>
 
             {/* Footer */}
-            <DialogFooter className={cn(adminDialogFooterClass, "shrink-0")}>
+            <DialogFooter className={cn(adminDialogFooterClass, 'shrink-0')}>
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleClose}
                 disabled={isLoading}
-                className={cn("h-11 flex-1", adminSecondaryButtonClass)}
+                className={cn('h-11 flex-1', adminSecondaryButtonClass)}
               >
                 Hủy
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading || !form.formState.isValid}
-                className={cn("h-11 flex-1 shadow-sm", adminPrimaryButtonClass)}
+                className={cn('h-11 flex-1 shadow-sm', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />

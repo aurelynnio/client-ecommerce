@@ -1,16 +1,35 @@
-"use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/utils/cn";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useActiveBanners } from "@/hooks/queries";
-import { useRouter } from "next/navigation";
+'use client';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/cn';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useActiveBanners } from '@/hooks/queries';
+import { useRouter } from 'next/navigation';
 
 export default function Banner() {
   const router = useRouter();
-  const { data: banners = [], isLoading } = useActiveBanners();
+  const { data: bannersData = [], isLoading } = useActiveBanners();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const banners =
+    bannersData && bannersData.length > 0
+      ? bannersData
+      : [
+          {
+            _id: 'default-banner-1',
+            title: 'Chào mừng bạn đến với Aura',
+            subtitle: 'Những lựa chọn tốt hơn, cho nhịp sống hằng ngày.',
+            imageUrl: '/images/default-banner.svg',
+            link: '/products',
+            theme: 'dark',
+          },
+        ];
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState(0);
@@ -23,11 +42,9 @@ export default function Banner() {
     (newDirection: number) => {
       if (length === 0) return;
       setDirection(newDirection);
-      setCurrentIndex(
-        (prevIndex) => (prevIndex + newDirection + length) % length
-      );
+      setCurrentIndex((prevIndex) => (prevIndex + newDirection + length) % length);
     },
-    [length]
+    [length],
   );
 
   useEffect(() => {
@@ -47,7 +64,7 @@ export default function Banner() {
 
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? "20%" : "-20%",
+      x: direction > 0 ? '20%' : '-20%',
       scale: 1.1,
       opacity: 0,
     }),
@@ -59,7 +76,7 @@ export default function Banner() {
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? "10%" : "-10%",
+      x: direction < 0 ? '10%' : '-10%',
       scale: 0.95,
       opacity: 0,
     }),
@@ -78,25 +95,22 @@ export default function Banner() {
     }),
   };
 
-  if (isLoading || length === 0) {
+  if (!mounted || isLoading) {
     return (
-      <div className="w-full h-full bg-[#f7f7f7] animate-pulse flex items-center justify-center rounded-lg">
+      <div className="flex h-full w-full items-center justify-center rounded-lg bg-muted animate-pulse">
         <span className="text-gray-400 text-sm font-medium">Đang tải...</span>
       </div>
     );
   }
 
   // Ensure index is valid
-  const safeIndex =
-    currentIndex >= 0 && currentIndex < length ? currentIndex : 0;
+  const safeIndex = currentIndex >= 0 && currentIndex < length ? currentIndex : 0;
   const banner = banners[safeIndex];
 
   if (!banner) {
     return (
-      <div className="w-full h-full bg-[#f7f7f7] animate-pulse flex items-center justify-center rounded-lg">
-        <span className="text-gray-400 text-sm font-medium">
-          Đang tải banner...
-        </span>
+      <div className="flex h-full w-full items-center justify-center rounded-lg bg-muted animate-pulse">
+        <span className="text-gray-400 text-sm font-medium">Đang tải banner...</span>
       </div>
     );
   }
@@ -109,14 +123,14 @@ export default function Banner() {
     >
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
-          key={safeIndex}
+          key={banner._id || safeIndex}
           custom={direction}
           variants={variants}
           initial="enter"
           animate="center"
           exit="exit"
           transition={{
-            x: { type: "spring", stiffness: 300, damping: 35 },
+            x: { type: 'spring', stiffness: 300, damping: 35 },
             opacity: { duration: 0.6 },
             scale: { duration: 0.8 },
           }}
@@ -132,8 +146,8 @@ export default function Banner() {
             />
 
             {/* Dynamic Vignette & Gradient */}
-            <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-
+            <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+ 
             {/* Content Layer */}
             <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-center px-6 text-center z-10">
               <div className="max-w-2xl space-y-4">
@@ -142,37 +156,37 @@ export default function Banner() {
                   initial="hidden"
                   animate="visible"
                   variants={textVariants}
-                  className="inline-block px-3 py-1 rounded-full bg-[#E53935]/90 backdrop-blur-md text-white text-xs font-bold tracking-wide uppercase mb-2"
+                  className="mb-2 inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wide text-primary-foreground"
                 >
                   Ưu đãi đặc biệt
                 </motion.span>
-
+ 
                 <motion.h2
                   custom={1}
                   initial="hidden"
                   animate="visible"
                   variants={textVariants}
                   className={cn(
-                    "text-xl md:text-2xl lg:text-3xl font-bold tracking-tighter drop-shadow-md leading-tight",
-                    banner.theme === "light" ? "text-black" : "text-white"
+                    'text-xl md:text-2xl lg:text-3xl font-bold tracking-tighter drop-shadow-md leading-tight',
+                    banner.theme === 'light' ? 'text-white' : 'text-black',
                   )}
                 >
                   {banner.title}
                 </motion.h2>
-
+ 
                 <motion.p
                   custom={2}
                   initial="hidden"
                   animate="visible"
                   variants={textVariants}
                   className={cn(
-                    "text-xs md:text-sm font-medium max-w-xs mx-auto",
-                    banner.theme === "light" ? "text-black/80" : "text-white/80"
+                    'text-xs md:text-sm font-medium max-w-xs mx-auto',
+                    banner.theme === 'light' ? 'text-white/90' : 'text-black/80',
                   )}
                 >
                   {banner.subtitle}
                 </motion.p>
-
+ 
                 <motion.div
                   custom={3}
                   initial="hidden"
@@ -189,10 +203,10 @@ export default function Banner() {
                       }
                     }}
                     className={cn(
-                      "rounded-full px-5 py-2 text-xs font-bold transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg",
-                      banner.theme === "light"
-                        ? "bg-[#E53935] text-white hover:bg-[#D32F2F]"
-                        : "bg-white text-[#E53935] hover:bg-gray-100"
+                      'rounded-full px-5 py-2 text-xs font-bold shadow-lg transition-[background-color,color,transform,box-shadow] duration-200 hover:scale-105 active:scale-95 motion-reduce:transition-none',
+                      banner.theme === 'light'
+                        ? 'bg-white text-black hover:bg-white/90 border-transparent'
+                        : 'bg-primary text-primary-foreground hover:bg-primary-hover',
                     )}
                   >
                     Mua ngay
@@ -208,21 +222,21 @@ export default function Banner() {
       <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-3 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <button
           onClick={() => paginate(-1)}
-          className="p-1.5 rounded-full bg-white/80 hover:bg-white text-gray-700 hover:text-[#E53935] shadow-md transition-all pointer-events-auto"
+          className="pointer-events-auto rounded-full bg-card/90 p-1.5 text-foreground shadow-sm transition-colors hover:bg-card hover:text-primary"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <button
           onClick={() => paginate(1)}
-          className="p-1.5 rounded-full bg-white/80 hover:bg-white text-gray-700 hover:text-[#E53935] shadow-md transition-all pointer-events-auto"
+          className="pointer-events-auto rounded-full bg-card/90 p-1.5 text-foreground shadow-sm transition-colors hover:bg-card hover:text-primary"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Pagination Dots - Taobao Style */}
+      {/* Pagination controls */}
       <div className="absolute bottom-3 left-0 right-0 z-30 flex justify-center">
-        <div className="flex gap-1.5 bg-black/20 backdrop-blur-sm rounded-full px-2 py-1">
+        <div className="flex gap-1.5 rounded-full border border-border bg-card/90 px-2 py-1 shadow-sm">
           {banners.map((_, idx) => (
             <button
               key={idx}
@@ -231,10 +245,8 @@ export default function Banner() {
                 setCurrentIndex(idx);
               }}
               className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300",
-                idx === currentIndex
-                  ? "bg-white w-5"
-                  : "bg-white/50 hover:bg-white/80"
+                'h-2 w-2 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none',
+                idx === currentIndex ? 'bg-white w-5' : 'bg-white/50 hover:bg-white/80',
               )}
             />
           ))}

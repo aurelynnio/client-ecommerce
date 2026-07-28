@@ -2,18 +2,13 @@
  * Review React Query Hooks
  * Replaces reviewAction.ts async thunks with React Query
  */
-import {
-  QueryClient,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { STALE_TIME } from "@/constants/cache";
-import { reviewKeys, productKeys } from "@/lib/queryKeys";
-import { PaginationData } from "@/types/common";
+import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { STALE_TIME } from '@/constants/cache';
+import { reviewKeys, productKeys } from '@/lib/queryKeys';
+import { PaginationData } from '@/types/common';
 
 // ============ Types ============
 export interface Review {
@@ -44,9 +39,7 @@ export interface Review {
 export interface AdminReview {
   _id: string;
   user?: { _id: string; username: string; email?: string };
-  product?:
-    | string
-    | { _id: string; name: string; slug?: string; images?: string[] };
+  product?: string | { _id: string; name: string; slug?: string; images?: string[] };
   rating: number;
   comment?: string;
   createdAt: string;
@@ -92,10 +85,7 @@ export interface UpdateReviewData {
   images?: string[];
 }
 
-function invalidateReviewProduct(
-  queryClient: QueryClient,
-  productId: string,
-) {
+function invalidateReviewProduct(queryClient: QueryClient, productId: string) {
   return queryClient.invalidateQueries({
     queryKey: reviewKeys.product(productId),
   });
@@ -105,10 +95,7 @@ function invalidateUserReviews(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: reviewKeys.user() });
 }
 
-function invalidateProductDetailRating(
-  queryClient: QueryClient,
-  productId: string,
-) {
+function invalidateProductDetailRating(queryClient: QueryClient, productId: string) {
   return queryClient.invalidateQueries({
     queryKey: productKeys.detailById(productId),
   });
@@ -118,7 +105,7 @@ function invalidateProductDetailRating(
 const reviewApi = {
   getByProduct: async (
     productId: string,
-    params: ReviewListParams = {}
+    params: ReviewListParams = {},
   ): Promise<ReviewListResponse> => {
     const { page = 1, limit = 10 } = params;
     const response = await instance.get(`/reviews/product/${productId}`, {
@@ -141,22 +128,16 @@ const reviewApi = {
       pagination: data?.pagination || null,
       averageRating: metadata?.averageRating ?? data?.averageRating,
       totalReviews: metadata?.totalReviews ?? data?.totalReviews,
-      ratingDistribution:
-        metadata?.ratingDistribution ?? data?.ratingDistribution,
+      ratingDistribution: metadata?.ratingDistribution ?? data?.ratingDistribution,
     };
   },
 
-  getByShop: async (
-    shopId: string,
-    params: ReviewListParams = {}
-  ): Promise<ReviewListResponse> => {
+  getByShop: async (shopId: string, params: ReviewListParams = {}): Promise<ReviewListResponse> => {
     const { page = 1, limit = 10, rating } = params;
     const response = await instance.get(`/reviews/shop/${shopId}`, {
       params: { page, limit, ...(rating && { rating }) },
     });
-    const data = extractApiData<ReviewListResponse & { data?: Review[] }>(
-      response
-    );
+    const data = extractApiData<ReviewListResponse & { data?: Review[] }>(response);
     return {
       reviews: data?.reviews || data?.data || [],
       pagination: data?.pagination || null,
@@ -164,16 +145,14 @@ const reviewApi = {
   },
 
   getUserReviews: async (): Promise<Review[]> => {
-    const response = await instance.get("/reviews/user/me");
+    const response = await instance.get('/reviews/user/me');
     return extractApiData(response);
   },
 
   // Admin APIs
-  getAdminReviews: async (
-    params: AdminReviewListParams = {},
-  ): Promise<AdminReviewListResponse> => {
+  getAdminReviews: async (params: AdminReviewListParams = {}): Promise<AdminReviewListResponse> => {
     const { page = 1, limit = 10, rating, search } = params;
-    const response = await instance.get("/reviews", {
+    const response = await instance.get('/reviews', {
       params: { page, limit, rating, search },
     });
     return extractApiData(response);
@@ -182,24 +161,23 @@ const reviewApi = {
   // Seller APIs
   getMyShopReviews: async (params: ReviewListParams = {}): Promise<ReviewListResponse> => {
     const { page = 1, limit = 10, rating } = params;
-    const response = await instance.get("/reviews/seller/me", {
+    const response = await instance.get('/reviews/seller/me', {
       params: { page, limit, rating },
     });
     return extractApiData(response);
   },
 
   replyReview: async (data: { reviewId: string; content: string }) => {
-    const response = await instance.post(
-      `/reviews/seller/${data.reviewId}/reply`,
-      { content: data.content }
-    );
+    const response = await instance.post(`/reviews/seller/${data.reviewId}/reply`, {
+      content: data.content,
+    });
     return extractApiData(response);
   },
 
   // Mutations
 
   create: async (data: CreateReviewData): Promise<Review> => {
-    const response = await instance.post("/reviews", data);
+    const response = await instance.post('/reviews', data);
     return extractApiData(response);
   },
 
@@ -219,10 +197,7 @@ const reviewApi = {
 /**
  * Get reviews for a product
  */
-export function useProductReviews(
-  productId: string,
-  params?: ReviewListParams
-) {
+export function useProductReviews(productId: string, params?: ReviewListParams) {
   return useQuery({
     queryKey: reviewKeys.product(productId, params),
     queryFn: () => reviewApi.getByProduct(productId, params),
@@ -288,13 +263,12 @@ export function useReplyReview() {
       queryClient.invalidateQueries({ queryKey: reviewKeys.seller() });
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Reply review failed" });
+      errorHandler.log(error, { context: 'Reply review failed' });
     },
   });
 }
 
 // ============ Mutation Hooks ============
-
 
 /**
  * Create review mutation
@@ -310,7 +284,7 @@ export function useCreateReview() {
       invalidateUserReviews(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Create review failed" });
+      errorHandler.log(error, { context: 'Create review failed' });
     },
   });
 }
@@ -328,7 +302,7 @@ export function useUpdateReview(productId: string) {
       invalidateUserReviews(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update review failed" });
+      errorHandler.log(error, { context: 'Update review failed' });
     },
   });
 }
@@ -347,7 +321,7 @@ export function useDeleteReview(productId: string) {
       invalidateUserReviews(queryClient);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete review failed" });
+      errorHandler.log(error, { context: 'Delete review failed' });
     },
   });
 }
@@ -364,7 +338,7 @@ export function useDeleteAdminReview() {
       queryClient.invalidateQueries({ queryKey: reviewKeys.admin() });
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Delete admin review failed" });
+      errorHandler.log(error, { context: 'Delete admin review failed' });
     },
   });
 }

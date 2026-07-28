@@ -1,4 +1,4 @@
-import { BaseEntity } from "./common";
+import { BaseEntity } from './common';
 
 // Review user info (populated)
 export interface ReviewUser {

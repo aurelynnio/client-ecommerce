@@ -1,12 +1,7 @@
-import { BaseEntity, PaginationData } from "./common";
+import { BaseEntity, PaginationData } from './common';
 
 // Notification type enum - matches backend schema
-export type NotificationType =
-  | "order_status"
-  | "promotion"
-  | "system"
-  | "chat"
-  | "shop_follow";
+export type NotificationType = 'order_status' | 'promotion' | 'system' | 'chat' | 'shop_follow';
 
 // Populated order info for notification
 export interface NotificationOrderInfo {

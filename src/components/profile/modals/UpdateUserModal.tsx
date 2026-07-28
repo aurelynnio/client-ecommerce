@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Form,
   FormControl,
@@ -7,13 +7,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+} from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface UpdateUserProfileProps {
   open: boolean;
@@ -21,27 +28,21 @@ interface UpdateUserProfileProps {
 }
 
 const formSchema = z.object({
-  avatar: z.string().url({ message: "Vui lòng nhập URL hợp lệ." }),
+  avatar: z.string().url({ message: 'Vui lòng nhập URL hợp lệ.' }),
   username: z.string().min(2, {
-    message: "Tên người dùng phải có ít nhất 2 ký tự.",
+    message: 'Tên người dùng phải có ít nhất 2 ký tự.',
   }),
-  email: z.string().email({ message: "Vui lòng nhập địa chỉ email hợp lệ." }),
-  password: z
-    .string()
-    .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự." })
-    .optional(),
+  email: z.string().email({ message: 'Vui lòng nhập địa chỉ email hợp lệ.' }),
+  password: z.string().min(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự.' }).optional(),
 });
 
-export default function UpdateUserProfile({
-  open,
-  setOpen,
-}: UpdateUserProfileProps) {
+export default function UpdateUserProfile({ open, setOpen }: UpdateUserProfileProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      avatar: "",
+      username: '',
+      email: '',
+      avatar: '',
     },
   });
 
@@ -60,10 +61,7 @@ export default function UpdateUserProfile({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
@@ -73,9 +71,7 @@ export default function UpdateUserProfile({
                   <FormControl>
                     <Input placeholder="tên người dùng" {...field} />
                   </FormControl>
-                  <FormDescription>
-                     Tên hiển thị công khai.
-                  </FormDescription>
+                  <FormDescription>Tên hiển thị công khai.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -94,8 +90,10 @@ export default function UpdateUserProfile({
               )}
             />
             <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setOpen && setOpen(false)}>Hủy</Button>
-                <Button type="submit">Lưu thay đổi</Button>
+              <Button type="button" variant="outline" onClick={() => setOpen && setOpen(false)}>
+                Hủy
+              </Button>
+              <Button type="submit">Lưu thay đổi</Button>
             </DialogFooter>
           </form>
         </Form>

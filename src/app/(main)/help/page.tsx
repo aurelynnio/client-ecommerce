@@ -1,20 +1,20 @@
-import InfoPage from "@/components/common/InfoPage";
+import InfoPage from '@/components/common/InfoPage';
 
 const sections = [
   {
-    title: "Mua hàng",
+    title: 'Mua hàng',
     items: [
-      "Tìm sản phẩm bằng thanh tìm kiếm hoặc danh mục",
-      "Thêm vào giỏ và xác nhận thông tin giao hàng",
-      "Áp dụng voucher trước khi thanh toán",
+      'Tìm sản phẩm bằng thanh tìm kiếm hoặc danh mục',
+      'Thêm vào giỏ và xác nhận thông tin giao hàng',
+      'Áp dụng voucher trước khi thanh toán',
     ],
   },
   {
-    title: "Sau khi đặt hàng",
+    title: 'Sau khi đặt hàng',
     items: [
-      "Theo dõi tại Hồ sơ > Đơn hàng",
-      "Liên hệ shop qua tin nhắn nếu cần",
-      "Yêu cầu hỗ trợ nếu đơn có sự cố",
+      'Theo dõi tại Hồ sơ > Đơn hàng',
+      'Liên hệ shop qua tin nhắn nếu cần',
+      'Yêu cầu hỗ trợ nếu đơn có sự cố',
     ],
   },
 ];

@@ -1,77 +1,67 @@
-import { ComponentProps, ReactNode } from "react";
-import { LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/utils/cn";
+import { ComponentProps, ReactNode } from 'react';
+import { LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/cn';
 
-export const adminShellClass =
-  "bg-[radial-gradient(circle_at_top_left,_rgba(216,71,60,0.1),_transparent_26%),linear-gradient(180deg,_#fcfbf8_0%,_#f4efe8_100%)] text-slate-950";
+export const adminShellClass = 'bg-background text-foreground';
 
-export const adminSurfaceClass =
-  "rounded-[28px] border border-slate-200/80 bg-white/90 shadow-[0_18px_42px_-30px_rgba(15,23,42,0.4)] backdrop-blur-sm";
+export const adminSurfaceClass = 'rounded-lg border border-border bg-card shadow-sm';
 
-export const adminSubtleSurfaceClass =
-  "rounded-[28px] border border-slate-200/70 bg-[#f7f2eb]/92 shadow-[0_18px_42px_-34px_rgba(15,23,42,0.28)] backdrop-blur-sm";
+export const adminSubtleSurfaceClass = 'rounded-lg border border-border bg-muted/40 shadow-sm';
 
 export const adminFilterBarClass = cn(
   adminSubtleSurfaceClass,
-  "flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between",
+  'flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between',
 );
 
-export const adminTableShellClass = cn(
-  adminSurfaceClass,
-  "overflow-hidden",
-);
+export const adminTableShellClass = cn(adminSurfaceClass, 'overflow-hidden');
 
-export const adminTableHeaderClass = "bg-[#f4ede5]/90";
+export const adminTableHeaderClass = 'bg-muted/60';
 
-export const adminRowHoverClass =
-  "transition-colors hover:bg-[#fbf6f0]/80";
+export const adminRowHoverClass = 'transition-colors hover:bg-muted/60';
 
 export const adminSearchInputClass =
-  "rounded-2xl border-0 bg-white/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.14)] focus-visible:ring-[#d8473c]/15 focus-visible:ring-[3px] focus-visible:border-transparent";
+  'rounded-lg border border-input bg-card focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]';
 
 export const adminFieldSurfaceClass =
-  "rounded-2xl border-0 bg-white/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.14)] focus:ring-0";
+  'rounded-lg border border-input bg-card focus-visible:border-ring focus-visible:ring-ring/50';
 
 export const adminDialogContentClass = cn(
   adminSurfaceClass,
-  "rounded-[2rem] border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(248,244,238,0.94)_100%)] shadow-[0_28px_60px_-34px_rgba(15,23,42,0.45)] backdrop-blur-xl",
+  'rounded-lg border-border bg-card shadow-lg',
 );
 
 export const adminDialogFooterClass =
-  "flex-col-reverse gap-3 border-t border-[#ebe2d8] bg-transparent pt-5 sm:flex-row sm:justify-end sm:gap-3";
+  'flex-col-reverse gap-3 border-t border-border bg-transparent pt-5 sm:flex-row sm:justify-end sm:gap-3';
 
-export const adminInsetPanelClass =
-  "rounded-2xl border border-[#ece3d8] bg-[#fbf7f1]/90";
+export const adminInsetPanelClass = 'rounded-lg border border-border bg-muted/40';
 
 export const adminNativeSelectClass =
-  "h-10 w-full rounded-2xl border-0 bg-white/95 px-3 text-sm shadow-[inset_0_0_0_1px_rgba(148,163,184,0.14)] focus:outline-none focus:ring-2 focus:ring-[#d8473c]/15 sm:w-auto";
+  'h-10 w-full rounded-lg border border-input bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50 sm:w-auto';
 
 export const adminIconButtonClass =
-  "h-10 w-10 rounded-2xl border-0 bg-white/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.14)] hover:bg-white";
+  'h-10 w-10 rounded-lg border border-border bg-card hover:bg-muted';
 
 export const adminSmallIconButtonClass =
-  "h-8 w-8 rounded-xl border-0 bg-white/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.12)] hover:bg-white";
+  'h-8 w-8 rounded-lg border border-border bg-card hover:bg-muted';
 
-export const adminMediaPlaceholderClass =
-  "bg-[#f5efe8]";
+export const adminMediaPlaceholderClass = 'bg-muted';
 
 export const adminPrimaryButtonClass =
-  "rounded-2xl border border-[#d8473c]/15 bg-[#d8473c] text-white shadow-[0_12px_24px_-18px_rgba(216,71,60,0.9)] hover:bg-[#c53b31]";
+  'rounded-lg border border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover';
 
 export const adminSecondaryButtonClass =
-  "rounded-2xl border border-slate-200 bg-white/90 text-slate-700 hover:bg-white";
+  'rounded-lg border border-border bg-card text-foreground hover:bg-muted';
 
-export const adminMenuContentClass =
-  "rounded-2xl border border-slate-200/80 bg-white/95 p-1 shadow-[0_18px_42px_-30px_rgba(15,23,42,0.35)] backdrop-blur-sm";
+export const adminMenuContentClass = 'rounded-lg border border-border bg-popover p-1 shadow-md';
 
 export const adminMenuLabelClass =
-  "px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500";
+  'px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground';
 
-export const adminMenuSeparatorClass = "my-1 bg-[#efe7de]";
+export const adminMenuSeparatorClass = 'my-1 bg-border';
 
 export const adminCodePillClass =
-  "relative rounded-lg bg-[#f5efe8] px-[0.45rem] py-[0.24rem] font-mono text-xs text-slate-500";
+  'relative rounded-md bg-muted px-[0.45rem] py-[0.24rem] font-mono text-xs text-muted-foreground';
 
 interface AdminPageHeaderProps {
   title: string;
@@ -80,30 +70,23 @@ interface AdminPageHeaderProps {
   className?: string;
 }
 
-export function AdminPageHeader({
-  title,
-  description,
-  actions,
-  className,
-}: AdminPageHeaderProps) {
+export function AdminPageHeader({ title, description, actions, className }: AdminPageHeaderProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between",
+        'flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between',
         className,
       )}
     >
       <div className="space-y-2">
         <div className="flex items-center gap-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#d8473c]" />
-          <h1 className="text-[clamp(2rem,3vw,2.7rem)] font-semibold uppercase tracking-[0.12em] text-slate-950">
+          <span className="h-2.5 w-2.5 rounded-full bg-primary" />
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             {title}
           </h1>
         </div>
         {description ? (
-          <p className="max-w-3xl pl-5 text-sm leading-6 text-slate-500">
-            {description}
-          </p>
+          <p className="max-w-3xl pl-5 text-sm leading-6 text-muted-foreground">{description}</p>
         ) : null}
       </div>
       {actions ? (
@@ -115,31 +98,26 @@ export function AdminPageHeader({
   );
 }
 
-interface AdminActionButtonProps
-  extends ComponentProps<typeof Button> {
-  tone?: "primary" | "secondary" | "danger";
+interface AdminActionButtonProps extends ComponentProps<typeof Button> {
+  tone?: 'primary' | 'secondary' | 'danger';
 }
 
 export function AdminActionButton({
-  tone = "primary",
+  tone = 'primary',
   className,
   ...props
 }: AdminActionButtonProps) {
   const toneClass =
-    tone === "primary"
+    tone === 'primary'
       ? adminPrimaryButtonClass
-      : tone === "danger"
-        ? "rounded-2xl"
+      : tone === 'danger'
+        ? 'rounded-lg'
         : adminSecondaryButtonClass;
 
   return (
     <Button
-      className={cn(
-        "h-10 w-full gap-2 px-5 text-sm font-medium sm:w-auto",
-        toneClass,
-        className,
-      )}
-      variant={tone === "danger" ? "destructive" : undefined}
+      className={cn('h-10 w-full gap-2 px-5 text-sm font-medium sm:w-auto', toneClass, className)}
+      variant={tone === 'danger' ? 'destructive' : undefined}
       {...props}
     />
   );
@@ -150,14 +128,9 @@ interface AdminStatsGridProps {
   className?: string;
 }
 
-export function AdminStatsGrid({
-  children,
-  className,
-}: AdminStatsGridProps) {
+export function AdminStatsGrid({ children, className }: AdminStatsGridProps) {
   return (
-    <div className={cn("grid gap-4 md:grid-cols-2 lg:grid-cols-4", className)}>
-      {children}
-    </div>
+    <div className={cn('grid gap-4 md:grid-cols-2 lg:grid-cols-4', className)}>{children}</div>
   );
 }
 
@@ -166,16 +139,16 @@ interface AdminStatCardProps {
   value: ReactNode;
   description?: ReactNode;
   icon: LucideIcon;
-  accent?: "brand" | "blue" | "green" | "amber" | "slate";
+  accent?: 'brand' | 'blue' | 'green' | 'amber' | 'slate';
   meta?: ReactNode;
 }
 
 const statAccentClasses = {
-  brand: "bg-[#d8473c]/10 text-[#d8473c]",
-  blue: "bg-sky-500/10 text-sky-600",
-  green: "bg-emerald-500/10 text-emerald-600",
-  amber: "bg-amber-500/10 text-amber-600",
-  slate: "bg-slate-500/10 text-slate-600",
+  brand: 'bg-primary/10 text-primary',
+  blue: 'bg-info/15 text-info',
+  green: 'bg-success/15 text-success',
+  amber: 'bg-warning/15 text-warning',
+  slate: 'bg-muted text-muted-foreground',
 };
 
 export function AdminStatCard({
@@ -183,23 +156,21 @@ export function AdminStatCard({
   value,
   description,
   icon: Icon,
-  accent = "brand",
+  accent = 'brand',
   meta,
 }: AdminStatCardProps) {
   return (
-    <div className={cn(adminSurfaceClass, "p-6")}>
+    <div className={cn(adminSurfaceClass, 'p-6')}>
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             {title}
           </p>
-          <div className="text-2xl font-semibold tracking-tight text-slate-950">
-            {value}
-          </div>
+          <div className="text-2xl font-semibold tracking-tight text-foreground">{value}</div>
         </div>
         <div
           className={cn(
-            "flex h-11 w-11 items-center justify-center rounded-2xl",
+            'flex h-11 w-11 items-center justify-center rounded-lg',
             statAccentClasses[accent],
           )}
         >
@@ -208,7 +179,7 @@ export function AdminStatCard({
       </div>
       {description || meta ? (
         <div className="mt-4 flex items-center justify-between gap-3">
-          <p className="text-sm text-slate-500">{description}</p>
+          <p className="text-sm text-muted-foreground">{description}</p>
           {meta ? <div className="shrink-0">{meta}</div> : null}
         </div>
       ) : null}

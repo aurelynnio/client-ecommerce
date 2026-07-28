@@ -3,12 +3,12 @@
  * Replaces cartAction.ts async thunks with React Query for server sync
  * Note: Cart UI state (selectedItems, etc.) remains in Redux
  */
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import instance from "@/api/api";
-import { extractApiData } from "@/api";
-import { errorHandler } from "@/services/errorHandler";
-import { cartKeys } from "@/lib/queryKeys";
-import { Cart } from "@/types/cart";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import instance from '@/api/api';
+import { extractApiData } from '@/api';
+import { errorHandler } from '@/services/errorHandler';
+import { cartKeys } from '@/lib/queryKeys';
+import { Cart } from '@/types/cart';
 
 export interface AddToCartData {
   productId: string;
@@ -25,12 +25,12 @@ export interface UpdateCartItemData {
 
 const cartApi = {
   get: async (): Promise<Cart> => {
-    const response = await instance.get("/cart");
+    const response = await instance.get('/cart');
     return extractApiData(response);
   },
 
   add: async (data: AddToCartData): Promise<Cart> => {
-    const response = await instance.post("/cart", {
+    const response = await instance.post('/cart', {
       productId: data.productId,
       shopId: data.shopId,
       modelId: data.modelId,
@@ -53,7 +53,7 @@ const cartApi = {
   },
 
   clear: async (): Promise<Cart> => {
-    const response = await instance.delete("/cart");
+    const response = await instance.delete('/cart');
     return extractApiData(response);
   },
 };
@@ -83,7 +83,7 @@ export function useAddToCart() {
       queryClient.setQueryData(cartKeys.current(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Add to cart failed" });
+      errorHandler.log(error, { context: 'Add to cart failed' });
     },
   });
 }
@@ -100,7 +100,7 @@ export function useUpdateCartItem() {
       queryClient.setQueryData(cartKeys.current(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Update cart item failed" });
+      errorHandler.log(error, { context: 'Update cart item failed' });
     },
   });
 }
@@ -117,7 +117,7 @@ export function useRemoveFromCart() {
       queryClient.setQueryData(cartKeys.current(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Remove from cart failed" });
+      errorHandler.log(error, { context: 'Remove from cart failed' });
     },
   });
 }
@@ -134,7 +134,7 @@ export function useClearCart() {
       queryClient.setQueryData(cartKeys.current(), data);
     },
     onError: (error) => {
-      errorHandler.log(error, { context: "Clear cart failed" });
+      errorHandler.log(error, { context: 'Clear cart failed' });
     },
   });
 }

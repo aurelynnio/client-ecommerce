@@ -13,6 +13,8 @@ import {
   Search,
   Grid3X3,
   List,
+  Home,
+  ChevronRight,
 } from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
@@ -127,35 +129,76 @@ export default function ShopPage() {
 
   if (shopLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <SpinnerLoading size={32} />
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+          >
+            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+              <Home className="h-3 w-3" />
+              <span>Trang chủ</span>
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-medium text-foreground">Shop</span>
+          </nav>
+          <SpinnerLoading className="py-20" />
+        </div>
       </div>
     );
   }
 
   if (shopError || !currentShop) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <Store className="mx-auto mb-2 h-12 w-12 text-muted-foreground" />
-          <p className="text-muted-foreground">
-            {shopError instanceof Error ? shopError.message : shopError || 'Không tìm thấy shop'}
-          </p>
-          <Link href="/">
-            <Button variant="outline" className="mt-4">
-              Về trang chủ
-            </Button>
-          </Link>
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+          >
+            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+              <Home className="h-3 w-3" />
+              <span>Trang chủ</span>
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-medium text-foreground">Shop</span>
+          </nav>
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+              <Store className="h-8 w-8 text-muted-foreground/60" />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {shopError instanceof Error ? shopError.message : shopError || 'Không tìm thấy shop'}
+            </p>
+            <Link href="/">
+              <Button variant="outline" className="mt-4 rounded-lg">
+                Về trang chủ
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-background py-6">
-      <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
-        <section className="overflow-hidden rounded-xl border border-border bg-card">
-          <div className="relative h-32 md:h-40">
+    <main className="min-h-screen bg-background py-4">
+      <div className="aura-container space-y-4">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-1 text-xs text-muted-foreground"
+        >
+          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">{currentShop.name}</span>
+        </nav>
+
+        <section className="overflow-hidden rounded-lg border border-border bg-card">
+          <div className="relative h-32 md:h-48">
             <Image
               src={currentShop.banner || '/images/default-banner.svg'}
               alt=""
@@ -165,7 +208,7 @@ export default function ShopPage() {
             <div className="absolute inset-0 bg-black/30" />
           </div>
           <div className="p-4 md:p-6">
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+            <div className="flex flex-col gap-4 md:flex-row md:gap-6">
               {/* Logo */}
               <div className="relative mx-auto size-20 shrink-0 overflow-hidden rounded-full border-2 border-card md:mx-0 md:size-24">
                 <Image
@@ -178,9 +221,9 @@ export default function ShopPage() {
 
               {/* Info */}
               <div className="flex-1 text-center md:text-left">
-                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+                <div className="flex flex-col items-center gap-2 md:flex-row md:items-center md:gap-3">
                   <h1 className="text-xl font-semibold text-foreground">{currentShop.name}</h1>
-                  <span className="mx-auto inline-flex w-fit items-center justify-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs text-primary md:mx-0 md:justify-start">
+                  <span className="inline-flex w-fit items-center justify-center gap-1 rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
                     <Store className="h-3 w-3" />
                     Official Store
                   </span>
@@ -190,7 +233,7 @@ export default function ShopPage() {
                 </p>
 
                 {/* Stats */}
-                <div className="flex items-center justify-center md:justify-start gap-6 mt-3 text-sm">
+                <div className="mt-3 flex items-center justify-center gap-6 text-sm md:justify-start">
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 fill-star text-star" />
                     <span className="font-medium">{currentShop.rating}</span>
@@ -209,38 +252,46 @@ export default function ShopPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2 justify-center md:justify-end shrink-0">
+              <div className="flex shrink-0 items-center justify-center gap-2 md:justify-end">
                 <Button
                   onClick={handleFollow}
                   variant={isFollowing ? 'outline' : 'default'}
-                  className={isFollowing ? 'text-primary hover:bg-primary/10' : ''}
+                  className={
+                    isFollowing
+                      ? 'rounded-lg text-primary hover:bg-primary/10'
+                      : 'rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover'
+                  }
                 >
                   {isFollowing ? 'Đang theo dõi' : '+ Theo dõi'}
                 </Button>
-                <Button variant="outline" onClick={handleChat}>
-                  <MessageCircle className="h-4 w-4 mr-1" />
+                <Button
+                  variant="outline"
+                  onClick={handleChat}
+                  className="rounded-lg"
+                >
+                  <MessageCircle className="mr-1 h-4 w-4" />
                   Chat
                 </Button>
               </div>
             </div>
 
-            {/* Metrics */}
-            <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border pt-4 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="text-center">
+            {/* Metrics (Tmall/JD card style) */}
+            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 sm:gap-3">
+              <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
                 <div className="flex items-center justify-center gap-1 text-success">
                   <MessageCircle className="h-4 w-4" />
                   <span className="font-bold">{currentShop.metrics?.responseRate || 0}%</span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">Tỉ lệ phản hồi</p>
               </div>
-              <div className="text-center">
+              <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
                 <div className="flex items-center justify-center gap-1 text-info">
                   <Clock className="h-4 w-4" />
                   <span className="font-bold">Trong vài phút</span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">Thời gian phản hồi</p>
               </div>
-              <div className="text-center">
+              <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
                 <div className="flex items-center justify-center gap-1 text-warning">
                   <Truck className="h-4 w-4" />
                   <span className="font-bold">{currentShop.metrics?.shippingOnTime || 0}%</span>
@@ -253,7 +304,7 @@ export default function ShopPage() {
 
         {/* Products Section */}
         <section className="space-y-4">
-          <div className="border-b border-border pb-4">
+          <div className="border-b border-border pb-3">
             <h2 className="mb-3 text-lg font-semibold text-foreground">
               Sản phẩm từ {currentShop.name}
             </h2>
@@ -262,32 +313,42 @@ export default function ShopPage() {
                 <SpinnerLoading size={20} />
               </div>
             ) : (
-              <ul className="flex gap-2 overflow-x-auto pb-1">
+              <ul className="no-scrollbar flex gap-1 overflow-x-auto">
                 <li className="shrink-0">
                   <button
                     onClick={() => setActiveCategory('all')}
-                    className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
+                    className={`relative whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors ${
                       activeCategory === 'all'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-muted-foreground hover:text-foreground'
+                        ? 'font-bold text-primary'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
+                    aria-current={activeCategory === 'all' ? 'page' : undefined}
                   >
                     Tất cả
-                    <span className="ml-1 opacity-70">({totalProducts})</span>
+                    <span className="ml-1 font-normal text-muted-foreground/60">({totalProducts})</span>
+                    {activeCategory === 'all' && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+                    )}
                   </button>
                 </li>
                 {categories.map((cat) => (
                   <li key={cat._id} className="shrink-0">
                     <button
                       onClick={() => setActiveCategory(cat._id)}
-                      className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
+                      className={`relative whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors ${
                         activeCategory === cat._id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-muted-foreground hover:text-foreground'
+                          ? 'font-bold text-primary'
+                          : 'text-muted-foreground hover:text-foreground'
                       }`}
+                      aria-current={activeCategory === cat._id ? 'page' : undefined}
                     >
                       {cat.name}
-                      <span className="ml-1 opacity-70">({cat.productCount})</span>
+                      <span className="ml-1 font-normal text-muted-foreground/60">
+                        ({cat.productCount})
+                      </span>
+                      {activeCategory === cat._id && (
+                        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+                      )}
                     </button>
                   </li>
                 ))}
@@ -295,22 +356,22 @@ export default function ShopPage() {
             )}
           </div>
           {/* Search & Filter Bar */}
-          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative flex-1 w-full sm:max-w-[300px]">
+          <div className="mb-2 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="relative w-full flex-1 sm:max-w-[300px]">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Tìm trong shop..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 pl-9"
+                className="h-10 rounded-lg border-border pl-9 focus:border-primary focus:ring-primary/20"
               />
             </div>
-            <div className="flex items-center gap-1 sm:ml-auto">
+            <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 sm:ml-auto">
               <button
                 onClick={() => setViewMode('grid')}
                 aria-label="Hiển thị dạng lưới"
                 aria-pressed={viewMode === 'grid'}
-                className={`rounded-md p-2 ${
+                className={`rounded-md p-1.5 transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:bg-muted'
@@ -322,7 +383,7 @@ export default function ShopPage() {
                 onClick={() => setViewMode('list')}
                 aria-label="Hiển thị dạng danh sách"
                 aria-pressed={viewMode === 'list'}
-                className={`rounded-md p-2 ${
+                className={`rounded-md p-1.5 transition-colors ${
                   viewMode === 'list'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:bg-muted'

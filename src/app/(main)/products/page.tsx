@@ -2,12 +2,13 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useInfiniteProducts } from '@/hooks/queries/useProducts';
 import { useActiveCategories } from '@/hooks/queries/useCategories';
 import { Button } from '@/components/ui/button';
-import { SlidersHorizontal, ChevronDown, Loader2 } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown, Loader2, ChevronRight, Home } from 'lucide-react';
 import ProductFilter from '@/components/product/ProductFilter';
 import ProductGrid from '@/components/product/ProductGrid';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
@@ -268,97 +269,126 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-[1440px] px-4 pt-8 pb-4 lg:px-6">
-        {/* Minimal Typographic Header */}
-        <div className="pb-6 border-b border-border/40">
-          <h1 className="text-3xl font-medium tracking-tight text-foreground lg:text-4xl">
-            Sản phẩm
-            <span className="text-sm font-normal text-muted-foreground ml-3 tracking-normal">
-              ({totalProducts} items)
-            </span>
-          </h1>
+      <div className="mx-auto max-w-[1440px] px-4 pt-4 pb-2 lg:px-6">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-1 text-xs text-muted-foreground"
+        >
+          <Link
+            href="/"
+            className="flex items-center gap-1 transition-colors hover:text-primary"
+          >
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">Sản phẩm</span>
+        </nav>
+
+        {/* Page Header */}
+        <div className="flex items-end justify-between border-b border-border pb-4 pt-3">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+              {activeCategory ? activeCategoryName : 'Tất cả sản phẩm'}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">{totalProducts}</span> sản phẩm
+              {activeCategory ? ` trong "${activeCategoryName}"` : ''}
+            </p>
+          </div>
         </div>
 
-        {/* Dynamic Category Navigation with More Dropdown */}
-        <div className="flex items-center justify-between border-b border-border/40 pb-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => handleCategoryClick(null)}
-              className={`h-9 px-4 text-xs font-medium rounded-full transition-all border ${
-                !activeCategory
-                  ? 'bg-primary text-primary-foreground border-primary shadow-xs'
-                  : 'bg-card text-muted-foreground border-border/60 hover:bg-muted hover:text-foreground'
-              } focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
-              aria-current={!activeCategory ? 'page' : undefined}
-            >
-              Tất cả sản phẩm
-            </button>
-            {visibleCategories.map((category) => (
+        {/* Category Tabs (Tmall/JD underline style) */}
+        <div className="flex items-center gap-1 overflow-x-auto border-b border-border no-scrollbar">
+          <button
+            onClick={() => handleCategoryClick(null)}
+            className={`relative shrink-0 px-4 py-3 text-sm font-medium transition-colors ${
+              !activeCategory
+                ? 'text-primary'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+            aria-current={!activeCategory ? 'page' : undefined}
+          >
+            Tất cả
+            {!activeCategory && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+            )}
+          </button>
+          {visibleCategories.map((category) => {
+            const isActive = activeCategory === category._id;
+            return (
               <button
                 key={category._id}
                 onClick={() => handleCategoryClick(category._id)}
-                className={`h-9 px-4 text-xs font-medium rounded-full transition-all border ${
-                  activeCategory === category._id
-                    ? 'bg-primary text-primary-foreground border-primary shadow-xs'
-                    : 'bg-card text-muted-foreground border-border/60 hover:bg-muted hover:text-foreground'
+                className={`relative shrink-0 px-4 py-3 text-sm font-medium transition-colors ${
+                  isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
-                aria-current={activeCategory === category._id ? 'page' : undefined}
+                aria-current={isActive ? 'page' : undefined}
               >
                 {category.name}
-              </button>
-            ))}
-
-            {/* Dropdown for remaining categories */}
-            {dropdownCategories.length > 0 && (
-              <div className="relative">
-                <button
-                  onClick={() => setIsDropdownOpen((prev) => !prev)}
-                  className={`h-9 px-4 text-xs font-medium rounded-full border transition-all flex items-center gap-1.5 ${
-                    isActiveInDropdown
-                      ? 'border-primary bg-primary/5 text-primary font-semibold'
-                      : 'border-border/60 bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
-                  } focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
-                  aria-haspopup="menu"
-                  aria-expanded={isDropdownOpen}
-                >
-                  Xem thêm
-                  <ChevronDown className={`h-3 w-3 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-
-                {isDropdownOpen && (
-                  <>
-                    <div onClick={() => setIsDropdownOpen(false)} className="fixed inset-0 z-40" />
-                    <div
-                      className="absolute left-0 mt-2 w-56 max-h-80 overflow-y-auto rounded-lg border border-border bg-card p-1 shadow-md z-50 animate-in fade-in-50 zoom-in-95 duration-100"
-                      role="menu"
-                    >
-                      {dropdownCategories.map((category) => (
-                        <button
-                          key={category._id}
-                          onClick={() => {
-                            handleCategoryClick(category._id);
-                            setIsDropdownOpen(false);
-                          }}
-                          className={`w-full text-left px-3 py-2 text-xs font-medium rounded-md transition-colors ${
-                            activeCategory === category._id
-                              ? 'bg-primary/10 text-primary font-semibold'
-                              : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                          } focus-visible:ring-2 focus-visible:ring-primary`}
-                          role="menuitem"
-                        >
-                          {category.name}
-                        </button>
-                      ))}
-                    </div>
-                  </>
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
                 )}
-              </div>
-            )}
-          </div>
+              </button>
+            );
+          })}
+
+          {/* Dropdown for remaining categories */}
+          {dropdownCategories.length > 0 && (
+            <div className="relative shrink-0">
+              <button
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+                className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors ${
+                  isActiveInDropdown
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+                aria-haspopup="menu"
+                aria-expanded={isDropdownOpen}
+              >
+                Xem thêm
+                <ChevronDown
+                  className={`h-3 w-3 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {isDropdownOpen && (
+                <>
+                  <div
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="fixed inset-0 z-40"
+                  />
+                  <div
+                    className="absolute left-0 top-full z-50 mt-1 w-56 max-h-80 overflow-y-auto rounded-lg border border-border bg-card p-1 animate-in fade-in-50 zoom-in-95 duration-100"
+                    role="menu"
+                  >
+                    {dropdownCategories.map((category) => (
+                      <button
+                        key={category._id}
+                        onClick={() => {
+                          handleCategoryClick(category._id);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${
+                          activeCategory === category._id
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        }`}
+                        role="menuitem"
+                      >
+                        {category.name}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="sticky top-[80px] z-30 bg-background/80 backdrop-blur-md border-b border-border/40 transition-all">
+      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md transition-all md:top-[108px]">
         <div className="mx-auto max-w-[1440px] px-4 py-3 lg:px-6">
           <div className="w-full py-1">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -407,10 +437,10 @@ export default function ProductsPage() {
                     <button
                       key={tab.value}
                       onClick={() => handleSortTabClick(tab.value)}
-                      className={`flex shrink-0 items-center gap-1 rounded-full px-4 py-1.5 text-xs font-medium border transition-colors ${
+                      className={`flex shrink-0 items-center gap-1 rounded-full border px-4 py-1.5 text-xs font-medium transition-colors ${
                         filters.sortBy === tab.value ||
                         (tab.value === 'price' && filters.sortBy?.startsWith('price'))
-                          ? 'border-primary bg-primary text-primary-foreground shadow-xs'
+                          ? 'border-primary bg-primary text-primary-foreground'
                           : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
                       }`}
                     >

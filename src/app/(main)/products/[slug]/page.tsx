@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import { ChevronRight, Home } from 'lucide-react';
 
 // Custom hook
 import { useProductDetail } from '@/hooks/queries';
@@ -90,8 +92,47 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="bg-background min-h-screen text-foreground font-sans pb-20 lg:pb-0">
+    <div className="min-h-screen bg-background pb-20 font-sans text-foreground lg:pb-0">
       <div className="aura-container py-5 lg:py-7">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-4 flex items-center gap-1 text-xs text-muted-foreground"
+        >
+          <Link
+            href="/"
+            className="flex items-center gap-1 transition-colors hover:text-primary"
+          >
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <Link href="/products" className="transition-colors hover:text-primary">
+            Sản phẩm
+          </Link>
+          {product.category && (
+            <>
+              <ChevronRight className="h-3 w-3" />
+              <Link
+                href={`/products?category=${
+                  typeof product.category === 'object'
+                    ? product.category.slug
+                    : product.category
+                }`}
+                className="transition-colors hover:text-primary"
+              >
+                {typeof product.category === 'object'
+                  ? product.category.name
+                  : 'Danh mục'}
+              </Link>
+            </>
+          )}
+          <ChevronRight className="h-3 w-3" />
+          <span className="line-clamp-1 max-w-[200px] font-medium text-foreground">
+            {product.name}
+          </span>
+        </nav>
+
         {/* Main Layout Section */}
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Left: Gallery */}

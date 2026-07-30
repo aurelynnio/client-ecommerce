@@ -47,9 +47,11 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-center space-y-2">
+      <div className="space-y-2 text-center">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Quên mật khẩu</h1>
-        <p className="text-sm text-muted-foreground">Nhập email để nhận mã xác nhận</p>
+        <p className="text-sm text-muted-foreground">
+          Nhập email đã đăng ký, chúng tôi sẽ gửi mã xác nhận đến hộp thư của bạn
+        </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
@@ -62,7 +64,10 @@ export default function ForgotPasswordPage() {
             id="email"
             type="email"
             placeholder="name@example.com"
-            className="h-11 rounded-lg border-input"
+            autoComplete="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
             disabled={isLoading}
           />
           {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
@@ -71,7 +76,7 @@ export default function ForgotPasswordPage() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="mt-2 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
+          className="h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
           {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Gửi mã xác nhận

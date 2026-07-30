@@ -128,7 +128,7 @@ export default function RegisterPage() {
 
         <div className="grid gap-2">
           <Label htmlFor="password" className="text-sm font-medium">
-            Password
+            Mật khẩu
           </Label>
           <div className="relative">
             <Input
@@ -162,7 +162,7 @@ export default function RegisterPage() {
 
         <div className="grid gap-2">
           <Label htmlFor="confirmPassword" className="text-sm font-medium">
-            Confirm password
+            Xác nhận mật khẩu
           </Label>
           <div className="relative">
             <Input
@@ -192,7 +192,7 @@ export default function RegisterPage() {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-primary-foreground"
+          className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-primary-foreground"
         >
           {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Tạo tài khoản
@@ -203,6 +203,17 @@ export default function RegisterPage() {
         Đã có tài khoản?{' '}
         <Link href="/login" className="text-primary hover:underline underline-offset-4 font-medium">
           Đăng nhập
+        </Link>
+      </p>
+
+      <p className="text-center text-xs text-muted-foreground/70">
+        Bằng việc đăng ký, bạn đồng ý với{' '}
+        <Link href="/terms" className="underline underline-offset-2 hover:text-foreground">
+          Điều khoản
+        </Link>{' '}
+        &{' '}
+        <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+          Chính sách bảo mật
         </Link>
       </p>
     </div>

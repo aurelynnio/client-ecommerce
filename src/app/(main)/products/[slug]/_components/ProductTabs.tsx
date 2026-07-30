@@ -42,8 +42,8 @@ export function ProductTabs({ activeTab, onTabChange, reviewCount }: ProductTabs
   };
 
   return (
-    <div className="border-b border-border sticky top-0 lg:top-14 bg-background z-20">
-      <div className="flex items-center gap-8 lg:gap-12 max-w-[800px] overflow-x-auto no-scrollbar">
+    <div className="sticky top-16 z-20 border-b border-border bg-background md:top-[108px]">
+      <div className="no-scrollbar flex max-w-[800px] items-center gap-8 overflow-x-auto lg:gap-12">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const count = tab.id === 'reviews' ? reviewCount : undefined;
@@ -53,17 +53,20 @@ export function ProductTabs({ activeTab, onTabChange, reviewCount }: ProductTabs
               key={tab.id}
               onClick={() => handleTabClick(tab.id)}
               className={cn(
-                'px-2 py-4 text-sm font-medium whitespace-nowrap transition-colors relative',
-                isActive ? 'text-primary font-bold' : 'text-muted-foreground hover:text-primary',
+                'relative whitespace-nowrap px-2 py-4 text-sm font-medium transition-colors',
+                isActive ? 'font-bold text-primary' : 'text-muted-foreground hover:text-primary',
               )}
+              aria-current={isActive ? 'page' : undefined}
             >
               {tab.label}
               {count !== undefined && (
-                <span className="text-muted-foreground/60 font-normal ml-1">({count})</span>
+                <span className="ml-1 font-normal text-muted-foreground/60">({count})</span>
               )}
 
               {/* Active indicator */}
-              {isActive && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />}
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+              )}
             </button>
           );
         })}

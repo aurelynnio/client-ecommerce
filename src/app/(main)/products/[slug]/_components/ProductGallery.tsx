@@ -59,16 +59,16 @@ export function ProductGallery({
     return (
       <>
         {/* Desktop - Fixed size */}
-        <div className="hidden lg:flex w-[420px] h-[420px] bg-muted items-center justify-center rounded-sm shrink-0">
-          <div className="flex flex-col items-center justify-center text-muted-foreground/60">
-            <Store className="w-16 h-16 opacity-20 mb-2" />
+        <div className="hidden w-full max-w-[480px] items-center justify-center rounded-lg border border-border bg-muted lg:flex">
+          <div className="flex aspect-square w-full flex-col items-center justify-center text-muted-foreground/60">
+            <Store className="mb-2 h-16 w-16 opacity-20" />
             <span className="text-sm">Không có ảnh</span>
           </div>
         </div>
         {/* Mobile - Aspect ratio */}
-        <div className="lg:hidden -mx-4 w-full aspect-square bg-muted flex flex-col items-center justify-center">
+        <div className="flex aspect-square w-full flex-col items-center justify-center bg-muted lg:hidden">
           <div className="flex flex-col items-center justify-center text-muted-foreground/60">
-            <Store className="w-12 h-12 opacity-20 mb-2" />
+            <Store className="mb-2 h-12 w-12 opacity-20" />
             <span className="text-sm">Không có ảnh</span>
           </div>
         </div>
@@ -79,18 +79,20 @@ export function ProductGallery({
   return (
     <>
       {/* Desktop Gallery */}
-      <div className="hidden lg:flex gap-4 shrink-0">
+      <div className="hidden w-full max-w-[480px] gap-3 lg:flex">
         {/* Vertical Thumbnails */}
-        <div className="flex flex-col gap-2 w-[60px]">
+        <div className="flex w-[60px] shrink-0 flex-col gap-2">
           {images.map((img, idx) => (
             <button
               key={idx}
               onMouseEnter={() => onIndexChange(idx)}
               onClick={() => onIndexChange(idx)}
               className={cn(
-                'relative h-[60px] w-[60px] overflow-hidden rounded-sm border-2 transition-[border-color,box-shadow]',
-                selectedIndex === idx ? 'border-primary' : 'border-transparent hover:border-border',
+                'relative h-[60px] w-[60px] overflow-hidden rounded-md border transition-colors',
+                selectedIndex === idx ? 'border-primary' : 'border-border hover:border-muted-foreground',
               )}
+              aria-label={`Xem ảnh ${idx + 1}`}
+              aria-current={selectedIndex === idx}
             >
               <Image
                 src={img}
@@ -104,20 +106,20 @@ export function ProductGallery({
         </div>
 
         {/* Main Image */}
-        <div className="w-[420px] h-[420px] relative border border-border/50 rounded-sm overflow-hidden bg-card group shrink-0">
+        <div className="group relative aspect-square shrink-0 flex-1 overflow-hidden rounded-lg border border-border bg-card">
           {images[selectedIndex] && !imageError ? (
             <Image
               src={images[selectedIndex]}
               alt={productName}
               fill
-              className="object-contain p-2 transition-transform group-hover:scale-105"
+              className="object-contain p-2 transition-transform group-hover:scale-105 motion-reduce:transform-none"
               priority
-              sizes="420px"
+              sizes="(max-width: 1024px) 0px, 420px"
               onError={() => setFailedImageIndex(selectedIndex)}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 text-muted-foreground/60">
-              <Store className="w-16 h-16 opacity-20 mb-2" />
+            <div className="flex h-full w-full flex-col items-center justify-center bg-muted/50 text-muted-foreground/60">
+              <Store className="mb-2 h-16 w-16 opacity-20" />
               <span className="text-sm">Không có ảnh</span>
             </div>
           )}
@@ -126,7 +128,7 @@ export function ProductGallery({
 
       {/* Mobile Gallery - Swipeable */}
       <div
-        className="lg:hidden -mx-4 relative"
+        className="relative lg:hidden"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -142,8 +144,8 @@ export function ProductGallery({
               onError={() => setFailedImageIndex(selectedIndex)}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 text-muted-foreground/60">
-              <Store className="w-12 h-12 opacity-20 mb-2" />
+            <div className="flex h-full w-full flex-col items-center justify-center bg-muted/50 text-muted-foreground/60">
+              <Store className="mb-2 h-12 w-12 opacity-20" />
               <span className="text-sm">Không có ảnh</span>
             </div>
           )}
@@ -155,44 +157,47 @@ export function ProductGallery({
                 onClick={handlePrev}
                 disabled={selectedIndex === 0}
                 className={cn(
-                  'absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white transition-opacity',
+                  'absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white transition-opacity',
                   selectedIndex === 0 ? 'opacity-30' : 'opacity-70 hover:opacity-100',
                 )}
+                aria-label="Ảnh trước"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={handleNext}
                 disabled={selectedIndex === images.length - 1}
                 className={cn(
-                  'absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white transition-opacity',
+                  'absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white transition-opacity',
                   selectedIndex === images.length - 1
                     ? 'opacity-30'
                     : 'opacity-70 hover:opacity-100',
                 )}
+                aria-label="Ảnh sau"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="h-5 w-5" />
               </button>
             </>
           )}
 
           {/* Image Counter */}
-          <div className="absolute bottom-4 right-4 bg-black/30 text-white text-[10px] px-2 py-0.5 rounded-full">
+          <div className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white">
             {selectedIndex + 1} / {images.length}
           </div>
         </div>
 
         {/* Dot Indicators */}
         {images.length > 1 && images.length <= 10 && (
-          <div className="flex justify-center gap-1.5 mt-3">
+          <div className="mt-3 flex justify-center gap-1.5">
             {images.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => onIndexChange(idx)}
                 className={cn(
-                  'h-2 w-2 rounded-full transition-[width,background-color] duration-200 motion-reduce:transition-none',
-                  selectedIndex === idx ? 'w-4 bg-primary' : 'bg-muted-foreground/40',
+                  'h-2 rounded-full transition-[width,background-color] duration-200 motion-reduce:transition-none',
+                  selectedIndex === idx ? 'w-4 bg-primary' : 'w-2 bg-muted-foreground/40',
                 )}
+                aria-label={`Chuyển đến ảnh ${idx + 1}`}
               />
             ))}
           </div>

@@ -227,7 +227,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-primary-foreground"
+            className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-primary-foreground"
           >
             {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
             Đăng nhập
@@ -242,6 +242,17 @@ export default function LoginPage() {
           className="text-primary hover:underline underline-offset-4 font-medium"
         >
           Đăng ký ngay
+        </Link>
+      </p>
+
+      <p className="text-center text-xs text-muted-foreground/70">
+        Bằng việc đăng nhập, bạn đồng ý với{' '}
+        <Link href="/terms" className="underline underline-offset-2 hover:text-foreground">
+          Điều khoản
+        </Link>{' '}
+        &{' '}
+        <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+          Chính sách bảo mật
         </Link>
       </p>
     </div>

@@ -30,10 +30,16 @@ import {
   ChevronRight,
   Shield,
   Wallet,
+  Home,
+  ShoppingCart,
+  CheckCircle2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { groupCartItemsByShop } from '@/types/cart';
 import { getSafeErrorMessage } from '@/api';
+import SpinnerLoading from '@/components/common/SpinnerLoading';
+
+const FREE_SHIPPING_THRESHOLD = 500000;
 
 const getPrimaryAddress = (addresses: Address[] = []) =>
   addresses.find((address) => address.isDefault) ?? addresses[0] ?? null;
@@ -47,6 +53,39 @@ const hasCompleteAddress = (address: Address | null) =>
     address.district?.trim() &&
     address.ward?.trim()
   );
+
+// Step indicator (Tmall/JD checkout flow: Cart > Checkout > Done)
+function CheckoutSteps() {
+  const steps = [
+    { id: 1, label: 'Giỏ hàng', icon: ShoppingCart, active: false, done: true },
+    { id: 2, label: 'Thanh toán', icon: CreditCard, active: true, done: false },
+    { id: 3, label: 'Hoàn thành', icon: CheckCircle2, active: false, done: false },
+  ];
+  return (
+    <div className="hidden items-center gap-2 md:flex">
+      {steps.map((step, idx) => {
+        const Icon = step.icon;
+        const colorClass = step.active
+          ? 'text-primary'
+          : step.done
+            ? 'text-success'
+            : 'text-muted-foreground/50';
+        return (
+          <div key={step.id} className="flex items-center gap-2">
+            <div className={`flex items-center gap-1.5 ${colorClass}`}>
+              <Icon className="h-4 w-4" />
+              <span className="text-sm font-medium">{step.label}</span>
+              {step.done && !step.active && <Check className="h-3 w-3" />}
+            </div>
+            {idx < steps.length - 1 && (
+              <ChevronRight className="h-3 w-3 text-muted-foreground/30" />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'vnpay'>('cod');
@@ -238,35 +277,95 @@ export default function CheckoutPage() {
 
   if (!cartItems || cartItems.length === 0) {
     return (
-      <div className="w-full min-h-screen bg-background py-20 flex items-center justify-center">
-        <p className="text-muted-foreground">Đang chuyển đến giỏ hàng...</p>
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+          >
+            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+              <Home className="h-3 w-3" />
+              <span>Trang chủ</span>
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <Link href="/cart" className="transition-colors hover:text-primary">
+              Giỏ hàng
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-medium text-foreground">Thanh toán</span>
+          </nav>
+          <SpinnerLoading className="py-20" />
+        </div>
       </div>
     );
   }
 
   if (profileQuery.isLoading) {
     return (
-      <div className="w-full min-h-screen bg-background py-20 flex items-center justify-center">
-        <p className="text-muted-foreground">Đang tải địa chỉ giao hàng...</p>
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+          >
+            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+              <Home className="h-3 w-3" />
+              <span>Trang chủ</span>
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <Link href="/cart" className="transition-colors hover:text-primary">
+              Giỏ hàng
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-medium text-foreground">Thanh toán</span>
+          </nav>
+          <SpinnerLoading className="py-20" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen bg-background py-4 -mt-4 -mx-4 px-4">
+    <div className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        {/* Header */}
-        <div className="bg-muted/40 border border-border rounded-lg mb-4 p-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+        >
+          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <Link href="/cart" className="transition-colors hover:text-primary">
+            Giỏ hàng
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">Thanh toán</span>
+        </nav>
+
+        {/* Header with title + checkout steps */}
+        <div className="mb-4 flex items-end justify-between border-b border-border pb-3">
           <div className="flex items-center gap-3">
-            <Link href="/cart" className="text-muted-foreground hover:text-primary">
+            <Link
+              href="/cart"
+              className="text-muted-foreground transition-colors hover:text-primary"
+              aria-label="Quay lại giỏ hàng"
+            >
               <ChevronLeft className="h-5 w-5" />
             </Link>
-            <h1 className="text-xl font-bold text-foreground">Thanh toán</h1>
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+                Thanh toán
+              </h1>
+              <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                <Shield className="h-3 w-3 text-success" />
+                Thanh toán an toàn
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4 text-success" />
-            <span>Thanh toán an toàn</span>
-          </div>
+          <CheckoutSteps />
         </div>
 
         <form id="checkout-form" onSubmit={handleSubmit}>
@@ -274,13 +373,13 @@ export default function CheckoutPage() {
             {/* Main Content */}
             <div className="min-w-0 space-y-4 lg:col-span-8">
               {/* Shipping Address */}
-              <div className="bg-muted/40 border border-border rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <h2 className="font-semibold text-foreground">Địa chỉ nhận hàng</h2>
+              <div className="overflow-hidden rounded-lg border border-border bg-card">
+                <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <h2 className="text-sm font-semibold text-foreground">Địa chỉ nhận hàng</h2>
                 </div>
 
-                <div className="rounded-lg border border-border bg-card p-4">
+                <div className="p-4">
                   {primaryAddress && hasValidAddress ? (
                     <div className="space-y-3">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -307,15 +406,15 @@ export default function CheckoutPage() {
                           type="button"
                           variant="outline"
                           onClick={() => router.push('/profile?tab=address')}
-                          className="border-border text-primary hover:bg-primary-light hover:text-primary rounded-lg"
+                          className="shrink-0 rounded-lg border-border text-primary hover:bg-primary-light hover:text-primary"
                         >
-                          Cập nhật địa chỉ
+                          Thay đổi
                         </Button>
                       </div>
 
                       <div className="space-y-1.5 border-t border-border pt-3">
                         <Label htmlFor="note" className="text-sm text-muted-foreground">
-                          Ghi chú
+                          Ghi chú cho shop
                         </Label>
                         <Input
                           id="note"
@@ -337,7 +436,7 @@ export default function CheckoutPage() {
                       <Button
                         type="button"
                         onClick={() => router.push('/profile?tab=address')}
-                        className="bg-primary hover:bg-primary-hover rounded-lg text-primary-foreground"
+                        className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover"
                       >
                         Đi tới hồ sơ
                       </Button>
@@ -350,13 +449,18 @@ export default function CheckoutPage() {
               {itemsByShop.map((shopGroup) => (
                 <div
                   key={shopGroup.shop._id}
-                  className="bg-muted/40 border border-border rounded-lg overflow-hidden"
+                  className="overflow-hidden rounded-lg border border-border bg-card"
                 >
                   {/* Shop Header */}
-                  <div className="flex items-center gap-2 p-4 border-b border-border/60">
+                  <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
                     <Store className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-foreground">{shopGroup.shop.name}</span>
-                    <span className="text-xs text-primary border border-primary px-1.5 py-0.5 rounded-lg">
+                    <Link
+                      href={`/shop/${shopGroup.shop.slug}`}
+                      className="font-medium text-foreground transition-colors hover:text-primary"
+                    >
+                      {shopGroup.shop.name}
+                    </Link>
+                    <span className="rounded-sm border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                       Chính hãng
                     </span>
                   </div>
@@ -365,9 +469,9 @@ export default function CheckoutPage() {
                   {shopGroup.items.map((item) => (
                     <div
                       key={item._id}
-                      className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border-b border-border/30 last:border-0"
+                      className="flex flex-col gap-3 border-b border-border p-4 last:border-0 sm:flex-row sm:items-center"
                     >
-                      <div className="relative w-16 h-16 bg-muted rounded overflow-hidden shrink-0">
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded border border-border bg-muted">
                         {getItemImage(item) ? (
                           <Image
                             src={getItemImage(item)!}
@@ -380,28 +484,30 @@ export default function CheckoutPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-                            Không có hình ảnh
+                          <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
+                            Không có ảnh
                           </div>
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm text-foreground line-clamp-1">
+                      <div className="min-w-0 flex-1">
+                        <h4 className="line-clamp-1 text-sm text-foreground">
                           {typeof item.productId === 'object' && item.productId
                             ? item.productId.name
                             : 'Sản phẩm'}
                         </h4>
                         {(item.variant || item.size) && (
-                          <p className="text-xs text-muted-foreground mt-0.5">
+                          <p className="mt-0.5 text-xs text-muted-foreground">
                             {[item.variant?.color, item.size && `Size: ${item.size}`]
                               .filter(Boolean)
                               .join(', ')}
                           </p>
                         )}
-                        <p className="text-xs text-muted-foreground mt-0.5">x{item.quantity}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          x{item.quantity}
+                        </p>
                       </div>
                       <div className="text-left sm:text-right">
-                        <span className="text-primary font-medium">
+                        <span className="font-medium text-primary">
                           {formatCurrency(getEffectivePrice(item) * item.quantity)}
                         </span>
                       </div>
@@ -409,14 +515,14 @@ export default function CheckoutPage() {
                   ))}
 
                   {/* Shop Voucher */}
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-4 bg-muted/20 border-t border-border/40">
+                  <div className="flex flex-col gap-2 border-t border-border bg-muted/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Tag className="h-4 w-4 text-primary" />
                       <span>Voucher của Shop</span>
                     </div>
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-sm text-primary self-start sm:self-auto"
+                      className="flex items-center gap-1 self-start text-sm text-primary sm:self-auto"
                     >
                       <span>Chọn voucher</span>
                       <ChevronRight className="h-4 w-4" />
@@ -426,19 +532,19 @@ export default function CheckoutPage() {
               ))}
 
               {/* Platform Voucher */}
-              <div className="bg-muted/40 border border-border rounded-lg p-4">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-2">
-                    <Tag className="h-5 w-5 text-primary" />
-                    <span className="font-medium text-foreground">Voucher nền tảng</span>
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <div className="overflow-hidden rounded-lg border border-border bg-card">
+                <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
+                  <Tag className="h-4 w-4 text-primary" />
+                  <h2 className="text-sm font-semibold text-foreground">Voucher nền tảng</h2>
+                </div>
+                <div className="p-4">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <Input
                       placeholder="Nhập mã voucher"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
                       disabled={!!appliedPlatformVoucher}
-                      className="h-9 w-full sm:w-40 text-sm rounded-lg border-border"
+                      className="h-9 w-full rounded-lg border-border text-sm focus:border-primary focus:ring-primary/20 sm:w-48"
                     />
                     {appliedPlatformVoucher ? (
                       <Button
@@ -446,9 +552,9 @@ export default function CheckoutPage() {
                         size="sm"
                         variant="outline"
                         onClick={handleRemoveVoucher}
-                        className="h-9 text-destructive border-destructive/30 hover:bg-destructive/15 w-full sm:w-auto rounded-lg"
+                        className="h-9 w-full shrink-0 rounded-lg border-destructive/30 text-destructive hover:bg-destructive/15 sm:w-auto"
                       >
-                        Xóa
+                        Xóa voucher
                       </Button>
                     ) : (
                       <Button
@@ -456,35 +562,37 @@ export default function CheckoutPage() {
                         size="sm"
                         onClick={handleApplyVoucher}
                         disabled={voucherLoading || !promoCode}
-                        className="h-9 bg-primary hover:bg-primary-hover w-full sm:w-auto rounded-lg text-primary-foreground"
+                        className="h-9 w-full shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover sm:w-auto"
                       >
                         Áp dụng
                       </Button>
                     )}
                   </div>
+                  {appliedPlatformVoucher && (
+                    <p className="mt-2 flex items-center gap-1 text-xs text-success">
+                      <Check className="h-3 w-3" />
+                      Đã áp dụng mã: {appliedPlatformVoucher.code} (-
+                      {formatCurrency(appliedPlatformVoucher.discountAmount)})
+                    </p>
+                  )}
                 </div>
-                {appliedPlatformVoucher && (
-                  <p className="text-xs text-success mt-2 flex items-center gap-1">
-                    <Check className="h-3 w-3" />
-                    Đã áp dụng mã: {appliedPlatformVoucher.code} (-
-                    {formatCurrency(appliedPlatformVoucher.discountAmount)})
-                  </p>
-                )}
               </div>
 
               {/* Payment Method */}
-              <div className="bg-muted/40 border border-border rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border">
-                  <Wallet className="h-5 w-5 text-primary" />
-                  <h2 className="font-semibold text-foreground">Phương thức thanh toán</h2>
+              <div className="overflow-hidden rounded-lg border border-border bg-card">
+                <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
+                  <Wallet className="h-4 w-4 text-primary" />
+                  <h2 className="text-sm font-semibold text-foreground">
+                    Phương thức thanh toán
+                  </h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2">
                   <label
-                    className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-[border-color,background-color,box-shadow] ${
+                    className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
                       paymentMethod === 'cod'
-                        ? 'border-primary bg-primary-light'
-                        : 'border-border hover:border-muted-foreground/30 bg-card text-foreground'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border bg-card text-foreground hover:border-muted-foreground/30'
                     }`}
                   >
                     <input
@@ -509,14 +617,16 @@ export default function CheckoutPage() {
                       </span>
                       <p className="text-xs text-muted-foreground">COD</p>
                     </div>
-                    {paymentMethod === 'cod' && <Check className="h-4 w-4 text-primary ml-auto" />}
+                    {paymentMethod === 'cod' && (
+                      <Check className="ml-auto h-4 w-4 text-primary" />
+                    )}
                   </label>
 
                   <label
-                    className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-[border-color,background-color,box-shadow] ${
+                    className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
                       paymentMethod === 'vnpay'
-                        ? 'border-primary bg-primary-light'
-                        : 'border-border hover:border-muted-foreground/30 bg-card text-foreground'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border bg-card text-foreground hover:border-muted-foreground/30'
                     }`}
                   >
                     <input
@@ -542,7 +652,7 @@ export default function CheckoutPage() {
                       <p className="text-xs text-muted-foreground">Thẻ ATM/Visa/Master</p>
                     </div>
                     {paymentMethod === 'vnpay' && (
-                      <Check className="h-4 w-4 text-primary ml-auto" />
+                      <Check className="ml-auto h-4 w-4 text-primary" />
                     )}
                   </label>
                 </div>
@@ -551,12 +661,63 @@ export default function CheckoutPage() {
 
             {/* Order Summary Sidebar */}
             <div className="min-w-0 lg:col-span-4">
-              <div className="bg-muted/40 border border-border rounded-lg p-4 lg:sticky lg:top-[140px]">
-                <h2 className="font-bold text-foreground mb-4 pb-3 border-b border-border">
+              <div className="rounded-lg border border-border bg-card p-4 lg:sticky lg:top-[124px]">
+                <h2 className="mb-3 border-b border-border pb-3 text-base font-bold text-foreground">
                   Chi tiết thanh toán
                 </h2>
 
-                <div className="space-y-3 text-sm">
+                {/* Freeship Progress Bar (Tmall/JD style) */}
+                {(() => {
+                  const baseTotal = checkoutTotal || 0;
+                  const remaining = FREE_SHIPPING_THRESHOLD - baseTotal;
+                  const reached = baseTotal >= FREE_SHIPPING_THRESHOLD;
+                  const percent = Math.min(
+                    100,
+                    Math.round((baseTotal / FREE_SHIPPING_THRESHOLD) * 100),
+                  );
+                  return (
+                    <div
+                      className={
+                        reached
+                          ? 'mb-3 rounded border border-success/30 bg-success/10 p-2.5 text-xs'
+                          : 'mb-3 rounded border border-warning/30 bg-warning/10 p-2.5 text-xs'
+                      }
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <Truck
+                          className={
+                            reached ? 'h-3.5 w-3.5 text-success' : 'h-3.5 w-3.5 text-warning'
+                          }
+                        />
+                        {reached ? (
+                          <span className="font-medium text-success">
+                            Bạn được miễn phí vận chuyển
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground">
+                            Mua thêm{' '}
+                            <span className="font-semibold text-warning">
+                              {formatCurrency(remaining)}
+                            </span>{' '}
+                            để được freeship
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
+                        <div
+                          className={
+                            reached
+                              ? 'h-full rounded-full bg-success transition-all'
+                              : 'h-full rounded-full bg-warning transition-all'
+                          }
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <div className="space-y-2.5 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
                       Tạm tính ({cartItems.length} sản phẩm)
@@ -583,27 +744,29 @@ export default function CheckoutPage() {
                     <span className="text-success">Miễn phí</span>
                   </div>
 
-                  <div className="pt-3 border-t border-border">
-                    <div className="flex justify-between items-center">
+                  <div className="border-t border-border pt-3">
+                    <div className="flex items-center justify-between">
                       <span className="font-medium text-foreground">Tổng thanh toán</span>
                       <span className="text-xl font-bold text-primary">
                         {formatCurrency(finalTotal > 0 ? finalTotal : 0)}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground text-right mt-1">Đã bao gồm VAT</p>
+                    <p className="mt-1 text-right text-xs text-muted-foreground">
+                      Đã bao gồm VAT
+                    </p>
                   </div>
                 </div>
 
                 <Button
                   type="submit"
                   form="checkout-form"
-                  className="w-full h-11 mt-4 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-primary-foreground"
+                  className="mt-3 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Đang xử lý...' : 'Đặt hàng'}
                 </Button>
 
-                <p className="text-center text-xs text-muted-foreground mt-3">
+                <p className="mt-3 text-center text-xs text-muted-foreground">
                   Nhấn &quot;Đặt hàng&quot; đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản của
                   chúng tôi
                 </p>
@@ -611,6 +774,24 @@ export default function CheckoutPage() {
             </div>
           </div>
         </form>
+
+        {/* Sticky Mobile Place Order Bar (Tmall/JD style) */}
+        <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-border bg-card px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] lg:hidden">
+          <div className="min-w-0">
+            <p className="text-xs text-muted-foreground">Tổng thanh toán</p>
+            <p className="text-lg font-bold text-primary">
+              {formatCurrency(finalTotal > 0 ? finalTotal : 0)}
+            </p>
+          </div>
+          <Button
+            type="submit"
+            form="checkout-form"
+            className="h-11 shrink-0 rounded-lg bg-primary px-8 font-medium text-primary-foreground hover:bg-primary-hover"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Đang xử lý...' : 'Đặt hàng'}
+          </Button>
+        </div>
       </div>
     </div>
   );

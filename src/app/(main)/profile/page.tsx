@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useLogout } from '@/hooks/queries';
 import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
@@ -27,6 +28,7 @@ import {
   Store,
   ShieldCheck,
   UserRound,
+  Home,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -125,54 +127,96 @@ export default function ProfilePage() {
 
   if (!isAuthenticated && !authLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6 text-center bg-background -mt-4 -mx-4 px-4 py-20">
-        <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center">
-          <User className="h-10 w-10 text-muted-foreground" />
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          {/* Breadcrumb */}
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+          >
+            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+              <Home className="h-3 w-3" />
+              <span>Trang chủ</span>
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-medium text-foreground">Hồ sơ</span>
+          </nav>
+
+          <div className="flex flex-col items-center justify-center space-y-6 py-20 text-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border bg-muted/30">
+              <User className="h-10 w-10 text-muted-foreground/60" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold text-foreground">Vui lòng đăng nhập</h2>
+              <p className="text-sm text-muted-foreground">
+                Đăng nhập để quản lý tài khoản của bạn
+              </p>
+            </div>
+            <Button
+              onClick={() => router.push('/login')}
+              className="h-11 rounded-lg bg-primary px-8 font-medium hover:bg-primary-hover"
+            >
+              Đăng nhập ngay
+            </Button>
+          </div>
         </div>
-        <div className="space-y-2">
-          <h2 className="text-xl font-bold text-foreground">Vui lòng đăng nhập</h2>
-          <p className="text-muted-foreground text-sm">Đăng nhập để quản lý tài khoản của bạn</p>
-        </div>
-        <Button
-          onClick={() => router.push('/login')}
-          className="bg-primary hover:bg-primary/90 rounded px-8 h-10"
-        >
-          Đăng nhập ngay
-        </Button>
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen bg-background px-4 py-6">
+    <div className="min-h-screen bg-background py-4">
       {(authLoading || isLoading || logoutMutation.isPending) && (
         <SpinnerLoading className="fixed inset-0 z-50 m-auto" />
       )}
 
       <div
         className={cn(
-          'max-w-[1200px] mx-auto transition-opacity duration-200',
+          'aura-container transition-opacity duration-200',
           (authLoading || isLoading || logoutMutation.isPending) &&
-            'opacity-50 pointer-events-none',
+            'pointer-events-none opacity-50',
         )}
       >
-        <div className="flex flex-col md:flex-row gap-6">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+        >
+          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">Hồ sơ</span>
+        </nav>
+
+        {/* Page Header */}
+        <div className="mb-4 border-b border-border pb-3">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+            Tài khoản của tôi
+          </h1>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            Quản lý thông tin cá nhân, đơn hàng và địa chỉ giao hàng
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-6 md:flex-row">
           {/* Sidebar */}
-          <div className="w-full md:w-[240px] shrink-0 space-y-4">
+          <div className="w-full shrink-0 space-y-4 md:w-[240px]">
             {/* User Card */}
-            <div className="bg-card rounded-lg p-4 border border-border/50">
-              <div className="flex items-center gap-3 pb-4 border-b border-border/30">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex items-center gap-3 border-b border-border pb-4">
                 <Avatar className="h-14 w-14 ring-2 ring-primary/10">
                   <AvatarImage src={currentUser?.avatar ?? undefined} className="object-cover" />
-                  <AvatarFallback className="text-lg bg-primary/10 text-primary">
+                  <AvatarFallback className="bg-primary/10 text-lg text-primary">
                     {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-foreground truncate">
+                  <p className="truncate font-semibold text-foreground">
                     {currentUser?.username || 'Người dùng'}
                   </p>
-                  <div className="flex items-center gap-1 mt-0.5">
+                  <div className="mt-0.5 flex items-center gap-1">
                     <AccountBadgeIcon className="h-3 w-3 text-primary" />
                     <span className="text-xs text-muted-foreground">{accountRoleLabel}</span>
                   </div>
@@ -184,9 +228,9 @@ export default function ProfilePage() {
                 {quickStats.map((stat) => {
                   const Icon = stat.icon;
                   return (
-                    <div key={stat.label} className="text-center flex flex-col items-center">
-                      <Icon className="h-3.5 w-3.5 text-primary/60 mb-1" />
-                      <p className="font-semibold text-primary text-sm">{stat.value}</p>
+                    <div key={stat.label} className="flex flex-col items-center text-center">
+                      <Icon className="mb-1 h-3.5 w-3.5 text-primary/60" />
+                      <p className="text-sm font-semibold text-primary">{stat.value}</p>
                       <p className="text-[10px] text-muted-foreground">{stat.label}</p>
                     </div>
                   );
@@ -195,14 +239,14 @@ export default function ProfilePage() {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="bg-card rounded-lg overflow-hidden border border-border/50">
+            <div className="overflow-hidden rounded-lg border border-border bg-card">
               <Tabs
                 value={activeTab}
                 onValueChange={handleTabChange}
                 orientation="vertical"
                 className="w-full"
               >
-                <TabsList className="flex w-full flex-row md:flex-col h-auto bg-transparent p-2 md:p-0 overflow-x-auto md:overflow-visible gap-2 md:gap-0">
+                <TabsList className="flex h-auto w-full flex-row gap-2 bg-transparent p-2 md:flex-col md:gap-0 md:p-0 md:overflow-visible">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
@@ -210,16 +254,16 @@ export default function ProfilePage() {
                         key={tab.value}
                         value={tab.value}
                         className={cn(
-                          'flex-none md:flex-1 w-auto md:w-full justify-start px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-none text-sm font-medium border border-border/40 md:border-0 md:border-l-2 md:border-l-transparent shrink-0',
-                          'transition-[color,background-color,border-color,box-shadow] duration-200',
-                          'bg-background md:bg-transparent hover:bg-muted/50 text-muted-foreground hover:text-foreground',
-                          'data-[state=active]:bg-primary/10 md:data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:border-primary md:data-[state=active]:border-l-primary',
+                          'w-auto shrink-0 justify-start rounded-lg border border-border/40 px-3 py-2.5 text-sm font-medium md:w-full md:rounded-none md:border-0 md:border-l-2 md:border-l-transparent',
+                          'transition-colors duration-200',
+                          'bg-background hover:bg-muted/50 text-muted-foreground hover:text-foreground md:bg-transparent',
+                          'data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary md:data-[state=active]:bg-primary/5 md:data-[state=active]:border-l-primary',
                           'data-[state=inactive]:border-border/40 md:data-[state=inactive]:border-l-transparent',
                         )}
                       >
-                        <Icon className="h-4 w-4 mr-3 shrink-0" />
+                        <Icon className="mr-3 h-4 w-4 shrink-0" />
                         <span className="flex-1 text-left">{tab.label}</span>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground/50 hidden md:block" />
+                        <ChevronRight className="hidden h-4 w-4 text-muted-foreground/50 md:block" />
                       </TabsTrigger>
                     );
                   })}
@@ -233,42 +277,42 @@ export default function ProfilePage() {
                     void handleLogout();
                   }}
                   variant="ghost"
-                  className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-none px-4 py-3 h-auto"
+                  className="h-auto w-full justify-start rounded-none px-4 py-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                 >
-                  <LogOut className="h-4 w-4 mr-3" />
+                  <LogOut className="mr-3 h-4 w-4" />
                   Đăng xuất
                 </Button>
               </div>
             </div>
 
             {/* Wallet Card */}
-            <div className="bg-primary rounded-lg p-4 text-primary-foreground">
-              <div className="flex items-center gap-2 mb-3">
+            <div className="rounded-lg bg-primary p-4 text-primary-foreground">
+              <div className="mb-3 flex items-center gap-2">
                 <Wallet className="h-5 w-5 opacity-90" />
-                <span className="font-medium text-sm">Đơn hàng chờ xử lý</span>
+                <span className="text-sm font-medium">Đơn hàng chờ xử lý</span>
               </div>
               <p className="text-2xl font-bold">{pendingOrders}</p>
-              <p className="text-xs text-primary-foreground/60 mt-1">Cần theo dõi sớm</p>
+              <p className="mt-1 text-xs text-primary-foreground/70">Cần theo dõi sớm</p>
             </div>
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 min-w-0">
-            <div className="bg-card rounded-lg min-h-[500px] border border-border/50">
+          <div className="min-w-0 flex-1">
+            <div className="min-h-[500px] rounded-lg border border-border bg-card">
               <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-                <TabsContent value="profile" className="mt-0 focus-visible:ring-0 p-4">
+                <TabsContent value="profile" className="mt-0 p-4 focus-visible:ring-0">
                   {currentUser && <ProfileTab user={currentUser} />}
                 </TabsContent>
-                <TabsContent value="orders" className="mt-0 focus-visible:ring-0 p-4">
+                <TabsContent value="orders" className="mt-0 p-4 focus-visible:ring-0">
                   <OrdersTab />
                 </TabsContent>
-                <TabsContent value="address" className="mt-0 focus-visible:ring-0 p-4">
+                <TabsContent value="address" className="mt-0 p-4 focus-visible:ring-0">
                   {currentUser && <AddressTab user={currentUser} />}
                 </TabsContent>
-                <TabsContent value="shop" className="mt-0 focus-visible:ring-0 p-4">
+                <TabsContent value="shop" className="mt-0 p-4 focus-visible:ring-0">
                   <ShopTab />
                 </TabsContent>
-                <TabsContent value="settings" className="mt-0 focus-visible:ring-0 p-4">
+                <TabsContent value="settings" className="mt-0 p-4 focus-visible:ring-0">
                   {currentUser && <SettingsTab user={currentUser} />}
                 </TabsContent>
               </Tabs>

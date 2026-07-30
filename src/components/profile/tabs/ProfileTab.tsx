@@ -55,9 +55,10 @@ export default function ProfileTab({ user }: ProfileTabProps) {
           </div>
           <Button
             size="icon"
-            className="absolute bottom-0 right-0 h-8 w-8 rounded-full shadow-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
+            className="absolute bottom-0 right-0 h-8 w-8 rounded-full border-2 border-card bg-primary text-primary-foreground hover:bg-primary-hover transition-colors duration-200"
             onClick={handleUploadAvatar}
             disabled={isUploadingAvatar}
+            aria-label="Đổi ảnh đại diện"
           >
             {isUploadingAvatar ? (
               <SpinnerLoading noWrapper size={16} className="text-primary-foreground" />
@@ -139,9 +140,9 @@ interface InfoRowProps {
 }
 
 const InfoRow = ({ icon: Icon, label, value, sublabel, action }: InfoRowProps) => (
-  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-md transition-colors duration-200 hover:bg-muted">
+  <div className="flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors duration-200 hover:bg-muted/30">
     <div className="flex items-center gap-4">
-      <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center text-muted-foreground">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
         <Icon className="h-5 w-5" />
       </div>
       <div>
@@ -150,7 +151,7 @@ const InfoRow = ({ icon: Icon, label, value, sublabel, action }: InfoRowProps) =
           <p className="font-medium text-foreground">{value}</p>
           {action}
         </div>
-        {sublabel && <p className="text-xs text-muted-foreground mt-0.5">{sublabel}</p>}
+        {sublabel && <p className="mt-0.5 text-xs text-muted-foreground">{sublabel}</p>}
       </div>
     </div>
   </div>

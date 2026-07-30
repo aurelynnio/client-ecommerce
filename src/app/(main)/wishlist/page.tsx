@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useEffect } from 'react';
-import { Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
+import { Heart, ShoppingCart, Trash2, ArrowRight, Home, ChevronRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -12,6 +12,20 @@ import { Product } from '@/types/product';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { useRouter } from 'next/navigation';
 import { getSafeErrorMessage } from '@/api';
+
+const Breadcrumb = () => (
+  <nav
+    aria-label="Breadcrumb"
+    className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+  >
+    <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+      <Home className="h-3 w-3" />
+      <span>Trang chủ</span>
+    </Link>
+    <ChevronRight className="h-3 w-3" />
+    <span className="font-medium text-foreground">Yêu thích</span>
+  </nav>
+);
 
 export default function WishlistPage() {
   const router = useRouter();
@@ -66,8 +80,11 @@ export default function WishlistPage() {
   // Loading state
   if (isLoading && items.length === 0) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <SpinnerLoading size={32} />
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          <Breadcrumb />
+          <SpinnerLoading className="py-20" />
+        </div>
       </div>
     );
   }
@@ -75,45 +92,56 @@ export default function WishlistPage() {
   // Empty State
   if (!isLoading && items.length === 0) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center bg-background p-4">
-        <div className="max-w-md space-y-4 text-center">
-          <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full border border-border bg-card">
-            <Heart className="h-9 w-9 text-muted-foreground" />
+      <div className="min-h-screen bg-background py-4">
+        <div className="aura-container">
+          <Breadcrumb />
+          <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+            <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full border border-border bg-muted/30">
+              <Heart className="h-9 w-9 text-muted-foreground/60" />
+            </div>
+            <div className="max-w-md space-y-2">
+              <h2 className="text-xl font-semibold text-foreground">
+                Chưa có sản phẩm yêu thích
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Hãy thêm sản phẩm vào danh sách yêu thích của bạn để theo dõi và mua sắm dễ dàng hơn
+              </p>
+            </div>
+            <Link href="/products" className="mt-6 block">
+              <Button className="h-11 rounded-lg bg-primary px-8 font-medium text-primary-foreground hover:bg-primary-hover">
+                Khám phá sản phẩm
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
-          <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-foreground">Chưa có sản phẩm yêu thích</h2>
-            <p className="text-sm text-muted-foreground">
-              Hãy thêm sản phẩm vào danh sách yêu thích của bạn
-            </p>
-          </div>
-          <Link href="/products" className="block pt-4">
-            <Button className="h-10 px-8 text-sm">
-              Khám phá sản phẩm <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Header */}
-        <div className="mb-6 flex items-center justify-between border-b border-border pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Heart className="h-5 w-5 text-primary" />
-              <h1 className="text-xl font-semibold text-foreground">Sản phẩm yêu thích</h1>
-              <span className="text-sm text-muted-foreground">
-                ({pagination?.totalItems || items.length} sản phẩm)
-              </span>
-            </div>
+    <div className="min-h-screen bg-background py-4">
+      <div className="aura-container">
+        <Breadcrumb />
+
+        {/* Page Header */}
+        <div className="mb-4 border-b border-border pb-3">
+          <div className="flex items-center gap-2">
+            <Heart className="h-5 w-5 text-primary" />
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+              Sản phẩm yêu thích
+            </h1>
+            <span className="text-sm text-muted-foreground">
+              ({pagination?.totalItems || items.length} sản phẩm)
+            </span>
           </div>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            Những sản phẩm bạn đã lưu để theo dõi và mua sắm sau
+          </p>
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {items.map((item) => {
             const price = item.price?.discountPrice || item.price?.currentPrice || 0;
             const originalPrice = item.price?.currentPrice || 0;
@@ -123,11 +151,13 @@ export default function WishlistPage() {
             const productImage =
               item.variants?.[0]?.images?.[0] || '/images/placeholder-product.svg';
             const shopName = typeof item.shop === 'object' ? item.shop?.name : 'Shop';
+            const ratingAverage = item.ratingAverage || 0;
+            const soldCount = item.soldCount || 0;
 
             return (
               <article
                 key={item._id}
-                className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30"
+                className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/50"
               >
                 {/* Image */}
                 <Link href={`/products/${item.slug || item._id}`}>
@@ -136,17 +166,17 @@ export default function WishlistPage() {
                       src={productImage}
                       alt={item.name}
                       fill
-                      className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                      className="object-cover transition-transform duration-200 group-hover:scale-[1.02] motion-reduce:transform-none"
                       sizes="(max-width: 640px) 50vw, 25vw"
                     />
-                    {/* Remove Button */}
+                    {/* Remove Button (border-over-shadow rule) */}
                     <button
                       aria-label={`Xóa ${item.name} khỏi danh sách yêu thích`}
                       onClick={(e) => {
                         e.preventDefault();
                         handleRemoveItem(item._id);
                       }}
-                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm hover:text-destructive"
+                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive hover:text-destructive-foreground"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -156,7 +186,7 @@ export default function WishlistPage() {
                 {/* Info */}
                 <div className="p-3">
                   <Link href={`/products/${item.slug || item._id}`}>
-                    <h3 className="min-h-10 text-sm leading-5 text-foreground transition-colors group-hover:text-primary">
+                    <h3 className="line-clamp-2 min-h-10 text-sm leading-5 text-foreground transition-colors group-hover:text-primary">
                       {item.name}
                     </h3>
                   </Link>
@@ -164,7 +194,7 @@ export default function WishlistPage() {
                   {/* Price */}
                   <div className="mt-2 flex items-baseline gap-1">
                     <span className="text-xs text-primary">₫</span>
-                    <span className="text-base font-semibold text-primary">
+                    <span className="text-base font-bold text-primary">
                       {price.toLocaleString('vi-VN')}
                     </span>
                     {hasDiscount && (
@@ -172,6 +202,18 @@ export default function WishlistPage() {
                         ₫{originalPrice.toLocaleString('vi-VN')}
                       </span>
                     )}
+                  </div>
+
+                  {/* Rating + Sold (Tmall/JD style) */}
+                  <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-0.5">
+                      <Star className="h-3 w-3 fill-star text-star" />
+                      <span className="font-medium text-foreground">
+                        {ratingAverage.toFixed(1)}
+                      </span>
+                    </div>
+                    <span className="text-muted-foreground/40">|</span>
+                    <span>Đã bán {soldCount}</span>
                   </div>
 
                   {/* Shop */}
@@ -182,9 +224,9 @@ export default function WishlistPage() {
                     onClick={() => handleAddToCart(item)}
                     variant="outline"
                     size="sm"
-                    className="mt-3 h-9 w-full text-xs text-primary hover:bg-primary/10 hover:text-primary"
+                    className="mt-3 h-9 w-full rounded-lg border-primary/30 text-xs text-primary hover:bg-primary/10 hover:text-primary"
                   >
-                    <ShoppingCart className="h-3.5 w-3.5 mr-1" />
+                    <ShoppingCart className="mr-1 h-3.5 w-3.5" />
                     Thêm vào giỏ
                   </Button>
                 </div>

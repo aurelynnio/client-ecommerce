@@ -51,26 +51,26 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
 
   const statusConfig = {
     verified: {
-      bg: 'bg-green-100',
-      text: 'text-green-600',
+      bg: 'bg-success/15',
+      text: 'text-success',
       label: 'Đã xác minh',
     },
     unverified: {
-      bg: 'bg-gray-100',
-      text: 'text-gray-600',
+      bg: 'bg-muted',
+      text: 'text-muted-foreground',
       label: 'Chưa xác minh',
     },
   };
 
   const roleConfig: Record<string, { bg: string; text: string }> = {
     admin: {
-      bg: 'bg-purple-100',
-      text: 'text-purple-600',
+      bg: 'bg-info/15',
+      text: 'text-info',
     },
-    user: { bg: 'bg-blue-100', text: 'text-blue-600' },
+    user: { bg: 'bg-info/15', text: 'text-info' },
     moderator: {
-      bg: 'bg-orange-100',
-      text: 'text-orange-600',
+      bg: 'bg-warning/15',
+      text: 'text-warning',
     },
   };
 
@@ -119,14 +119,14 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
               <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
                 <TabsTrigger
                   value="profile"
-                  className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                  className="flex items-center gap-2 rounded-xl data-[state=active]:bg-card data-[state=active]:text-foreground"
                 >
                   <UserIcon className="h-4 w-4" />
                   Hồ sơ
                 </TabsTrigger>
                 <TabsTrigger
                   value="permissions"
-                  className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                  className="flex items-center gap-2 rounded-xl data-[state=active]:bg-card data-[state=active]:text-foreground"
                 >
                   <Key className="h-4 w-4" />
                   Quyền hạn
@@ -137,7 +137,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
             <TabsContent value="profile" className="p-6 pt-4 space-y-6">
               {/* User Avatar & Basic Info */}
               <div className="flex items-center gap-4">
-                <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-border/50 bg-gray-100 flex-shrink-0">
+                <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-border/50 bg-muted flex-shrink-0">
                   {user.avatar ? (
                     <Image
                       src={user.avatar}
@@ -175,9 +175,9 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
                           : user.roles}
                     </div>
                     {user.isVerifiedEmail ? (
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                     ) : (
-                      <XCircle className="h-4 w-4 text-gray-400" />
+                      <XCircle className="h-4 w-4 text-muted-foreground/60" />
                     )}
                   </div>
                 </div>
@@ -219,7 +219,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
                           <span className="font-medium text-sm text-foreground">
                             {addr.fullName}
                           </span>
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground bg-gray-100 px-2 py-0.5 rounded-md">
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
                             <Phone className="h-3 w-3" />
                             {addr.phone}
                           </div>
@@ -231,7 +231,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
                     ))}
                   </div>
                 ) : (
-                  <div className="p-6 rounded-2xl border border-dashed border-border/50 text-center bg-gray-50/30">
+                  <div className="p-6 rounded-2xl border border-dashed border-border/50 text-center bg-muted/30">
                     <MapPin className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">Chưa đăng ký địa chỉ</p>
                   </div>

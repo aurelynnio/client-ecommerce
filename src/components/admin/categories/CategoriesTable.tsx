@@ -68,14 +68,14 @@ interface CategoriesTableProps {
 
 export const getStatusBadge = (status: boolean) => {
   return status ? (
-    <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
       <CheckCircle className="h-3 w-3 mr-1" />
       Đang hoạt động
     </Badge>
   ) : (
     <Badge
       variant="outline"
-      className="bg-gray-100 text-gray-600 border-0 rounded-lg px-2.5 py-0.5 shadow-none"
+      className="bg-muted text-muted-foreground border-0 rounded-lg px-2.5 py-0.5 shadow-none"
     >
       <XCircle className="h-3 w-3 mr-1" />
       Ngừng hoạt động
@@ -118,7 +118,7 @@ const CategoryRow = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="mr-2 h-6 w-6 rounded-lg p-0 hover:bg-white"
+                className="mr-2 h-6 w-6 rounded-lg p-0 hover:bg-card"
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? (

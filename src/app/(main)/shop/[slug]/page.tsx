@@ -162,7 +162,7 @@ export default function ShopPage() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/10" />
+            <div className="absolute inset-0 bg-black/30" />
           </div>
           <div className="p-4 md:p-6">
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
@@ -192,7 +192,7 @@ export default function ShopPage() {
                 {/* Stats */}
                 <div className="flex items-center justify-center md:justify-start gap-6 mt-3 text-sm">
                   <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-warning text-warning" />
+                    <Star className="h-4 w-4 fill-star text-star" />
                     <span className="font-medium">{currentShop.rating}</span>
                     <span className="text-muted-foreground">
                       ({formatNumber(currentShop.metrics?.ratingCount || 0)} đánh giá)

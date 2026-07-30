@@ -49,7 +49,7 @@ export default function ShopTab() {
       {/* Shop Header */}
       <div className="relative">
         {/* Banner */}
-        <div className="h-32 rounded-xl overflow-hidden bg-linear-to-r from-primary/20 to-primary/5">
+        <div className="h-32 rounded-xl overflow-hidden bg-primary-light">
           {myShop.banner && (
             <Image src={myShop.banner} alt="Shop Banner" fill className="object-cover" />
           )}
@@ -57,7 +57,7 @@ export default function ShopTab() {
 
         {/* Logo & Info */}
         <div className="flex items-end gap-4 -mt-10 px-4">
-          <div className="relative w-20 h-20 rounded-full border-4 border-white bg-white shadow-lg overflow-hidden">
+          <div className="relative w-20 h-20 rounded-full border-4 border-white bg-card shadow-lg overflow-hidden">
             {myShop.logo ? (
               <Image src={myShop.logo} alt={myShop.name} fill className="object-cover" />
             ) : (
@@ -72,8 +72,8 @@ export default function ShopTab() {
               <span
                 className={`px-2 py-0.5 text-xs rounded-full ${
                   myShop.status === 'active'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-600'
+                    ? 'bg-success/15 text-success'
+                    : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {myShop.status === 'active' ? 'Đang hoạt động' : myShop.status}
@@ -99,7 +99,7 @@ export default function ShopTab() {
       {myShop.pickupAddress && (
         <div className="rounded-lg bg-muted p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
+            <div className="h-10 w-10 rounded-full bg-card flex items-center justify-center">
               <MapPin className="h-5 w-5 text-primary" />
             </div>
             <div>

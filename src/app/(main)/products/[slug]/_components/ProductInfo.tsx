@@ -27,8 +27,8 @@ function FlashSaleCountdown({ flashSale }: { flashSale: FlashSaleInfo }) {
 
   return (
     <div className="flex items-center gap-2 text-xs">
-      <span className="bg-primary text-white px-2 py-0.5 rounded font-bold">FLASH SALE</span>
-      <span className="text-gray-500">
+      <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded font-bold">FLASH SALE</span>
+      <span className="text-muted-foreground">
         Kết thúc sau: {hours}h {minutes}m
       </span>
     </div>
@@ -69,21 +69,21 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm">{shop?.name || 'Shop'}</span>
               {product.isFeatured && (
-                <span className="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-sm font-bold">
+                <span className="bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-sm font-bold">
                   Mall
                 </span>
               )}
             </div>
             <div className="flex items-center gap-4 text-xs">
               <div className="flex items-center gap-1.5">
-                <span className="text-gray-400">Đánh giá:</span>
+                <span className="text-muted-foreground/60">Đánh giá:</span>
                 <span className="text-primary font-bold">
                   {product.ratingAverage?.toFixed(1) || '0'}
-                  <Star className="w-3 h-3 inline ml-0.5 fill-current" />
+                  <Star className="w-3 h-3 inline ml-0.5 fill-current text-star" />
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="text-gray-400">Đã bán:</span>
+                <span className="text-muted-foreground/60">Đã bán:</span>
                 <span className="font-medium">{product.soldCount || 0}</span>
               </div>
             </div>
@@ -103,12 +103,12 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
       {/* Rating & Sold - Mobile */}
       <div className="flex items-center gap-4 text-sm lg:hidden">
         <div className="flex items-center gap-1">
-          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+          <Star className="w-4 h-4 fill-star text-star" />
           <span className="font-medium">{product.ratingAverage?.toFixed(1) || '0'}</span>
-          <span className="text-gray-400">({product.reviewCount || 0})</span>
+          <span className="text-muted-foreground/60">({product.reviewCount || 0})</span>
         </div>
-        <span className="text-gray-300">|</span>
-        <span className="text-gray-500">{product.soldCount || 0} đã bán</span>
+        <span className="text-muted-foreground/50">|</span>
+        <span className="text-muted-foreground">{product.soldCount || 0} đã bán</span>
       </div>
 
       {/* Flash Sale Badge */}
@@ -123,11 +123,11 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
           </span>
           {originalPrice && originalPrice > effectivePrice && (
             <>
-              <span className="text-gray-400 text-sm line-through ml-3 font-normal">
+              <span className="text-price-strikethrough text-sm line-through ml-3 font-normal">
                 ₫{originalPrice.toLocaleString('vi-VN')}
               </span>
               {discountPercent > 0 && (
-                <span className="bg-primary text-white text-xs px-1.5 py-0.5 rounded font-bold ml-2">
+                <span className="bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded font-bold ml-2">
                   -{discountPercent}%
                 </span>
               )}
@@ -136,17 +136,17 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
         </div>
 
         {/* Delivery Badges */}
-        <div className="flex items-center gap-6 mt-4 text-xs text-gray-500">
+        <div className="flex items-center gap-6 mt-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-muted-foreground/60" />
             Giao hàng 48h
           </div>
           <div className="flex items-center gap-1.5">
-            <Truck className="w-3.5 h-3.5 text-gray-400" />
+            <Truck className="w-3.5 h-3.5 text-muted-foreground/60" />
             Đổi trả miễn phí
           </div>
           <div className="flex items-center gap-1.5">
-            <Star className="w-3.5 h-3.5 text-gray-400" />
+            <Star className="w-3.5 h-3.5 text-muted-foreground/60" />
             Chính hãng 100%
           </div>
         </div>

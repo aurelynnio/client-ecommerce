@@ -221,7 +221,7 @@ export default function OrdersAdminPage() {
       <div className="space-y-6">
         <OrdersHeader />
         <div className="flex h-64 items-center justify-center rounded-lg border border-border bg-muted/50">
-          <div className="text-red-500 text-center">
+          <div className="text-destructive text-center">
             <div className="text-lg font-semibold mb-2">Error loading orders</div>
             <div>{getSafeErrorMessage(error, 'Không thể tải danh sách đơn hàng')}</div>
             <Button onClick={() => refetch()} className="mt-4">

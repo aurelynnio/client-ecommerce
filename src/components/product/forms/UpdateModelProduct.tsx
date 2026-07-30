@@ -481,7 +481,7 @@ export function UpdateModelProduct({
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="h-10 w-10 shrink-0 rounded-2xl text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                className="h-10 w-10 shrink-0 rounded-2xl text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -496,14 +496,14 @@ export function UpdateModelProduct({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">
-                  Tên sản phẩm <span className="text-red-500">*</span>
+                  Tên sản phẩm <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -512,21 +512,21 @@ export function UpdateModelProduct({
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">
-                  Danh mục <span className="text-red-500">*</span>
+                  Danh mục <span className="text-destructive">*</span>
                 </Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-card">
                     <SelectValue placeholder="Chọn danh mục sản phẩm" />
                   </SelectTrigger>
                   <SelectContent>
@@ -547,7 +547,7 @@ export function UpdateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-card">
                     <SelectValue placeholder="Chọn danh mục của shop" />
                   </SelectTrigger>
                   <SelectContent>
@@ -569,13 +569,13 @@ export function UpdateModelProduct({
                   value={formData.brand}
                   onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-medium">
-                Mô tả sản phẩm <span className="text-red-500">*</span>
+                Mô tả sản phẩm <span className="text-destructive">*</span>
               </Label>
               <Textarea
                 value={formData.description}
@@ -587,7 +587,7 @@ export function UpdateModelProduct({
                 }
                 rows={3}
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white resize-none"
+                className="rounded-xl border-border bg-muted/50 focus:bg-card resize-none"
                 minLength={10}
               />
             </div>
@@ -611,7 +611,7 @@ export function UpdateModelProduct({
                   <button
                     type="button"
                     onClick={() => removeExistingDescriptionImage(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -621,7 +621,7 @@ export function UpdateModelProduct({
               {formData.descriptionImages.newPreviews.map((preview, index) => (
                 <div
                   key={`new-${index}`}
-                  className="relative w-24 h-24 rounded-xl overflow-hidden border group border-green-300"
+                  className="relative w-24 h-24 rounded-xl overflow-hidden border group border-success/40"
                 >
                   <Image
                     src={preview}
@@ -629,13 +629,13 @@ export function UpdateModelProduct({
                     fill
                     className="object-cover"
                   />
-                  <span className="absolute bottom-1 left-1 text-[10px] bg-green-500 text-white px-1 rounded">
+                  <span className="absolute bottom-1 left-1 text-[10px] bg-success text-success-foreground px-1 rounded">
                     Mới
                   </span>
                   <button
                     type="button"
                     onClick={() => removeNewDescriptionImage(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -645,8 +645,8 @@ export function UpdateModelProduct({
                 formData.descriptionImages.newFiles.length <
                 20 && (
                 <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
-                  <Upload className="h-6 w-6 text-gray-400" />
-                  <span className="text-xs text-gray-400 mt-1">Thêm ảnh</span>
+                  <Upload className="h-6 w-6 text-muted-foreground/60" />
+                  <span className="text-xs text-muted-foreground/60 mt-1">Thêm ảnh</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -680,7 +680,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -698,7 +698,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -713,7 +713,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -728,7 +728,7 @@ export function UpdateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-card">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -742,7 +742,7 @@ export function UpdateModelProduct({
               </div>
             </div>
             <div className="flex gap-6">
-              <div className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isNewArrival}
                   onCheckedChange={(checked) =>
@@ -752,7 +752,7 @@ export function UpdateModelProduct({
                 />
                 <Label className="text-sm font-medium cursor-pointer">Sản phẩm mới</Label>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isFeatured}
                   onCheckedChange={(checked) =>
@@ -782,7 +782,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -800,7 +800,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -818,7 +818,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -836,7 +836,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
                 />
               </div>
             </div>
@@ -866,11 +866,11 @@ export function UpdateModelProduct({
             </div>
 
             {/* Product-level Sizes */}
-            <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-              <Label className="text-sm font-medium text-blue-700">
+            <div className="p-4 bg-info/15 rounded-xl border border-info/30">
+              <Label className="text-sm font-medium text-info">
                 Kích thước sản phẩm (áp dụng cho tất cả variants)
               </Label>
-              <p className="text-xs text-blue-600 mb-2">VD: S, M, L, XL hoặc 36, 37, 38, 39, 40</p>
+              <p className="text-xs text-info mb-2">VD: S, M, L, XL hoặc 36, 37, 38, 39, 40</p>
               <div className="flex gap-2 mb-2">
                 <Input
                   value={newSize}
@@ -878,7 +878,7 @@ export function UpdateModelProduct({
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSize())}
                   placeholder="Nhập size và nhấn Enter"
                   disabled={isLoading}
-                  className="rounded-lg text-sm h-9 bg-white"
+                  className="rounded-lg text-sm h-9 bg-card"
                 />
                 <Button
                   type="button"
@@ -896,13 +896,13 @@ export function UpdateModelProduct({
                   {formData.sizes.map((size) => (
                     <span
                       key={size}
-                      className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-sm"
+                      className="inline-flex items-center gap-1 bg-info/15 text-info px-2 py-1 rounded-lg text-sm"
                     >
                       {size}
                       <button
                         type="button"
                         onClick={() => removeSize(size)}
-                        className="text-blue-500 hover:text-red-500"
+                        className="text-info hover:text-destructive"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -913,7 +913,7 @@ export function UpdateModelProduct({
             </div>
 
             {formData.variants.length === 0 ? (
-              <div className="text-center py-8 text-gray-400 border-2 border-dashed rounded-xl">
+              <div className="text-center py-8 text-muted-foreground/60 border-2 border-dashed rounded-xl">
                 <p className="text-sm">Chưa có variant nào</p>
                 <p className="text-xs mt-1">
                   Nhấn &quot;Thêm variant&quot; để tạo biến thể sản phẩm
@@ -922,12 +922,12 @@ export function UpdateModelProduct({
             ) : (
               <div className="space-y-4">
                 {formData.variants.map((variant, idx) => (
-                  <div key={variant._id} className="border rounded-xl p-4 space-y-4 bg-gray-50/30">
+                  <div key={variant._id} className="border rounded-xl p-4 space-y-4 bg-muted/30">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-sm font-medium text-foreground/80">
                         Variant #{idx + 1}
                         {!variant._id.startsWith('temp-') && (
-                          <span className="text-xs text-gray-400 ml-2">
+                          <span className="text-xs text-muted-foreground/60 ml-2">
                             (ID: {variant._id.slice(-6)})
                           </span>
                         )}
@@ -937,7 +937,7 @@ export function UpdateModelProduct({
                         onClick={() => removeVariant(idx)}
                         variant="ghost"
                         size="sm"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/15"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -947,7 +947,7 @@ export function UpdateModelProduct({
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
                         <Label className="text-xs">
-                          Tên hiển thị <span className="text-red-500">*</span>
+                          Tên hiển thị <span className="text-destructive">*</span>
                         </Label>
                         <Input
                           value={variant.name}
@@ -1012,7 +1012,7 @@ export function UpdateModelProduct({
                             <button
                               type="button"
                               onClick={() => removeExistingVariantImage(idx, imgIdx)}
-                              className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-0.5 right-0.5 bg-destructive text-destructive-foreground rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               <X className="h-2.5 w-2.5" />
                             </button>
@@ -1022,7 +1022,7 @@ export function UpdateModelProduct({
                         {variant.images.newPreviews.map((preview, imgIdx) => (
                           <div
                             key={`new-${imgIdx}`}
-                            className="relative w-16 h-16 rounded-lg overflow-hidden border border-green-300 group"
+                            className="relative w-16 h-16 rounded-lg overflow-hidden border border-success/40 group"
                           >
                             <Image
                               src={preview}
@@ -1030,13 +1030,13 @@ export function UpdateModelProduct({
                               fill
                               className="object-cover"
                             />
-                            <span className="absolute bottom-0.5 left-0.5 text-[8px] bg-green-500 text-white px-1 rounded">
+                            <span className="absolute bottom-0.5 left-0.5 text-[8px] bg-success text-success-foreground px-1 rounded">
                               Mới
                             </span>
                             <button
                               type="button"
                               onClick={() => removeNewVariantImage(idx, imgIdx)}
-                              className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-0.5 right-0.5 bg-destructive text-destructive-foreground rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               <X className="h-2.5 w-2.5" />
                             </button>
@@ -1044,7 +1044,7 @@ export function UpdateModelProduct({
                         ))}
                         {variant.images.existing.length + variant.images.newFiles.length < 8 && (
                           <label className="flex size-16 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
-                            <Upload className="h-4 w-4 text-gray-400" />
+                            <Upload className="h-4 w-4 text-muted-foreground/60" />
                             <input
                               type="file"
                               accept="image/*"
@@ -1073,14 +1073,14 @@ export function UpdateModelProduct({
                 onChange={(e) => setNewAttribute({ ...newAttribute, name: e.target.value })}
                 placeholder="Tên thông số"
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/50 focus:bg-card"
               />
               <Input
                 value={newAttribute.value}
                 onChange={(e) => setNewAttribute({ ...newAttribute, value: e.target.value })}
                 placeholder="Giá trị"
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/50 focus:bg-card"
               />
               <Button
                 type="button"
@@ -1097,14 +1097,14 @@ export function UpdateModelProduct({
                 {formData.attributes.map((attr, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg text-sm"
+                    className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded-lg text-sm"
                   >
                     <span className="font-medium">{attr.name}:</span>
                     <span>{attr.value}</span>
                     <button
                       type="button"
                       onClick={() => removeAttribute(i)}
-                      className="text-gray-400 hover:text-red-500"
+                      className="text-muted-foreground/60 hover:text-destructive"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -1125,7 +1125,7 @@ export function UpdateModelProduct({
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Nhập tag và nhấn Enter"
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/50 focus:bg-card"
               />
               <Button
                 type="button"

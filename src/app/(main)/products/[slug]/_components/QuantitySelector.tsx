@@ -27,7 +27,7 @@ export function QuantitySelector({
 
   return (
     <div className="flex items-center gap-4">
-      <span className="text-sm text-gray-400 w-16 shrink-0">Số lượng</span>
+      <span className="text-sm text-muted-foreground/60 w-16 shrink-0">Số lượng</span>
 
       <div className="flex items-center h-9 border border-border rounded-lg overflow-hidden">
         <button
@@ -62,9 +62,9 @@ export function QuantitySelector({
         </button>
       </div>
 
-      <div className="flex items-center gap-2 text-xs text-gray-400">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground/60">
         <span>{max} sản phẩm có sẵn</span>
-        <span className="text-gray-300">|</span>
+        <span className="text-muted-foreground/50">|</span>
         <span>Dự kiến giao 3-5 ngày</span>
       </div>
     </div>

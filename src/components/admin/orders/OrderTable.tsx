@@ -112,39 +112,39 @@ export function OrdersTable({
       pending: {
         label: 'Chờ xử lý',
         variant: 'secondary',
-        className: 'bg-gray-100 text-gray-700 hover:bg-gray-100',
+        className: 'bg-muted text-foreground/80 hover:bg-muted',
       },
       confirmed: {
         label: 'Đã xác nhận',
         variant: 'outline',
-        className: 'bg-blue-50 text-blue-700 border-blue-200',
+        className: 'bg-info/15 text-info border-info/30',
       },
       processing: {
         label: 'Đang xử lý',
         variant: 'default',
-        className: 'bg-indigo-100 text-indigo-700 hover:bg-indigo-100',
+        className: 'bg-info/15 text-info hover:bg-info/15',
       },
       shipped: {
         label: 'Đang giao',
         variant: 'default',
-        className: 'bg-purple-100 text-purple-700 hover:bg-purple-100',
+        className: 'bg-info/15 text-info hover:bg-info/15',
       },
       delivered: {
         label: 'Đã giao',
         variant: 'outline',
-        className: 'bg-green-50 text-green-700 border-green-200',
+        className: 'bg-success/15 text-success border-success/30',
       },
       cancelled: {
         label: 'Đã hủy',
         variant: 'destructive',
-        className: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-50',
+        className: 'bg-destructive/15 text-destructive border-destructive/30 hover:bg-destructive/15',
       },
     };
 
     const config = statusConfig[status] || {
       label: status,
       variant: 'secondary',
-      className: 'bg-gray-100 text-gray-700',
+      className: 'bg-muted text-foreground/80',
     };
 
     return (
@@ -168,12 +168,12 @@ export function OrdersTable({
       unpaid: {
         label: 'Chưa thanh toán',
         variant: 'secondary',
-        className: 'bg-yellow-50 text-yellow-700 border border-yellow-200',
+        className: 'bg-warning/15 text-warning border border-warning/30',
       },
       paid: {
         label: 'Đã thanh toán',
         variant: 'outline',
-        className: 'bg-green-50 text-green-700 border border-green-200',
+        className: 'bg-success/15 text-success border border-success/30',
       },
       refunded: { label: 'Hoàn tiền', variant: 'destructive' },
     };
@@ -215,7 +215,7 @@ export function OrdersTable({
 
           {/* Date Range Filter */}
           {onDateFilter && (
-            <div className="flex w-full flex-wrap items-center gap-2 rounded-xl bg-white px-3 py-2 sm:h-10 sm:w-auto sm:py-0">
+            <div className="flex w-full flex-wrap items-center gap-2 rounded-xl bg-card px-3 py-2 sm:h-10 sm:w-auto sm:py-0">
               <Calendar className="h-4 w-4 text-muted-foreground" />
               <input
                 type="date"
@@ -223,7 +223,7 @@ export function OrdersTable({
                 onChange={(e) => onDateFilter(e.target.value, endDate)}
                 className="text-sm bg-transparent border-0 focus:ring-0 w-[120px] min-w-[110px]"
               />
-              <span className="text-gray-400">-</span>
+              <span className="text-muted-foreground/60">-</span>
               <input
                 type="date"
                 value={endDate}

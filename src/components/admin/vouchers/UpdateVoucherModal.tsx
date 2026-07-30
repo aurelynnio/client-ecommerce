@@ -261,7 +261,7 @@ export function UpdateModelDiscount({
               disabled={isLoading}
               className={cn('sm:min-w-36', adminPrimaryButtonClass)}
             >
-              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />}
+              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />}
               Cập nhật
             </Button>
           </DialogFooter>

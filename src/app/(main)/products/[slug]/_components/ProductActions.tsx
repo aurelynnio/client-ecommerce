@@ -64,7 +64,7 @@ export function ProductActions({
           onClick={onBuyNow}
           disabled={disabled || loading}
           className={cn(
-            'flex h-12 w-[180px] items-center justify-center gap-2 rounded-lg bg-primary text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-primary-hover active:scale-95 motion-reduce:transition-none',
+            'flex h-12 w-[180px] items-center justify-center gap-2 rounded-lg bg-primary text-sm font-bold text-primary-foreground transition-[background-color,transform] duration-150 hover:bg-primary-hover active:scale-95 motion-reduce:transition-none',
             (disabled || loading) && 'opacity-50 cursor-not-allowed',
           )}
         >

@@ -28,39 +28,39 @@ export default function OrderCard({
   const getStatusConfig = (status: Order['status']) => {
     switch (status) {
       case 'pending':
-        return { icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50', label: 'Chờ xử lý' };
+        return { icon: Clock, color: 'text-warning', bg: 'bg-warning/15', label: 'Chờ xử lý' };
       case 'confirmed':
         return {
           icon: CheckCircle,
-          color: 'text-blue-500',
-          bg: 'bg-blue-50',
+          color: 'text-info',
+          bg: 'bg-info/15',
           label: 'Đã xác nhận',
         };
       case 'processing':
         return {
           icon: RefreshCw,
-          color: 'text-indigo-500',
-          bg: 'bg-indigo-50',
+          color: 'text-info',
+          bg: 'bg-info/15',
           label: 'Đang xử lý',
         };
       case 'shipped':
         return {
           icon: Truck,
-          color: 'text-purple-500',
-          bg: 'bg-purple-50',
+          color: 'text-info',
+          bg: 'bg-info/15',
           label: 'Đang giao hàng',
         };
       case 'delivered':
         return {
           icon: CheckCircle,
-          color: 'text-green-500',
-          bg: 'bg-green-50',
+          color: 'text-success',
+          bg: 'bg-success/15',
           label: 'Đã giao hàng',
         };
       case 'cancelled':
-        return { icon: XCircle, color: 'text-red-500', bg: 'bg-red-50', label: 'Đã hủy' };
+        return { icon: XCircle, color: 'text-destructive', bg: 'bg-destructive/15', label: 'Đã hủy' };
       default:
-        return { icon: Package, color: 'text-gray-500', bg: 'bg-gray-50', label: status };
+        return { icon: Package, color: 'text-muted-foreground', bg: 'bg-muted/50', label: status };
     }
   };
 

@@ -94,7 +94,7 @@ export default function AddressTab({ user }: AddressTabProps) {
           <h4 className="font-semibold text-base tracking-tight">{address.fullName}</h4>
           {address.isDefault && (
             <Badge className="rounded-sm bg-primary/10 text-primary text-xs px-2 py-0.5 border-0">
-              <Star className="h-3 w-3 mr-1 fill-current" />
+              <Star className="h-3 w-3 mr-1 fill-current text-star" />
               Mặc định
             </Badge>
           )}

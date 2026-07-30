@@ -24,7 +24,7 @@ const SectionHeader = memo(function SectionHeader({
   return (
     <div className="flex items-center gap-2 mb-4">
       <Icon className={cn('h-5 w-5', iconColor)} />
-      <h2 className="font-bold text-lg text-gray-800">{title}</h2>
+      <h2 className="font-bold text-lg text-foreground">{title}</h2>
     </div>
   );
 });
@@ -89,7 +89,7 @@ export const RecentlyViewedSection = memo(function RecentlyViewedSection({
 
   return (
     <section className={cn('py-6', className)}>
-      <SectionHeader icon={Clock} title="Đã xem gần đây" iconColor="text-blue-500" />
+      <SectionHeader icon={Clock} title="Đã xem gần đây" iconColor="text-info" />
       <ProductGrid products={recentlyViewed} columns={5} />
     </section>
   );
@@ -122,7 +122,7 @@ export const HomepageRecommendations = memo(function HomepageRecommendations({
       {/* Popular Products */}
       {homepage.popular && homepage.popular.length > 0 && (
         <section>
-          <SectionHeader icon={TrendingUp} title="Sản phẩm bán chạy" iconColor="text-orange-500" />
+          <SectionHeader icon={TrendingUp} title="Sản phẩm bán chạy" iconColor="text-warning" />
           <ProductGrid products={homepage.popular} columns={5} />
         </section>
       )}
@@ -130,7 +130,7 @@ export const HomepageRecommendations = memo(function HomepageRecommendations({
       {/* Top Rated */}
       {homepage.topRated && homepage.topRated.length > 0 && (
         <section>
-          <SectionHeader icon={Star} title="Đánh giá cao" iconColor="text-yellow-500" />
+          <SectionHeader icon={Star} title="Đánh giá cao" iconColor="text-star" />
           <ProductGrid products={homepage.topRated} columns={5} />
         </section>
       )}

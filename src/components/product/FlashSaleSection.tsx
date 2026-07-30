@@ -41,7 +41,7 @@ const SoldProgress = memo(function SoldProgress({ percent }: { percent: number }
         className="absolute inset-y-0 left-0 rounded-full bg-primary transition-[width] duration-300 motion-reduce:transition-none"
         style={{ width: `${Math.min(percent, 100)}%` }}
       />
-      <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white">
+      <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-primary-foreground">
         {percent >= 50 ? `Đã bán ${percent}%` : 'Đang bán chạy'}
       </span>
     </div>
@@ -59,7 +59,7 @@ const FlashSaleCard = memo(function FlashSaleCard({ product }: { product: FlashS
       className="group w-[140px] shrink-0 overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30 sm:w-40"
     >
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
+      <div className="relative aspect-square overflow-hidden bg-muted/50">
         <Image
           src={productImage}
           alt={product.name}
@@ -85,7 +85,7 @@ const FlashSaleCard = memo(function FlashSaleCard({ product }: { product: FlashS
           </span>
         </div>
         {flashSaleInfo?.originalPrice > flashSaleInfo?.salePrice && (
-          <span className="text-[10px] text-gray-400 line-through">
+          <span className="text-[10px] text-price-strikethrough line-through">
             ₫{flashSaleInfo.originalPrice.toLocaleString('vi-VN')}
           </span>
         )}
@@ -122,7 +122,7 @@ export const FlashSaleSection = memo(function FlashSaleSection() {
 
           {remainingSeconds > 0 && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600">Kết thúc trong</span>
+              <span className="text-xs text-muted-foreground">Kết thúc trong</span>
               <CountdownTimer seconds={remainingSeconds} />
             </div>
           )}

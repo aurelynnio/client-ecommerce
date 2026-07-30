@@ -382,14 +382,14 @@ export function CreateModelProduct({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">
-                  Tên sản phẩm <span className="text-red-500">*</span>
+                  Tên sản phẩm <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="VD: Áo thun nam cotton"
                 />
               </div>
@@ -399,7 +399,7 @@ export function CreateModelProduct({
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="Để trống sẽ tự tạo từ tên"
                 />
               </div>
@@ -407,14 +407,14 @@ export function CreateModelProduct({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">
-                  Danh mục <span className="text-red-500">*</span>
+                  Danh mục <span className="text-destructive">*</span>
                 </Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-white">
                     <SelectValue placeholder="Chọn danh mục sản phẩm" />
                   </SelectTrigger>
                   <SelectContent>
@@ -435,7 +435,7 @@ export function CreateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-white">
                     <SelectValue placeholder="Chọn danh mục của shop" />
                   </SelectTrigger>
                   <SelectContent>
@@ -457,14 +457,14 @@ export function CreateModelProduct({
                   value={formData.brand}
                   onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="VD: Nike, Adidas, Uniqlo"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-medium">
-                Mô tả sản phẩm <span className="text-red-500">*</span>
+                Mô tả sản phẩm <span className="text-destructive">*</span>
               </Label>
               <Textarea
                 value={formData.description}
@@ -476,7 +476,7 @@ export function CreateModelProduct({
                 }
                 rows={3}
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white resize-none"
+                className="rounded-xl border-border bg-muted/50 focus:bg-white resize-none"
                 placeholder="Mô tả chi tiết về sản phẩm, chất liệu, công dụng..."
                 minLength={10}
               />
@@ -502,7 +502,7 @@ export function CreateModelProduct({
                   <button
                     type="button"
                     onClick={() => removeDescriptionImage(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -510,8 +510,8 @@ export function CreateModelProduct({
               ))}
               {formData.descriptionImages.files.length < 20 && (
                 <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
-                  <Upload className="h-6 w-6 text-gray-400" />
-                  <span className="text-xs text-gray-400 mt-1">Thêm ảnh</span>
+                  <Upload className="h-6 w-6 text-muted-foreground/60" />
+                  <span className="text-xs text-muted-foreground/60 mt-1">Thêm ảnh</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -532,7 +532,7 @@ export function CreateModelProduct({
             <div className="grid grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">
-                  Giá bán (VND) <span className="text-red-500">*</span>
+                  Giá bán (VND) <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -547,7 +547,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="150000"
                   min="0"
                 />
@@ -567,7 +567,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="120000"
                   min="0"
                 />
@@ -584,7 +584,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="100"
                   min="0"
                 />
@@ -601,7 +601,7 @@ export function CreateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -615,7 +615,7 @@ export function CreateModelProduct({
               </div>
             </div>
             <div className="flex gap-6">
-              <div className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isNewArrival}
                   onCheckedChange={(checked) =>
@@ -625,7 +625,7 @@ export function CreateModelProduct({
                 />
                 <Label className="text-sm font-medium cursor-pointer">Sản phẩm mới</Label>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isFeatured}
                   onCheckedChange={(checked) =>
@@ -655,7 +655,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="500"
                   min="0"
                 />
@@ -675,7 +675,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="30"
                   min="0"
                 />
@@ -695,7 +695,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="20"
                   min="0"
                 />
@@ -715,7 +715,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
                   placeholder="5"
                   min="0"
                 />
@@ -747,11 +747,11 @@ export function CreateModelProduct({
             </div>
 
             {/* Product-level Sizes */}
-            <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-              <Label className="text-sm font-medium text-blue-700">
+            <div className="p-4 bg-info/15 rounded-xl border border-border/50">
+              <Label className="text-sm font-medium text-info">
                 Kích thước sản phẩm (áp dụng cho tất cả variants)
               </Label>
-              <p className="text-xs text-blue-600 mb-2">VD: S, M, L, XL hoặc 36, 37, 38, 39, 40</p>
+              <p className="text-xs text-info mb-2">VD: S, M, L, XL hoặc 36, 37, 38, 39, 40</p>
               <div className="flex gap-2 mb-2">
                 <Input
                   value={newSize}
@@ -777,13 +777,13 @@ export function CreateModelProduct({
                   {formData.sizes.map((size) => (
                     <span
                       key={size}
-                      className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-sm"
+                      className="inline-flex items-center gap-1 bg-info/15 text-info px-2 py-1 rounded-lg text-sm"
                     >
                       {size}
                       <button
                         type="button"
                         onClick={() => removeSize(size)}
-                        className="text-blue-500 hover:text-red-500"
+                        className="text-info hover:text-destructive"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -794,7 +794,7 @@ export function CreateModelProduct({
             </div>
 
             {formData.variants.length === 0 ? (
-              <div className="text-center py-8 text-gray-400 border-2 border-dashed rounded-xl">
+              <div className="text-center py-8 text-muted-foreground/60 border-2 border-dashed rounded-xl">
                 <p className="text-sm">Chưa có variant nào</p>
                 <p className="text-xs mt-1">
                   Nhấn &quot;Thêm variant&quot; để tạo biến thể sản phẩm
@@ -803,15 +803,15 @@ export function CreateModelProduct({
             ) : (
               <div className="space-y-4">
                 {formData.variants.map((variant, idx) => (
-                  <div key={variant._id} className="border rounded-xl p-4 space-y-4 bg-gray-50/30">
+                  <div key={variant._id} className="border rounded-xl p-4 space-y-4 bg-muted/30">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">Variant #{idx + 1}</span>
+                      <span className="text-sm font-medium text-foreground">Variant #{idx + 1}</span>
                       <Button
                         type="button"
                         onClick={() => removeVariant(idx)}
                         variant="ghost"
                         size="sm"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/15"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -821,7 +821,7 @@ export function CreateModelProduct({
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
                         <Label className="text-xs">
-                          Tên hiển thị <span className="text-red-500">*</span>
+                          Tên hiển thị <span className="text-destructive">*</span>
                         </Label>
                         <Input
                           value={variant.name}
@@ -889,7 +889,7 @@ export function CreateModelProduct({
                             <button
                               type="button"
                               onClick={() => removeVariantImage(idx, imgIdx)}
-                              className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-0.5 right-0.5 bg-destructive text-destructive-foreground rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               <X className="h-2.5 w-2.5" />
                             </button>
@@ -897,7 +897,7 @@ export function CreateModelProduct({
                         ))}
                         {variant.images.files.length < 8 && (
                           <label className="flex size-16 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-primary/5">
-                            <Upload className="h-4 w-4 text-gray-400" />
+                            <Upload className="h-4 w-4 text-muted-foreground/60" />
                             <input
                               type="file"
                               accept="image/*"
@@ -927,14 +927,14 @@ export function CreateModelProduct({
                 onChange={(e) => setNewAttribute({ ...newAttribute, name: e.target.value })}
                 placeholder="Tên thông số (VD: Chất liệu)"
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/50 focus:bg-white"
               />
               <Input
                 value={newAttribute.value}
                 onChange={(e) => setNewAttribute({ ...newAttribute, value: e.target.value })}
                 placeholder="Giá trị (VD: Cotton 100%)"
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/50 focus:bg-white"
               />
               <Button
                 type="button"
@@ -951,14 +951,14 @@ export function CreateModelProduct({
                 {formData.attributes.map((attr, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg text-sm"
+                    className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded-lg text-sm"
                   >
                     <span className="font-medium">{attr.name}:</span>
                     <span>{attr.value}</span>
                     <button
                       type="button"
                       onClick={() => removeAttribute(i)}
-                      className="text-gray-400 hover:text-red-500"
+                      className="text-muted-foreground/60 hover:text-destructive"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -980,7 +980,7 @@ export function CreateModelProduct({
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Nhập tag và nhấn Enter"
                 disabled={isLoading}
-                className="rounded-xl border-gray-200 bg-gray-50/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/50 focus:bg-white"
               />
               <Button
                 type="button"

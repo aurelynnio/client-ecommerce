@@ -98,7 +98,7 @@ export default function Banner() {
   if (!mounted || isLoading) {
     return (
       <div className="flex h-full w-full items-center justify-center rounded-lg bg-muted animate-pulse">
-        <span className="text-gray-400 text-sm font-medium">Đang tải...</span>
+        <span className="text-muted-foreground/60 text-sm font-medium">Đang tải...</span>
       </div>
     );
   }
@@ -110,14 +110,14 @@ export default function Banner() {
   if (!banner) {
     return (
       <div className="flex h-full w-full items-center justify-center rounded-lg bg-muted animate-pulse">
-        <span className="text-gray-400 text-sm font-medium">Đang tải banner...</span>
+        <span className="text-muted-foreground/60 text-sm font-medium">Đang tải banner...</span>
       </div>
     );
   }
 
   return (
     <section
-      className="relative w-full h-full overflow-hidden bg-gray-100 group rounded-lg"
+      className="relative w-full h-full overflow-hidden bg-muted group rounded-lg"
       onMouseEnter={() => (isHoveringRef.current = true)}
       onMouseLeave={() => (isHoveringRef.current = false)}
     >
@@ -205,7 +205,7 @@ export default function Banner() {
                     className={cn(
                       'rounded-full px-5 py-2 text-xs font-bold shadow-lg transition-[background-color,color,transform,box-shadow] duration-200 hover:scale-105 active:scale-95 motion-reduce:transition-none',
                       banner.theme === 'light'
-                        ? 'bg-white text-black hover:bg-white/90 border-transparent'
+                        ? 'bg-card text-black hover:bg-card/90 border-transparent'
                         : 'bg-primary text-primary-foreground hover:bg-primary-hover',
                     )}
                   >
@@ -246,7 +246,7 @@ export default function Banner() {
               }}
               className={cn(
                 'h-2 w-2 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none',
-                idx === currentIndex ? 'bg-white w-5' : 'bg-white/50 hover:bg-white/80',
+                idx === currentIndex ? 'bg-card w-5' : 'bg-white/50 hover:bg-white/80',
               )}
             />
           ))}

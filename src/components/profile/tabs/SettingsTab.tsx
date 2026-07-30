@@ -195,7 +195,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
             <div className="bg-muted/20 p-5 rounded-md border border-border/30">
               <div className="flex items-start justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                  <div className="h-10 w-10 rounded-full bg-info/15 flex items-center justify-center text-info">
                     <Key className="h-5 w-5" />
                   </div>
                   <div>
@@ -305,7 +305,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                 <Button
                   type="submit"
                   disabled={isChangingPassword}
-                  className="mt-2 text-white rounded-sm"
+                  className="mt-2 text-primary-foreground rounded-sm"
                 >
                   {isChangingPassword ? 'Đang cập nhật...' : 'Cập nhật mật khẩu'}
                 </Button>
@@ -319,7 +319,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                     className={cn(
                       'h-10 w-10 rounded-full flex items-center justify-center transition-colors duration-200',
                       twoFactorEnabled
-                        ? 'bg-green-50 text-green-600'
+                        ? 'bg-success/15 text-success'
                         : 'bg-muted text-muted-foreground',
                     )}
                   >
@@ -346,16 +346,16 @@ export default function SettingsTab({ user }: SettingsTabProps) {
               </div>
               <div className="mt-3 flex items-center gap-2">
                 {twoFactorEnabled ? (
-                  <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
+                  <Badge className="bg-success/15 text-success hover:bg-success/15">
                     Đang bật
                   </Badge>
                 ) : (
-                  <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">
+                  <Badge variant="outline" className="border-border bg-muted/50 text-muted-foreground">
                     Chưa bật
                   </Badge>
                 )}
                 {!user?.isVerifiedEmail ? (
-                  <span className="text-xs text-amber-600">
+                  <span className="text-xs text-warning">
                     Cần xác minh email trước khi sử dụng.
                   </span>
                 ) : null}
@@ -382,7 +382,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                           void handleConfirmTwoFactor();
                         }}
                         disabled={confirmTwoFactorMutation.isPending}
-                        className="text-white"
+                        className="text-primary-foreground"
                       >
                         {confirmTwoFactorMutation.isPending
                           ? 'Đang xác nhận...'
@@ -436,8 +436,8 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                     className={cn(
                       'h-10 w-10 rounded-full flex items-center justify-center transition-colors duration-200',
                       user?.isVerifiedEmail
-                        ? 'bg-blue-50 text-blue-600'
-                        : 'bg-amber-50 text-amber-600',
+                        ? 'bg-info/15 text-info'
+                        : 'bg-warning/15 text-warning',
                     )}
                   >
                     <Mail className="h-5 w-5" />
@@ -448,14 +448,14 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       {user?.isVerifiedEmail ? (
                         <Badge
                           variant="secondary"
-                          className="bg-green-100 text-green-700 hover:bg-green-100 h-5 px-1.5 text-[10px]"
+                          className="bg-success/15 text-success hover:bg-success/15 h-5 px-1.5 text-[10px]"
                         >
                           Đã xác minh
                         </Badge>
                       ) : (
                         <Badge
                           variant="outline"
-                          className="text-amber-600 border-amber-200 bg-amber-50 h-5 px-1.5 text-[10px]"
+                          className="text-warning border-warning/30 bg-warning/15 h-5 px-1.5 text-[10px]"
                         >
                           Chưa xác minh
                         </Badge>

@@ -141,7 +141,7 @@ export function CreateBannerModal({
                       <Input
                         placeholder="VD: Tương lai của sự mượt mà"
                         {...field}
-                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                       />
                     </FormControl>
                     <FormMessage />
@@ -159,7 +159,7 @@ export function CreateBannerModal({
                       <Input
                         placeholder="VD: Trải nghiệm bộ sưu tập tối thượng..."
                         {...field}
-                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                       />
                     </FormControl>
                     <FormMessage />
@@ -178,7 +178,7 @@ export function CreateBannerModal({
                         <Input
                           placeholder="/shop"
                           {...field}
-                          className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                          className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                         />
                       </FormControl>
                       <FormMessage />
@@ -255,7 +255,7 @@ export function CreateBannerModal({
                             </div>
                           ) : (
                             <div className="flex flex-col items-center">
-                              <div className="bg-gray-100 p-3 rounded-full mb-3">
+                              <div className="bg-muted p-3 rounded-full mb-3">
                                 <Upload className="h-5 w-5 text-muted-foreground" />
                               </div>
                               <p className="text-sm font-medium text-foreground">
@@ -331,7 +331,7 @@ export function CreateBannerModal({
                 className={cn('h-11 flex-1 shadow-sm', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
-                  <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
+                  <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />
                 ) : (
                   <Plus className="h-4 w-4 mr-2" />
                 )}

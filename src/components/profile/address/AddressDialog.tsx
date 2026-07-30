@@ -345,7 +345,7 @@ export default function AddressDialog({
                 size="sm"
                 onClick={getCurrentLocation}
                 disabled={isGettingLocation}
-                className="h-8 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                className="h-8 text-xs text-info hover:text-info hover:bg-info/15"
               >
                 {isGettingLocation ? (
                   <SpinnerLoading size={14} noWrapper className="mr-1.5" />

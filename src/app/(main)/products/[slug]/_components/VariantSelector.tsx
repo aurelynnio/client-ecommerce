@@ -33,7 +33,7 @@ export function VariantSelector({
       {/* Variant/Color Selection */}
       {hasVariants && (
         <div className="flex items-start gap-4">
-          <span className="text-sm text-gray-400 w-16 pt-2 shrink-0">Màu sắc</span>
+          <span className="text-sm text-muted-foreground/60 w-16 pt-2 shrink-0">Màu sắc</span>
           <div className="flex-1">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {variants.map((variant, index) => {
@@ -46,7 +46,7 @@ export function VariantSelector({
                     onClick={() => !isOutOfStock && onSelect(index)}
                     disabled={isOutOfStock}
                     className={cn(
-                      'flex items-center gap-2 p-1.5 border rounded-lg transition-[border-color,background-color,box-shadow] overflow-hidden bg-white text-left',
+                      'flex items-center gap-2 p-1.5 border rounded-lg transition-[border-color,background-color,box-shadow] overflow-hidden bg-card text-left',
                       isSelected
                         ? 'border-primary ring-1 ring-primary bg-primary-light'
                         : 'border-border hover:border-muted-foreground/30',
@@ -68,11 +68,11 @@ export function VariantSelector({
 
                     {/* Variant Name */}
                     <div className="flex-1 min-w-0 pr-1">
-                      <span className="text-xs text-gray-700 line-clamp-2 font-medium">
+                      <span className="text-xs text-foreground/80 line-clamp-2 font-medium">
                         {variant.name || getVariantDisplay(variant)}
                       </span>
                       {isOutOfStock && (
-                        <span className="text-[10px] text-red-500 block">Hết hàng</span>
+                        <span className="text-[10px] text-destructive block">Hết hàng</span>
                       )}
                     </div>
                   </button>
@@ -86,7 +86,7 @@ export function VariantSelector({
       {/* Size Selection */}
       {hasSizes && (
         <div className="flex items-start gap-4">
-          <span className="text-sm text-gray-400 w-16 pt-2 shrink-0">Kích cỡ</span>
+          <span className="text-sm text-muted-foreground/60 w-16 pt-2 shrink-0">Kích cỡ</span>
           <div className="flex-1">
             <div className="flex flex-wrap gap-2">
               {sizes.map((size) => {
@@ -99,7 +99,7 @@ export function VariantSelector({
                     className={cn(
                       'min-w-[48px] h-10 px-4 border rounded-lg text-sm font-medium transition-[border-color,background-color,color,box-shadow]',
                       isSelected
-                        ? 'border-primary bg-primary text-white'
+                        ? 'border-primary bg-primary text-primary-foreground'
                         : 'border-border bg-card text-foreground hover:border-muted-foreground/30 hover:bg-muted/40',
                     )}
                   >
@@ -109,7 +109,7 @@ export function VariantSelector({
               })}
             </div>
             {!selectedSize && sizes.length > 0 && (
-              <p className="text-xs text-orange-500 mt-2">Vui lòng chọn kích cỡ</p>
+              <p className="text-xs text-warning mt-2">Vui lòng chọn kích cỡ</p>
             )}
           </div>
         </div>
@@ -117,23 +117,23 @@ export function VariantSelector({
 
       {/* Selected Info Summary */}
       {(selectedVariant || selectedSize) && (
-        <div className="flex items-center gap-3 text-sm text-gray-600 bg-muted/30 border border-border p-3 rounded-lg">
-          <span className="text-gray-400">Đã chọn:</span>
+        <div className="flex items-center gap-3 text-sm text-muted-foreground bg-muted/30 border border-border p-3 rounded-lg">
+          <span className="text-muted-foreground/60">Đã chọn:</span>
           {selectedVariant && (
-            <span className="font-medium text-gray-800">
+            <span className="font-medium text-foreground">
               {selectedVariant.name || getVariantDisplay(selectedVariant)}
             </span>
           )}
-          {selectedVariant && selectedSize && <span className="text-gray-300">•</span>}
+          {selectedVariant && selectedSize && <span className="text-muted-foreground/50">•</span>}
           {selectedSize && (
-            <span className="font-medium text-gray-800">Kích cỡ {selectedSize}</span>
+            <span className="font-medium text-foreground">Kích cỡ {selectedSize}</span>
           )}
-          <span className="text-gray-300">|</span>
+          <span className="text-muted-foreground/50">|</span>
           <span>
             Kho:{' '}
             <strong
               className={
-                selectedVariant && selectedVariant.stock <= 5 ? 'text-orange-500' : 'text-gray-800'
+                selectedVariant && selectedVariant.stock <= 5 ? 'text-warning' : 'text-foreground'
               }
             >
               {selectedVariant?.stock || 0}

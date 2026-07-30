@@ -37,15 +37,15 @@ function RatingBreakdownComponent({
 
         return (
           <div key={rating} className="flex items-center gap-2 text-xs">
-            <span className="w-3 text-gray-600">{rating}</span>
-            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            <span className="w-3 text-muted-foreground">{rating}</span>
+            <Star className="w-3 h-3 fill-star text-star" />
             <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-warning transition-[width] duration-300 motion-reduce:transition-none"
                 style={{ width: `${percentage}%` }}
               />
             </div>
-            <span className="w-8 text-gray-400 text-right">{count}</span>
+            <span className="w-8 text-muted-foreground/60 text-right">{count}</span>
           </div>
         );
       })}
@@ -100,7 +100,7 @@ export function ProductReviews({
     <section id="section-reviews" className="py-8">
       <h2 className="text-lg font-bold flex items-center gap-2 mb-6">
         Đánh giá từ người mua
-        <span className="text-sm font-normal text-gray-400">({reviewCount})</span>
+        <span className="text-sm font-normal text-muted-foreground/60">({reviewCount})</span>
       </h2>
 
       {/* Rating Summary */}
@@ -114,13 +114,13 @@ export function ProductReviews({
                 key={i}
                 className={`w-4 h-4 ${
                   i < Math.round(ratingAverage)
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : 'text-gray-300'
+                    ? 'fill-star text-star'
+                    : 'text-muted-foreground/50'
                 }`}
               />
             ))}
           </div>
-          <div className="text-xs text-gray-500 mt-1">{reviewCount} đánh giá</div>
+          <div className="text-xs text-muted-foreground mt-1">{reviewCount} đánh giá</div>
         </div>
 
         {/* Rating Breakdown */}
@@ -144,7 +144,7 @@ export function ProductReviews({
           ))}
         </div>
       ) : reviews.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-muted-foreground">
           <p>Chưa có đánh giá nào cho sản phẩm này</p>
           <p className="text-sm mt-1">Hãy là người đầu tiên đánh giá!</p>
         </div>
@@ -171,12 +171,12 @@ export function ProductReviews({
             <Button
               variant="ghost"
               onClick={() => setPage((p) => p + 1)}
-              className="text-xs text-gray-400 hover:text-primary"
+              className="text-xs text-muted-foreground/60 hover:text-primary"
             >
               Xem thêm đánh giá <ChevronRight className="w-3 h-3 ml-1" />
             </Button>
           ) : (
-            <span className="text-xs text-gray-400">Đã hiển thị tất cả đánh giá</span>
+            <span className="text-xs text-muted-foreground/60">Đã hiển thị tất cả đánh giá</span>
           )}
         </div>
       )}

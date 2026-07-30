@@ -103,27 +103,27 @@ export function DiscountsTable({
   const getStatusBadge = (discount: Voucher) => {
     if (!discount.isActive) {
       return (
-        <Badge className="bg-gray-100 text-gray-600 hover:bg-gray-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-muted text-muted-foreground hover:bg-muted border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
           Ngừng hoạt động
         </Badge>
       );
     }
     if (isExpired(discount.endDate)) {
       return (
-        <Badge className="bg-red-50 text-red-600 hover:bg-red-50 border-red-100 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-destructive/15 text-destructive hover:bg-destructive/15 border-destructive/30 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
           Hết hạn
         </Badge>
       );
     }
     if ((discount.usageCount ?? 0) >= discount.usageLimit) {
       return (
-        <Badge className="bg-orange-50 text-orange-600 hover:bg-orange-50 border-orange-100 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-warning/15 text-warning hover:bg-warning/15 border-warning/30 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
           Hết lượt dùng
         </Badge>
       );
     }
     return (
-      <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+      <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
         Đang hoạt động
       </Badge>
     );
@@ -147,7 +147,7 @@ export function DiscountsTable({
   const getScopeDisplay = (discount: Voucher) => {
     if (discount.scope === 'platform' || !discount.shopId) {
       return (
-        <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-info/15 text-info hover:bg-info/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
           <Globe className="h-3 w-3 mr-1" />
           Hệ thống
         </Badge>
@@ -307,8 +307,8 @@ export function DiscountsTable({
                 <TableRow>
                   <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
                     <div className="flex flex-col items-center justify-center">
-                      <span className="bg-gray-100 p-3 rounded-full mb-3">
-                        <Filter className="h-6 w-6 text-gray-400" />
+                      <span className="bg-muted p-3 rounded-full mb-3">
+                        <Filter className="h-6 w-6 text-muted-foreground/60" />
                       </span>
                       Không tìm thấy mã giảm giá.
                     </div>
@@ -367,14 +367,14 @@ export function DiscountsTable({
                           </DropdownMenuLabel>
                           <DropdownMenuItem
                             onClick={() => onView(discount)}
-                            className="focus:bg-gray-100 rounded-lg cursor-pointer gap-2"
+                            className="focus:bg-muted rounded-lg cursor-pointer gap-2"
                           >
                             <Eye className="h-4 w-4" />
                             Xem chi tiết
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => onEdit(discount)}
-                            className="focus:bg-gray-100 rounded-lg cursor-pointer gap-2"
+                            className="focus:bg-muted rounded-lg cursor-pointer gap-2"
                           >
                             <Edit className="h-4 w-4" />
                             Chỉnh sửa
@@ -382,7 +382,7 @@ export function DiscountsTable({
                           <DropdownMenuSeparator className={adminMenuSeparatorClass} />
                           <DropdownMenuItem
                             onClick={() => onDelete(discount)}
-                            className="text-red-600 focus:text-red-700 focus:bg-red-50 rounded-lg cursor-pointer gap-2"
+                            className="text-destructive focus:text-destructive focus:bg-destructive/15 rounded-lg cursor-pointer gap-2"
                           >
                             <Trash2 className="h-4 w-4" />
                             Xóa

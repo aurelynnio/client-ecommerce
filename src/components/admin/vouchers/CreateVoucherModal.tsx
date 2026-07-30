@@ -276,7 +276,7 @@ export function CreateModelDiscount({
               disabled={isLoading}
               className={cn('sm:min-w-40', adminPrimaryButtonClass)}
             >
-              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />}
+              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />}
               Tạo mã giảm giá
             </Button>
           </DialogFooter>

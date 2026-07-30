@@ -251,11 +251,11 @@ export default function SellerOrdersPage() {
           </div>
         ) : orders.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <ShoppingCart className="h-10 w-10 text-gray-400" />
+            <div className="w-20 h-20 bg-card rounded-full flex items-center justify-center mx-auto mb-4">
+              <ShoppingCart className="h-10 w-10 text-muted-foreground/60" />
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">Chưa có đơn hàng nào</h3>
-            <p className="text-gray-500 text-sm">Đơn hàng sẽ xuất hiện khi có khách đặt</p>
+            <h3 className="font-semibold text-foreground mb-2">Chưa có đơn hàng nào</h3>
+            <p className="text-muted-foreground text-sm">Đơn hàng sẽ xuất hiện khi có khách đặt</p>
           </div>
         ) : (
           <>
@@ -268,12 +268,12 @@ export default function SellerOrdersPage() {
                 return (
                   <div
                     key={order._id}
-                    className={`p-5 ${idx % 2 === 0 ? 'bg-white' : 'bg-white/50'}`}
+                    className={`p-5 ${idx % 2 === 0 ? 'bg-card' : 'bg-card/50'}`}
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
                       <div>
                         <div className="flex items-center gap-3">
-                          <span className="font-semibold text-gray-800">
+                          <span className="font-semibold text-foreground">
                             #{order.orderCode || order._id.slice(-8).toUpperCase()}
                           </span>
                           <Badge
@@ -283,7 +283,7 @@ export default function SellerOrdersPage() {
                             {status.label}
                           </Badge>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">{formatDate(order.createdAt)}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{formatDate(order.createdAt)}</p>
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -333,7 +333,7 @@ export default function SellerOrdersPage() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <Package className="h-5 w-5 text-gray-400" />
+                                  <Package className="h-5 w-5 text-muted-foreground/60" />
                                 </div>
                               )}
                               {item.quantity > 1 && (
@@ -349,17 +349,17 @@ export default function SellerOrdersPage() {
                             </div>
                           )}
                         </div>
-                        <p className="text-sm text-gray-600 mt-2">
+                        <p className="text-sm text-muted-foreground mt-2">
                           {order.products.length} sản phẩm
                         </p>
                       </div>
 
                       {/* Customer */}
                       <div className="w-full lg:w-48">
-                        <p className="text-sm font-medium text-gray-800">
+                        <p className="text-sm font-medium text-foreground">
                           {getCustomerName(order)}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">{getCustomerPhone(order)}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{getCustomerPhone(order)}</p>
                       </div>
 
                       {/* Total */}
@@ -376,8 +376,8 @@ export default function SellerOrdersPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-6 py-4 bg-white/50">
-                <p className="text-sm text-gray-500">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-6 py-4 bg-card/50">
+                <p className="text-sm text-muted-foreground">
                   Hiển thị {orders.length} / {total} đơn hàng
                 </p>
                 <div className="flex gap-2">
@@ -386,7 +386,7 @@ export default function SellerOrdersPage() {
                     size="sm"
                     disabled={page <= 1}
                     onClick={() => setPage((p) => p - 1)}
-                    className="rounded-lg border-0 bg-white"
+                    className="rounded-lg border-0 bg-card"
                   >
                     Trước
                   </Button>
@@ -395,7 +395,7 @@ export default function SellerOrdersPage() {
                     size="sm"
                     disabled={page >= totalPages}
                     onClick={() => setPage((p) => p + 1)}
-                    className="rounded-lg border-0 bg-white"
+                    className="rounded-lg border-0 bg-card"
                   >
                     Sau
                   </Button>
@@ -419,7 +419,7 @@ export default function SellerOrdersPage() {
             <div className="space-y-4">
               {/* Order Status */}
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">Trạng thái:</span>
+                <span className="text-sm text-muted-foreground">Trạng thái:</span>
                 <Badge
                   className={`${statusConfig[selectedOrder.status]?.bg} ${
                     statusConfig[selectedOrder.status]?.color
@@ -430,11 +430,11 @@ export default function SellerOrdersPage() {
               </div>
 
               {/* Customer Info */}
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-muted/50 rounded-lg p-4">
                 <h4 className="font-medium mb-2">Thông tin khách hàng</h4>
                 <p className="text-sm">{getCustomerName(selectedOrder)}</p>
-                <p className="text-sm text-gray-500">{getCustomerPhone(selectedOrder)}</p>
-                <p className="text-sm text-gray-500">{selectedOrder.shippingAddress?.address}</p>
+                <p className="text-sm text-muted-foreground">{getCustomerPhone(selectedOrder)}</p>
+                <p className="text-sm text-muted-foreground">{selectedOrder.shippingAddress?.address}</p>
               </div>
 
               {/* Products */}
@@ -442,19 +442,19 @@ export default function SellerOrdersPage() {
                 <h4 className="font-medium mb-2">Sản phẩm</h4>
                 <div className="space-y-2">
                   {selectedOrder.products.map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
-                      <div className="relative w-12 h-12 rounded overflow-hidden bg-white">
+                    <div key={i} className="flex items-center gap-3 p-2 bg-muted/50 rounded-lg">
+                      <div className="relative w-12 h-12 rounded overflow-hidden bg-card">
                         {item.image ? (
                           <Image src={item.image} alt={item.name} fill className="object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Package className="h-4 w-4 text-gray-400" />
+                            <Package className="h-4 w-4 text-muted-foreground/60" />
                           </div>
                         )}
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium">{item.name}</p>
-                        <p className="text-xs text-gray-500">x{item.quantity}</p>
+                        <p className="text-xs text-muted-foreground">x{item.quantity}</p>
                       </div>
                       <p className="text-sm font-medium">
                         {formatCurrency(item.price * item.quantity)}
@@ -471,7 +471,7 @@ export default function SellerOrdersPage() {
                   <span>{formatCurrency(selectedOrder.subtotal)}</span>
                 </div>
                 {selectedOrder.discountShop && selectedOrder.discountShop > 0 && (
-                  <div className="flex justify-between text-sm text-green-600">
+                  <div className="flex justify-between text-sm text-success">
                     <span>Giảm giá shop:</span>
                     <span>-{formatCurrency(selectedOrder.discountShop)}</span>
                   </div>
@@ -499,7 +499,7 @@ export default function SellerOrdersPage() {
           {selectedOrder && (
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500 mb-2">Trạng thái hiện tại:</p>
+                <p className="text-sm text-muted-foreground mb-2">Trạng thái hiện tại:</p>
                 <Badge
                   className={`${statusConfig[selectedOrder.status]?.bg} ${
                     statusConfig[selectedOrder.status]?.color
@@ -509,7 +509,7 @@ export default function SellerOrdersPage() {
                 </Badge>
               </div>
               <div>
-                <p className="text-sm text-gray-500 mb-2">Chọn trạng thái mới:</p>
+                <p className="text-sm text-muted-foreground mb-2">Chọn trạng thái mới:</p>
                 <Select value={newStatus} onValueChange={setNewStatus}>
                   <SelectTrigger>
                     <SelectValue placeholder="Chọn trạng thái" />

@@ -37,7 +37,7 @@ function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
     <div
       className={cn(
         'flex items-center gap-1.5 text-xs transition-colors',
-        met ? 'text-green-600' : 'text-gray-400',
+        met ? 'text-success' : 'text-muted-foreground/60',
       )}
     >
       {met ? (
@@ -102,7 +102,7 @@ export default function RegisterPage() {
             className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
           />
           {form.formState.errors.username ? (
-            <p className="text-sm text-red-500">{form.formState.errors.username.message}</p>
+            <p className="text-sm text-destructive">{form.formState.errors.username.message}</p>
           ) : null}
         </div>
 
@@ -122,7 +122,7 @@ export default function RegisterPage() {
             className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
           />
           {form.formState.errors.email ? (
-            <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
+            <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
           ) : null}
         </div>
 
@@ -145,7 +145,7 @@ export default function RegisterPage() {
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
               aria-pressed={showPassword}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
             >
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
@@ -156,7 +156,7 @@ export default function RegisterPage() {
             </div>
           ) : null}
           {form.formState.errors.password ? (
-            <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
+            <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
           ) : null}
         </div>
 
@@ -179,22 +179,22 @@ export default function RegisterPage() {
               onClick={() => setShowConfirmPassword((v) => !v)}
               aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
               aria-pressed={showConfirmPassword}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
             >
               {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
           {form.formState.errors.confirmPassword ? (
-            <p className="text-sm text-red-500">{form.formState.errors.confirmPassword.message}</p>
+            <p className="text-sm text-destructive">{form.formState.errors.confirmPassword.message}</p>
           ) : null}
         </div>
 
         <Button
           type="submit"
           disabled={loading}
-          className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-white"
+          className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-primary-foreground"
         >
-          {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
+          {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Tạo tài khoản
         </Button>
       </form>

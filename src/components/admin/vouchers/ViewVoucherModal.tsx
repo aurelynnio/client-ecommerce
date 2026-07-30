@@ -44,23 +44,23 @@ export function ViewModelDiscount({
 
   const statusConfig = {
     active: {
-      bg: 'bg-green-100',
-      text: 'text-green-600',
+      bg: 'bg-success/15',
+      text: 'text-success',
       label: 'Đang hoạt động',
     },
     expired: {
-      bg: 'bg-red-100',
-      text: 'text-red-600',
+      bg: 'bg-destructive/15',
+      text: 'text-destructive',
       label: 'Đã hết hạn',
     },
     limit: {
-      bg: 'bg-orange-100',
-      text: 'text-orange-600',
+      bg: 'bg-warning/15',
+      text: 'text-warning',
       label: 'Hết lượt dùng',
     },
     inactive: {
-      bg: 'bg-gray-100',
-      text: 'text-gray-600',
+      bg: 'bg-muted',
+      text: 'text-muted-foreground',
       label: 'Ngừng hoạt động',
     },
   };
@@ -121,7 +121,7 @@ export function ViewModelDiscount({
                 <DollarSign className="w-3.5 h-3.5" />
                 Giá trị
               </div>
-              <div className="text-2xl font-bold tracking-tight text-blue-600">
+              <div className="text-2xl font-bold tracking-tight text-info">
                 {discount.type === 'percentage'
                   ? `${discount.value ?? 0}%`
                   : `${(discount.value ?? 0).toLocaleString()}₫`}
@@ -136,8 +136,8 @@ export function ViewModelDiscount({
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className={cn(adminInsetPanelClass, 'flex items-center gap-3 p-3 shadow-none')}>
-                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center">
-                  <BarChart3 className="h-5 w-5 text-blue-500" />
+                <div className="h-10 w-10 rounded-full bg-info/15 flex items-center justify-center">
+                  <BarChart3 className="h-5 w-5 text-info" />
                 </div>
                 <div>
                   <div className="text-sm font-medium">
@@ -148,8 +148,8 @@ export function ViewModelDiscount({
               </div>
 
               <div className={cn(adminInsetPanelClass, 'flex items-center gap-3 p-3 shadow-none')}>
-                <div className="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                  <DollarSign className="h-5 w-5 text-indigo-500" />
+                <div className="h-10 w-10 rounded-full bg-info/15 flex items-center justify-center">
+                  <DollarSign className="h-5 w-5 text-info" />
                 </div>
                 <div>
                   <div className="text-sm font-medium">

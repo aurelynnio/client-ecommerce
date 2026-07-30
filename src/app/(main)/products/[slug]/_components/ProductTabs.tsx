@@ -54,12 +54,12 @@ export function ProductTabs({ activeTab, onTabChange, reviewCount }: ProductTabs
               onClick={() => handleTabClick(tab.id)}
               className={cn(
                 'px-2 py-4 text-sm font-medium whitespace-nowrap transition-colors relative',
-                isActive ? 'text-primary font-bold' : 'text-gray-500 hover:text-primary',
+                isActive ? 'text-primary font-bold' : 'text-muted-foreground hover:text-primary',
               )}
             >
               {tab.label}
               {count !== undefined && (
-                <span className="text-gray-400 font-normal ml-1">({count})</span>
+                <span className="text-muted-foreground/60 font-normal ml-1">({count})</span>
               )}
 
               {/* Active indicator */}

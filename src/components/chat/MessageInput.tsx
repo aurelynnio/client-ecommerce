@@ -42,7 +42,7 @@ export default function MessageInput({ conversationId }: MessageInputProps) {
   return (
     <div className="border-t border-border p-3">
       <div className="flex items-center gap-2">
-        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">
+        <button className="p-2 text-muted-foreground/60 hover:text-muted-foreground hover:bg-muted rounded">
           <ImageIcon className="h-5 w-5" />
         </button>
         <Input
@@ -55,7 +55,7 @@ export default function MessageInput({ conversationId }: MessageInputProps) {
         />
         <Button onClick={handleSend} disabled={!content.trim() || isSending} size="sm" className="">
           {isSending ? (
-            <SpinnerLoading noWrapper size={16} className="text-white" />
+            <SpinnerLoading noWrapper size={16} className="text-primary-foreground" />
           ) : (
             <Send className="h-4 w-4" />
           )}

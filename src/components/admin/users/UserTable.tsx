@@ -72,14 +72,14 @@ interface UsersTableProps {
 
 export const getVerifiedBadge = (isVerified: boolean) => {
   return isVerified ? (
-    <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
       <CheckCircle className="h-3 w-3 mr-1" />
       Đã xác minh
     </Badge>
   ) : (
     <Badge
       variant="outline"
-      className="bg-gray-100 text-gray-600 border-0 rounded-lg px-2.5 py-0.5 shadow-none"
+      className="bg-muted text-muted-foreground border-0 rounded-lg px-2.5 py-0.5 shadow-none"
     >
       <XCircle className="h-3 w-3 mr-1" />
       Chưa xác minh
@@ -89,8 +89,8 @@ export const getVerifiedBadge = (isVerified: boolean) => {
 
 export const getRoleBadge = (roles: string) => {
   const colors: { [key: string]: string } = {
-    admin: 'bg-purple-100 text-purple-700 hover:bg-purple-100 border-0',
-    user: 'bg-gray-100 text-gray-700 hover:bg-gray-100 border-0',
+    admin: 'bg-info/15 text-info hover:bg-info/15 border-0',
+    user: 'bg-muted text-foreground/80 hover:bg-muted border-0',
   };
 
   const roleNames: { [key: string]: string } = {
@@ -101,7 +101,7 @@ export const getRoleBadge = (roles: string) => {
   return (
     <Badge
       variant="secondary"
-      className={`rounded-lg px-2.5 py-0.5 shadow-none ${colors[roles] || 'bg-gray-100 text-gray-700 border-0'}`}
+      className={`rounded-lg px-2.5 py-0.5 shadow-none ${colors[roles] || 'bg-muted text-foreground/80 border-0'}`}
     >
       {roleNames[roles] || roles}
     </Badge>
@@ -178,7 +178,7 @@ export function UsersTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start rounded-2xl border border-slate-200 bg-white/90 hover:bg-white sm:w-auto sm:justify-center"
+                className="w-full justify-start rounded-2xl border border-border bg-card/90 hover:bg-card sm:w-auto sm:justify-center"
               >
                 <Shield className="h-4 w-4 mr-2 text-muted-foreground" />
                 {selectedRole === 'admin'
@@ -219,7 +219,7 @@ export function UsersTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start rounded-2xl border border-slate-200 bg-white/90 hover:bg-white sm:w-auto sm:justify-center"
+                className="w-full justify-start rounded-2xl border border-border bg-card/90 hover:bg-card sm:w-auto sm:justify-center"
               >
                 <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
                 {selectedVerified === true

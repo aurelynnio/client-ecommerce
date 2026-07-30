@@ -168,7 +168,7 @@ export default function WishlistPage() {
                       {price.toLocaleString('vi-VN')}
                     </span>
                     {hasDiscount && (
-                      <span className="ml-1 text-xs text-muted-foreground line-through">
+                      <span className="ml-1 text-xs text-price-strikethrough line-through">
                         ₫{originalPrice.toLocaleString('vi-VN')}
                       </span>
                     )}

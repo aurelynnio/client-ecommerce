@@ -37,19 +37,19 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
     switch (status) {
       case 'active':
         return (
-          <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0">
+          <Badge className="bg-success/15 text-success hover:bg-success/15 border-0">
             Đang hoạt động
           </Badge>
         );
       case 'pending':
         return (
-          <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100 border-0">
+          <Badge className="bg-warning/15 text-warning hover:bg-warning/15 border-0">
             Đang chờ
           </Badge>
         );
       case 'suspended':
         return (
-          <Badge className="bg-red-100 text-red-700 hover:bg-red-100 border-0">Tạm ngưng</Badge>
+          <Badge className="bg-destructive/15 text-destructive hover:bg-destructive/15 border-0">Tạm ngưng</Badge>
         );
       default:
         return <Badge variant="outline">{status}</Badge>;
@@ -116,22 +116,22 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
 
           {/* Statistics */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-2xl bg-sky-50 p-4 text-center">
-              <Package className="h-5 w-5 mx-auto mb-2 text-blue-600" />
-              <p className="text-2xl font-bold text-blue-700">{shop.totalProducts || 0}</p>
-              <p className="text-xs text-blue-600/80">Sản phẩm</p>
+            <div className="rounded-2xl bg-info/15 p-4 text-center">
+              <Package className="h-5 w-5 mx-auto mb-2 text-info" />
+              <p className="text-2xl font-bold text-info">{shop.totalProducts || 0}</p>
+              <p className="text-xs text-info/80">Sản phẩm</p>
             </div>
-            <div className="rounded-2xl bg-emerald-50 p-4 text-center">
-              <ShoppingCart className="h-5 w-5 mx-auto mb-2 text-green-600" />
-              <p className="text-2xl font-bold text-green-700">{shop.totalOrders || 0}</p>
-              <p className="text-xs text-green-600/80">Đơn hàng</p>
+            <div className="rounded-2xl bg-success/15 p-4 text-center">
+              <ShoppingCart className="h-5 w-5 mx-auto mb-2 text-success" />
+              <p className="text-2xl font-bold text-success">{shop.totalOrders || 0}</p>
+              <p className="text-xs text-success/80">Đơn hàng</p>
             </div>
-            <div className="rounded-2xl bg-amber-50 p-4 text-center">
-              <Star className="h-5 w-5 mx-auto mb-2 text-amber-600" />
-              <p className="text-2xl font-bold text-amber-700">
+            <div className="rounded-2xl bg-warning/15 p-4 text-center">
+              <Star className="h-5 w-5 mx-auto mb-2 text-star" />
+              <p className="text-2xl font-bold text-warning">
                 {shop.rating?.toFixed(1) || '0.0'}
               </p>
-              <p className="text-xs text-amber-600/80">Đánh giá</p>
+              <p className="text-xs text-warning/80">Đánh giá</p>
             </div>
           </div>
 

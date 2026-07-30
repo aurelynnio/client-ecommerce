@@ -151,7 +151,7 @@ export function ProductsTable({
       <div className="flex flex-col">
         <span className="font-medium text-foreground">{currentPrice.toLocaleString()}₫</span>
         {discountPrice > 0 && discountPrice !== currentPrice && (
-          <span className="text-xs text-muted-foreground line-through">
+          <span className="text-xs text-price-strikethrough line-through">
             {discountPrice.toLocaleString()}₫
           </span>
         )}
@@ -220,7 +220,7 @@ export function ProductsTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="flex w-full items-center justify-start gap-2 rounded-2xl border border-slate-200 bg-white/90 hover:bg-white sm:w-auto sm:justify-center"
+                className="flex w-full items-center justify-start gap-2 rounded-2xl border border-border bg-card/90 hover:bg-card sm:w-auto sm:justify-center"
               >
                 <Filter className="h-4 w-4" />
                 Giá
@@ -410,7 +410,7 @@ export function ProductsTable({
                             {product.isNewArrival && (
                               <Badge
                                 variant="secondary"
-                                className="h-5 px-1.5 text-[10px] rounded-md bg-blue-50 text-blue-600 border-0"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-info/15 text-info border-0"
                               >
                                 Mới
                               </Badge>
@@ -418,7 +418,7 @@ export function ProductsTable({
                             {product.isFeatured && (
                               <Badge
                                 variant="secondary"
-                                className="h-5 px-1.5 text-[10px] rounded-md bg-purple-50 text-purple-600 border-0"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-info/15 text-info border-0"
                               >
                                 Hot
                               </Badge>
@@ -426,7 +426,7 @@ export function ProductsTable({
                             {product.onSale && (
                               <Badge
                                 variant="secondary"
-                                className="h-5 px-1.5 text-[10px] rounded-md bg-red-50 text-red-600 border-0"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-destructive/15 text-destructive border-0"
                               >
                                 Giảm giá
                               </Badge>
@@ -499,8 +499,8 @@ export function ProductsTable({
                         variant={product.isActive ? 'default' : 'secondary'}
                         className={`rounded-lg font-medium px-2.5 py-0.5 shadow-none border-0 ${
                           product.isActive
-                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
+                            ? 'bg-success/15 text-success hover:bg-success/15'
+                            : 'bg-muted text-muted-foreground hover:bg-muted'
                         }`}
                       >
                         {product.isActive ? 'Đang bán' : 'Ngừng bán'}

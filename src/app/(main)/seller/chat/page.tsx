@@ -177,7 +177,7 @@ export default function SellerChatPage() {
                       )}
                     </div>
                     {conversation.unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center">
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
                         {conversation.unreadCount}
                       </span>
                     )}
@@ -351,7 +351,7 @@ export default function SellerChatPage() {
                     className="h-10 rounded-lg bg-primary px-4 hover:bg-primary-hover"
                   >
                     {isSending ? (
-                      <SpinnerLoading noWrapper size={16} className="text-white" />
+                      <SpinnerLoading noWrapper size={16} className="text-primary-foreground" />
                     ) : (
                       <Send className="h-4 w-4" />
                     )}

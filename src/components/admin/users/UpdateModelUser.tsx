@@ -159,8 +159,8 @@ export function UpdateModelUser({
               className={cn(
                 'px-3 py-1 rounded-full text-xs font-medium border-0',
                 formData.roles === 'admin'
-                  ? 'bg-purple-100 text-purple-600'
-                  : 'bg-blue-100 text-blue-600',
+                  ? 'bg-info/15 text-info'
+                  : 'bg-info/15 text-info',
               )}
             >
               {formData.roles === 'admin' ? 'Quản trị viên' : 'Người dùng'}
@@ -175,14 +175,14 @@ export function UpdateModelUser({
                 <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
                   <TabsTrigger
                     value="info"
-                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-card data-[state=active]:text-foreground"
                   >
                     <UserIcon className="h-4 w-4" />
                     Thông tin
                   </TabsTrigger>
                   <TabsTrigger
                     value="permissions"
-                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-card data-[state=active]:text-foreground"
                   >
                     <Key className="h-4 w-4" />
                     Quyền hạn
@@ -206,7 +206,7 @@ export function UpdateModelUser({
                     id="username"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    className={cn(adminFieldSurfaceClass, 'h-11 transition-colors focus:bg-white')}
+                    className={cn(adminFieldSurfaceClass, 'h-11 transition-colors focus:bg-card')}
                     required
                     disabled={isLoading}
                   />
@@ -223,7 +223,7 @@ export function UpdateModelUser({
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className={cn(adminFieldSurfaceClass, 'h-11 transition-colors focus:bg-white')}
+                    className={cn(adminFieldSurfaceClass, 'h-11 transition-colors focus:bg-card')}
                     required
                     disabled={isLoading}
                   />
@@ -286,10 +286,10 @@ export function UpdateModelUser({
                 ) : (
                   <>
                     <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3">
-                      <p className="text-xs text-blue-600">
+                      <p className="text-xs text-info">
                         Role <span className="font-semibold">{formData.roles}</span> có{' '}
                         {defaultRolePerms.length} quyền mặc định.
-                        <span className="text-blue-500 ml-1">*</span> = quyền từ role
+                        <span className="text-info ml-1">*</span> = quyền từ role
                       </p>
                     </div>
 
@@ -324,7 +324,7 @@ export function UpdateModelUser({
                                   onClick={() => handleTogglePermission(perm)}
                                 >
                                   {action}
-                                  {isFromRole && <span className="ml-1 text-blue-400">*</span>}
+                                  {isFromRole && <span className="ml-1 text-info">*</span>}
                                 </Badge>
                               );
                             })}

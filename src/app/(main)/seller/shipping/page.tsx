@@ -184,7 +184,7 @@ export default function SellerShippingPage() {
                     type="checkbox"
                     checked={formData.isDefault}
                     onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
-                    className="rounded border-gray-300 w-4 h-4"
+                    className="rounded border-border w-4 h-4"
                   />
                   <span className="text-sm text-muted-foreground">Đặt làm mặc định</span>
                 </label>

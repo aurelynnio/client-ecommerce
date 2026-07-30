@@ -141,7 +141,7 @@ export default function SellerReviewsPage() {
                       <div>
                         <h3 className="font-medium text-foreground">{product?.name}</h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <div className="flex text-warning">
+                          <div className="flex text-star">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}

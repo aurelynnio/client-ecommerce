@@ -177,7 +177,7 @@ export function CreateNotificationModal({
               Hủy
             </Button>
             <Button type="submit" disabled={isLoading} className={adminPrimaryButtonClass}>
-              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />}
+              {isLoading && <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />}
               Gửi thông báo
             </Button>
           </DialogFooter>

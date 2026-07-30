@@ -35,10 +35,10 @@ const groups = [
 export default function SiteMapPage() {
   return (
     <main className="min-h-screen bg-background px-4 py-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-gray-100 p-6 md:p-8 space-y-8">
+      <div className="max-w-4xl mx-auto bg-card rounded-2xl border border-border/50 p-6 md:p-8 space-y-8">
         <header className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Sơ đồ trang web</h1>
-          <p className="text-sm md:text-base text-gray-600">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Sơ đồ trang web</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             Danh sách các khu vực chính để truy cập nhanh.
           </p>
         </header>
@@ -46,7 +46,7 @@ export default function SiteMapPage() {
         <div className="grid gap-6 md:grid-cols-3">
           {groups.map((group) => (
             <section key={group.title} className="space-y-3">
-              <h2 className="text-lg font-semibold text-gray-800">{group.title}</h2>
+              <h2 className="text-lg font-semibold text-foreground">{group.title}</h2>
               <ul className="space-y-2 text-sm">
                 {group.links.map((link) => (
                   <li key={link.href}>

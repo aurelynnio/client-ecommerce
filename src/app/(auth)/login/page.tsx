@@ -137,9 +137,9 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-white"
+            className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-primary-foreground"
           >
-            {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
+            {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
             Xác nhận đăng nhập
           </Button>
           <div className="flex items-center justify-between text-sm">
@@ -183,7 +183,7 @@ export default function LoginPage() {
               className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
             />
             {form.formState.errors.email ? (
-              <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
+              <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
             ) : null}
           </div>
 
@@ -214,22 +214,22 @@ export default function LoginPage() {
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                 aria-pressed={showPassword}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
             {form.formState.errors.password ? (
-              <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
+              <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
             ) : null}
           </div>
 
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-white"
+            className="w-full h-11 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium mt-2 text-primary-foreground"
           >
-            {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
+            {loading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
             Đăng nhập
           </Button>
         </form>

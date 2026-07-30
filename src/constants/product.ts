@@ -35,23 +35,23 @@ export const STATUS_CONFIG: Record<
 > = {
   draft: {
     label: 'Bản nháp',
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-100',
+    color: 'text-muted-foreground',
+    bgColor: 'bg-muted',
   },
   published: {
     label: 'Đang bán',
-    color: 'text-green-600',
-    bgColor: 'bg-green-100',
+    color: 'text-success-foreground',
+    bgColor: 'bg-success/15',
   },
   suspended: {
     label: 'Tạm ngưng',
-    color: 'text-yellow-600',
-    bgColor: 'bg-yellow-100',
+    color: 'text-warning-foreground',
+    bgColor: 'bg-warning/15',
   },
   deleted: {
     label: 'Đã xóa',
-    color: 'text-red-600',
-    bgColor: 'bg-red-100',
+    color: 'text-destructive-foreground',
+    bgColor: 'bg-destructive/15',
   },
 };
 

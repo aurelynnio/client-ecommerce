@@ -111,8 +111,8 @@ export default function OrdersTab() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="h-16 w-16 rounded-full bg-red-50 flex items-center justify-center mb-6">
-          <Package className="h-8 w-8 text-red-500" />
+        <div className="h-16 w-16 rounded-full bg-destructive/15 flex items-center justify-center mb-6">
+          <Package className="h-8 w-8 text-destructive" />
         </div>
         <h3 className="text-lg font-semibold tracking-tight mb-2">Đã xảy ra lỗi</h3>
         <p className="text-muted-foreground mb-8 max-w-sm text-sm">

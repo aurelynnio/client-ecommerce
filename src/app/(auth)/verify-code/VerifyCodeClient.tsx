@@ -96,7 +96,7 @@ export default function VerifyCodeClient({ initialEmail, initialCode }: VerifyCo
       </div>
 
       {!canVerify ? (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-xl border border-warning/30 bg-warning/15 px-4 py-3 text-sm text-warning">
           Thiếu email để xác thực. Quay lại trang gửi mã để nhập email.
           <div className="mt-2">
             <Link
@@ -141,7 +141,7 @@ export default function VerifyCodeClient({ initialEmail, initialCode }: VerifyCo
           disabled={!canVerify || isLoading || otp.length !== OTP_LENGTH}
           className="h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
-          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
+          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Xác nhận
         </Button>
       </form>

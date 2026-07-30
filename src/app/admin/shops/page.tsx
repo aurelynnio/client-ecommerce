@@ -245,7 +245,7 @@ export default function AdminShopsPage() {
                     <TableCell>{getStatusBadge(shop.status)}</TableCell>
                     <TableCell className="text-center">{shop.totalProducts || 0}</TableCell>
                     <TableCell className="text-center">
-                      <span className="text-warning">★</span> {shop.rating?.toFixed(1) || '0.0'}
+                      <span className="text-star">★</span> {shop.rating?.toFixed(1) || '0.0'}
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>

@@ -59,15 +59,15 @@ export function ProductGallery({
     return (
       <>
         {/* Desktop - Fixed size */}
-        <div className="hidden lg:flex w-[420px] h-[420px] bg-gray-100 items-center justify-center rounded-sm shrink-0">
-          <div className="flex flex-col items-center justify-center text-gray-400">
+        <div className="hidden lg:flex w-[420px] h-[420px] bg-muted items-center justify-center rounded-sm shrink-0">
+          <div className="flex flex-col items-center justify-center text-muted-foreground/60">
             <Store className="w-16 h-16 opacity-20 mb-2" />
             <span className="text-sm">Không có ảnh</span>
           </div>
         </div>
         {/* Mobile - Aspect ratio */}
-        <div className="lg:hidden -mx-4 w-full aspect-square bg-gray-100 flex flex-col items-center justify-center">
-          <div className="flex flex-col items-center justify-center text-gray-400">
+        <div className="lg:hidden -mx-4 w-full aspect-square bg-muted flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center text-muted-foreground/60">
             <Store className="w-12 h-12 opacity-20 mb-2" />
             <span className="text-sm">Không có ảnh</span>
           </div>
@@ -104,7 +104,7 @@ export function ProductGallery({
         </div>
 
         {/* Main Image */}
-        <div className="w-[420px] h-[420px] relative border border-gray-100 rounded-sm overflow-hidden bg-white group shrink-0">
+        <div className="w-[420px] h-[420px] relative border border-border/50 rounded-sm overflow-hidden bg-card group shrink-0">
           {images[selectedIndex] && !imageError ? (
             <Image
               src={images[selectedIndex]}
@@ -116,7 +116,7 @@ export function ProductGallery({
               onError={() => setFailedImageIndex(selectedIndex)}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-400">
+            <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 text-muted-foreground/60">
               <Store className="w-16 h-16 opacity-20 mb-2" />
               <span className="text-sm">Không có ảnh</span>
             </div>
@@ -130,7 +130,7 @@ export function ProductGallery({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-white">
+        <div className="relative aspect-square w-full overflow-hidden bg-card">
           {images[selectedIndex] && !imageError ? (
             <Image
               src={images[selectedIndex]}
@@ -142,7 +142,7 @@ export function ProductGallery({
               onError={() => setFailedImageIndex(selectedIndex)}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-400">
+            <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 text-muted-foreground/60">
               <Store className="w-12 h-12 opacity-20 mb-2" />
               <span className="text-sm">Không có ảnh</span>
             </div>

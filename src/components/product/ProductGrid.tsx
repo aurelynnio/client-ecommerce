@@ -19,8 +19,7 @@ interface ProductGridProps {
  * Breakpoints:
  * - Mobile (< 640px): 2 columns
  * - Tablet (640px - 1023px): 3 columns
- * - Desktop (1024px - 1279px): 4 columns
- * - Wide (1280px+): 5 columns
+ * - Desktop (1024px+): 4 columns
  */
 export function ProductGrid({
   products,

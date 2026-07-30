@@ -112,7 +112,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
         {/* Banner & Logo */}
         <div className="overflow-hidden rounded-lg border border-border bg-card">
           {/* Banner */}
-          <div className="relative h-36 sm:h-48 bg-linear-to-r from-gray-200 to-gray-300">
+          <div className="relative h-36 sm:h-48 bg-muted">
             <input
               type="file"
               ref={bannerInputRef}
@@ -150,7 +150,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 />
                 <div className="size-24 overflow-hidden rounded-lg border border-border bg-card">
                   {isUploadingLogo ? (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="w-full h-full flex items-center justify-center bg-muted">
                       <SpinnerLoading size={24} className="text-primary" />
                     </div>
                   ) : formData.logo ? (
@@ -162,7 +162,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                       className="object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="w-full h-full flex items-center justify-center bg-muted">
                       <Upload className="h-6 w-6 text-muted-foreground" />
                     </div>
                   )}
@@ -170,7 +170,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <button
                   type="button"
                   onClick={() => logoInputRef.current?.click()}
-                  className="absolute -bottom-1 -right-1 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors"
+                  className="absolute -bottom-1 -right-1 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors"
                 >
                   <Camera className="h-4 w-4" />
                 </button>
@@ -227,7 +227,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.fullName || ''}
                   onChange={(e) => updatePickupAddress('fullName', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
                 />
               </div>
               <div>
@@ -235,7 +235,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.phone || ''}
                   onChange={(e) => updatePickupAddress('phone', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
               <Input
                 value={formData.pickupAddress?.address || ''}
                 onChange={(e) => updatePickupAddress('address', e.target.value)}
-                className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                className="mt-1.5 h-11 rounded-xl border-0 bg-card"
                 placeholder="Số nhà, tên đường..."
               />
             </div>
@@ -254,7 +254,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.city || ''}
                   onChange={(e) => updatePickupAddress('city', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
                 />
               </div>
               <div>
@@ -262,7 +262,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.district || ''}
                   onChange={(e) => updatePickupAddress('district', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
                 />
               </div>
               <div>
@@ -270,7 +270,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.ward || ''}
                   onChange={(e) => updatePickupAddress('ward', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
                 />
               </div>
             </div>

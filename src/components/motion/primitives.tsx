@@ -28,9 +28,15 @@ const SLOW = { duration: 0.3, ease: EASE_IN_OUT } satisfies Transition;
 export function AnimatedDropdown({
   children,
   className,
+  id,
+  role,
+  'aria-label': ariaLabel,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
+  role?: string;
+  'aria-label'?: string;
 }) {
   return (
     <motion.div
@@ -39,6 +45,9 @@ export function AnimatedDropdown({
       exit={{ opacity: 0, y: -8 }}
       transition={FAST}
       className={className}
+      id={id}
+      role={role}
+      aria-label={ariaLabel}
     >
       {children}
     </motion.div>

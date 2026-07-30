@@ -157,11 +157,11 @@ export default function AdminReviewsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex flex-col gap-1">
-                            <div className="flex text-warning">
+                            <div className="flex text-star">
                               {[...Array(5)].map((_, i) => (
                                 <Star
                                   key={i}
-                                  className={`h-3 w-3 ${i < review.rating ? 'fill-current' : 'text-muted-foreground/30'}`}
+                                  className={`h-3 w-3 ${i < review.rating ? 'fill-current text-star' : 'text-muted-foreground/30'}`}
                                 />
                               ))}
                             </div>

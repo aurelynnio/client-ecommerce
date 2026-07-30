@@ -31,25 +31,25 @@ export default function NotificationItem({ notification, onClose }: Notification
     const iconClass = 'h-4 w-4';
     switch (notification.type) {
       case 'order_status':
-        return <ShoppingBag className={cn(iconClass, 'text-blue-500')} />;
+        return <ShoppingBag className={cn(iconClass, 'text-info')} />;
       case 'promotion':
-        return <Tag className={cn(iconClass, 'text-green-500')} />;
+        return <Tag className={cn(iconClass, 'text-success')} />;
       case 'system':
-        return <Info className={cn(iconClass, 'text-amber-500')} />;
+        return <Info className={cn(iconClass, 'text-warning')} />;
       default:
-        return <Bell className={cn(iconClass, 'text-gray-400')} />;
+        return <Bell className={cn(iconClass, 'text-muted-foreground/60')} />;
     }
   };
 
   const Content = (
     <div
       className={cn(
-        'flex gap-3 px-4 py-3 transition-colors hover:bg-gray-50/80',
+        'flex gap-3 px-4 py-3 transition-colors hover:bg-muted/80',
         !notification.isRead && 'bg-primary/3',
       )}
     >
       {/* Icon */}
-      <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+      <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center shrink-0">
         {getIcon()}
       </div>
 
@@ -59,7 +59,7 @@ export default function NotificationItem({ notification, onClose }: Notification
           <p
             className={cn(
               'text-[13px] leading-snug line-clamp-1',
-              !notification.isRead ? 'font-medium text-gray-800' : 'text-gray-700',
+              !notification.isRead ? 'font-medium text-foreground' : 'text-foreground/80',
             )}
           >
             {notification.title}
@@ -69,11 +69,11 @@ export default function NotificationItem({ notification, onClose }: Notification
           )}
         </div>
 
-        <p className="text-xs text-gray-500 line-clamp-2 mt-0.5 leading-relaxed">
+        <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5 leading-relaxed">
           {notification.message}
         </p>
 
-        <p className="text-[11px] text-gray-400 mt-1.5">{timeAgo(notification.createdAt)}</p>
+        <p className="text-[11px] text-muted-foreground/60 mt-1.5">{timeAgo(notification.createdAt)}</p>
       </div>
     </div>
   );

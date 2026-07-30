@@ -135,7 +135,7 @@ export function EditCategoryModal({
                 Chỉnh sửa danh mục
                 <Badge
                   variant="outline"
-                  className="text-sm rounded-lg bg-white/50 border-border/50"
+                  className="text-sm rounded-lg bg-card/50 border-border/50"
                 >
                   ID: {category._id?.slice(-4)}
                 </Badge>
@@ -162,7 +162,7 @@ export function EditCategoryModal({
                         field.onChange(e);
                         handleNameChange(e.target.value);
                       }}
-                      className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                      className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                     />
                   </FormControl>
                   <FormMessage />
@@ -183,7 +183,7 @@ export function EditCategoryModal({
                     <Input
                       placeholder="ten-danh-muc"
                       {...field}
-                      className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                      className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                     />
                   </FormControl>
                   <FormDescription>SEO URL: /categories/{field.value}</FormDescription>
@@ -207,7 +207,7 @@ export function EditCategoryModal({
                       value={field.value || ''}
                       className={cn(
                         adminFieldSurfaceClass,
-                        'min-h-24 resize-none transition-colors focus:bg-white',
+                        'min-h-24 resize-none transition-colors focus:bg-card',
                       )}
                     />
                   </FormControl>
@@ -233,12 +233,12 @@ export function EditCategoryModal({
                       {field.value ? (
                         <Badge
                           variant="default"
-                          className="bg-green-100 text-green-700 hover:bg-green-100 border-none"
+                          className="bg-success/15 text-success hover:bg-success/15 border-none"
                         >
                           Đang hoạt động
                         </Badge>
                       ) : (
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                        <Badge variant="secondary" className="bg-muted text-muted-foreground">
                           Ngừng hoạt động
                         </Badge>
                       )}
@@ -286,7 +286,7 @@ export function EditCategoryModal({
                 className={cn('sm:min-w-40', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
-                  <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
+                  <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}

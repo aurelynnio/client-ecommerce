@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LogOut, Menu, ChevronLeft, ChevronRight, Bell } from 'lucide-react';
@@ -14,7 +14,6 @@ import Image from 'next/image';
 import { ADMIN_NAVIGATION } from '@/constants';
 import NotificationModel from '@/components/notifications/NotificationModel';
 import { useUnreadNotificationCount } from '@/hooks/queries/useNotifications';
-import { useSettings } from '@/hooks/queries/useSettings';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RequireRole } from '@/components/common/PermissionGate';
 import { usePermissions } from '@/context/PermissionContext';
@@ -34,24 +33,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const logoutMutation = useLogout();
   const { data, isAuthenticated } = useAppSelector((state) => state.auth);
   const isAdmin = data?.roles === 'admin';
-  const { data: settings } = useSettings({
-    enabled: isAuthenticated && isAdmin,
-  });
   const { data: unreadCountData } = useUnreadNotificationCount({
     enabled: isAuthenticated && isAdmin,
   });
   const unreadCount = unreadCountData || 0;
   const { hasPermission } = usePermissions();
-  const isDarkMode = settings?.display?.darkMode ?? false;
-
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle('dark', isDarkMode);
-
-    return () => {
-      root.classList.remove('dark');
-    };
-  }, [isDarkMode]);
 
   // Filter navigation items based on user permissions
   const filteredNavigation = useMemo(() => {
@@ -99,7 +85,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="flex h-16 items-center px-6">
                 <div className="flex items-center gap-2">
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/20 bg-primary">
-                    <span className="text-white font-bold text-sm">A</span>
+                    <span className="text-primary-foreground font-bold text-sm">A</span>
                   </div>
                   <span className="text-lg font-bold tracking-tight">Quản trị</span>
                 </div>
@@ -151,7 +137,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {!isCollapsed && (
               <div className="flex items-center gap-2">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-primary/20 bg-primary">
-                  <span className="text-white font-bold">A</span>
+                  <span className="text-primary-foreground font-bold">A</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-bold tracking-tight">Bảng quản trị</span>

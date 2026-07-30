@@ -69,7 +69,7 @@ export default function SendCodePage() {
           disabled={isLoading || !email.trim()}
           className="mt-2 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
-          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
+          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Gửi mã xác nhận
         </Button>
       </form>

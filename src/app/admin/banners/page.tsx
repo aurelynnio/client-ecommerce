@@ -82,7 +82,7 @@ export default function BannersAdminPage() {
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-red-500">
+        <div className="text-destructive">
           Error: {getSafeErrorMessage(error, 'Failed to load banners')}
         </div>
       </div>

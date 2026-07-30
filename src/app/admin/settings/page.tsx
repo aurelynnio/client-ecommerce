@@ -10,7 +10,7 @@ import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { toast } from 'sonner';
 import { getSafeErrorMessage } from '@/api';
 import { useSettings, useUpdateSettings } from '@/hooks/queries/useSettings';
-import { StoreSettings, NotificationSettings, DisplaySettings } from '@/types/settings';
+import { StoreSettings, NotificationSettings } from '@/types/settings';
 import {
   AdminActionButton,
   AdminPageHeader,
@@ -41,25 +41,15 @@ export default function SettingsPage() {
     [settings],
   );
 
-  const initialDisplayData = useMemo(
-    () => ({
-      darkMode: settings?.display?.darkMode ?? false,
-    }),
-    [settings],
-  );
-
   const [storeEdits, setStoreEdits] = useState<Partial<StoreSettings>>({});
   const [notificationEdits, setNotificationEdits] = useState<Partial<NotificationSettings>>({});
-  const [displayEdits, setDisplayEdits] = useState<Partial<DisplaySettings>>({});
 
   const storeData = { ...initialStoreData, ...storeEdits };
   const notificationData = { ...initialNotificationData, ...notificationEdits };
-  const displayData = { ...initialDisplayData, ...displayEdits };
 
   const hasChanges =
     Object.keys(storeEdits).length > 0 ||
-    Object.keys(notificationEdits).length > 0 ||
-    Object.keys(displayEdits).length > 0;
+    Object.keys(notificationEdits).length > 0;
 
   const handleStoreChange = (field: keyof StoreSettings, value: string) => {
     setStoreEdits((prev) => ({ ...prev, [field]: value }));
@@ -67,10 +57,6 @@ export default function SettingsPage() {
 
   const handleNotificationChange = (field: keyof NotificationSettings, value: boolean) => {
     setNotificationEdits((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleDisplayChange = (field: keyof DisplaySettings, value: boolean) => {
-    setDisplayEdits((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSaveStore = async () => {
@@ -88,16 +74,6 @@ export default function SettingsPage() {
       await updateMutation.mutateAsync({ notifications: notificationData });
       toast.success('Đã lưu cài đặt thông báo');
       setNotificationEdits({});
-    } catch (error: unknown) {
-      toast.error(getSafeErrorMessage(error, 'Không thể lưu cài đặt'));
-    }
-  };
-
-  const handleSaveDisplay = async () => {
-    try {
-      await updateMutation.mutateAsync({ display: displayData });
-      toast.success('Đã lưu cài đặt hiển thị');
-      setDisplayEdits({});
     } catch (error: unknown) {
       toast.error(getSafeErrorMessage(error, 'Không thể lưu cài đặt'));
     }
@@ -159,12 +135,6 @@ export default function SettingsPage() {
               className="rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:bg-card data-[state=active]:bg-card data-[state=active]:text-primary"
             >
               Thông báo
-            </TabsTrigger>
-            <TabsTrigger
-              value="display"
-              className="rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:bg-card data-[state=active]:bg-card data-[state=active]:text-primary"
-            >
-              Hiển thị
             </TabsTrigger>
           </TabsList>
         </div>
@@ -291,51 +261,6 @@ export default function SettingsPage() {
                     <CheckCircle className="h-4 w-4 mr-2" />
                   )}
                   Lưu cấu hình thông báo
-                </AdminActionButton>
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="display" className="mt-0">
-          <div className={cn(adminSurfaceClass, 'space-y-8 p-6')}>
-            <div>
-              <h3 className="text-lg font-semibold tracking-tight">Cấu hình giao diện</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Tùy chỉnh cách hiển thị của khu vực quản trị.
-              </p>
-            </div>
-
-            <div className="space-y-6 max-w-2xl">
-              <div
-                className={cn(
-                  adminSubtleSurfaceClass,
-                  'flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between',
-                )}
-              >
-                <div className="flex flex-col space-y-1">
-                  <Label htmlFor="dark-mode" className="text-base font-medium">
-                    Tùy chọn dark mode
-                  </Label>
-                  <span className="text-xs text-muted-foreground font-normal">
-                    Bật hoặc tắt chế độ tối cho giao diện quản trị.
-                  </span>
-                </div>
-                <Switch
-                  id="dark-mode"
-                  checked={displayData.darkMode}
-                  onCheckedChange={(checked) => handleDisplayChange('darkMode', checked)}
-                />
-              </div>
-
-              <div className="pt-2">
-                <AdminActionButton onClick={handleSaveDisplay} disabled={updateMutation.isPending}>
-                  {updateMutation.isPending ? (
-                    <SpinnerLoading size={16} noWrapper className="mr-2" />
-                  ) : (
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                  )}
-                  Lưu cài đặt hiển thị
                 </AdminActionButton>
               </div>
             </div>

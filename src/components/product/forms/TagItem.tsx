@@ -7,7 +7,7 @@ interface TagItemProps {
 }
 
 export const TagItem = memo(({ tag, onRemove }: TagItemProps) => (
-  <div className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-lg text-sm">
+  <div className="flex items-center gap-1 bg-muted px-3 py-1 rounded-lg text-sm">
     <span className="text-sm">{tag}</span>
     <button
       type="button"

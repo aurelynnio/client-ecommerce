@@ -309,7 +309,7 @@ export default function SellerProductsPage() {
                           {formatCurrency(product.price?.currentPrice || 0)}
                         </p>
                         {product.price?.discountPrice && product.price.discountPrice > 0 && (
-                          <p className="text-xs text-muted-foreground line-through">
+                          <p className="text-xs text-price-strikethrough line-through">
                             {formatCurrency(product.price.discountPrice)}
                           </p>
                         )}

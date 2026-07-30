@@ -239,7 +239,7 @@ export default function CheckoutPage() {
   if (!cartItems || cartItems.length === 0) {
     return (
       <div className="w-full min-h-screen bg-background py-20 flex items-center justify-center">
-        <p className="text-gray-500">Đang chuyển đến giỏ hàng...</p>
+        <p className="text-muted-foreground">Đang chuyển đến giỏ hàng...</p>
       </div>
     );
   }
@@ -247,7 +247,7 @@ export default function CheckoutPage() {
   if (profileQuery.isLoading) {
     return (
       <div className="w-full min-h-screen bg-background py-20 flex items-center justify-center">
-        <p className="text-gray-500">Đang tải địa chỉ giao hàng...</p>
+        <p className="text-muted-foreground">Đang tải địa chỉ giao hàng...</p>
       </div>
     );
   }
@@ -264,7 +264,7 @@ export default function CheckoutPage() {
             <h1 className="text-xl font-bold text-foreground">Thanh toán</h1>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4 text-green-500" />
+            <Shield className="h-4 w-4 text-success" />
             <span>Thanh toán an toàn</span>
           </div>
         </div>
@@ -337,7 +337,7 @@ export default function CheckoutPage() {
                       <Button
                         type="button"
                         onClick={() => router.push('/profile?tab=address')}
-                        className="bg-primary hover:bg-primary-hover rounded-lg text-white"
+                        className="bg-primary hover:bg-primary-hover rounded-lg text-primary-foreground"
                       >
                         Đi tới hồ sơ
                       </Button>
@@ -446,7 +446,7 @@ export default function CheckoutPage() {
                         size="sm"
                         variant="outline"
                         onClick={handleRemoveVoucher}
-                        className="h-9 text-red-500 border-red-200 hover:bg-red-50 w-full sm:w-auto rounded-lg"
+                        className="h-9 text-destructive border-destructive/30 hover:bg-destructive/15 w-full sm:w-auto rounded-lg"
                       >
                         Xóa
                       </Button>
@@ -456,7 +456,7 @@ export default function CheckoutPage() {
                         size="sm"
                         onClick={handleApplyVoucher}
                         disabled={voucherLoading || !promoCode}
-                        className="h-9 bg-primary hover:bg-primary-hover w-full sm:w-auto rounded-lg text-white"
+                        className="h-9 bg-primary hover:bg-primary-hover w-full sm:w-auto rounded-lg text-primary-foreground"
                       >
                         Áp dụng
                       </Button>
@@ -464,7 +464,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 {appliedPlatformVoucher && (
-                  <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                  <p className="text-xs text-success mt-2 flex items-center gap-1">
                     <Check className="h-3 w-3" />
                     Đã áp dụng mã: {appliedPlatformVoucher.code} (-
                     {formatCurrency(appliedPlatformVoucher.discountAmount)})
@@ -565,14 +565,14 @@ export default function CheckoutPage() {
                   </div>
 
                   {shopDiscount > 0 && (
-                    <div className="flex justify-between text-green-600">
+                    <div className="flex justify-between text-success">
                       <span>Voucher Cửa hàng</span>
                       <span>-{formatCurrency(shopDiscount)}</span>
                     </div>
                   )}
 
                   {platformDiscount > 0 && (
-                    <div className="flex justify-between text-green-600">
+                    <div className="flex justify-between text-success">
                       <span>Voucher nền tảng</span>
                       <span>-{formatCurrency(platformDiscount)}</span>
                     </div>
@@ -580,7 +580,7 @@ export default function CheckoutPage() {
 
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Phí vận chuyển</span>
-                    <span className="text-green-600">Miễn phí</span>
+                    <span className="text-success">Miễn phí</span>
                   </div>
 
                   <div className="pt-3 border-t border-border">
@@ -597,7 +597,7 @@ export default function CheckoutPage() {
                 <Button
                   type="submit"
                   form="checkout-form"
-                  className="w-full h-11 mt-4 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-white"
+                  className="w-full h-11 mt-4 bg-primary hover:bg-primary-hover rounded-lg text-base font-medium text-primary-foreground"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Đang xử lý...' : 'Đặt hàng'}

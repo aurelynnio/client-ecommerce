@@ -43,7 +43,7 @@ function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
     <div
       className={cn(
         'flex items-center gap-1.5 text-xs transition-colors',
-        met ? 'text-green-600' : 'text-gray-400',
+        met ? 'text-success' : 'text-muted-foreground/60',
       )}
     >
       {met ? (
@@ -210,7 +210,7 @@ export default function ResetPasswordPage() {
           disabled={isLoading}
           className="mt-2 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
-          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-white" /> : null}
+          {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Đặt lại mật khẩu
         </Button>
       </form>

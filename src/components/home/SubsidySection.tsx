@@ -88,7 +88,7 @@ export default function SubsidySection() {
                         className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                       />
                       {discount > 0 && (
-                        <span className="absolute top-1 left-1 bg-primary text-white text-[9px] px-1.5 py-0.5 rounded font-bold">
+                        <span className="absolute top-1 left-1 bg-primary text-primary-foreground text-[9px] px-1.5 py-0.5 rounded font-bold">
                           -{discount}%
                         </span>
                       )}

@@ -16,6 +16,9 @@ export default function SpinnerLoading({
 }: SpinnerLoadingProps) {
   const spinner = (
     <div
+      role="status"
+      aria-live="polite"
+      aria-label="Đang tải"
       className={cn(
         'relative flex items-center justify-center animate-spin',
         noWrapper && className,

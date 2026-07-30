@@ -487,7 +487,7 @@ export function CreateCategoryModal({
                 className={cn('h-11 flex-1 shadow-sm', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
-                  <SpinnerLoading noWrapper size={16} className="mr-2 text-white" />
+                  <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />
                 ) : (
                   <Plus className="h-4 w-4 mr-2" />
                 )}

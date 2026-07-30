@@ -300,7 +300,7 @@ export default function AdminFlashSalePage() {
                       <span className="text-lg font-semibold text-primary">
                         {product.flashSale?.salePrice?.toLocaleString()}đ
                       </span>
-                      <span className="text-xs text-muted-foreground line-through">
+                      <span className="text-xs text-price-strikethrough line-through">
                         {product.price?.currentPrice?.toLocaleString()}đ
                       </span>
                     </div>

@@ -34,7 +34,7 @@ export default function ReviewItem({
                 {verified && (
                   <Badge
                     variant="secondary"
-                    className="h-5 px-1.5 text-[10px] bg-green-50 text-green-700 hover:bg-green-100 gap-1 rounded-sm font-normal"
+                    className="h-5 px-1.5 text-[10px] bg-success/15 text-success hover:bg-success/15 gap-1 rounded-sm font-normal"
                   >
                     <CheckCircle className="h-3 w-3" />
                     Đã xác minh
@@ -47,7 +47,7 @@ export default function ReviewItem({
                     <Star
                       key={i}
                       className={`h-3 w-3 ${
-                        i < rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30'
+                        i < rating ? 'fill-star text-star' : 'text-muted-foreground/30'
                       }`}
                     />
                   ))}

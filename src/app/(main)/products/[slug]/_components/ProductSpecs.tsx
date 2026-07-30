@@ -97,7 +97,7 @@ export function ProductSpecs({ product }: ProductSpecsProps) {
         {allSpecs.map((spec, index) => (
           <div
             key={index}
-            className="flex border-b border-r border-gray-100 last:border-b-0 even:border-r-0 md:even:border-r md:nth-last-[-n+2]:border-b-0"
+            className="flex border-b border-r border-border/50 last:border-b-0 even:border-r-0 md:even:border-r md:nth-last-[-n+2]:border-b-0"
           >
             <div className="flex w-2/5 items-center gap-2 bg-muted px-4 py-3.5 text-xs font-medium text-muted-foreground">
               {spec.icon && <span className="text-muted-foreground">{spec.icon}</span>}
@@ -113,12 +113,12 @@ export function ProductSpecs({ product }: ProductSpecsProps) {
       {/* Sizes Display - Visual chips */}
       {product.sizes && product.sizes.length > 0 && (
         <div className="mt-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Kích cỡ có sẵn</h3>
+          <h3 className="text-sm font-medium text-foreground/80 mb-3">Kích cỡ có sẵn</h3>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((size, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full border border-gray-200"
+                className="px-3 py-1.5 bg-muted text-foreground/80 text-xs font-medium rounded-full border border-border"
               >
                 {size}
               </span>
@@ -130,18 +130,18 @@ export function ProductSpecs({ product }: ProductSpecsProps) {
       {/* Variants Summary */}
       {product.variants && product.variants.length > 0 && (
         <div className="mt-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">
+          <h3 className="text-sm font-medium text-foreground/80 mb-3">
             Phân loại ({product.variants.length} màu)
           </h3>
           <div className="flex flex-wrap gap-2">
             {product.variants.map((variant, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1.5 bg-white text-gray-600 text-xs font-medium rounded-full border border-gray-200 flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-card text-muted-foreground text-xs font-medium rounded-full border border-border flex items-center gap-1.5"
               >
                 {variant.color && (
                   <span
-                    className="w-3 h-3 rounded-full border border-gray-300"
+                    className="w-3 h-3 rounded-full border border-border"
                     style={{
                       backgroundColor: getColorCode(variant.color),
                     }}

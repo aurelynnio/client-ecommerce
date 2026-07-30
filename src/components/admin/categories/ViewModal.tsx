@@ -57,14 +57,14 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
 
   const getStatusBadge = (status: boolean) => {
     return status ? (
-      <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+      <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
         <CheckCircle className="h-3 w-3 mr-1" />
         Đang hoạt động
       </Badge>
     ) : (
       <Badge
         variant="outline"
-        className="bg-gray-100 text-gray-600 border-0 rounded-lg px-2.5 py-0.5 shadow-none"
+        className="bg-muted text-muted-foreground border-0 rounded-lg px-2.5 py-0.5 shadow-none"
       >
         <XCircle className="h-3 w-3 mr-1" />
         Ngừng hoạt động
@@ -155,7 +155,7 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
                   {images.map((image, index) => (
                     <div
                       key={index}
-                      className="relative aspect-square rounded-xl overflow-hidden border border-border/50 cursor-zoom-in group bg-gray-50"
+                      className="relative aspect-square rounded-xl overflow-hidden border border-border/50 cursor-zoom-in group bg-muted/50"
                       onClick={() => setSelectedImage(image)}
                     >
                       <Image
@@ -172,7 +172,7 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
                   ))}
                 </div>
               ) : (
-                <div className="p-8 border-2 border-dashed border-border/50 rounded-2xl flex flex-col items-center justify-center text-muted-foreground bg-gray-50/30">
+                <div className="p-8 border-2 border-dashed border-border/50 rounded-2xl flex flex-col items-center justify-center text-muted-foreground bg-muted/30">
                   <ImageIcon className="h-8 w-8 mb-2 opacity-30" />
                   <p className="text-sm">Chưa có hình ảnh</p>
                 </div>
@@ -186,9 +186,9 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {category.parentCategory ? (
-                  <div className="p-4 rounded-xl border border-border/50 bg-gray-50/50 flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-lg border border-border/30 shadow-sm">
-                      <Layers className="h-4 w-4 text-blue-500" />
+                  <div className="p-4 rounded-xl border border-border/50 bg-muted/50 flex items-center gap-3">
+                    <div className="p-2 bg-card rounded-lg border border-border/30 shadow-sm">
+                      <Layers className="h-4 w-4 text-info" />
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground uppercase font-bold">
@@ -202,8 +202,8 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-xl border border-border/50 bg-gray-50/50 flex items-center gap-3 opacity-60">
-                    <div className="p-2 bg-white rounded-lg border border-border/30">
+                  <div className="p-4 rounded-xl border border-border/50 bg-muted/50 flex items-center gap-3 opacity-60">
+                    <div className="p-2 bg-card rounded-lg border border-border/30">
                       <Layers className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <div>
@@ -215,15 +215,15 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
                   </div>
                 )}
 
-                <div className="p-4 rounded-xl border border-border/50 bg-gray-50/50 flex items-center gap-3">
-                  <div className="p-2 bg-white rounded-lg border border-border/30 shadow-sm">
-                    <Link className="h-4 w-4 text-green-500" />
+                <div className="p-4 rounded-xl border border-border/50 bg-muted/50 flex items-center gap-3">
+                  <div className="p-2 bg-card rounded-lg border border-border/30 shadow-sm">
+                    <Link className="h-4 w-4 text-success" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs text-muted-foreground uppercase font-bold">
                       URL Công khai
                     </p>
-                    <p className="font-medium text-sm truncate text-blue-600 hover:underline cursor-pointer">
+                    <p className="font-medium text-sm truncate text-info hover:underline cursor-pointer">
                       /categories/{category.slug}
                     </p>
                   </div>

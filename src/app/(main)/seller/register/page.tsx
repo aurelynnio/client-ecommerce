@@ -204,9 +204,9 @@ export default function SellerRegisterPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Nhập tên shop"
-                    className={`${fieldSurfaceClass} ${errors.name ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+                    className={`${fieldSurfaceClass} ${errors.name ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
                   />
-                  {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                 </div>
                 <div>
                   <Label htmlFor="description" className={fieldLabelClass}>
@@ -240,13 +240,13 @@ export default function SellerRegisterPage() {
                       onClick={() => logoInputRef.current?.click()}
                     >
                       {isUploadingLogo ? (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                        <div className="w-full h-full flex items-center justify-center bg-muted/50">
                           <SpinnerLoading size={20} />
                         </div>
                       ) : formData.logo ? (
                         <Image src={formData.logo} alt="Logo" fill className="object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                        <div className="w-full h-full flex items-center justify-center bg-muted/50">
                           <Upload className="h-5 w-5 text-muted-foreground" />
                         </div>
                       )}
@@ -267,13 +267,13 @@ export default function SellerRegisterPage() {
                       onClick={() => bannerInputRef.current?.click()}
                     >
                       {isUploadingBanner ? (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                        <div className="w-full h-full flex items-center justify-center bg-muted/50">
                           <SpinnerLoading size={20} />
                         </div>
                       ) : formData.banner ? (
                         <Image src={formData.banner} alt="Banner" fill className="object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                        <div className="w-full h-full flex items-center justify-center bg-muted/50">
                           <Upload className="h-5 w-5 text-muted-foreground" />
                         </div>
                       )}
@@ -302,10 +302,10 @@ export default function SellerRegisterPage() {
                       value={formData.pickupAddress?.fullName}
                       onChange={(e) => updatePickupAddress('fullName', e.target.value)}
                       placeholder="Họ tên người gửi"
-                      className={`${fieldSurfaceClass} ${errors.fullName ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+                      className={`${fieldSurfaceClass} ${errors.fullName ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
                     />
                     {errors.fullName && (
-                      <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>
+                      <p className="text-xs text-destructive mt-1">{errors.fullName}</p>
                     )}
                   </div>
                   <div>
@@ -318,9 +318,9 @@ export default function SellerRegisterPage() {
                       value={formData.pickupAddress?.phone}
                       onChange={(e) => updatePickupAddress('phone', e.target.value)}
                       placeholder="0912345678"
-                      className={`${fieldSurfaceClass} ${errors.phone ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+                      className={`${fieldSurfaceClass} ${errors.phone ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
                     />
-                    {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
+                    {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
                   </div>
                 </div>
                 <div>
@@ -333,9 +333,9 @@ export default function SellerRegisterPage() {
                     value={formData.pickupAddress?.address}
                     onChange={(e) => updatePickupAddress('address', e.target.value)}
                     placeholder="Số nhà, tên đường"
-                    className={`${fieldSurfaceClass} ${errors.address ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+                    className={`${fieldSurfaceClass} ${errors.address ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
                   />
-                  {errors.address && <p className="text-xs text-red-500 mt-1">{errors.address}</p>}
+                  {errors.address && <p className="text-xs text-destructive mt-1">{errors.address}</p>}
                   <p className={helperTextClass}>
                     Đây là địa chỉ shop dùng để lấy hàng và xử lý vận chuyển.
                   </p>
@@ -351,9 +351,9 @@ export default function SellerRegisterPage() {
                       value={formData.pickupAddress?.city}
                       onChange={(e) => updatePickupAddress('city', e.target.value)}
                       placeholder="TP. Hồ Chí Minh"
-                      className={`${fieldSurfaceClass} ${errors.city ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+                      className={`${fieldSurfaceClass} ${errors.city ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
                     />
-                    {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city}</p>}
+                    {errors.city && <p className="text-xs text-destructive mt-1">{errors.city}</p>}
                   </div>
                   <div>
                     <Label htmlFor="district" className={fieldLabelClass}>

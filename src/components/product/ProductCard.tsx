@@ -59,28 +59,28 @@ const getDiscountPercent = (original: number, sale: number): number => {
 const renderBadge = (product: Product, discountPercent: number) => {
   if (product.stock === 0) {
     return (
-      <span className="bg-neutral-900 text-white text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
+      <span className="bg-destructive text-destructive-foreground text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
         Hết hàng
       </span>
     );
   }
   if (product.flashSale) {
     return (
-      <span className="bg-primary text-white text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
+      <span className="bg-primary text-primary-foreground text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
         Giá sốc
       </span>
     );
   }
   if (discountPercent > 0) {
     return (
-      <span className="bg-amber-600 text-white text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
+      <span className="bg-warning text-warning-foreground text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
         -{discountPercent}%
       </span>
     );
   }
   if (product.soldCount === 0) {
     return (
-      <span className="bg-emerald-600 text-white text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
+      <span className="bg-success text-success-foreground text-[9px] font-semibold px-2 py-0.5 rounded-sm tracking-wide uppercase shadow-xs">
         Mới
       </span>
     );
@@ -104,7 +104,7 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
 
   return (
     <Link href={`/products/${product.slug || product._id}`} className="group block h-full w-full">
-      <div className="flex h-full w-full flex-col gap-2.5">
+      <div className="card-product flex h-full w-full flex-col gap-2.5 rounded-lg p-2">
         {/* Image Container */}
         <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-muted/10">
           {productImage && !imageError ? (
@@ -128,7 +128,7 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
           )}
 
           {/* Wishlist Button */}
-          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-10">
             <WishlistButton productId={product._id} productName={product.name} size="sm" />
           </div>
 
@@ -166,7 +166,7 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
                 <span className="font-medium text-[14px] text-primary">
                   {formatCurrency(displayPrice.discount!)}
                 </span>
-                <span className="text-[11px] text-muted-foreground line-through">
+                <span className="text-[11px] text-price-strikethrough line-through">
                   {formatCurrency(displayPrice.current)}
                 </span>
               </div>

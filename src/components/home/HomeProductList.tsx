@@ -82,7 +82,7 @@ export default function HomeProductList({ selectedCategorySlug }: HomeProductLis
 
   if (error) {
     return (
-      <div className="text-center py-20 text-red-500">
+      <div className="text-center py-20 text-destructive">
         Đã xảy ra lỗi: {getSafeErrorMessage(error, 'Không thể tải sản phẩm')}
       </div>
     );

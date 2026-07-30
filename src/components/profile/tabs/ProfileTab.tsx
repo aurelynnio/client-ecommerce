@@ -55,12 +55,12 @@ export default function ProfileTab({ user }: ProfileTabProps) {
           </div>
           <Button
             size="icon"
-            className="absolute bottom-0 right-0 h-8 w-8 rounded-full shadow-sm bg-primary text-white hover:bg-primary/90 transition-colors duration-200"
+            className="absolute bottom-0 right-0 h-8 w-8 rounded-full shadow-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
             onClick={handleUploadAvatar}
             disabled={isUploadingAvatar}
           >
             {isUploadingAvatar ? (
-              <SpinnerLoading noWrapper size={16} className="text-white" />
+              <SpinnerLoading noWrapper size={16} className="text-primary-foreground" />
             ) : (
               <Plus className="h-4 w-4" />
             )}
@@ -92,7 +92,7 @@ export default function ProfileTab({ user }: ProfileTabProps) {
             user.isVerifiedEmail ? (
               <Badge
                 variant="secondary"
-                className="bg-green-100 text-green-700 hover:bg-green-100 gap-1 px-2 py-0.5 h-5 text-[10px]"
+                className="bg-success/15 text-success hover:bg-success/15 gap-1 px-2 py-0.5 h-5 text-[10px]"
               >
                 <Check className="h-3 w-3" />
                 Đã xác minh

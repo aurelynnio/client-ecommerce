@@ -60,7 +60,7 @@ export function UsersStats({
           icon={stat.icon}
           accent={index === 0 ? 'brand' : index === 1 ? 'blue' : 'green'}
           meta={
-            <span className="inline-flex rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600">
+            <span className="inline-flex rounded-full bg-success/15 px-2.5 py-1 text-xs font-medium text-success">
               {stat.percentage}
             </span>
           }

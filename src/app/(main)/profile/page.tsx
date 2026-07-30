@@ -242,13 +242,13 @@ export default function ProfilePage() {
             </div>
 
             {/* Wallet Card */}
-            <div className="bg-linear-to-br from-primary/90 to-primary rounded-lg p-4 text-white">
+            <div className="bg-primary rounded-lg p-4 text-primary-foreground">
               <div className="flex items-center gap-2 mb-3">
                 <Wallet className="h-5 w-5 opacity-90" />
                 <span className="font-medium text-sm">Đơn hàng chờ xử lý</span>
               </div>
               <p className="text-2xl font-bold">{pendingOrders}</p>
-              <p className="text-xs text-white/60 mt-1">Cần theo dõi sớm</p>
+              <p className="text-xs text-primary-foreground/60 mt-1">Cần theo dõi sớm</p>
             </div>
           </div>
 

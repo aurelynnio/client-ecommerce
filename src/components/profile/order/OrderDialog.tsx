@@ -67,44 +67,44 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
       case 'pending':
         return {
           icon: Clock,
-          color: 'text-amber-500',
-          bg: 'bg-amber-50',
+          color: 'text-warning',
+          bg: 'bg-warning/15',
           label: 'Chờ xử lý',
         };
       case 'confirmed':
       case 'processing':
         return {
           icon: RefreshCw,
-          color: 'text-blue-500',
-          bg: 'bg-blue-50',
+          color: 'text-info',
+          bg: 'bg-info/15',
           label: 'Đang xử lý',
         };
       case 'shipped':
         return {
           icon: Truck,
-          color: 'text-purple-500',
-          bg: 'bg-purple-50',
+          color: 'text-info',
+          bg: 'bg-info/15',
           label: 'Đang giao hàng',
         };
       case 'delivered':
         return {
           icon: CheckCircle,
-          color: 'text-green-500',
-          bg: 'bg-green-50',
+          color: 'text-success',
+          bg: 'bg-success/15',
           label: 'Đã giao hàng',
         };
       case 'cancelled':
         return {
           icon: XCircle,
-          color: 'text-red-500',
-          bg: 'bg-red-50',
+          color: 'text-destructive',
+          bg: 'bg-destructive/15',
           label: 'Đã hủy',
         };
       default:
         return {
           icon: Package,
-          color: 'text-gray-500',
-          bg: 'bg-gray-50',
+          color: 'text-muted-foreground',
+          bg: 'bg-muted/50',
           label: status,
         };
     }
@@ -215,8 +215,8 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
                     className={cn(
                       'rounded-lg px-2.5 font-medium border-0',
                       order.paymentStatus === 'paid'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-zinc-100 text-zinc-900',
+                        ? 'bg-success/15 text-success'
+                        : 'bg-muted text-foreground',
                     )}
                   >
                     {order.paymentStatus === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
@@ -270,7 +270,7 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
                 <span>{formatCurrency(order.subtotal)}</span>
               </div>
               {(order.discountShop ?? 0) + (order.discountPlatform ?? 0) > 0 && (
-                <div className="flex justify-between text-sm text-emerald-600 font-medium">
+                <div className="flex justify-between text-sm text-success font-medium">
                   <span>Giảm giá</span>
                   <span>
                     -{formatCurrency((order.discountShop ?? 0) + (order.discountPlatform ?? 0))}

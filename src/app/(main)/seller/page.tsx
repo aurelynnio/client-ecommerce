@@ -184,7 +184,7 @@ export default function SellerDashboardPage() {
         <div className="rounded-xl border border-border bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="flex size-10 items-center justify-center rounded-lg bg-warning/15">
-              <Star className="h-5 w-5 text-warning" />
+              <Star className="h-5 w-5 text-star" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Đánh giá</p>

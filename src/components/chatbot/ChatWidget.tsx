@@ -290,7 +290,7 @@ export default function ChatWidget() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                <Bot className="h-5 w-5 text-white" />
+                <Bot className="h-5 w-5 text-primary-foreground" />
               </div>
               <div>
                 <h3 className="text-base font-semibold text-foreground">Mia - Trợ lý AI</h3>
@@ -358,14 +358,14 @@ export default function ChatWidget() {
                 >
                   {msg.role === 'assistant' && (
                     <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0 mt-0.5">
-                      <Bot className="h-3.5 w-3.5 text-white" />
+                      <Bot className="h-3.5 w-3.5 text-primary-foreground" />
                     </div>
                   )}
                   <div
                     className={cn(
                       'max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed border shadow-xs',
                       msg.role === 'user'
-                        ? 'bg-primary text-white border-primary/10 rounded-tr-xs font-medium'
+                        ? 'bg-primary text-primary-foreground border-primary/10 rounded-tr-xs font-medium'
                         : 'bg-card text-foreground border-border rounded-tl-xs font-medium',
                     )}
                   >
@@ -417,7 +417,7 @@ export default function ChatWidget() {
               {streamingContent && (
                 <div className="flex items-start gap-2 justify-start">
                   <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0 mt-0.5">
-                    <Bot className="h-3.5 w-3.5 text-white" />
+                    <Bot className="h-3.5 w-3.5 text-primary-foreground" />
                   </div>
                   <div className="max-w-[80%] rounded-xl rounded-tl-xs px-3 py-2 text-sm bg-card text-foreground border border-border shadow-xs">
                     <ReactMarkdown>{streamingContent}</ReactMarkdown>
@@ -429,7 +429,7 @@ export default function ChatWidget() {
               {isLoading && !streamingContent && (
                 <div className="flex items-start gap-2 justify-start">
                   <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0 mt-0.5">
-                    <Bot className="h-3.5 w-3.5 text-white" />
+                    <Bot className="h-3.5 w-3.5 text-primary-foreground" />
                   </div>
                   <div className="bg-card rounded-xl rounded-tl-xs px-3 py-2 border border-border shadow-xs">
                     <div className="flex items-center gap-1.5 py-1">
@@ -464,7 +464,7 @@ export default function ChatWidget() {
               type="submit"
               disabled={!input.trim() || isLoading}
               size="icon"
-              className="h-10 w-10 rounded-lg bg-primary hover:bg-primary-hover text-white shrink-0 shadow-sm"
+              className="h-10 w-10 rounded-lg bg-primary hover:bg-primary-hover text-primary-foreground shrink-0 shadow-sm"
             >
               {isLoading ? <SpinnerLoading size={16} noWrapper /> : <Send className="h-4 w-4" />}
             </Button>

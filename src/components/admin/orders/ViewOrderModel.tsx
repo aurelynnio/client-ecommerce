@@ -150,11 +150,11 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
               </h3>
               <div className="flex items-center gap-3">
                 {shopInfo.logo ? (
-                  <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-gray-100 border border-border/50">
+                  <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-muted border border-border/50">
                     <Image src={shopInfo.logo} alt={shopInfo.name} fill className="object-cover" />
                   </div>
                 ) : (
-                  <div className="h-12 w-12 rounded-xl bg-gray-100 flex items-center justify-center border border-border/50">
+                  <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center border border-border/50">
                     <Store className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
@@ -194,7 +194,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
                   <div className="text-muted-foreground text-xs">{order.shippingAddress.city}</div>
                 </div>
                 {order.shippingAddress.note && (
-                  <div className="mt-2 text-xs bg-yellow-50 text-yellow-800 p-2 rounded-lg border border-yellow-100">
+                  <div className="mt-2 text-xs bg-warning/15 text-warning p-2 rounded-lg border border-warning/30">
                     <span className="font-medium">Ghi chú: </span>
                     {order.shippingAddress.note}
                   </div>
@@ -209,9 +209,9 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
           <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground px-1">
             Chi tiết sản phẩm
           </h3>
-          <div className="border border-border/50 rounded-2xl overflow-hidden bg-white/40">
+          <div className="border border-border/50 rounded-2xl overflow-hidden bg-card/40">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50/80 border-b border-border/50 text-xs uppercase tracking-wider text-muted-foreground">
+              <thead className="bg-muted/80 border-b border-border/50 text-xs uppercase tracking-wider text-muted-foreground">
                 <tr>
                   <th className="text-left p-4 font-medium">Sản phẩm</th>
                   <th className="text-left p-4 font-medium">Đơn giá</th>
@@ -221,10 +221,10 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
               </thead>
               <tbody className="divide-y divide-border/50">
                 {order.products?.map((item, index) => (
-                  <tr key={index} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={index} className="hover:bg-muted/50 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden border border-border/50">
+                        <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center overflow-hidden border border-border/50">
                           {item.image ? (
                             <Image
                               src={item.image}
@@ -260,7 +260,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="bg-gray-50/80 border-t border-border/50 font-semibold">
+              <tfoot className="bg-muted/80 border-t border-border/50 font-semibold">
                 <tr>
                   <td colSpan={3} className="p-4 text-right">
                     Tổng cộng

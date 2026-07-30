@@ -342,7 +342,7 @@ export default function CartPage() {
                   onClick={() => {
                     void handleClearCart();
                   }}
-                  className="sm:ml-auto text-muted-foreground hover:text-red-500 flex items-center gap-1"
+                  className="sm:ml-auto text-muted-foreground hover:text-destructive flex items-center gap-1"
                 >
                   <Trash2 className="h-4 w-4" />
                   Xóa tất cả
@@ -352,9 +352,9 @@ export default function CartPage() {
 
             {/* Warning for deleted products */}
             {deletedItems.length > 0 && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-sm p-4">
+              <div className="bg-warning/15 border border-warning/30 rounded-sm p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-2 text-yellow-700">
+                  <div className="flex items-center gap-2 text-warning">
                     <span className="text-sm">
                       ⚠️ Có {deletedItems.length} sản phẩm không còn tồn tại và đã bị xóa khỏi hiển
                       thị.
@@ -366,7 +366,7 @@ export default function CartPage() {
                         void handleRemoveItem(item._id);
                       });
                     }}
-                    className="text-sm text-red-500 hover:text-red-600 font-medium"
+                    className="text-sm text-destructive hover:text-destructive font-medium"
                   >
                     Xóa tất cả sản phẩm không hợp lệ
                   </button>
@@ -428,7 +428,7 @@ export default function CartPage() {
                         }`}
                         className="shrink-0"
                       >
-                        <div className="relative w-20 h-20 bg-gray-100 rounded overflow-hidden">
+                        <div className="relative w-20 h-20 bg-muted rounded overflow-hidden">
                           {getItemImage(item) ? (
                             <Image
                               src={getItemImage(item)!}
@@ -441,7 +441,7 @@ export default function CartPage() {
                               className="object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                            <div className="w-full h-full flex items-center justify-center text-muted-foreground/60 text-xs">
                               Không có hình ảnh
                             </div>
                           )}
@@ -478,7 +478,7 @@ export default function CartPage() {
                             {formatCurrency(getEffectivePrice(item))}
                           </span>
                           {hasDiscount(item) && (
-                            <span className="text-xs text-gray-400 line-through">
+                            <span className="text-xs text-price-strikethrough line-through">
                               {formatCurrency(getOriginalPrice(item))}
                             </span>
                           )}
@@ -514,7 +514,7 @@ export default function CartPage() {
                           onClick={() => {
                             void handleRemoveItem(item._id);
                           }}
-                          className="text-muted-foreground hover:text-red-500 shrink-0"
+                          className="text-muted-foreground hover:text-destructive shrink-0"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -552,7 +552,7 @@ export default function CartPage() {
                       size="sm"
                       variant="outline"
                       onClick={handleRemoveVoucher}
-                      className="h-9 px-3 text-red-500 border-red-200 hover:bg-red-50"
+                      className="h-9 px-3 text-destructive border-destructive/30 hover:bg-destructive/15"
                     >
                       Xóa
                     </Button>
@@ -568,7 +568,7 @@ export default function CartPage() {
                   )}
                 </div>
                 {appliedPlatformVoucher && (
-                  <div className="mt-2 text-xs text-green-600 flex items-center gap-1">
+                  <div className="mt-2 text-xs text-success flex items-center gap-1">
                     <span>✓</span>
                     <span>Đã áp dụng mã: {appliedPlatformVoucher.code}</span>
                   </div>
@@ -587,7 +587,7 @@ export default function CartPage() {
                 </div>
 
                 {appliedPlatformVoucher && (
-                  <div className="flex justify-between text-sm text-green-600">
+                  <div className="flex justify-between text-sm text-success">
                     <span>Giảm giá</span>
                     <span>-{formatCurrency(appliedPlatformVoucher.discountAmount)}</span>
                   </div>

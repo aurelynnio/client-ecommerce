@@ -39,6 +39,7 @@ export function VoucherCard({
   const isPlatform = voucher.scope === 'platform';
   const accentColor = isPlatform ? 'text-primary' : 'text-info';
   const accentBg = isPlatform ? 'bg-primary' : 'bg-info';
+  const accentFg = isPlatform ? 'text-primary-foreground' : 'text-info-foreground';
 
   // Compact variant for daily vouchers grid
   if (variant === 'compact') {
@@ -77,8 +78,9 @@ export function VoucherCard({
             <button
               onClick={() => onCollect?.(voucher._id)}
               className={cn(
-                'w-full py-1.5 rounded-lg text-white text-xs font-medium transition-opacity hover:opacity-90',
+                'w-full py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-90',
                 accentBg,
+                accentFg,
               )}
             >
               Lưu
@@ -150,8 +152,9 @@ export function VoucherCard({
               <button
                 onClick={() => onCollect?.(voucher._id)}
                 className={cn(
-                  'text-[10px] font-medium px-3 py-1 rounded-lg text-white transition-opacity hover:opacity-90',
+                  'text-[10px] font-medium px-3 py-1 rounded-lg transition-opacity hover:opacity-90',
                   accentBg,
+                  accentFg,
                 )}
               >
                 Lưu
@@ -248,8 +251,9 @@ export function VoucherCard({
             <button
               onClick={() => onCollect?.(voucher._id)}
               className={cn(
-                'flex-1 h-9 rounded-lg text-xs font-medium text-white transition-opacity hover:opacity-90',
+                'flex-1 h-9 rounded-lg text-xs font-medium transition-opacity hover:opacity-90',
                 accentBg,
+                accentFg,
               )}
             >
               Lưu ngay

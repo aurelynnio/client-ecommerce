@@ -44,19 +44,19 @@ interface ViewModelProductProps {
 const statusMap: Record<string, { label: string; className: string }> = {
   published: {
     label: 'Đang bán',
-    className: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    className: 'border-success/30 bg-success/15 text-success',
   },
   draft: {
     label: 'Bản nháp',
-    className: 'border-amber-200 bg-amber-50 text-amber-700',
+    className: 'border-warning/30 bg-warning/15 text-warning',
   },
   suspended: {
     label: 'Tạm ngưng',
-    className: 'border-rose-200 bg-rose-50 text-rose-700',
+    className: 'border-discount/30 bg-discount/15 text-discount',
   },
   deleted: {
     label: 'Đã xóa',
-    className: 'border-slate-200 bg-slate-100 text-slate-600',
+    className: 'border-border bg-muted text-muted-foreground',
   },
 };
 
@@ -105,8 +105,8 @@ function InfoCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="mb-3 flex items-center gap-2 text-slate-400">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-2 text-muted-foreground/60">
         <Icon className="h-4 w-4" />
         <span className="text-[11px] font-semibold uppercase tracking-[0.16em]">{label}</span>
       </div>
@@ -154,7 +154,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
   const statusConfig = statusMap[product.status] || {
     label: 'Không xác định',
-    className: 'border-slate-200 bg-slate-100 text-slate-600',
+    className: 'border-border bg-muted text-muted-foreground',
   };
   const mainImage = getMainImage();
   const allImages = getAllImages();
@@ -166,17 +166,17 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
         showCloseButton={false}
         className="max-w-5xl gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 shadow-lg"
       >
-        <DialogHeader className="border-b border-slate-200 bg-white px-6 py-5">
+        <DialogHeader className="border-b border-border bg-card px-6 py-5">
           <div className="flex items-start justify-between gap-4">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Package className="h-5 w-5" />
               </div>
               <div className="min-w-0">
-                <DialogTitle className="text-2xl font-semibold tracking-tight text-slate-950">
+                <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
                   Chi tiết sản phẩm
                 </DialogTitle>
-                <p className="mt-1 text-sm text-slate-500">ID: {product._id}</p>
+                <p className="mt-1 text-sm text-muted-foreground">ID: {product._id}</p>
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
@@ -203,7 +203,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                  className="h-9 w-9 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -214,14 +214,14 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
         <div className="max-h-[calc(92vh-152px)] overflow-y-auto px-6 py-6 pb-8 no-scrollbar">
           <div className="space-y-5">
-            <section className="grid gap-6 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm xl:grid-cols-[180px_minmax(0,1fr)_220px]">
+            <section className="grid gap-6 rounded-[28px] border border-border bg-card p-6 shadow-sm xl:grid-cols-[180px_minmax(0,1fr)_220px]">
               <div className="flex justify-center xl:justify-start">
                 {mainImage ? (
-                  <div className="relative h-40 w-40 overflow-hidden rounded-2xl bg-slate-100">
+                  <div className="relative h-40 w-40 overflow-hidden rounded-2xl bg-muted">
                     <Image src={mainImage} alt={product.name} fill className="object-cover" />
                   </div>
                 ) : (
-                  <div className="flex h-40 w-40 items-center justify-center rounded-2xl bg-slate-100 text-slate-300">
+                  <div className="flex h-40 w-40 items-center justify-center rounded-2xl bg-muted text-muted-foreground/50">
                     <Package className="h-10 w-10" />
                   </div>
                 )}
@@ -229,71 +229,71 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
               <div className="min-w-0 space-y-4">
                 <div className="space-y-2">
-                  <h2 className="max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-slate-950">
+                  <h2 className="max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-foreground">
                     {product.name}
                   </h2>
-                  <p className="break-all text-sm text-slate-400">/{product.slug}</p>
+                  <p className="break-all text-sm text-muted-foreground/60">/{product.slug}</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   {product.isNewArrival ? (
-                    <Badge className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sky-700">
+                    <Badge className="rounded-full border border-info/30 bg-info/15 px-3 py-1 text-info">
                       Mới
                     </Badge>
                   ) : null}
                   {product.isFeatured ? (
-                    <Badge className="rounded-full border border-fuchsia-200 bg-fuchsia-50 px-3 py-1 text-fuchsia-700">
+                    <Badge className="rounded-full border border-warning/30 bg-warning/15 px-3 py-1 text-warning">
                       Nổi bật
                     </Badge>
                   ) : null}
                   {product.onSale ? (
-                    <Badge className="rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-rose-700">
+                    <Badge className="rounded-full border border-discount/30 bg-discount/15 px-3 py-1 text-discount">
                       Giảm giá
                     </Badge>
                   ) : null}
                   {product.brand ? (
-                    <Badge variant="outline" className="rounded-full px-3 py-1 text-slate-600">
+                    <Badge variant="outline" className="rounded-full px-3 py-1 text-muted-foreground">
                       {product.brand}
                     </Badge>
                   ) : null}
                 </div>
 
-                <div className="grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
+                <div className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
                   <div className="rounded-lg bg-muted px-4 py-3">
-                    <div className="mb-1 flex items-center gap-2 text-slate-400">
-                      <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
+                    <div className="mb-1 flex items-center gap-2 text-muted-foreground/60">
+                      <Star className="h-4 w-4 text-star fill-star" />
                       <span className="text-xs font-medium uppercase tracking-[0.12em]">
                         Đánh giá
                       </span>
                     </div>
-                    <div className="text-base font-semibold text-slate-900">
+                    <div className="text-base font-semibold text-foreground">
                       {product.ratingAverage?.toFixed(1) || '0.0'}
-                      <span className="ml-1 text-sm font-normal text-slate-400">
+                      <span className="ml-1 text-sm font-normal text-muted-foreground/60">
                         ({product.reviewCount || 0})
                       </span>
                     </div>
                   </div>
                   <div className="rounded-lg bg-muted px-4 py-3">
-                    <div className="mb-1 flex items-center gap-2 text-slate-400">
+                    <div className="mb-1 flex items-center gap-2 text-muted-foreground/60">
                       <TrendingUp className="h-4 w-4" />
                       <span className="text-xs font-medium uppercase tracking-[0.12em]">
                         Đã bán
                       </span>
                     </div>
-                    <div className="text-base font-semibold text-slate-900">{totalSold}</div>
+                    <div className="text-base font-semibold text-foreground">{totalSold}</div>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-3 rounded-lg bg-muted px-5 py-5 text-left xl:text-right">
-                <p className="text-sm font-medium uppercase tracking-[0.16em] text-slate-400">
+                <p className="text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground/60">
                   Giá bán
                 </p>
                 <div className="text-4xl font-semibold tracking-tight text-primary">
                   {formatCurrency(product.price?.currentPrice || 0)}
                 </div>
                 {product.price?.discountPrice && product.price.discountPrice > 0 ? (
-                  <div className="text-base text-slate-400 line-through">
+                  <div className="text-base text-price-strikethrough line-through">
                     {formatCurrency(product.price.discountPrice)}
                   </div>
                 ) : null}
@@ -302,11 +302,11 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
             <section className="grid gap-4 md:grid-cols-3">
               <InfoCard icon={Layers} label="Danh mục">
-                <p className="text-xl font-semibold text-slate-900">
+                <p className="text-xl font-semibold text-foreground">
                   {getCategoryName(product.category)}
                 </p>
                 {shopCategoryName ? (
-                  <p className="mt-2 flex items-center gap-2 text-sm text-slate-500">
+                  <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
                     <Store className="h-4 w-4" />
                     {shopCategoryName}
                   </p>
@@ -318,28 +318,28 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                   className={cn(
                     'text-4xl font-semibold tracking-tight',
                     totalStock > 10
-                      ? 'text-emerald-600'
+                      ? 'text-success'
                       : totalStock > 0
-                        ? 'text-amber-600'
-                        : 'text-rose-500',
+                        ? 'text-warning'
+                        : 'text-destructive',
                   )}
                 >
                   {totalStock}
                 </p>
-                <p className="mt-2 text-sm text-slate-500">sản phẩm có sẵn</p>
+                <p className="mt-2 text-sm text-muted-foreground">sản phẩm có sẵn</p>
               </InfoCard>
 
               <InfoCard icon={Calendar} label="Thời gian">
-                <div className="space-y-2 text-sm text-slate-600">
+                <div className="space-y-2 text-sm text-muted-foreground">
                   <p>
                     Tạo:{' '}
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-foreground">
                       {formatDate(product.createdAt)}
                     </span>
                   </p>
                   <p>
                     Sửa:{' '}
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-foreground">
                       {formatDate(product.updatedAt)}
                     </span>
                   </p>
@@ -348,8 +348,8 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             </section>
 
             {product.sizes?.length ? (
-              <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-slate-500">
+              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Ruler className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
                     Kích thước có sẵn
@@ -369,9 +369,9 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.variants?.length ? (
-              <section className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
-                <div className="border-b border-slate-200 px-5 py-4">
-                  <div className="flex items-center gap-2 text-slate-500">
+              <section className="overflow-hidden rounded-[28px] border border-border bg-card shadow-sm">
+                <div className="border-b border-border px-5 py-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
                     <Palette className="h-4 w-4" />
                     <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
                       Phân loại màu ({product.variants.length})
@@ -386,7 +386,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                     >
                       <div className="shrink-0">
                         {variant.images?.[0] ? (
-                          <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-slate-100">
+                          <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-muted">
                             <Image
                               src={variant.images[0]}
                               alt={variant.name}
@@ -395,7 +395,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                             />
                           </div>
                         ) : (
-                          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-slate-100 text-slate-300">
+                          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-muted text-muted-foreground/50">
                             <ImageIcon className="h-6 w-6" />
                           </div>
                         )}
@@ -409,23 +409,23 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                               style={{ backgroundColor: getColorCode(variant.color) }}
                             />
                           ) : null}
-                          <p className="text-base font-semibold text-slate-900">
+                          <p className="text-base font-semibold text-foreground">
                             {variant.name || `Variant #${index + 1}`}
                           </p>
                         </div>
                         {variant.sku ? (
-                          <p className="font-mono text-xs text-slate-400">SKU: {variant.sku}</p>
+                          <p className="font-mono text-xs text-muted-foreground/60">SKU: {variant.sku}</p>
                         ) : null}
-                        <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500">
+                        <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
                           <span>
-                            Kho: <strong className="text-slate-900">{variant.stock}</strong>
+                            Kho: <strong className="text-foreground">{variant.stock}</strong>
                           </span>
                           <span>
-                            Đã bán: <strong className="text-slate-900">{variant.sold || 0}</strong>
+                            Đã bán: <strong className="text-foreground">{variant.sold || 0}</strong>
                           </span>
                           <span>
                             Ảnh:{' '}
-                            <strong className="text-slate-900">
+                            <strong className="text-foreground">
                               {variant.images?.length || 0}
                             </strong>
                           </span>
@@ -433,7 +433,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                       </div>
 
                       <div className="text-right">
-                        <p className="text-sm font-medium text-slate-400">Giá</p>
+                        <p className="text-sm font-medium text-muted-foreground/60">Giá</p>
                         <p className="text-lg font-semibold text-primary">
                           {formatCurrency(variant.price || 0)}
                         </p>
@@ -445,22 +445,22 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.description ? (
-              <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-slate-500">
+              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Tag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
                     Mô tả sản phẩm
                   </h3>
                 </div>
-                <p className="whitespace-pre-wrap text-sm leading-7 text-slate-600">
+                <p className="whitespace-pre-wrap text-sm leading-7 text-muted-foreground">
                   {product.description}
                 </p>
               </section>
             ) : null}
 
             {product.weight || product.dimensions ? (
-              <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-slate-500">
+              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ShoppingBag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
                     Thông tin vận chuyển
@@ -469,11 +469,11 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                 <div className="grid gap-3 md:grid-cols-2">
                   {product.weight ? (
                     <div className="rounded-lg bg-muted px-4 py-3 text-sm text-muted-foreground">
-                      <div className="mb-1 flex items-center gap-2 text-slate-400">
+                      <div className="mb-1 flex items-center gap-2 text-muted-foreground/60">
                         <Weight className="h-4 w-4" />
                         <span className="uppercase tracking-[0.12em]">Cân nặng</span>
                       </div>
-                      <strong className="text-slate-900">{product.weight}g</strong>
+                      <strong className="text-foreground">{product.weight}g</strong>
                     </div>
                   ) : null}
                   {product.dimensions &&
@@ -481,11 +481,11 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                     product.dimensions.width ||
                     product.dimensions.height) ? (
                     <div className="rounded-lg bg-muted px-4 py-3 text-sm text-muted-foreground">
-                      <div className="mb-1 flex items-center gap-2 text-slate-400">
+                      <div className="mb-1 flex items-center gap-2 text-muted-foreground/60">
                         <Ruler className="h-4 w-4" />
                         <span className="uppercase tracking-[0.12em]">Kích thước</span>
                       </div>
-                      <strong className="text-slate-900">
+                      <strong className="text-foreground">
                         {product.dimensions.length || 0} x {product.dimensions.width || 0} x{' '}
                         {product.dimensions.height || 0} cm
                       </strong>
@@ -496,8 +496,8 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.attributes?.length ? (
-              <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-slate-500">
+              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Box className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
                     Thông số kỹ thuật
@@ -509,8 +509,8 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                       key={`${attribute.name}-${index}`}
                       className="flex items-center justify-between rounded-lg bg-muted px-4 py-3 text-sm"
                     >
-                      <span className="text-slate-500">{attribute.name}</span>
-                      <span className="font-medium text-slate-900">{attribute.value}</span>
+                      <span className="text-muted-foreground">{attribute.name}</span>
+                      <span className="font-medium text-foreground">{attribute.value}</span>
                     </div>
                   ))}
                 </div>
@@ -518,8 +518,8 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.tags?.length ? (
-              <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-slate-500">
+              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Tag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">Tags</h3>
                 </div>
@@ -538,8 +538,8 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {allImages.length ? (
-              <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-slate-500">
+              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ImageIcon className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
                     Tất cả hình ảnh ({allImages.length})
@@ -549,7 +549,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                   {allImages.slice(0, 12).map((image, index) => (
                     <div
                       key={`${image}-${index}`}
-                      className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100"
+                      className="relative aspect-square overflow-hidden rounded-2xl bg-muted"
                     >
                       <Image
                         src={image}
@@ -570,9 +570,9 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-slate-200 bg-white px-6 py-4">
+        <div className="flex justify-end gap-3 border-t border-border bg-card px-6 py-4">
           <DialogClose asChild>
-            <Button variant="outline" className="rounded-2xl border-slate-200 px-5">
+            <Button variant="outline" className="rounded-2xl border-border px-5">
               Đóng
             </Button>
           </DialogClose>

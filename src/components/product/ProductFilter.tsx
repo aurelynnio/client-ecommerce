@@ -258,12 +258,12 @@ export default function ProductFilter({
               >
                 <div className="flex">
                   {Array.from({ length: rating }).map((_, i) => (
-                    <span key={i} className="text-yellow-400 text-sm">
+                    <span key={i} className="text-star text-sm">
                       ★
                     </span>
                   ))}
                   {Array.from({ length: 5 - rating }).map((_, i) => (
-                    <span key={i} className="text-gray-200 text-sm">
+                    <span key={i} className="text-muted-foreground/40 text-sm">
                       ★
                     </span>
                   ))}
@@ -315,7 +315,7 @@ export default function ProductFilter({
                       className={`h-3 w-3 ${
                         getColorHex(colorValue) === '#FFFFFF' ||
                         getColorHex(colorValue) === '#E5E0D6'
-                          ? 'text-gray-800'
+                          ? 'text-foreground'
                           : 'text-white'
                       }`}
                       strokeWidth={3}

@@ -178,7 +178,7 @@ export default function CategoriesAdminPage() {
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-red-500">
+        <div className="text-destructive">
           Error: {getSafeErrorMessage(error, 'Failed to load categories')}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ChevronRight, Home } from 'lucide-react';
 
 const groups = [
   {
@@ -34,23 +35,41 @@ const groups = [
 
 export default function SiteMapPage() {
   return (
-    <main className="min-h-screen bg-background px-4 py-8">
-      <div className="max-w-4xl mx-auto bg-card rounded-2xl border border-border/50 p-6 md:p-8 space-y-8">
-        <header className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Sơ đồ trang web</h1>
-          <p className="text-sm md:text-base text-muted-foreground">
-            Danh sách các khu vực chính để truy cập nhanh.
+    <main className="min-h-screen bg-background py-4">
+      <div className="aura-container">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
+        >
+          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">Sơ đồ trang web</span>
+        </nav>
+
+        <header className="border-b border-border pb-3">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+            Sơ đồ trang web
+          </h1>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            Danh sách các khu vực chính để truy cập nhanh
           </p>
         </header>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 py-4 md:grid-cols-3">
           {groups.map((group) => (
-            <section key={group.title} className="space-y-3">
+            <section key={group.title} className="rounded-lg border border-border bg-card p-4">
               <h2 className="text-lg font-semibold text-foreground">{group.title}</h2>
-              <ul className="space-y-2 text-sm">
+              <ul className="mt-3 space-y-2 text-sm">
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-primary hover:underline">
+                    <Link
+                      href={link.href}
+                      className="text-primary transition-colors hover:text-primary-hover hover:underline underline-offset-2"
+                    >
                       {link.label}
                     </Link>
                   </li>

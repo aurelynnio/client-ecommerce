@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Home } from 'lucide-react';
 
 interface InfoLink {
   href: string;
@@ -20,45 +20,60 @@ interface InfoPageProps {
 /** Shared readable document layout for policy, help and service content. */
 export default function InfoPage({ title, description, sections, updatedAt }: InfoPageProps) {
   return (
-    <main className="min-h-screen bg-background">
-      <div className="aura-container grid gap-8 py-8 lg:grid-cols-[12rem_minmax(0,46rem)] lg:py-12">
+    <main className="min-h-screen bg-background py-4">
+      <div className="aura-container grid gap-6 lg:grid-cols-[12rem_minmax(0,46rem)]">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground lg:col-span-2 lg:mb-0"
+        >
+          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">{title}</span>
+        </nav>
         <aside className="lg:pt-1">
-          <nav aria-label="Điều hướng thông tin" className="flex gap-1 overflow-x-auto lg:flex-col">
+          <nav
+            aria-label="Điều hướng thông tin"
+            className="no-scrollbar flex gap-1 overflow-x-auto lg:flex-col"
+          >
             <Link
               href="/"
-              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/30 hover:text-foreground"
             >
               Trang chủ
             </Link>
             <Link
               href="/help"
-              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/30 hover:text-foreground"
             >
               Trợ giúp
             </Link>
             <Link
               href="/support"
-              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/30 hover:text-foreground"
             >
               Hỗ trợ
             </Link>
           </nav>
         </aside>
         <article className="min-w-0">
-          <header className="border-b border-border pb-7">
-            <h1 className="text-3xl font-semibold tracking-tight text-foreground">{title}</h1>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">
-              {description}
-            </p>
+          <header className="border-b border-border pb-3">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
+              {title}
+            </h1>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p>
             {updatedAt ? (
-              <p className="mt-4 text-sm text-muted-foreground">Cập nhật lần cuối: {updatedAt}</p>
+              <p className="mt-2 text-xs text-muted-foreground">Cập nhật lần cuối: {updatedAt}</p>
             ) : null}
           </header>
           <div className="divide-y divide-border">
             {sections.map((section) => (
-              <section key={section.title} className="py-7">
+              <section key={section.title} className="py-4">
                 <h2 className="text-lg font-semibold text-foreground">{section.title}</h2>
-                <ul className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
+                <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                   {section.items.map((item) => (
                     <li key={item} className="flex gap-2">
                       <ChevronRight
@@ -70,7 +85,7 @@ export default function InfoPage({ title, description, sections, updatedAt }: In
                   ))}
                 </ul>
                 {section.links?.length ? (
-                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                  <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                     {section.links.map((link) => (
                       <Link
                         key={link.href}
@@ -85,7 +100,7 @@ export default function InfoPage({ title, description, sections, updatedAt }: In
               </section>
             ))}
           </div>
-          <footer className="border-t border-border pt-5 text-sm text-muted-foreground">
+          <footer className="border-t border-border pt-4 text-sm text-muted-foreground">
             Cần hỗ trợ thêm?{' '}
             <Link href="/support" className="font-medium text-primary hover:text-primary-hover">
               Liên hệ trung tâm hỗ trợ

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, ChevronRight, Package, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, ChevronRight, Home, Package, SlidersHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
@@ -40,38 +40,44 @@ export default function CategoryDetailPage() {
   );
   const loading = categoriesLoading || productsLoading;
   return (
-    <main className="min-h-screen bg-background">
-      <div className="aura-container py-7 sm:py-10">
+    <main className="min-h-screen bg-background py-4">
+      <div className="aura-container">
         <nav
           aria-label="Breadcrumb"
-          className="mb-5 flex items-center gap-2 text-sm text-muted-foreground"
+          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
         >
-          <Link href="/categories" className="hover:text-foreground">
+          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+          <ChevronRight className="h-3 w-3" />
+          <Link href="/categories" className="transition-colors hover:text-primary">
             Danh mục
           </Link>
-          <ChevronRight className="h-4 w-4" />
-          <span className="text-foreground">{category?.name || 'Sản phẩm'}</span>
+          <ChevronRight className="h-3 w-3" />
+          <span className="font-medium text-foreground">{category?.name || 'Sản phẩm'}</span>
         </nav>
-        <header className="border-b border-border pb-6">
-          <h1 className="text-3xl font-semibold tracking-tight">
+        <header className="border-b border-border pb-3">
+          <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">
             {category?.name || 'Danh mục sản phẩm'}
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-0.5 text-sm text-muted-foreground">
             {sortedProducts.length} sản phẩm hiện có
           </p>
         </header>
         {category?.subcategories?.length ? (
-          <div className="flex gap-2 overflow-x-auto py-5">
+          <ul className="no-scrollbar flex gap-1 overflow-x-auto py-3">
             {category.subcategories.map((sub) => (
-              <Link
-                key={sub._id}
-                href={`/categories/${sub.slug}`}
-                className="shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-primary"
-              >
-                {sub.name}
-              </Link>
+              <li key={sub._id} className="shrink-0">
+                <Link
+                  href={`/categories/${sub.slug}`}
+                  className="whitespace-nowrap rounded-md border border-border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  {sub.name}
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : null}
         <div className="flex flex-col gap-3 border-y border-border py-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
@@ -80,7 +86,7 @@ export default function CategoryDetailPage() {
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value as SortType)}
-              className="h-9 rounded-lg border border-input bg-card px-3 text-sm"
+              className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:border-primary focus:ring-primary/20 focus:outline-none"
             >
               <option value="default">Mặc định</option>
               <option value="newest">Mới nhất</option>
@@ -89,7 +95,7 @@ export default function CategoryDetailPage() {
             </select>
           </div>
           <Link href={`/products?category=${slug}`}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="rounded-lg">
               Bộ lọc nâng cao <ChevronDown className="ml-1 h-4 w-4" />
             </Button>
           </Link>
@@ -99,13 +105,15 @@ export default function CategoryDetailPage() {
             <SpinnerLoading />
           </div>
         ) : sortedProducts.length ? (
-          <div className="pt-6">
+          <div className="pt-5">
             <ProductGrid products={sortedProducts} />
           </div>
         ) : (
           <div className="flex min-h-80 flex-col items-center justify-center text-center">
-            <Package className="h-8 w-8 text-muted-foreground" />
-            <p className="mt-3 text-sm text-muted-foreground">Danh mục này chưa có sản phẩm.</p>
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+              <Package className="h-8 w-8 text-muted-foreground/60" />
+            </div>
+            <p className="text-sm text-muted-foreground">Danh mục này chưa có sản phẩm.</p>
           </div>
         )}
       </div>

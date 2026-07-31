@@ -41,9 +41,11 @@ export default function SendCodePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-center space-y-2">
+      <div className="space-y-2 text-center">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Xác thực email</h1>
-        <p className="text-sm text-muted-foreground">Nhập email để nhận mã xác thực</p>
+        <p className="text-sm text-muted-foreground">
+          Nhập email đã đăng ký, chúng tôi sẽ gửi mã xác thực đến hộp thư của bạn
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="grid gap-4">
@@ -56,10 +58,13 @@ export default function SendCodePage() {
             name="email"
             type="email"
             placeholder="name@example.com"
+            autoComplete="email"
+            autoCapitalize="none"
+            autoCorrect="off"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="h-11 rounded-lg border-input"
+            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
             disabled={isLoading}
           />
         </div>
@@ -67,7 +72,7 @@ export default function SendCodePage() {
         <Button
           type="submit"
           disabled={isLoading || !email.trim()}
-          className="mt-2 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
+          className="h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
           {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Gửi mã xác nhận

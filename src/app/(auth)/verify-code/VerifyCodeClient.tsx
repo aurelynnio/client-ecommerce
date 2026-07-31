@@ -22,7 +22,7 @@ type VerifyCodeClientProps = {
 };
 
 const OTP_LENGTH = 6;
-const OTP_SLOT_CLASS = 'h-12 w-12 rounded-lg border-input text-lg';
+const OTP_SLOT_CLASS = 'h-12 w-12 rounded-lg border-border text-lg';
 
 function isValidOtp(value: string | null | undefined): value is string {
   return typeof value === 'string' && /^\d{6}$/.test(value);
@@ -96,7 +96,7 @@ export default function VerifyCodeClient({ initialEmail, initialCode }: VerifyCo
       </div>
 
       {!canVerify ? (
-        <div className="rounded-xl border border-warning/30 bg-warning/15 px-4 py-3 text-sm text-warning">
+        <div className="rounded-lg border border-warning/30 bg-warning/15 px-4 py-3 text-sm text-warning">
           Thiếu email để xác thực. Quay lại trang gửi mã để nhập email.
           <div className="mt-2">
             <Link

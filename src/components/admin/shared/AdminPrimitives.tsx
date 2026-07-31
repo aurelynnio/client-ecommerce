@@ -5,9 +5,9 @@ import { cn } from '@/utils/cn';
 
 export const adminShellClass = 'bg-background text-foreground';
 
-export const adminSurfaceClass = 'rounded-lg border border-border bg-card shadow-sm';
+export const adminSurfaceClass = 'rounded-lg border border-border bg-card';
 
-export const adminSubtleSurfaceClass = 'rounded-lg border border-border bg-muted/40 shadow-sm';
+export const adminSubtleSurfaceClass = 'rounded-lg border border-border bg-muted/30';
 
 export const adminFilterBarClass = cn(
   adminSubtleSurfaceClass,
@@ -16,44 +16,44 @@ export const adminFilterBarClass = cn(
 
 export const adminTableShellClass = cn(adminSurfaceClass, 'overflow-hidden');
 
-export const adminTableHeaderClass = 'bg-muted/60';
+export const adminTableHeaderClass = 'bg-muted/30';
 
-export const adminRowHoverClass = 'transition-colors hover:bg-muted/60';
+export const adminRowHoverClass = 'transition-colors hover:bg-muted/30';
 
 export const adminSearchInputClass =
-  'rounded-lg border border-input bg-card focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]';
+  'rounded-lg border border-border bg-card focus:border-primary focus:ring-primary/20 focus-visible:ring-[3px]';
 
 export const adminFieldSurfaceClass =
-  'rounded-lg border border-input bg-card focus-visible:border-ring focus-visible:ring-ring/50';
+  'rounded-lg border border-border bg-card focus:border-primary focus:ring-primary/20';
 
 export const adminDialogContentClass = cn(
   adminSurfaceClass,
-  'rounded-lg border-border bg-card shadow-lg',
+  'rounded-lg border-border bg-card',
 );
 
 export const adminDialogFooterClass =
   'flex-col-reverse gap-3 border-t border-border bg-transparent pt-5 sm:flex-row sm:justify-end sm:gap-3';
 
-export const adminInsetPanelClass = 'rounded-lg border border-border bg-muted/40';
+export const adminInsetPanelClass = 'rounded-lg border border-border bg-muted/30';
 
 export const adminNativeSelectClass =
-  'h-10 w-full rounded-lg border border-input bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50 sm:w-auto';
+  'h-10 w-full rounded-lg border border-border bg-card px-3 text-sm focus:border-primary focus:ring-primary/20 focus:outline-none sm:w-auto';
 
 export const adminIconButtonClass =
-  'h-10 w-10 rounded-lg border border-border bg-card hover:bg-muted';
+  'h-10 w-10 rounded-lg border border-border bg-card hover:bg-muted/30';
 
 export const adminSmallIconButtonClass =
-  'h-8 w-8 rounded-lg border border-border bg-card hover:bg-muted';
+  'h-8 w-8 rounded-lg border border-border bg-card hover:bg-muted/30';
 
 export const adminMediaPlaceholderClass = 'bg-muted';
 
 export const adminPrimaryButtonClass =
-  'rounded-lg border border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover';
+  'rounded-lg border border-primary bg-primary text-primary-foreground hover:bg-primary-hover';
 
 export const adminSecondaryButtonClass =
-  'rounded-lg border border-border bg-card text-foreground hover:bg-muted';
+  'rounded-lg border border-border bg-card text-foreground hover:bg-muted/30';
 
-export const adminMenuContentClass = 'rounded-lg border border-border bg-popover p-1 shadow-md';
+export const adminMenuContentClass = 'rounded-lg border border-border bg-popover p-1';
 
 export const adminMenuLabelClass =
   'px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground';

@@ -119,7 +119,10 @@ export default function ResetPasswordPage() {
             id="email"
             type="email"
             placeholder="name@example.com"
-            className="h-11 rounded-lg border-input"
+            autoComplete="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
             disabled={isLoading}
           />
           {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
@@ -135,7 +138,8 @@ export default function ResetPasswordPage() {
             placeholder="Nhập mã 6 số"
             maxLength={6}
             inputMode="numeric"
-            className="h-11 rounded-lg border-input"
+            autoComplete="one-time-code"
+            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
             disabled={isLoading}
           />
           {errors.code ? <p className="text-sm text-destructive">{errors.code.message}</p> : null}
@@ -150,8 +154,9 @@ export default function ResetPasswordPage() {
               {...register('newPassword')}
               id="newPassword"
               type={showNewPassword ? 'text' : 'password'}
+              autoComplete="new-password"
               placeholder="••••••••"
-              className="h-11 rounded-lg border-input pr-11"
+              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
               disabled={isLoading}
             />
             <button
@@ -186,8 +191,9 @@ export default function ResetPasswordPage() {
               {...register('confirmPassword')}
               id="confirmPassword"
               type={showConfirmPassword ? 'text' : 'password'}
+              autoComplete="new-password"
               placeholder="••••••••"
-              className="h-11 rounded-lg border-input pr-11"
+              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
               disabled={isLoading}
             />
             <button
@@ -208,7 +214,7 @@ export default function ResetPasswordPage() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="mt-2 h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
+          className="h-11 w-full rounded-lg bg-primary text-base font-medium text-primary-foreground hover:bg-primary-hover"
         >
           {isLoading ? <SpinnerLoading noWrapper size={18} className="mr-2 text-primary-foreground" /> : null}
           Đặt lại mật khẩu

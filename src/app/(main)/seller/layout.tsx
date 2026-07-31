@@ -70,7 +70,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
   }, [pathname]);
 
   const renderNavigation = (onItemClick?: () => void) => (
-    <nav className="overflow-hidden rounded-xl border border-border bg-card">
+    <nav className="overflow-hidden rounded-lg border border-border bg-card">
       {menuItems.map((section) => (
         <div key={section.title}>
           <p className="px-4 pb-2 pt-4 text-[11px] font-semibold tracking-wider text-muted-foreground">
@@ -90,12 +90,12 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
                 className={cn(
                   'relative flex items-center gap-3 px-4 py-2.5 text-sm transition-colors',
                   isActive
-                    ? 'text-primary bg-primary/5 font-medium'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                    ? 'bg-primary/5 font-medium text-primary'
+                    : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground',
                 )}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full" />
+                  <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-primary" />
                 )}
                 <Icon className={cn('h-[18px] w-[18px]', isActive && 'text-primary')} />
                 <span>{item.name}</span>
@@ -193,7 +193,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-lg text-muted-foreground hover:text-foreground hover:bg-black/5"
+                  className="rounded-lg text-muted-foreground hover:bg-muted/30 hover:text-foreground"
                   onClick={() => setSidebarOpen(true)}
                   aria-label="Mở điều hướng người bán"
                 >

@@ -103,8 +103,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         className={cn(
                           'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                           isActive
-                            ? 'bg-card text-primary shadow-sm'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                            ? 'border border-border bg-card text-primary'
+                            : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground',
                         )}
                       >
                         <item.icon className={cn('h-4 w-4', isActive && 'text-primary')} />
@@ -150,7 +150,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               size="icon"
               onClick={() => setIsCollapsed(!isCollapsed)}
               className={cn(
-                'h-9 w-9 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground',
+                'h-9 w-9 rounded-lg text-muted-foreground hover:bg-muted/30 hover:text-foreground',
                 isCollapsed && 'mx-auto',
               )}
             >
@@ -174,8 +174,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     className={cn(
                       'group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-card text-primary shadow-sm'
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                        ? 'border border-border bg-card text-primary'
+                        : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground',
                       isCollapsed && 'justify-center px-2',
                     )}
                     title={isCollapsed ? item.name : undefined}
@@ -255,7 +255,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Button
                 variant="ghost"
                 size="icon"
-                className="-ml-2 rounded-lg text-muted-foreground hover:bg-muted lg:hidden"
+                className="-ml-2 rounded-lg text-muted-foreground hover:bg-muted/30 lg:hidden"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="h-5 w-5" />

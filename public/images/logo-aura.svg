@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 80" fill="none" role="img" aria-label="南天 NANTIAN.COM logo">
+  <!-- Hán tự 南天 (Nam Thiên) -->
+  <text x="80" y="42" font-family="'Noto Serif', 'Songti SC', 'STSong', serif" font-size="38" font-weight="700" fill="#e1251b" text-anchor="middle" letter-spacing="2">南天</text>
+  <!-- Wordmark NANTIAN.COM -->
+  <text x="80" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#e1251b" text-anchor="middle" letter-spacing="3">NANTIAN.COM</text>
+</svg>

@@ -15,15 +15,15 @@ export default function TopUtilityBar() {
   const { isAuthenticated, data } = useAppSelector((state) => state.auth);
 
   const linkClass =
-    'inline-flex items-center gap-1 text-[11px] text-tmall-black-foreground/70 transition-colors hover:text-tmall-black-foreground';
+    'inline-flex items-center gap-1 text-[11px] text-primary-foreground/80 transition-colors hover:text-primary-foreground';
 
-  const divider = <span className="text-tmall-black-foreground/30" aria-hidden>|</span>;
+  const divider = <span className="text-primary-foreground/40" aria-hidden>|</span>;
 
   return (
-    <div className="hidden bg-tmall-black text-tmall-black-foreground md:block">
+    <div className="hidden bg-primary text-primary-foreground md:block">
       <div className="aura-container flex h-8 items-center justify-between">
         {/* Left — greeting / ship-to */}
-        <div className="flex items-center gap-2 text-[11px] text-tmall-black-foreground/70">
+        <div className="flex items-center gap-2 text-[11px] text-primary-foreground/80">
           <span>Xin chào, chào mừng đến {BRAND_CONFIG.name}</span>
         </div>
 

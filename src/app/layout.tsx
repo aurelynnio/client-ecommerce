@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   },
   description: 'Modern refined e-commerce experience.',
   icons: {
-    icon: '/images/logo-aura-light.png',
-    shortcut: '/images/logo-aura-light.png',
-    apple: '/images/logo-aura-light.png',
+    icon: '/images/logo-aura.svg',
+    shortcut: '/images/logo-aura.svg',
+    apple: '/images/logo-aura.svg',
   },
   other: {
     google: 'notranslate',

@@ -348,11 +348,11 @@ export default function HeaderLayout() {
 
           <Link href="/" className="flex shrink-0 items-center" aria-label={BRAND_CONFIG.name}>
             <Image
-              src="/images/logo-aura-light.png"
+              src="/images/logo-aura.svg"
               alt={BRAND_CONFIG.name}
-              width={120}
-              height={40}
-              className="h-9 w-32 object-contain"
+              width={100}
+              height={50}
+              className="h-10 w-[100px] object-contain"
               priority
             />
           </Link>

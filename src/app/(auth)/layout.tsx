@@ -25,9 +25,9 @@ export default function AuthLayout({
 
         {/* Logo */}
         <Link href="/" className="relative z-10 flex items-center gap-2">
-          <div className="relative h-12 w-32">
+          <div className="relative h-16 w-[120px]">
             <Image
-              src="/images/logo-aura-light.png"
+              src="/images/logo-aura.svg"
               alt={BRAND_CONFIG.name}
               fill
               className="object-contain"
@@ -90,9 +90,9 @@ export default function AuthLayout({
         {/* Mobile logo */}
         <div className="mb-8 lg:hidden">
           <Link href="/" className="flex flex-col items-center">
-            <div className="relative h-12 w-32">
+            <div className="relative h-16 w-[120px]">
               <Image
-                src="/images/logo-aura-light.png"
+                src="/images/logo-aura.svg"
                 alt={BRAND_CONFIG.name}
                 fill
                 className="object-contain"

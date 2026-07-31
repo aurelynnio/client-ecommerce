@@ -464,7 +464,7 @@ export function UpdateModelProduct({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="max-h-[90vh] overflow-y-auto rounded-xl border-border bg-card p-6 shadow-lg sm:max-w-[1000px]"
+        className="max-h-[90vh] overflow-y-auto rounded-xl border-border bg-card p-6 sm:max-w-[1000px]"
       >
         <DialogHeader>
           <div className="flex items-start justify-between gap-4">
@@ -503,7 +503,7 @@ export function UpdateModelProduct({
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -512,7 +512,7 @@ export function UpdateModelProduct({
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
             </div>
@@ -526,7 +526,7 @@ export function UpdateModelProduct({
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-card">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/30 focus:bg-card">
                     <SelectValue placeholder="Chọn danh mục sản phẩm" />
                   </SelectTrigger>
                   <SelectContent>
@@ -547,7 +547,7 @@ export function UpdateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-card">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/30 focus:bg-card">
                     <SelectValue placeholder="Chọn danh mục của shop" />
                   </SelectTrigger>
                   <SelectContent>
@@ -569,7 +569,7 @@ export function UpdateModelProduct({
                   value={formData.brand}
                   onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
             </div>
@@ -587,7 +587,7 @@ export function UpdateModelProduct({
                 }
                 rows={3}
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-card resize-none"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card resize-none"
                 minLength={10}
               />
             </div>
@@ -680,7 +680,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -698,7 +698,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -713,7 +713,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -728,7 +728,7 @@ export function UpdateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-card">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/30 focus:bg-card">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -742,7 +742,7 @@ export function UpdateModelProduct({
               </div>
             </div>
             <div className="flex gap-6">
-              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isNewArrival}
                   onCheckedChange={(checked) =>
@@ -752,7 +752,7 @@ export function UpdateModelProduct({
                 />
                 <Label className="text-sm font-medium cursor-pointer">Sản phẩm mới</Label>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isFeatured}
                   onCheckedChange={(checked) =>
@@ -782,7 +782,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -800,7 +800,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -818,7 +818,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
               <div className="space-y-2">
@@ -836,7 +836,7 @@ export function UpdateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                 />
               </div>
             </div>
@@ -1073,14 +1073,14 @@ export function UpdateModelProduct({
                 onChange={(e) => setNewAttribute({ ...newAttribute, name: e.target.value })}
                 placeholder="Tên thông số"
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card"
               />
               <Input
                 value={newAttribute.value}
                 onChange={(e) => setNewAttribute({ ...newAttribute, value: e.target.value })}
                 placeholder="Giá trị"
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card"
               />
               <Button
                 type="button"
@@ -1125,7 +1125,7 @@ export function UpdateModelProduct({
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Nhập tag và nhấn Enter"
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-card"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card"
               />
               <Button
                 type="button"

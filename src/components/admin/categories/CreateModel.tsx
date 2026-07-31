@@ -238,7 +238,7 @@ export function CreateCategoryModal({
                           handleNameChange(e.target.value);
                         }}
                         autoFocus
-                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                       />
                     </FormControl>
                     <FormMessage />
@@ -261,7 +261,7 @@ export function CreateCategoryModal({
                           field.onChange(e);
                           handleSlugChange(e.target.value);
                         }}
-                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                        className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                       />
                     </FormControl>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1.5 ml-1">
@@ -293,7 +293,7 @@ export function CreateCategoryModal({
                           type="button"
                           className={cn(
                             adminFieldSurfaceClass,
-                            'flex h-10 w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors hover:bg-white focus:outline-none',
+                            'flex h-10 w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors hover:bg-muted/30 focus:outline-none',
                           )}
                           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
@@ -371,7 +371,7 @@ export function CreateCategoryModal({
                         value={field.value || ''}
                         className={cn(
                           adminFieldSurfaceClass,
-                          'min-h-24 resize-none transition-colors focus:bg-white',
+                          'min-h-24 resize-none transition-colors focus:bg-card',
                         )}
                       />
                     </FormControl>
@@ -484,7 +484,7 @@ export function CreateCategoryModal({
               <Button
                 type="submit"
                 disabled={isLoading || !form.formState.isValid}
-                className={cn('h-11 flex-1 shadow-sm', adminPrimaryButtonClass)}
+                className={cn('h-11 flex-1', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />

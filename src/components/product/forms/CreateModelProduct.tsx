@@ -365,7 +365,7 @@ export function CreateModelProduct({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-xl border-border bg-card p-6 shadow-lg sm:max-w-[1000px]">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-xl border-border bg-card p-6 sm:max-w-[1000px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold tracking-tight">
             Tạo sản phẩm mới
@@ -389,7 +389,7 @@ export function CreateModelProduct({
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="VD: Áo thun nam cotton"
                 />
               </div>
@@ -399,7 +399,7 @@ export function CreateModelProduct({
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="Để trống sẽ tự tạo từ tên"
                 />
               </div>
@@ -414,7 +414,7 @@ export function CreateModelProduct({
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/30 focus:bg-card">
                     <SelectValue placeholder="Chọn danh mục sản phẩm" />
                   </SelectTrigger>
                   <SelectContent>
@@ -435,7 +435,7 @@ export function CreateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/30 focus:bg-card">
                     <SelectValue placeholder="Chọn danh mục của shop" />
                   </SelectTrigger>
                   <SelectContent>
@@ -457,7 +457,7 @@ export function CreateModelProduct({
                   value={formData.brand}
                   onChange={(e) => setFormData((prev) => ({ ...prev, brand: e.target.value }))}
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="VD: Nike, Adidas, Uniqlo"
                 />
               </div>
@@ -476,7 +476,7 @@ export function CreateModelProduct({
                 }
                 rows={3}
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-white resize-none"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card resize-none"
                 placeholder="Mô tả chi tiết về sản phẩm, chất liệu, công dụng..."
                 minLength={10}
               />
@@ -547,7 +547,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="150000"
                   min="0"
                 />
@@ -567,7 +567,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="120000"
                   min="0"
                 />
@@ -584,7 +584,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="100"
                   min="0"
                 />
@@ -601,7 +601,7 @@ export function CreateModelProduct({
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-xl border-border bg-muted/50 focus:bg-white">
+                  <SelectTrigger className="rounded-xl border-border bg-muted/30 focus:bg-card">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -615,7 +615,7 @@ export function CreateModelProduct({
               </div>
             </div>
             <div className="flex gap-6">
-              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isNewArrival}
                   onCheckedChange={(checked) =>
@@ -625,7 +625,7 @@ export function CreateModelProduct({
                 />
                 <Label className="text-sm font-medium cursor-pointer">Sản phẩm mới</Label>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/50">
                 <Switch
                   checked={formData.isFeatured}
                   onCheckedChange={(checked) =>
@@ -655,7 +655,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="500"
                   min="0"
                 />
@@ -675,7 +675,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="30"
                   min="0"
                 />
@@ -695,7 +695,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="20"
                   min="0"
                 />
@@ -715,7 +715,7 @@ export function CreateModelProduct({
                     }))
                   }
                   disabled={isLoading}
-                  className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                  className="rounded-xl border-border bg-muted/30 focus:bg-card"
                   placeholder="5"
                   min="0"
                 />
@@ -759,7 +759,7 @@ export function CreateModelProduct({
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSize())}
                   placeholder="Nhập size và nhấn Enter"
                   disabled={isLoading}
-                  className="rounded-lg text-sm h-9 bg-white"
+                  className="rounded-lg text-sm h-9 bg-card"
                 />
                 <Button
                   type="button"
@@ -927,14 +927,14 @@ export function CreateModelProduct({
                 onChange={(e) => setNewAttribute({ ...newAttribute, name: e.target.value })}
                 placeholder="Tên thông số (VD: Chất liệu)"
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card"
               />
               <Input
                 value={newAttribute.value}
                 onChange={(e) => setNewAttribute({ ...newAttribute, value: e.target.value })}
                 placeholder="Giá trị (VD: Cotton 100%)"
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card"
               />
               <Button
                 type="button"
@@ -980,7 +980,7 @@ export function CreateModelProduct({
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Nhập tag và nhấn Enter"
                 disabled={isLoading}
-                className="rounded-xl border-border bg-muted/50 focus:bg-white"
+                className="rounded-xl border-border bg-muted/30 focus:bg-card"
               />
               <Button
                 type="button"

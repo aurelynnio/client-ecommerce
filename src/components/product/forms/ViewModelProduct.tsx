@@ -105,7 +105,7 @@ function InfoCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+    <div className="rounded-lg border border-border bg-card p-4">
       <div className="mb-3 flex items-center gap-2 text-muted-foreground/60">
         <Icon className="h-4 w-4" />
         <span className="text-[11px] font-semibold uppercase tracking-[0.16em]">{label}</span>
@@ -164,7 +164,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-5xl gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 shadow-lg"
+        className="max-w-5xl gap-0 overflow-hidden rounded-xl border border-border bg-card p-0"
       >
         <DialogHeader className="border-b border-border bg-card px-6 py-5">
           <div className="flex items-start justify-between gap-4">
@@ -214,14 +214,14 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
         <div className="max-h-[calc(92vh-152px)] overflow-y-auto px-6 py-6 pb-8 no-scrollbar">
           <div className="space-y-5">
-            <section className="grid gap-6 rounded-[28px] border border-border bg-card p-6 shadow-sm xl:grid-cols-[180px_minmax(0,1fr)_220px]">
+            <section className="grid gap-6 rounded-lg border border-border bg-card p-6 xl:grid-cols-[180px_minmax(0,1fr)_220px]">
               <div className="flex justify-center xl:justify-start">
                 {mainImage ? (
-                  <div className="relative h-40 w-40 overflow-hidden rounded-2xl bg-muted">
+                  <div className="relative h-40 w-40 overflow-hidden rounded-lg bg-muted">
                     <Image src={mainImage} alt={product.name} fill className="object-cover" />
                   </div>
                 ) : (
-                  <div className="flex h-40 w-40 items-center justify-center rounded-2xl bg-muted text-muted-foreground/50">
+                  <div className="flex h-40 w-40 items-center justify-center rounded-lg bg-muted text-muted-foreground/50">
                     <Package className="h-10 w-10" />
                   </div>
                 )}
@@ -348,7 +348,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             </section>
 
             {product.sizes?.length ? (
-              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+              <section className="rounded-lg border border-border bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Ruler className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -369,7 +369,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.variants?.length ? (
-              <section className="overflow-hidden rounded-[28px] border border-border bg-card shadow-sm">
+              <section className="overflow-hidden rounded-lg border border-border bg-card">
                 <div className="border-b border-border px-5 py-4">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Palette className="h-4 w-4" />
@@ -386,7 +386,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                     >
                       <div className="shrink-0">
                         {variant.images?.[0] ? (
-                          <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-muted">
+                          <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-muted">
                             <Image
                               src={variant.images[0]}
                               alt={variant.name}
@@ -395,7 +395,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                             />
                           </div>
                         ) : (
-                          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-muted text-muted-foreground/50">
+                          <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-muted text-muted-foreground/50">
                             <ImageIcon className="h-6 w-6" />
                           </div>
                         )}
@@ -405,7 +405,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                         <div className="flex flex-wrap items-center gap-2">
                           {variant.color ? (
                             <span
-                              className="h-4 w-4 rounded-full border border-white shadow-sm"
+                              className="h-4 w-4 rounded-full border border-card"
                               style={{ backgroundColor: getColorCode(variant.color) }}
                             />
                           ) : null}
@@ -445,7 +445,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.description ? (
-              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+              <section className="rounded-lg border border-border bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Tag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -459,7 +459,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.weight || product.dimensions ? (
-              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+              <section className="rounded-lg border border-border bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ShoppingBag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -496,7 +496,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.attributes?.length ? (
-              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+              <section className="rounded-lg border border-border bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Box className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -518,7 +518,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.tags?.length ? (
-              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+              <section className="rounded-lg border border-border bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Tag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">Tags</h3>
@@ -538,7 +538,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {allImages.length ? (
-              <section className="rounded-[28px] border border-border bg-card p-5 shadow-sm">
+              <section className="rounded-lg border border-border bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ImageIcon className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -549,7 +549,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                   {allImages.slice(0, 12).map((image, index) => (
                     <div
                       key={`${image}-${index}`}
-                      className="relative aspect-square overflow-hidden rounded-2xl bg-muted"
+                      className="relative aspect-square overflow-hidden rounded-lg bg-muted"
                     >
                       <Image
                         src={image}
@@ -572,7 +572,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
         <div className="flex justify-end gap-3 border-t border-border bg-card px-6 py-4">
           <DialogClose asChild>
-            <Button variant="outline" className="rounded-2xl border-border px-5">
+            <Button variant="outline" className="rounded-lg border-border px-5">
               Đóng
             </Button>
           </DialogClose>

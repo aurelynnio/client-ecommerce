@@ -172,7 +172,7 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
                   ))}
                 </div>
               ) : (
-                <div className="p-8 border-2 border-dashed border-border/50 rounded-2xl flex flex-col items-center justify-center text-muted-foreground bg-muted/30">
+                <div className="p-8 border-2 border-dashed border-border/50 rounded-lg flex flex-col items-center justify-center text-muted-foreground bg-muted/30">
                   <ImageIcon className="h-8 w-8 mb-2 opacity-30" />
                   <p className="text-sm">Chưa có hình ảnh</p>
                 </div>

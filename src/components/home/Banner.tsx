@@ -203,10 +203,8 @@ export default function Banner() {
                       }
                     }}
                     className={cn(
-                      'rounded-full px-5 py-2 text-xs font-bold shadow-lg transition-[background-color,color,transform,box-shadow] duration-200 hover:scale-105 active:scale-95 motion-reduce:transition-none',
-                      banner.theme === 'light'
-                        ? 'bg-card text-black hover:bg-card/90 border-transparent'
-                        : 'bg-primary text-primary-foreground hover:bg-primary-hover',
+                      'rounded-full px-5 py-2 text-xs font-bold transition-[background-color,color,transform,box-shadow] duration-200 hover:scale-105 active:scale-95 motion-reduce:transition-none',
+                      'bg-primary text-primary-foreground hover:bg-primary-hover',
                     )}
                   >
                     Mua ngay
@@ -246,7 +244,7 @@ export default function Banner() {
               }}
               className={cn(
                 'h-2 w-2 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none',
-                idx === currentIndex ? 'bg-card w-5' : 'bg-white/50 hover:bg-white/80',
+                idx === currentIndex ? 'bg-card w-5' : 'bg-muted-foreground/40 hover:bg-muted-foreground/70',
               )}
             />
           ))}

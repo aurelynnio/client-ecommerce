@@ -246,7 +246,7 @@ export function CreateBannerModal({
                                     e.stopPropagation();
                                     removeImage();
                                   }}
-                                  className="rounded-full shadow-lg"
+                                  className="rounded-full"
                                 >
                                   <Trash2 className="h-4 w-4 mr-1" />
                                   Xóa
@@ -283,7 +283,7 @@ export function CreateBannerModal({
                           type="number"
                           {...field}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-                          className="rounded-xl border-input bg-muted/40 shadow-sm transition-[border-color,background-color,box-shadow] focus:bg-card"
+                          className="rounded-xl border-border bg-muted/30 transition-[border-color,background-color,box-shadow] focus:bg-card"
                         />
                       </FormControl>
                       <FormMessage />
@@ -328,7 +328,7 @@ export function CreateBannerModal({
               <Button
                 type="submit"
                 disabled={isLoading}
-                className={cn('h-11 flex-1 shadow-sm', adminPrimaryButtonClass)}
+                className={cn('h-11 flex-1', adminPrimaryButtonClass)}
               >
                 {isLoading ? (
                   <SpinnerLoading noWrapper size={16} className="mr-2 text-primary-foreground" />

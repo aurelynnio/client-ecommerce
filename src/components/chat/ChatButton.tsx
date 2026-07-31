@@ -21,7 +21,7 @@ export default function ChatButton() {
       onClick={() => dispatch(toggleChat())}
       aria-label={isOpen ? 'Đóng trò chuyện' : 'Mở trò chuyện'}
       aria-expanded={isOpen}
-      className={`fixed bottom-4 right-4 z-40 flex size-14 items-center justify-center rounded-full border border-border shadow-lg transition-colors ${
+      className={`fixed bottom-4 right-4 z-40 flex size-14 items-center justify-center rounded-full border border-border transition-colors ${
         isOpen
           ? 'bg-muted text-muted-foreground'
           : 'bg-primary text-primary-foreground hover:bg-primary-hover'

@@ -36,7 +36,7 @@ export default function TrustBar() {
             key={title}
             className="flex items-center gap-3 bg-card px-4 py-4 transition-colors hover:bg-primary-light"
           >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-light text-primary">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Icon className="h-5 w-5" aria-hidden="true" />
             </span>
             <div className="min-w-0">

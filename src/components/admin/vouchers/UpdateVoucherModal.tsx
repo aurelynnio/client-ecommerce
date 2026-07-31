@@ -113,7 +113,7 @@ export function UpdateModelDiscount({
                   onChange={(e) => handleChange('code', e.target.value)}
                   placeholder="VD: GIAMGIA2024"
                   required
-                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 />
               </div>
 
@@ -126,7 +126,7 @@ export function UpdateModelDiscount({
                   onValueChange={(value) => handleChange('discountType', value)}
                 >
                   <SelectTrigger
-                    className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                    className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -149,7 +149,7 @@ export function UpdateModelDiscount({
                 placeholder="Mô tả mã giảm giá..."
                 className={cn(
                   adminFieldSurfaceClass,
-                  'min-h-24 resize-none transition-colors focus:bg-white',
+                  'min-h-24 resize-none transition-colors focus:bg-card',
                 )}
               />
             </div>
@@ -168,7 +168,7 @@ export function UpdateModelDiscount({
                   min="0"
                   max={formData.discountType === 'percent' ? '100' : undefined}
                   required
-                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 />
               </div>
 
@@ -184,7 +184,7 @@ export function UpdateModelDiscount({
                   placeholder="100"
                   min="1"
                   required
-                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 />
               </div>
             </div>
@@ -200,7 +200,7 @@ export function UpdateModelDiscount({
                   value={formData.startDate}
                   onChange={(e) => handleChange('startDate', e.target.value)}
                   required
-                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 />
               </div>
 
@@ -214,7 +214,7 @@ export function UpdateModelDiscount({
                   value={formData.endDate}
                   onChange={(e) => handleChange('endDate', e.target.value)}
                   required
-                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                  className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 />
               </div>
             </div>
@@ -230,7 +230,7 @@ export function UpdateModelDiscount({
                 onChange={(e) => handleChange('minOrderValue', e.target.value)}
                 placeholder="0"
                 min="0"
-                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
               />
             </div>
 

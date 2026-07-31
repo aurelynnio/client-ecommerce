@@ -209,7 +209,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
           <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground px-1">
             Chi tiết sản phẩm
           </h3>
-          <div className="border border-border/50 rounded-2xl overflow-hidden bg-card/40">
+          <div className="border border-border/50 rounded-lg overflow-hidden bg-card/40">
             <table className="w-full text-sm">
               <thead className="bg-muted/80 border-b border-border/50 text-xs uppercase tracking-wider text-muted-foreground">
                 <tr>
@@ -265,7 +265,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
                   <td colSpan={3} className="p-4 text-right">
                     Tổng cộng
                   </td>
-                  <td className="p-4 text-right text-base text-black">
+                  <td className="p-4 text-right text-base text-foreground">
                     {formatCurrency(order.totalAmount)}
                   </td>
                 </tr>

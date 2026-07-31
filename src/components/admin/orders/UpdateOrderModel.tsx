@@ -52,7 +52,7 @@ export function EditOrderModal({ isOpen, onClose, onSave, order, isLoading }: Ed
             </Label>
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger
-                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
               >
                 <SelectValue placeholder="Chọn trạng thái" />
               </SelectTrigger>

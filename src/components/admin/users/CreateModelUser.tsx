@@ -155,7 +155,7 @@ export function CreateModelUser({
                 id="username"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập họ và tên"
@@ -171,7 +171,7 @@ export function CreateModelUser({
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập địa chỉ email"
@@ -187,7 +187,7 @@ export function CreateModelUser({
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập số điện thoại"
@@ -203,7 +203,7 @@ export function CreateModelUser({
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-white')}
+                className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                 required
                 disabled={isLoading}
                 placeholder="Nhập mật khẩu (ít nhất 6 ký tự)"
@@ -338,7 +338,7 @@ export function CreateModelUser({
             </Button>
             <Button
               type="submit"
-              className={cn('h-10 px-6 shadow-sm', adminPrimaryButtonClass)}
+              className={cn('h-10 px-6', adminPrimaryButtonClass)}
               disabled={isLoading}
             >
               {isLoading ? (

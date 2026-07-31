@@ -57,7 +57,7 @@ export default function ShopTab() {
 
         {/* Logo & Info */}
         <div className="flex items-end gap-4 -mt-10 px-4">
-          <div className="relative w-20 h-20 rounded-full border-4 border-white bg-card shadow-lg overflow-hidden">
+          <div className="relative w-20 h-20 rounded-full border-4 border-card bg-card overflow-hidden">
             {myShop.logo ? (
               <Image src={myShop.logo} alt={myShop.name} fill className="object-cover" />
             ) : (

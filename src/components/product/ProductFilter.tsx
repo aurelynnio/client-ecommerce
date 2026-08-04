@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ProductFilters } from '@/types/product';
 
 interface ProductFilterProps {
@@ -389,12 +390,14 @@ export default function ProductFilter({
   // Mobile version
   if (isMobileOpen) {
     return (
-      <>
-        <div onClick={onMobileClose} className="fixed inset-0 z-40 bg-black/35 lg:hidden" />
-        <div className="fixed top-0 bottom-0 left-0 z-50 w-[280px] overflow-y-auto border-r border-border bg-card lg:hidden">
-          <div className="p-4">{filterContent}</div>
-        </div>
-      </>
+      <Sheet open={isMobileOpen} onOpenChange={(open) => !open && onMobileClose?.()}>
+        <SheetContent side="left" className="w-[280px] gap-0 p-0 lg:hidden">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Bộ lọc sản phẩm</SheetTitle>
+          </SheetHeader>
+          <div className="overflow-y-auto p-4">{filterContent}</div>
+        </SheetContent>
+      </Sheet>
     );
   }
 

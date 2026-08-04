@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ShieldCheck, Truck, Share2, Tag, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -68,10 +69,12 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {shop?.logo ? (
-              <img
+              <Image
                 src={shop.logo}
                 alt={shop.name}
-                className="h-8 w-8 rounded border border-border object-cover"
+                width={32}
+                height={32}
+                className="size-8 rounded border border-border object-cover"
               />
             ) : null}
             <Link

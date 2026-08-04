@@ -16,7 +16,7 @@ import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/utils/cn';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import {
   useChatConversations,
   useChatMessages,

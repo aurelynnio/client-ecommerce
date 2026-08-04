@@ -1,4 +1,5 @@
 import instance from '@/api/api';
+import { ENDPOINT_SHIPPING } from '@/constants/endpoint';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { CreateShippingTemplatePayload, UpdateShippingTemplatePayload } from '@/types/shipping';
 import { extractApiData, extractApiError } from '@/api';
@@ -8,7 +9,7 @@ export const getMyShippingTemplates = createAsyncThunk(
   'shipping/getMyTemplates',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await instance.get('/shipping');
+      const response = await instance.get(ENDPOINT_SHIPPING.ROOT);
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));
@@ -21,7 +22,7 @@ export const createShippingTemplate = createAsyncThunk(
   'shipping/create',
   async (data: CreateShippingTemplatePayload, { rejectWithValue }) => {
     try {
-      const response = await instance.post('/shipping', data);
+      const response = await instance.post(ENDPOINT_SHIPPING.ROOT, data);
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));
@@ -37,7 +38,7 @@ export const updateShippingTemplate = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await instance.put(`/shipping/${templateId}`, data);
+      const response = await instance.put(ENDPOINT_SHIPPING.byTemplateId(templateId), data);
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));
@@ -50,7 +51,7 @@ export const deleteShippingTemplate = createAsyncThunk(
   'shipping/delete',
   async (templateId: string, { rejectWithValue }) => {
     try {
-      await instance.delete(`/shipping/${templateId}`);
+      await instance.delete(ENDPOINT_SHIPPING.byTemplateId(templateId));
       return templateId;
     } catch (error) {
       return rejectWithValue(extractApiError(error));

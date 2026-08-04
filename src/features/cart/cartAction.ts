@@ -1,4 +1,5 @@
 import instance from '@/api/api';
+import { ENDPOINT_CART } from '@/constants/endpoint';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AddToCartPayload, UpdateCartItemPayload } from '@/types/cart';
 import { extractApiData, extractApiError } from '@/api';
@@ -11,7 +12,7 @@ export const addToCart = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await instance.post('/cart', {
+      const response = await instance.post(ENDPOINT_CART.ROOT, {
         productId,
         shopId,
         modelId,
@@ -30,7 +31,7 @@ export const removeFromCart = createAsyncThunk(
   'remove/cart',
   async ({ itemId }: { itemId: string }, { rejectWithValue }) => {
     try {
-      const response = await instance.delete(`/cart/${itemId}`);
+      const response = await instance.delete(ENDPOINT_CART.byItemId(itemId));
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));
@@ -41,7 +42,7 @@ export const removeFromCart = createAsyncThunk(
 // Clear entire cart
 export const clearCart = createAsyncThunk('clear/cart', async (_, { rejectWithValue }) => {
   try {
-    const response = await instance.delete('/cart');
+    const response = await instance.delete(ENDPOINT_CART.ROOT);
     return extractApiData(response);
   } catch (error) {
     return rejectWithValue(extractApiError(error));
@@ -53,7 +54,7 @@ export const updateCartItem = createAsyncThunk(
   'update/cart',
   async ({ itemId, quantity }: UpdateCartItemPayload, { rejectWithValue }) => {
     try {
-      const response = await instance.put(`/cart/${itemId}`, { quantity });
+      const response = await instance.put(ENDPOINT_CART.byItemId(itemId), { quantity });
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));
@@ -64,7 +65,7 @@ export const updateCartItem = createAsyncThunk(
 // Get cart
 export const getCart = createAsyncThunk('get/cart', async (_, { rejectWithValue }) => {
   try {
-    const response = await instance.get('/cart');
+    const response = await instance.get(ENDPOINT_CART.ROOT);
     return extractApiData(response);
   } catch (error) {
     return rejectWithValue(extractApiError(error));
@@ -76,7 +77,7 @@ export const removeItemsByShop = createAsyncThunk(
   'remove/cart/shop',
   async ({ shopId }: { shopId: string }, { rejectWithValue }) => {
     try {
-      const cartResponse = await instance.get('/cart');
+      const cartResponse = await instance.get(ENDPOINT_CART.ROOT);
       const cart = extractApiData<{
         items?: Array<{ _id: string; shopId?: string | { _id?: string } }>;
       }>(cartResponse);
@@ -88,8 +89,8 @@ export const removeItemsByShop = createAsyncThunk(
           })
           .map((item) => item._id) ?? [];
 
-      await Promise.all(itemIds.map((itemId) => instance.delete(`/cart/${itemId}`)));
-      const response = await instance.get('/cart');
+      await Promise.all(itemIds.map((itemId) => instance.delete(ENDPOINT_CART.byItemId(itemId))));
+      const response = await instance.get(ENDPOINT_CART.ROOT);
       return extractApiData(response);
     } catch (error) {
       return rejectWithValue(extractApiError(error));

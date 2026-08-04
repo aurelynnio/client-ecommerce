@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_SHOP_CATEGORY } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { shopCategoryKeys } from '@/lib/queryKeys';
 import {
@@ -74,32 +75,32 @@ const mapCategoryPayload = (payload: CreateShopCategoryPayload | UpdateShopCateg
 const shopCategoryApi = {
   // Get seller's own categories
   getMy: async (): Promise<ShopCategory[]> => {
-    const response = await instance.get('/shop-categories/my');
+    const response = await instance.get(ENDPOINT_SHOP_CATEGORY.MY);
     const data = extractApiData(response);
     return normalizeCategoryList(data);
   },
 
   // Get public shop categories by shop ID
   getByShop: async (shopId: string): Promise<ShopCategory[]> => {
-    const response = await instance.get(`/shop-categories/${shopId}`);
+    const response = await instance.get(ENDPOINT_SHOP_CATEGORY.byShopId(shopId));
     const data = extractApiData(response);
     return normalizeCategoryList(data);
   },
 
   create: async (data: CreateShopCategoryPayload): Promise<ShopCategory> => {
-    const response = await instance.post('/shop-categories', mapCategoryPayload(data));
+    const response = await instance.post(ENDPOINT_SHOP_CATEGORY.ROOT, mapCategoryPayload(data));
     const result = extractApiData(response);
     return normalizeCategory(result);
   },
 
   update: async (categoryId: string, data: UpdateShopCategoryPayload): Promise<ShopCategory> => {
-    const response = await instance.put(`/shop-categories/${categoryId}`, mapCategoryPayload(data));
+    const response = await instance.put(ENDPOINT_SHOP_CATEGORY.byCategoryId(categoryId), mapCategoryPayload(data));
     const result = extractApiData(response);
     return normalizeCategory(result);
   },
 
   delete: async (categoryId: string): Promise<string> => {
-    await instance.delete(`/shop-categories/${categoryId}`);
+    await instance.delete(ENDPOINT_SHOP_CATEGORY.byCategoryId(categoryId));
     return categoryId;
   },
 };

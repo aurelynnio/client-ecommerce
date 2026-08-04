@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import {
   setCartFromQuery,
   toggleSelectItem,
@@ -708,8 +708,8 @@ export default function CartPage() {
                       <div
                         className={
                           reached
-                            ? 'h-full rounded-full bg-success transition-all'
-                            : 'h-full rounded-full bg-warning transition-all'
+                            ? 'h-full rounded-full bg-success transition-[width]'
+                            : 'h-full rounded-full bg-warning transition-[width]'
                         }
                         style={{ width: `${percent}%` }}
                       />

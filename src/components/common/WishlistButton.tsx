@@ -3,7 +3,7 @@ import { memo, useCallback } from 'react';
 import { Heart } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useWishlistManager } from '@/hooks/queries/useWishlist';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 
 interface WishlistButtonProps {
   productId: string;

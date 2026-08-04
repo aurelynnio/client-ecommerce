@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useMemo, useCallback } from 'react';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 
 /**
  * Permission Context Type Definition

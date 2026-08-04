@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ProductCard from '@/components/product/ProductCard';
 import { toast } from 'sonner';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useShopBySlug, useShopCategories } from '@/hooks/queries/useShop';
 import { useInfiniteShopProducts } from '@/hooks/queries/useProducts';
 import { useStartConversation } from '@/hooks/queries';

@@ -3,8 +3,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_SHOP, ENDPOINT_SHOP_CATEGORY } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { shopCategoryKeys, shopKeys } from '@/lib/queryKeys';
 import { Shop, CreateShopPayload, UpdateShopPayload } from '@/types/shop';
@@ -20,7 +21,7 @@ export interface ShopListParams {
 const shopApi = {
   getMyShop: async (): Promise<Shop | null> => {
     try {
-      const response = await instance.get('/shops/my');
+      const response = await instance.get(ENDPOINT_SHOP.MY);
       return extractApiData(response);
     } catch (error: unknown) {
       // If user doesn't have a shop, return null instead of throwing
@@ -32,12 +33,12 @@ const shopApi = {
   },
 
   getById: async (shopId: string): Promise<Shop> => {
-    const response = await instance.get(`/shops/${shopId}`);
+    const response = await instance.get(ENDPOINT_SHOP.byId(shopId));
     return extractApiData(response);
   },
 
   getBySlug: async (slug: string): Promise<Shop> => {
-    const response = await instance.get(`/shops/slug/${slug}`);
+    const response = await instance.get(ENDPOINT_SHOP.bySlug(slug));
     return extractApiData(response);
   },
 
@@ -53,7 +54,7 @@ const shopApi = {
     }[];
     totalProducts: number;
   }> => {
-    const response = await instance.get(`/shop-categories/${shopId}`);
+    const response = await instance.get(ENDPOINT_SHOP_CATEGORY.byShopId(shopId));
     const data = extractApiData<
       | {
           categories?: {
@@ -86,7 +87,7 @@ const shopApi = {
     params: ShopListParams = {},
   ): Promise<{ shops: Shop[]; pagination: PaginationData | null }> => {
     const { page = 1, limit = 10, search, status } = params;
-    const response = await instance.get('/shops/admin/all', {
+    const response = await instance.get(ENDPOINT_SHOP.ADMIN_LIST, {
       params: { page, limit, search, status },
     });
     const data = extractApiData<{
@@ -101,24 +102,24 @@ const shopApi = {
   },
 
   register: async (data: CreateShopPayload): Promise<Shop> => {
-    const response = await instance.post('/shops/register', data);
+    const response = await instance.post(ENDPOINT_SHOP.REGISTER, data);
     return extractApiData(response);
   },
 
   update: async (data: UpdateShopPayload): Promise<Shop> => {
-    const response = await instance.put('/shops/my', data);
+    const response = await instance.put(ENDPOINT_SHOP.MY, data);
     return extractApiData(response);
   },
 
   uploadLogo: async (formData: FormData): Promise<{ logo: string }> => {
-    const response = await instance.post('/shops/upload-logo', formData, {
+    const response = await instance.post(ENDPOINT_SHOP.UPLOAD_LOGO, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   uploadBanner: async (formData: FormData): Promise<{ banner: string }> => {
-    const response = await instance.post('/shops/upload-banner', formData, {
+    const response = await instance.post(ENDPOINT_SHOP.UPLOAD_BANNER, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
@@ -129,16 +130,16 @@ const shopApi = {
     status: 'active' | 'inactive' | 'banned';
   }): Promise<Shop> => {
     const { shopId, status } = params;
-    const response = await instance.put(`/shops/admin/${shopId}/status`, { status });
+    const response = await instance.put(ENDPOINT_SHOP.updateAdminStatus(shopId), { status });
     return extractApiData(response);
   },
 
   follow: async (shopId: string): Promise<void> => {
-    await instance.post(`/shops/${shopId}/follow`);
+    await instance.post(ENDPOINT_SHOP.follow(shopId));
   },
 
   unfollow: async (shopId: string): Promise<void> => {
-    await instance.delete(`/shops/${shopId}/follow`);
+    await instance.delete(ENDPOINT_SHOP.follow(shopId));
   },
 };
 
@@ -211,7 +212,7 @@ export function useShopStatistics(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: shopKeys.statistics(),
     queryFn: async (): Promise<ShopStatistics> => {
-      const response = await instance.get('/shops/statistics');
+      const response = await instance.get(ENDPOINT_SHOP.STATISTICS);
       return extractApiData(response);
     },
     enabled: options?.enabled,

@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_CATEGORY } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME, GC_TIME } from '@/constants/cache';
 import { categoryKeys } from '@/lib/queryKeys';
 import { Category, CategoriesResponse } from '@/types/category';
@@ -53,13 +54,13 @@ function invalidateCategoryListAndTree(queryClient: QueryClient) {
 // ============ API Functions ============
 const categoryApi = {
   getTree: async (): Promise<CategoryTree[]> => {
-    const response = await instance.get('/categories/tree');
+    const response = await instance.get(ENDPOINT_CATEGORY.TREE);
     return extractApiData(response);
   },
 
   getAll: async (params: CategoryListParams = {}): Promise<CategoriesResponse> => {
     const { page = 1, limit = 10, search = '', parentCategory } = params;
-    const response = await instance.get('/categories', {
+    const response = await instance.get(ENDPOINT_CATEGORY.LIST, {
       params: { page, limit, search, ...(parentCategory !== undefined && { parentCategory }) },
     });
     return extractApiData(response);
@@ -67,14 +68,14 @@ const categoryApi = {
 
   getActive: async (params: CategoryListParams = {}): Promise<CategoriesResponse> => {
     const { page = 1, limit = 100, search = '', parentCategory } = params;
-    const response = await instance.get('/categories/active', {
+    const response = await instance.get(ENDPOINT_CATEGORY.ACTIVE, {
       params: { page, limit, search, ...(parentCategory !== undefined && { parentCategory }) },
     });
     return extractApiData(response);
   },
 
   getById: async (categoryId: string): Promise<Category> => {
-    const response = await instance.get(`/categories/${categoryId}`);
+    const response = await instance.get(ENDPOINT_CATEGORY.byId(categoryId));
     return extractApiData(response);
   },
 
@@ -82,24 +83,24 @@ const categoryApi = {
     categories: Category[];
     totalProducts: number;
   }> => {
-    const response = await instance.get('/categories/statistics');
+    const response = await instance.get(ENDPOINT_CATEGORY.STATISTICS);
     return extractApiData(response);
   },
 
   // Mutations
   create: async (data: CreateCategoryData): Promise<Category> => {
-    const response = await instance.post('/categories', data);
+    const response = await instance.post(ENDPOINT_CATEGORY.LIST, data);
     return extractApiData(response);
   },
 
   update: async (data: UpdateCategoryData): Promise<Category> => {
     const { id, ...updateData } = data;
-    const response = await instance.put(`/categories/${id}`, updateData);
+    const response = await instance.put(ENDPOINT_CATEGORY.byId(id), updateData);
     return extractApiData(response);
   },
 
   delete: async (categoryId: string): Promise<void> => {
-    await instance.delete(`/categories/${categoryId}`);
+    await instance.delete(ENDPOINT_CATEGORY.byId(categoryId));
   },
 };
 

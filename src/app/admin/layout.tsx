@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import { useLogout } from '@/hooks/queries';
 import { toast } from 'sonner';
 import Image from 'next/image';

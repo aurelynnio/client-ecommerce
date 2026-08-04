@@ -13,8 +13,9 @@ import {
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import instance from '@/api/api';
+import { ENDPOINT_PRODUCT } from '@/constants/endpoint';
 import { extractApiData, getSafeErrorMessage } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { productKeys } from '@/lib/queryKeys';
 import { Product, Variant, Price } from '@/types/product';
@@ -143,7 +144,7 @@ function syncProductDetailBySlug(queryClient: QueryClient, product: Product) {
 
 const productApi = {
   getAll: async (params: ProductListParams): Promise<ProductListResponse> => {
-    const response = await instance.get('/products', {
+    const response = await instance.get(ENDPOINT_PRODUCT.LIST, {
       params: buildProductQueryParams(params),
     });
     const serverData = extractApiData<ServerProductListResponse>(response);
@@ -151,32 +152,32 @@ const productApi = {
   },
 
   getBySlug: async (slug: string): Promise<Product> => {
-    const response = await instance.get(`/products/slug/${slug}`);
+    const response = await instance.get(ENDPOINT_PRODUCT.bySlug(slug));
     return extractApiData(response);
   },
 
   getById: async (productId: string): Promise<Product> => {
-    const response = await instance.get(`/products/${productId}`);
+    const response = await instance.get(ENDPOINT_PRODUCT.byId(productId));
     return extractApiData(response);
   },
 
   getFeatured: async (): Promise<Product[]> => {
-    const response = await instance.get('/products/featured');
+    const response = await instance.get(ENDPOINT_PRODUCT.FEATURED);
     return extractApiData(response);
   },
 
   getNewArrivals: async (): Promise<Product[]> => {
-    const response = await instance.get('/products/new-arrivals');
+    const response = await instance.get(ENDPOINT_PRODUCT.NEW_ARRIVALS);
     return extractApiData(response);
   },
 
   getOnSale: async (): Promise<Product[]> => {
-    const response = await instance.get('/products/on-sale');
+    const response = await instance.get(ENDPOINT_PRODUCT.ON_SALE);
     return extractApiData(response);
   },
 
   getByCategory: async (categorySlug: string): Promise<Product[]> => {
-    const response = await instance.get(`/products/category/${categorySlug}`);
+    const response = await instance.get(ENDPOINT_PRODUCT.byCategory(categorySlug));
     const result = extractApiData<{ data?: Product[]; products?: Product[] } | Product[]>(response);
     if (Array.isArray(result)) {
       return result;
@@ -189,7 +190,7 @@ const productApi = {
     page: number = 1,
     limit: number = 20,
   ): Promise<ProductListResponse> => {
-    const response = await instance.get(`/products/category/${categorySlug}`, {
+    const response = await instance.get(ENDPOINT_PRODUCT.byCategory(categorySlug), {
       params: { page, limit },
     });
     const serverData = extractApiData<ServerProductListResponse>(response);
@@ -197,12 +198,12 @@ const productApi = {
   },
 
   getRelated: async (productId: string): Promise<Product[]> => {
-    const response = await instance.get(`/products/related/${productId}`);
+    const response = await instance.get(ENDPOINT_PRODUCT.related(productId));
     return extractApiData(response);
   },
 
   search: async (params: { keyword: string; limit?: number }): Promise<Product[]> => {
-    const response = await instance.get('/products/search', {
+    const response = await instance.get(ENDPOINT_PRODUCT.SEARCH, {
       params: { q: params.keyword, limit: params.limit || 10 },
     });
     return extractApiData(response);
@@ -210,7 +211,7 @@ const productApi = {
 
   // Mutations
   create: async (formData: FormData): Promise<Product> => {
-    const response = await instance.post('/products', formData, {
+    const response = await instance.post(ENDPOINT_PRODUCT.LIST, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
@@ -224,14 +225,14 @@ const productApi = {
     formData: FormData;
   }): Promise<Product> => {
     // Admin uses seller endpoint now as per server refactor
-    const response = await instance.put(`/products/seller/${productId}`, formData, {
+    const response = await instance.put(ENDPOINT_PRODUCT.seller(productId), formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   delete: async (productId: string): Promise<void> => {
-    await instance.delete(`/products/${productId}/permanent`);
+    await instance.delete(ENDPOINT_PRODUCT.permanent(productId));
   },
 
   // Seller mutations
@@ -242,14 +243,14 @@ const productApi = {
     productId: string;
     formData: FormData;
   }): Promise<Product> => {
-    const response = await instance.put(`/products/seller/${productId}`, formData, {
+    const response = await instance.put(ENDPOINT_PRODUCT.seller(productId), formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   deleteSeller: async (productId: string): Promise<void> => {
-    await instance.delete(`/products/seller/${productId}`);
+    await instance.delete(ENDPOINT_PRODUCT.seller(productId));
   },
 
   // Model mutations
@@ -260,7 +261,7 @@ const productApi = {
   }): Promise<Product> => {
     const { productId, modelId, updateData } = params;
     const response = await instance.put(
-      `/products/seller/${productId}/variants/${modelId}`,
+      ENDPOINT_PRODUCT.variant(productId, modelId),
       updateData,
     );
     return extractApiData(response);
@@ -268,7 +269,7 @@ const productApi = {
 
   deleteModel: async (params: { productId: string; modelId: string }): Promise<void> => {
     const { productId, modelId } = params;
-    await instance.delete(`/products/seller/${productId}/variants/${modelId}`);
+    await instance.delete(ENDPOINT_PRODUCT.variant(productId, modelId));
   },
 };
 

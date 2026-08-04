@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_AUTH, ENDPOINT_USER } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
 import {
   AuthLogin,
@@ -9,7 +10,7 @@ import {
   TwoFactorLoginChallenge,
   User,
 } from '@/types/auth';
-import { useAppDispatch } from '@/hooks/hooks';
+import { useAppDispatch } from '@/hooks/redux';
 import { authSlice } from '@/features/auth/authSlice';
 import {
   cartKeys,
@@ -36,7 +37,7 @@ interface VerifyLoginTwoFactorPayload {
 
 const authApi = {
   login: async (credentials: AuthLogin): Promise<LoginResult> => {
-    const response = await instance.post('/auth/login', credentials, {
+    const response = await instance.post(ENDPOINT_AUTH.LOGIN, credentials, {
       withCredentials: true,
     });
     return extractApiData(response);
@@ -48,50 +49,50 @@ const authApi = {
       email: credentials.email,
       password: credentials.password,
     };
-    const response = await instance.post('/auth/register', payload, {
+    const response = await instance.post(ENDPOINT_AUTH.REGISTER, payload, {
       withCredentials: true,
     });
     return extractApiData(response);
   },
 
   sendVerificationCode: async (payload: { email: string }): Promise<unknown> => {
-    const response = await instance.post('/auth/send-verification-code', payload, {
+    const response = await instance.post(ENDPOINT_AUTH.SEND_VERIFICATION_CODE, payload, {
       withCredentials: true,
     });
     return extractApiData(response);
   },
 
   verifyCode: async (payload: VerifyCodePayload): Promise<User> => {
-    const response = await instance.post('/auth/verify-code', payload);
+    const response = await instance.post(ENDPOINT_AUTH.VERIFY_CODE, payload);
     return extractApiData(response);
   },
 
   forgotPassword: async (email: string): Promise<unknown> => {
-    const response = await instance.post('/auth/forgot-password', { email });
+    const response = await instance.post(ENDPOINT_AUTH.FORGOT_PASSWORD, { email });
     return extractApiData(response);
   },
 
   resetPassword: async (payload: PasswordReset): Promise<unknown> => {
-    const response = await instance.post('/auth/reset-password', payload);
+    const response = await instance.post(ENDPOINT_AUTH.RESET_PASSWORD, payload);
     return extractApiData(response);
   },
 
   logout: async (): Promise<void> => {
-    await instance.post('/auth/logout');
+    await instance.post(ENDPOINT_AUTH.LOGOUT);
   },
 
   refreshToken: async (): Promise<RefreshTokenResponse> => {
-    const response = await instance.post('/auth/refresh-token');
+    const response = await instance.post(ENDPOINT_AUTH.REFRESH);
     return extractApiData(response);
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const response = await instance.get('/users/profile');
+    const response = await instance.get(ENDPOINT_USER.PROFILE);
     return extractApiData(response);
   },
 
   verifyLoginTwoFactor: async (payload: VerifyLoginTwoFactorPayload): Promise<User> => {
-    const response = await instance.post('/auth/2fa/verify-login', payload, {
+    const response = await instance.post(ENDPOINT_AUTH.VERIFY_LOGIN_TWO_FACTOR, payload, {
       withCredentials: true,
     });
     return extractApiData(response);
@@ -100,7 +101,7 @@ const authApi = {
   resendLoginTwoFactorCode: async (
     payload: Pick<VerifyLoginTwoFactorPayload, 'challengeToken'>,
   ): Promise<{ email: string; expiresIn: string }> => {
-    const response = await instance.post('/auth/2fa/resend-login-code', payload, {
+    const response = await instance.post(ENDPOINT_AUTH.RESEND_LOGIN_TWO_FACTOR_CODE, payload, {
       withCredentials: true,
     });
     return extractApiData(response);

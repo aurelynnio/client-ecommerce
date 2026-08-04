@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_CHATBOT } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
 import { chatbotKeys } from '@/lib/queryKeys';
 import { PaginationData } from '@/types/common';
@@ -33,7 +34,7 @@ const chatbotApi = {
     page: number;
     limit: number;
   }): Promise<AdminChatbotSessionsResponse> => {
-    const response = await instance.get('/chatbot/admin/sessions', { params });
+    const response = await instance.get(ENDPOINT_CHATBOT.ADMIN_SESSIONS, { params });
     const data = extractApiData<{
       data?: ChatSession[];
       pagination?: {
@@ -68,7 +69,7 @@ const chatbotApi = {
   },
 
   getHistory: async (sessionId: string): Promise<AdminChatbotHistoryResponse> => {
-    const response = await instance.get(`/chatbot/history/${sessionId}`);
+    const response = await instance.get(ENDPOINT_CHATBOT.history(sessionId));
     return extractApiData(response);
   },
 };

@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_REVIEW } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { reviewKeys, productKeys } from '@/lib/queryKeys';
 import { PaginationData } from '@/types/common';
@@ -108,7 +109,7 @@ const reviewApi = {
     params: ReviewListParams = {},
   ): Promise<ReviewListResponse> => {
     const { page = 1, limit = 10 } = params;
-    const response = await instance.get(`/reviews/product/${productId}`, {
+    const response = await instance.get(ENDPOINT_REVIEW.byProductId(productId), {
       params: { page, limit },
     });
     const data = extractApiData<
@@ -134,7 +135,7 @@ const reviewApi = {
 
   getByShop: async (shopId: string, params: ReviewListParams = {}): Promise<ReviewListResponse> => {
     const { page = 1, limit = 10, rating } = params;
-    const response = await instance.get(`/reviews/shop/${shopId}`, {
+    const response = await instance.get(ENDPOINT_REVIEW.byShopId(shopId), {
       params: { page, limit, ...(rating && { rating }) },
     });
     const data = extractApiData<ReviewListResponse & { data?: Review[] }>(response);
@@ -145,14 +146,14 @@ const reviewApi = {
   },
 
   getUserReviews: async (): Promise<Review[]> => {
-    const response = await instance.get('/reviews/user/me');
+    const response = await instance.get(ENDPOINT_REVIEW.USER_ME);
     return extractApiData(response);
   },
 
   // Admin APIs
   getAdminReviews: async (params: AdminReviewListParams = {}): Promise<AdminReviewListResponse> => {
     const { page = 1, limit = 10, rating, search } = params;
-    const response = await instance.get('/reviews', {
+    const response = await instance.get(ENDPOINT_REVIEW.ROOT, {
       params: { page, limit, rating, search },
     });
     return extractApiData(response);
@@ -161,14 +162,14 @@ const reviewApi = {
   // Seller APIs
   getMyShopReviews: async (params: ReviewListParams = {}): Promise<ReviewListResponse> => {
     const { page = 1, limit = 10, rating } = params;
-    const response = await instance.get('/reviews/seller/me', {
+    const response = await instance.get(ENDPOINT_REVIEW.SELLER_ME, {
       params: { page, limit, rating },
     });
     return extractApiData(response);
   },
 
   replyReview: async (data: { reviewId: string; content: string }) => {
-    const response = await instance.post(`/reviews/seller/${data.reviewId}/reply`, {
+    const response = await instance.post(ENDPOINT_REVIEW.reply(data.reviewId), {
       content: data.content,
     });
     return extractApiData(response);
@@ -177,18 +178,18 @@ const reviewApi = {
   // Mutations
 
   create: async (data: CreateReviewData): Promise<Review> => {
-    const response = await instance.post('/reviews', data);
+    const response = await instance.post(ENDPOINT_REVIEW.ROOT, data);
     return extractApiData(response);
   },
 
   update: async (data: UpdateReviewData): Promise<Review> => {
     const { reviewId, ...updateData } = data;
-    const response = await instance.put(`/reviews/${reviewId}`, updateData);
+    const response = await instance.put(ENDPOINT_REVIEW.byId(reviewId), updateData);
     return extractApiData(response);
   },
 
   delete: async (reviewId: string): Promise<void> => {
-    await instance.delete(`/reviews/${reviewId}`);
+    await instance.delete(ENDPOINT_REVIEW.byId(reviewId));
   },
 };
 

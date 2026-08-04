@@ -1,7 +1,6 @@
 'use client';
-import { useEffect } from 'react';
 import { X, Bell } from 'lucide-react';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import {
   useNotifications,
   useMarkAllNotificationsAsRead,
@@ -9,6 +8,7 @@ import {
   useUnreadNotificationCount,
 } from '@/hooks/queries/useNotifications';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import NotificationItem from './NotificationItem';
 
 export default function NotificationModel({
@@ -34,48 +34,35 @@ export default function NotificationModel({
   const notifications = data?.notifications || [];
   const unreadCount = unreadCountData ?? data?.unreadCount ?? 0;
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
   if (!isOpen || !isAuthenticated) return null;
 
   return (
-    <>
-      {/* Backdrop - subtle */}
-      <div className="fixed inset-0 z-60 bg-black/5" onClick={onClose} />
-
-      {/* Panel */}
-      <div className="fixed right-4 top-14 w-[340px] max-h-[75vh] flex flex-col bg-card z-70 rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-        {/* Header - clean, minimal */}
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent
+        showCloseButton={false}
+        className="fixed right-4 top-14 left-auto z-70 flex max-h-[75vh] w-[340px] translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-xl border-0 p-0 shadow-lg data-[state=open]:slide-in-from-top-2 sm:max-w-none"
+      >
         <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">Thông báo</span>
+            <DialogTitle className="text-sm font-medium">Thông báo</DialogTitle>
             {unreadCount > 0 && (
               <span className="bg-primary text-primary-foreground text-[10px] font-medium px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
                 {unreadCount}
               </span>
             )}
           </div>
-          <button
-            type="button"
-            aria-label="Đóng thông báo"
-            onClick={onClose}
-            className="p-1 rounded-lg text-muted-foreground/60 hover:text-muted-foreground hover:bg-muted transition-colors"
-          >
-            <X className="h-4 w-4" />
-          </button>
+          <DialogClose asChild>
+            <button
+              type="button"
+              aria-label="Đóng thông báo"
+              className="rounded-lg p-1 text-muted-foreground/60 transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </DialogClose>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto" aria-live="polite">
           {isLoading && notifications.length === 0 ? (
             <div className="flex justify-center items-center py-16">
               <SpinnerLoading />
@@ -115,7 +102,7 @@ export default function NotificationModel({
             </button>
           </div>
         )}
-      </div>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 }

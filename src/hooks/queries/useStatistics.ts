@@ -4,6 +4,7 @@
  */
 import { useQuery } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_STATISTICS } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
 import { STALE_TIME, REFETCH_INTERVAL } from '@/constants/cache';
 import { statisticsKeys } from '@/lib/queryKeys';
@@ -93,7 +94,7 @@ export interface OrderStats {
 
 const statisticsApi = {
   getDashboard: async (): Promise<DashboardStats> => {
-    const response = await instance.get('/statistics/dashboard');
+    const response = await instance.get(ENDPOINT_STATISTICS.DASHBOARD);
     return extractApiData(response);
   },
 

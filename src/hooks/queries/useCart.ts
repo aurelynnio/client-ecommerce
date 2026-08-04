@@ -5,8 +5,9 @@
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_CART } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { cartKeys } from '@/lib/queryKeys';
 import { Cart } from '@/types/cart';
 
@@ -25,12 +26,12 @@ export interface UpdateCartItemData {
 
 const cartApi = {
   get: async (): Promise<Cart> => {
-    const response = await instance.get('/cart');
+    const response = await instance.get(ENDPOINT_CART.ROOT);
     return extractApiData(response);
   },
 
   add: async (data: AddToCartData): Promise<Cart> => {
-    const response = await instance.post('/cart', {
+    const response = await instance.post(ENDPOINT_CART.ROOT, {
       productId: data.productId,
       shopId: data.shopId,
       modelId: data.modelId,
@@ -41,19 +42,19 @@ const cartApi = {
   },
 
   update: async (data: UpdateCartItemData): Promise<Cart> => {
-    const response = await instance.put(`/cart/${data.itemId}`, {
+    const response = await instance.put(ENDPOINT_CART.byItemId(data.itemId), {
       quantity: data.quantity,
     });
     return extractApiData(response);
   },
 
   remove: async (itemId: string): Promise<Cart> => {
-    const response = await instance.delete(`/cart/${itemId}`);
+    const response = await instance.delete(ENDPOINT_CART.byItemId(itemId));
     return extractApiData(response);
   },
 
   clear: async (): Promise<Cart> => {
-    const response = await instance.delete('/cart');
+    const response = await instance.delete(ENDPOINT_CART.ROOT);
     return extractApiData(response);
   },
 };

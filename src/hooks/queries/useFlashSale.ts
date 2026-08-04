@@ -5,8 +5,9 @@
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import instance from '@/api/api';
+import { ENDPOINT_FLASH_SALE } from '@/constants/endpoint';
 import { extractApiData, getSafeErrorMessage } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME, REFETCH_INTERVAL } from '@/constants/cache';
 import { flashSaleKeys } from '@/lib/queryKeys';
 import {
@@ -47,17 +48,17 @@ function invalidateFlashSaleQueries(queryClient: QueryClient) {
 // ============ API Functions ============
 const flashSaleApi = {
   getActive: async (params?: { page?: number; limit?: number }): Promise<FlashSaleResponse> => {
-    const response = await instance.get('/flash-sale', { params });
+    const response = await instance.get(ENDPOINT_FLASH_SALE.ROOT, { params });
     return extractApiData(response);
   },
 
   getSchedule: async (): Promise<FlashSaleSlot[]> => {
-    const response = await instance.get('/flash-sale/schedule');
+    const response = await instance.get(ENDPOINT_FLASH_SALE.SCHEDULE);
     return extractApiData(response);
   },
 
   getAdminProducts: async (): Promise<AdminFlashSaleProduct[]> => {
-    const response = await instance.get('/flash-sale');
+    const response = await instance.get(ENDPOINT_FLASH_SALE.ROOT);
     const data = extractApiData<
       | {
           data?: AdminFlashSaleProduct[];
@@ -68,12 +69,12 @@ const flashSaleApi = {
   },
 
   getAdminSchedule: async (): Promise<AdminFlashSaleSlot[]> => {
-    const response = await instance.get('/flash-sale/schedule');
+    const response = await instance.get(ENDPOINT_FLASH_SALE.SCHEDULE);
     return extractApiData(response);
   },
 
   getBySlot: async (timeSlot: string): Promise<FlashSaleSlotResponse> => {
-    const response = await instance.get(`/flash-sale/slot/${timeSlot}`);
+    const response = await instance.get(ENDPOINT_FLASH_SALE.bySlot(timeSlot));
     return extractApiData(response);
   },
 
@@ -82,18 +83,18 @@ const flashSaleApi = {
     totalSold: number;
     revenue: number;
   }> => {
-    const response = await instance.get('/flash-sale/stats');
+    const response = await instance.get(ENDPOINT_FLASH_SALE.STATS);
     return extractApiData(response);
   },
 
   // Mutations (Seller/Admin)
   addProduct: async (params: { productId: string; data: AddToFlashSalePayload }): Promise<void> => {
     const { productId, data } = params;
-    await instance.post(`/flash-sale/${productId}`, data);
+    await instance.post(ENDPOINT_FLASH_SALE.byProductId(productId), data);
   },
 
   removeProduct: async (productId: string): Promise<void> => {
-    await instance.delete(`/flash-sale/${productId}`);
+    await instance.delete(ENDPOINT_FLASH_SALE.byProductId(productId));
   },
 };
 
@@ -225,8 +226,6 @@ export function useFlashSaleWithCountdown() {
     refetch: refetchSchedule,
   } = useFlashSaleSchedule();
 
-  const [nowMs, setNowMs] = useState(0);
-
   // Extract data from React Query response (matching FlashSaleResponse type)
   const products = flashSaleData?.data || [];
   const pagination = flashSaleData?.pagination;
@@ -242,31 +241,30 @@ export function useFlashSaleWithCountdown() {
     return Number.isFinite(ms) ? ms : null;
   }, [endTime]);
 
-  // Keep "now" in state. This avoids calling Date.now() during render (purity rule).
+  const [nowMs, setNowMs] = useState(0);
+
   useEffect(() => {
     if (!endTimeMs || products.length === 0) return;
 
-    const initId = setTimeout(() => {
-      setNowMs(Date.now());
-    }, 0);
-    const intervalId = setInterval(() => {
-      setNowMs(Date.now());
-    }, 1000);
+    const updateNow = () => setNowMs(Date.now());
+    const initialTimerId = setTimeout(updateNow, 0);
+
+    const intervalId = setInterval(updateNow, 1000);
 
     return () => {
-      clearTimeout(initId);
+      clearTimeout(initialTimerId);
       clearInterval(intervalId);
     };
   }, [endTimeMs, products.length]);
 
   const countdown = useMemo(() => {
-    if (!endTimeMs || !nowMs) return 0;
+    if (!endTimeMs || nowMs === 0) return 0;
     return Math.max(0, Math.floor((endTimeMs - nowMs) / 1000));
   }, [endTimeMs, nowMs]);
 
   useEffect(() => {
-    if (!endTimeMs || !nowMs) return;
-    if (countdown === 0) {
+    if (!endTimeMs) return;
+    if (nowMs > 0 && countdown === 0) {
       refetchFlashSale();
     }
   }, [countdown, endTimeMs, nowMs, refetchFlashSale]);

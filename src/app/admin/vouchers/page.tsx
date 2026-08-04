@@ -24,7 +24,7 @@ import {
 import { toast } from 'sonner';
 import { PaginationControls } from '@/components/common/Pagination';
 import { getSafeErrorMessage } from '@/api';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 
 export default function VouchersPage() {
   const { isAuthenticated, data: currentUser } = useAppSelector((state) => state.auth);

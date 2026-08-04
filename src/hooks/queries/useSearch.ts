@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_SEARCH } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
 import { STALE_TIME } from '@/constants/cache';
 import { SearchSuggestions } from '@/types/search';
@@ -8,7 +9,7 @@ import { searchKeys } from '@/lib/queryKeys';
 
 const searchApi = {
   getSuggestions: async (keyword: string, limit: number = 10): Promise<SearchSuggestions> => {
-    const response = await instance.get('/search/suggestions', {
+    const response = await instance.get(ENDPOINT_SEARCH.SUGGESTIONS, {
       params: { q: keyword, limit },
     });
     return extractApiData(response);

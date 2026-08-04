@@ -6,6 +6,9 @@
 // Axios instance
 export { default as api, injectStore } from './api';
 
+// Permission API
+export * from './permissions.api';
+
 // API utilities
 export {
   extractApiData,

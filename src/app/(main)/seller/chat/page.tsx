@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useMyShop } from '@/hooks/queries';
 import { cn } from '@/utils/cn';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import {
   useChatConversations,
   useChatMessages,

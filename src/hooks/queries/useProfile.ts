@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_AUTH, ENDPOINT_USER } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { userKeys } from '@/lib/queryKeys';
 import { User } from '@/types/user';
@@ -89,12 +90,12 @@ function invalidateAddressAndProfile(queryClient: QueryClient) {
 // ============ API Functions ============
 const userApi = {
   getProfile: async (): Promise<User> => {
-    const response = await instance.get('/users/profile');
+    const response = await instance.get(ENDPOINT_USER.PROFILE);
     return extractApiData(response);
   },
 
   getAddresses: async (): Promise<Address[]> => {
-    const response = await instance.get('/users/addresses');
+    const response = await instance.get(ENDPOINT_USER.ADDRESSES);
     return extractApiData(response);
   },
 
@@ -107,7 +108,7 @@ const userApi = {
     statistics: UserListStatistics | null;
   }> => {
     const { page = 1, limit = 10, search, role, isVerifiedEmail } = params;
-    const response = await instance.get('/users', {
+    const response = await instance.get(ENDPOINT_USER.ROOT, {
       params: { page, limit, search, role, isVerifiedEmail },
     });
     const data = extractApiData<{
@@ -124,19 +125,19 @@ const userApi = {
 
   // Mutations
   updateProfile: async (data: UpdateProfileData): Promise<User> => {
-    const response = await instance.put('/users/profile', data);
+    const response = await instance.put(ENDPOINT_USER.PROFILE, data);
     return extractApiData(response);
   },
 
   uploadAvatar: async (formData: FormData): Promise<{ avatar: string }> => {
-    const response = await instance.post('/users/upload-avatar', formData, {
+    const response = await instance.post(ENDPOINT_USER.UPLOAD_AVATAR, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   changePassword: async (data: { oldPassword: string; newPassword: string }): Promise<void> => {
-    await instance.put('/users/change-password', data);
+    await instance.put(ENDPOINT_USER.CHANGE_PASSWORD, data);
   },
 
   sendTwoFactorCode: async (
@@ -146,33 +147,33 @@ const userApi = {
     email: string;
     expiresIn: string;
   }> => {
-    const response = await instance.post('/auth/2fa/send-code', { action });
+    const response = await instance.post(ENDPOINT_AUTH.SEND_TWO_FACTOR_CODE, { action });
     return extractApiData(response);
   },
 
   confirmTwoFactor: async (data: { action: TwoFactorAction; code: string }): Promise<User> => {
-    const response = await instance.post('/auth/2fa/confirm', data);
+    const response = await instance.post(ENDPOINT_AUTH.CONFIRM_TWO_FACTOR, data);
     return extractApiData(response);
   },
 
   // Address mutations
   createAddress: async (data: CreateAddressData): Promise<Address> => {
-    const response = await instance.post('/users/addresses', data);
+    const response = await instance.post(ENDPOINT_USER.ADDRESSES, data);
     return extractApiData(response);
   },
 
   updateAddress: async (data: UpdateAddressData): Promise<Address> => {
     const { addressId, ...updateData } = data;
-    const response = await instance.put(`/users/addresses/${addressId}`, updateData);
+    const response = await instance.put(ENDPOINT_USER.address(addressId), updateData);
     return extractApiData(response);
   },
 
   deleteAddress: async (addressId: string): Promise<void> => {
-    await instance.delete(`/users/addresses/${addressId}`);
+    await instance.delete(ENDPOINT_USER.address(addressId));
   },
 
   setDefaultAddress: async (addressId: string): Promise<Address[]> => {
-    const response = await instance.put(`/users/addresses/${addressId}/default`);
+    const response = await instance.put(ENDPOINT_USER.defaultAddress(addressId));
     return extractApiData(response);
   },
 
@@ -180,17 +181,17 @@ const userApi = {
   createUser: async (data: CreateUserData): Promise<User> => {
     const payload = { ...data };
     delete payload.phone;
-    const response = await instance.post('/users', payload);
+    const response = await instance.post(ENDPOINT_USER.ROOT, payload);
     return extractApiData(response);
   },
 
   updateUser: async (data: UpdateUserData): Promise<User> => {
-    const response = await instance.put('/users', data);
+    const response = await instance.put(ENDPOINT_USER.ROOT, data);
     return extractApiData(response);
   },
 
   deleteUser: async (userId: string): Promise<void> => {
-    await instance.delete(`/users/${userId}`);
+    await instance.delete(ENDPOINT_USER.byId(userId));
   },
 };
 

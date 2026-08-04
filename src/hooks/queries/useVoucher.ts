@@ -4,9 +4,10 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_VOUCHER } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
 import { voucherKeys } from '@/lib/queryKeys';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import {
   Voucher,
@@ -45,7 +46,7 @@ function invalidateVoucherStatistics(queryClient: QueryClient) {
 // ============ API Functions ============
 const voucherApi = {
   getAdminList: async (params?: Partial<VoucherFilters>): Promise<VoucherListResponse> => {
-    const response = await instance.get('/vouchers', { params });
+    const response = await instance.get(ENDPOINT_VOUCHER.ROOT, { params });
     const data = extractApiData(response);
     // Handle different response formats
     if (Array.isArray(data)) {
@@ -71,17 +72,17 @@ const voucherApi = {
   },
 
   getPlatform: async (): Promise<Voucher[]> => {
-    const response = await instance.get('/vouchers/platform');
+    const response = await instance.get(ENDPOINT_VOUCHER.PLATFORM);
     return extractApiData(response);
   },
 
   getShopPublic: async (shopId: string): Promise<Voucher[]> => {
-    const response = await instance.get(`/vouchers/shop/${shopId}`);
+    const response = await instance.get(ENDPOINT_VOUCHER.byShopId(shopId));
     return extractApiData(response);
   },
 
   getById: async (id: string): Promise<Voucher> => {
-    const response = await instance.get(`/vouchers/${id}`);
+    const response = await instance.get(ENDPOINT_VOUCHER.byId(id));
     return extractApiData(response);
   },
 
@@ -90,28 +91,28 @@ const voucherApi = {
     shopId?: string;
     scope?: VoucherScope;
   }): Promise<AvailableVouchersResponse> => {
-    const response = await instance.get('/vouchers/available', { params });
+    const response = await instance.get(ENDPOINT_VOUCHER.AVAILABLE, { params });
     return extractApiData(response);
   },
 
   getStatistics: async (): Promise<VoucherStatistics> => {
-    const response = await instance.get('/vouchers/statistics');
+    const response = await instance.get(ENDPOINT_VOUCHER.STATISTICS);
     return extractApiData(response);
   },
 
   create: async (data: CreateVoucherData): Promise<Voucher> => {
-    const response = await instance.post('/vouchers', data);
+    const response = await instance.post(ENDPOINT_VOUCHER.ROOT, data);
     return extractApiData(response);
   },
 
   update: async ({ id, ...data }: UpdateVoucherData & { id: string }): Promise<Voucher> => {
-    const response = await instance.put(`/vouchers/${id}`, data);
+    const response = await instance.put(ENDPOINT_VOUCHER.byId(id), data);
     return extractApiData(response);
   },
 
   delete: async (id: string): Promise<string> => {
     // Admin table "Xóa" is expected to remove the voucher entirely.
-    await instance.delete(`/vouchers/${id}/permanent`);
+    await instance.delete(ENDPOINT_VOUCHER.permanent(id));
     return id;
   },
 
@@ -120,7 +121,7 @@ const voucherApi = {
     orderTotal: number;
     shopId?: string;
   }): Promise<ApplyVoucherResult> => {
-    const response = await instance.post('/vouchers/apply', {
+    const response = await instance.post(ENDPOINT_VOUCHER.APPLY, {
       code: params.code,
       orderValue: params.orderTotal,
       shopId: params.shopId,

@@ -13,7 +13,7 @@ import {
   updateUserPermissions,
   getAllPermissions,
   getRolePermissions,
-} from '@/api/permission';
+} from '@/api';
 import { getSafeErrorMessage } from '@/api';
 import {
   Dialog,

@@ -20,7 +20,7 @@ import { Badge } from '@/components/ui/badge';
 import { useState, useEffect } from 'react';
 import { Plus, ChevronDown, ChevronUp, Shield } from 'lucide-react';
 import { RESOURCES, ACTIONS } from '@/constants/permissions';
-import { getRolePermissions } from '@/api/permission';
+import { getRolePermissions } from '@/api';
 import { UserRole } from '@/types/user';
 import { CreateUserData } from '@/hooks/queries/useProfile';
 import {

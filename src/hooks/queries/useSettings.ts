@@ -4,20 +4,21 @@
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_SETTINGS } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { settingsKeys } from '@/lib/queryKeys';
 import { Settings, UpdateSettingsPayload } from '@/types/settings';
 
 const settingsApi = {
   getSettings: async (): Promise<Settings> => {
-    const response = await instance.get('/settings');
+    const response = await instance.get(ENDPOINT_SETTINGS.ROOT);
     return extractApiData(response);
   },
 
   updateSettings: async (data: UpdateSettingsPayload): Promise<Settings> => {
-    const response = await instance.put('/settings', data);
+    const response = await instance.put(ENDPOINT_SETTINGS.ROOT, data);
     return extractApiData(response);
   },
 };

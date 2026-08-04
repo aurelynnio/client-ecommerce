@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import { useLogin, useResendLoginTwoFactorCode, useVerifyLoginTwoFactor } from '@/hooks/queries';
 import { TwoFactorLoginChallenge } from '@/types/auth';
 

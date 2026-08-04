@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_ORDER } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { orderKeys, cartKeys } from '@/lib/queryKeys';
 import { Order, OrderStatus, OrderStatistics, OrderStatusCount } from '@/types/order';
@@ -113,7 +114,7 @@ function invalidateOrdersAndCart(queryClient: QueryClient) {
 const orderApi = {
   getUserOrders: async (params: OrderListParams = {}): Promise<OrderListResponse> => {
     const { page = 1, limit = 10, status, paymentStatus, paymentMethod } = params;
-    const response = await instance.get('/orders', {
+    const response = await instance.get(ENDPOINT_ORDER.ROOT, {
       params: {
         page,
         limit,
@@ -134,7 +135,7 @@ const orderApi = {
   },
 
   getById: async (orderId: string): Promise<Order> => {
-    const response = await instance.get(`/orders/${orderId}`);
+    const response = await instance.get(ENDPOINT_ORDER.byId(orderId));
     return extractApiData(response);
   },
 
@@ -142,7 +143,7 @@ const orderApi = {
   getAllOrders: async (params: OrderListParams = {}): Promise<OrderListResponse> => {
     const { page = 1, limit = 10, status, paymentStatus, paymentMethod, userId, shop } = params;
 
-    const response = await instance.get('/orders/all/list', {
+    const response = await instance.get(ENDPOINT_ORDER.ALL, {
       params: {
         page,
         limit,
@@ -170,7 +171,7 @@ const orderApi = {
     params: OrderListParams = {},
   ): Promise<OrderListResponse> => {
     const { page = 1, limit = 10, status, paymentStatus } = params;
-    const response = await instance.get('/orders/seller/list', {
+    const response = await instance.get(ENDPOINT_ORDER.SELLER, {
       params: {
         page,
         limit,
@@ -190,7 +191,7 @@ const orderApi = {
   },
 
   getStatistics: async (): Promise<OrderStatistics> => {
-    const response = await instance.get('/orders/statistics/overview');
+    const response = await instance.get(ENDPOINT_ORDER.STATISTICS);
     const data = extractApiData<ServerOrderStatisticsResponse>(response);
     return normalizeOrderStatistics(data);
   },
@@ -198,7 +199,7 @@ const orderApi = {
   // Mutations
   create: async (data: CreateOrderData): Promise<Order> => {
     const { voucherPlatformCode, discountCode, platformVoucher, shopVouchers, ...orderData } = data;
-    const response = await instance.post('/orders', {
+    const response = await instance.post(ENDPOINT_ORDER.ROOT, {
       ...orderData,
       platformVoucher: platformVoucher ?? voucherPlatformCode ?? discountCode,
       shopVouchers: shopVouchers ?? [],
@@ -207,20 +208,20 @@ const orderApi = {
   },
 
   cancel: async (orderId: string): Promise<Order> => {
-    const response = await instance.delete(`/orders/${orderId}/cancel`);
+    const response = await instance.delete(ENDPOINT_ORDER.cancel(orderId));
     return extractApiData(response);
   },
 
   updateStatus: async (params: { orderId: string; status: OrderStatus }): Promise<Order> => {
     const { orderId, status } = params;
-    const response = await instance.put(`/orders/${orderId}/status`, {
+    const response = await instance.put(ENDPOINT_ORDER.updateStatus(orderId), {
       status,
     });
     return extractApiData(response);
   },
 
   confirmDelivery: async (orderId: string): Promise<Order> => {
-    const response = await instance.post(`/orders/${orderId}/confirm-delivery`);
+    const response = await instance.post(ENDPOINT_ORDER.confirmDelivery(orderId));
     return extractApiData(response);
   },
 };

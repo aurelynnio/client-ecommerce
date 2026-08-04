@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_NEWSLETTER } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 
 interface NewsletterSubscriptionPayload {
   email: string;
@@ -17,7 +18,7 @@ const newsletterApi = {
   subscribe: async (
     data: NewsletterSubscriptionPayload,
   ): Promise<NewsletterSubscriptionResponse> => {
-    const response = await instance.post('/newsletter/subscribe', data);
+    const response = await instance.post(ENDPOINT_NEWSLETTER.SUBSCRIBE, data);
     return extractApiData(response);
   },
 };

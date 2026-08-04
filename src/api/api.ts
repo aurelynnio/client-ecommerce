@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { authSlice } from '@/features/auth/authSlice';
+import { ENDPOINT_AUTH } from '@/constants/endpoint';
 import type { Store } from '@reduxjs/toolkit';
 
 // Type for the Redux store
@@ -70,7 +71,7 @@ instance.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url?.includes('/auth/refresh-token')
+      !originalRequest.url?.includes(ENDPOINT_AUTH.REFRESH)
     ) {
       if (isRefreshing) {
         // If already refreshing, add request to queue
@@ -90,7 +91,7 @@ instance.interceptors.response.use(
 
       try {
         // Attempt to refresh token via cookie
-        await instance.post('/auth/refresh-token');
+        await instance.post(ENDPOINT_AUTH.REFRESH);
 
         // If successful, the server has set a new access token cookie
         // We just need to retry the original request

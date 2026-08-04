@@ -5,8 +5,9 @@
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useRef, useState } from 'react';
 import instance from '@/api/api';
+import { ENDPOINT_WISHLIST } from '@/constants/endpoint';
 import { extractApiData, getSafeErrorMessage } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { wishlistKeys } from '@/lib/queryKeys';
 import { toast } from 'sonner';
@@ -47,24 +48,24 @@ function invalidateWishlistAll(queryClient: QueryClient) {
 // ============ API Functions ============
 const wishlistApi = {
   getAll: async (params?: { page?: number; limit?: number }): Promise<WishlistResponse> => {
-    const response = await instance.get('/wishlist', { params });
+    const response = await instance.get(ENDPOINT_WISHLIST.ROOT, { params });
     return extractApiData(response);
   },
 
   getCount: async (): Promise<number> => {
-    const response = await instance.get('/wishlist/count');
+    const response = await instance.get(ENDPOINT_WISHLIST.COUNT);
     const data = extractApiData<{ count?: number }>(response);
     return data?.count || 0;
   },
 
   check: async (productId: string): Promise<boolean> => {
-    const response = await instance.get(`/wishlist/check/${productId}`);
+    const response = await instance.get(ENDPOINT_WISHLIST.check(productId));
     const data = extractApiData<CheckWishlistResponse>(response);
     return data?.isInWishlist || false;
   },
 
   checkMultiple: async (productIds: string[]): Promise<CheckMultipleWishlistResponse> => {
-    const response = await instance.post('/wishlist/check-multiple', {
+    const response = await instance.post(ENDPOINT_WISHLIST.CHECK_MULTIPLE, {
       productIds,
     });
     return extractApiData(response) || {};
@@ -72,17 +73,17 @@ const wishlistApi = {
 
   // Mutations
   add: async (productId: string): Promise<{ productId: string; wishlistCount: number }> => {
-    const response = await instance.post(`/wishlist/${productId}`);
+    const response = await instance.post(ENDPOINT_WISHLIST.byProductId(productId));
     return { ...extractApiData(response), productId };
   },
 
   remove: async (productId: string): Promise<{ productId: string; wishlistCount: number }> => {
-    const response = await instance.delete(`/wishlist/${productId}`);
+    const response = await instance.delete(ENDPOINT_WISHLIST.byProductId(productId));
     return { ...extractApiData(response), productId };
   },
 
   clear: async (): Promise<void> => {
-    await instance.delete('/wishlist');
+    await instance.delete(ENDPOINT_WISHLIST.ROOT);
   },
 };
 

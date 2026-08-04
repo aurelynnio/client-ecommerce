@@ -24,7 +24,7 @@ import { User as UserIcon, Mail, Shield, Key, CheckCircle } from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { User, UpdateUserData, UserRole } from '@/types/user';
 import { RESOURCES, ACTIONS } from '@/constants/permissions';
-import { getRolePermissions, getUserPermissions } from '@/api/permission';
+import { getRolePermissions, getUserPermissions } from '@/api';
 import { cn } from '@/utils/cn';
 import {
   adminDialogContentClass,

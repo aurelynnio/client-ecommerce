@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_NOTIFICATION } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME, REFETCH_INTERVAL } from '@/constants/cache';
 import { notificationKeys } from '@/lib/queryKeys';
 import { Notification, NotificationSummary, NotificationType } from '@/types/notification';
@@ -47,7 +48,7 @@ function invalidateNotificationQueries(queryClient: QueryClient) {
 const notificationApi = {
   getList: async (params: NotificationListParams = {}): Promise<NotificationListResponse> => {
     const { page = 1, limit = 10 } = params;
-    const response = await instance.get('/notifications', {
+    const response = await instance.get(ENDPOINT_NOTIFICATION.ROOT, {
       params: { page, limit },
     });
     const data = extractApiData<
@@ -71,25 +72,25 @@ const notificationApi = {
   },
 
   getUnreadCount: async (): Promise<number> => {
-    const response = await instance.get('/notifications/count');
+    const response = await instance.get(ENDPOINT_NOTIFICATION.COUNT);
     const data = extractApiData<{ count?: number }>(response);
     return data?.count || 0;
   },
 
   // Mutations
   markAsRead: async (notificationId: string): Promise<Notification> => {
-    const response = await instance.patch(`/notifications/${notificationId}`, {
+    const response = await instance.patch(ENDPOINT_NOTIFICATION.byId(notificationId), {
       isRead: true,
     });
     return extractApiData(response);
   },
 
   markAllAsRead: async (): Promise<void> => {
-    await instance.patch('/notifications/read-all', {});
+    await instance.patch(ENDPOINT_NOTIFICATION.READ_ALL, {});
   },
 
   clearAll: async (): Promise<void> => {
-    await instance.delete('/notifications');
+    await instance.delete(ENDPOINT_NOTIFICATION.ROOT);
   },
 
   // Admin: Create notification
@@ -100,7 +101,7 @@ const notificationApi = {
       link: data.link?.trim() || undefined,
       orderId: data.orderId?.trim() || undefined,
     };
-    const response = await instance.post('/notifications', payload);
+    const response = await instance.post(ENDPOINT_NOTIFICATION.ROOT, payload);
     return extractApiData(response);
   },
 };

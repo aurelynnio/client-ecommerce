@@ -5,8 +5,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useRef } from 'react';
 import instance from '@/api/api';
+import { ENDPOINT_RECOMMENDATION } from '@/constants/endpoint';
 import { extractApiData, getSafeErrorMessage } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { recommendationKeys } from '@/lib/queryKeys';
 import { Product } from '@/types/product';
@@ -15,48 +16,48 @@ import { HomepageRecommendations } from '@/types/recommendation';
 // ============ API Functions ============
 const recommendationApi = {
   getForYou: async (limit?: number): Promise<Product[]> => {
-    const response = await instance.get('/recommendations/for-you', {
+    const response = await instance.get(ENDPOINT_RECOMMENDATION.FOR_YOU, {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getRecentlyViewed: async (limit?: number): Promise<Product[]> => {
-    const response = await instance.get('/recommendations/recently-viewed', {
+    const response = await instance.get(ENDPOINT_RECOMMENDATION.RECENTLY_VIEWED, {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getSimilar: async (productId: string, limit?: number): Promise<Product[]> => {
-    const response = await instance.get(`/recommendations/similar/${productId}`, {
+    const response = await instance.get(ENDPOINT_RECOMMENDATION.similar(productId), {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getFrequentlyBoughtTogether: async (productId: string, limit?: number): Promise<Product[]> => {
-    const response = await instance.get(`/recommendations/fbt/${productId}`, {
+    const response = await instance.get(ENDPOINT_RECOMMENDATION.frequentlyBoughtTogether(productId), {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getCategoryRecommendations: async (categoryId: string, limit?: number): Promise<Product[]> => {
-    const response = await instance.get(`/recommendations/category/${categoryId}`, {
+    const response = await instance.get(ENDPOINT_RECOMMENDATION.byCategory(categoryId), {
       params: { limit },
     });
     return extractApiData(response);
   },
 
   getHomepage: async (): Promise<HomepageRecommendations> => {
-    const response = await instance.get('/recommendations/homepage');
+    const response = await instance.get(ENDPOINT_RECOMMENDATION.HOMEPAGE);
     return extractApiData(response);
   },
 
   // Track product view (mutation)
   trackView: async (productId: string): Promise<void> => {
-    await instance.post(`/recommendations/track-view/${productId}`);
+    await instance.post(ENDPOINT_RECOMMENDATION.trackView(productId));
   },
 };
 

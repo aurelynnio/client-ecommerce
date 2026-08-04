@@ -1,9 +1,10 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_CHAT } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
 import { STALE_TIME } from '@/constants/cache';
 import { chatKeys } from '@/lib/queryKeys';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import {
   ChatPagination,
   Conversation,
@@ -25,18 +26,18 @@ export interface ChatMessagesResponse {
 
 const chatApi = {
   startConversation: async (data: StartConversationPayload): Promise<Conversation> => {
-    const response = await instance.post('/chat/start', data);
+    const response = await instance.post(ENDPOINT_CHAT.START, data);
     return extractApiData(response);
   },
 
   getConversations: async (): Promise<Conversation[]> => {
-    const response = await instance.get('/chat/conversations');
+    const response = await instance.get(ENDPOINT_CHAT.CONVERSATIONS);
     return extractApiData(response);
   },
 
   getMessages: async (params: ChatMessagesParams): Promise<ChatMessagesResponse> => {
     const { conversationId, page = 1, limit = 50 } = params;
-    const response = await instance.get(`/chat/messages/${conversationId}`, {
+    const response = await instance.get(ENDPOINT_CHAT.messages(conversationId), {
       params: { page, limit },
     });
     const data = extractApiData<
@@ -68,18 +69,18 @@ const chatApi = {
         formData.append('files', file);
       });
 
-      const response = await instance.post('/chat/message/media', formData, {
+      const response = await instance.post(ENDPOINT_CHAT.MEDIA_MESSAGE, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return extractApiData(response);
     }
 
-    const response = await instance.post('/chat/message', payload);
+    const response = await instance.post(ENDPOINT_CHAT.MESSAGE, payload);
     return extractApiData(response);
   },
 
   markAsRead: async (conversationId: string): Promise<void> => {
-    await instance.put(`/chat/conversations/${conversationId}/read`);
+    await instance.put(ENDPOINT_CHAT.markAsRead(conversationId));
   },
 };
 

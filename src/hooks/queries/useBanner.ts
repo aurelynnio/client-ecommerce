@@ -4,8 +4,9 @@
  */
 import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_BANNER } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { bannerKeys } from '@/lib/queryKeys';
 import { BannerItem, CreateBannerPayload, UpdateBannerPayload } from '@/types/banner';
@@ -50,7 +51,7 @@ function invalidateBannerQueries(queryClient: QueryClient) {
 // ============ API Functions ============
 const bannerApi = {
   getActive: async (params?: BannerListParams): Promise<BannerItem[]> => {
-    const response = await instance.get('/banners', {
+    const response = await instance.get(ENDPOINT_BANNER.LIST, {
       params: { ...params, isActive: true },
     });
     const rawData = extractApiData<LegacyBannerResponse | BannerItem[]>(response);
@@ -66,7 +67,7 @@ const bannerApi = {
   },
 
   getAll: async (params?: BannerListParams): Promise<BannerListResponse> => {
-    const response = await instance.get('/banners/admin/all', { params });
+    const response = await instance.get(ENDPOINT_BANNER.ADMIN_LIST, { params });
     const rawData = extractApiData<LegacyBannerResponse>(response);
 
     // Normalize to standard format
@@ -97,7 +98,7 @@ const bannerApi = {
       formData.append('image', data.imageFile);
     }
 
-    const response = await instance.post('/banners', formData, {
+    const response = await instance.post(ENDPOINT_BANNER.LIST, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
@@ -113,14 +114,14 @@ const bannerApi = {
       }
     });
 
-    const response = await instance.put(`/banners/${id}`, formData, {
+    const response = await instance.put(ENDPOINT_BANNER.byId(id), formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
   },
 
   delete: async (id: string): Promise<void> => {
-    await instance.delete(`/banners/${id}`);
+    await instance.delete(ENDPOINT_BANNER.byId(id));
   },
 };
 

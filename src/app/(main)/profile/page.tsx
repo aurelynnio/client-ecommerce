@@ -1,6 +1,6 @@
 'use client';
 import { useProfile } from '@/hooks/queries/useProfile';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import { useState } from 'react';
 import { useLogout } from '@/hooks/queries';
 import { toast } from 'sonner';

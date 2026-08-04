@@ -4,8 +4,9 @@
  */
 import { useMutation, useQuery } from '@tanstack/react-query';
 import instance from '@/api/api';
+import { ENDPOINT_PAYMENT } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
-import { errorHandler } from '@/services/errorHandler';
+import { errorHandler } from '@/lib/error-handler';
 import { paymentKeys } from '@/lib/queryKeys';
 
 // ============ Types ============
@@ -27,13 +28,13 @@ export interface PaymentDetails {
 // ============ API Functions ============
 const paymentApi = {
   createUrl: async (orderId: string): Promise<PaymentUrlResponse> => {
-    const response = await instance.post('/payment', { orderId });
+    const response = await instance.post(ENDPOINT_PAYMENT.ROOT, { orderId });
 
     return extractApiData(response);
   },
 
   getByOrder: async (orderId: string): Promise<PaymentDetails> => {
-    const response = await instance.get(`/payment/order/${orderId}`);
+    const response = await instance.get(ENDPOINT_PAYMENT.byOrderId(orderId));
     return extractApiData(response);
   },
 };

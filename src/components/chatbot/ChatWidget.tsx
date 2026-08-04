@@ -6,11 +6,12 @@ import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 import ReactMarkdown from 'react-markdown';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setChatOpen } from '@/features/chat/chatSlice';
 import { ChatbotMessage } from '@/types/chat';
 import Link from 'next/link';
 import api from '@/api/api';
+import { ENDPOINT_CHATBOT } from '@/constants/endpoint';
 
 const CHATBOT_API_BASE_URL = api.defaults.baseURL || '/api';
 
@@ -125,7 +126,7 @@ export default function ChatWidget() {
 
   const loadHistory = async (sid: string) => {
     try {
-      const res = await fetch(`${CHATBOT_API_BASE_URL}/chatbot/history/${sid}`, {
+      const res = await fetch(`${CHATBOT_API_BASE_URL}${ENDPOINT_CHATBOT.history(sid)}`, {
         credentials: 'include',
       });
       const data = await res.json();
@@ -158,7 +159,7 @@ export default function ChatWidget() {
       setStreamingContent('');
 
       try {
-        const res = await fetch(`${CHATBOT_API_BASE_URL}/chatbot/stream`, {
+        const res = await fetch(`${CHATBOT_API_BASE_URL}${ENDPOINT_CHATBOT.STREAM}`, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },

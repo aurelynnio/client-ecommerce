@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import { useQueryClient } from '@tanstack/react-query';
 import { initSocketEvents } from '@/socket/index';
 import { SocketContextType } from '@/types/socket';

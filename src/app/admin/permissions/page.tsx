@@ -23,7 +23,7 @@ import {
   getRolePermissions,
   getAuditLogs,
   type AuditLogEntry,
-} from '@/api/permission';
+} from '@/api';
 import {
   AdminPageHeader,
   adminFilterBarClass,

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
@@ -707,8 +707,8 @@ export default function CheckoutPage() {
                         <div
                           className={
                             reached
-                              ? 'h-full rounded-full bg-success transition-all'
-                              : 'h-full rounded-full bg-warning transition-all'
+                              ? 'h-full rounded-full bg-success transition-[width]'
+                              : 'h-full rounded-full bg-warning transition-[width]'
                           }
                           style={{ width: `${percent}%` }}
                         />

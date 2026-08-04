@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import { BRAND_CONFIG } from '@/constants';
 import { Truck, Headphones, Smartphone, Store, User } from 'lucide-react';
 

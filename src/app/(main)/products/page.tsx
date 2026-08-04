@@ -388,7 +388,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md transition-all md:top-[108px]">
+      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md transition-colors md:top-[108px]">
         <div className="mx-auto max-w-[1440px] px-4 py-3 lg:px-6">
           <div className="w-full py-1">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">

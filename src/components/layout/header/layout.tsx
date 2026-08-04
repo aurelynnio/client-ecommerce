@@ -27,7 +27,7 @@ import NotificationModel from '@/components/notifications/NotificationModel';
 import TopUtilityBar from './TopUtilityBar';
 import { BRAND_CONFIG, pathArray } from '@/constants';
 import { toggleChat } from '@/features/chat/chatSlice';
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useCart } from '@/hooks/queries/useCart';
 import { useCategoryTree } from '@/hooks/queries/useCategories';
 import { useUnreadNotificationCount } from '@/hooks/queries/useNotifications';

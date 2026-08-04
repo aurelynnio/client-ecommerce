@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'sonner';
-import { useAppSelector } from '@/hooks/hooks';
+import { useAppSelector } from '@/hooks/redux';
 import { useWishlist, useRemoveFromWishlist } from '@/hooks/queries/useWishlist';
 import { useAddToCart } from '@/hooks/queries/useCart';
 import { Product } from '@/types/product';

@@ -2,11 +2,10 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
-import { Ticket, ChevronLeft, ChevronRight, ArrowRight, Copy, Check } from 'lucide-react';
+import { Ticket, ChevronLeft, ChevronRight, ArrowRight, Copy } from 'lucide-react';
 import { usePlatformVouchers } from '@/hooks/queries';
 import { toast } from 'sonner';
 import { Voucher } from '@/types/voucher';
-import { cn } from '@/utils/cn';
 
 function formatVoucherValue(voucher: Voucher) {
   if (voucher.type === 'percentage') return `${voucher.value}%`;

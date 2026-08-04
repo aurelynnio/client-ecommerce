@@ -11,11 +11,6 @@ import { useRouter } from 'next/navigation';
 export default function Banner() {
   const router = useRouter();
   const { data: bannersData = [], isLoading } = useActiveBanners();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const banners =
     bannersData && bannersData.length > 0
@@ -95,7 +90,7 @@ export default function Banner() {
     }),
   };
 
-  if (!mounted || isLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-full w-full items-center justify-center rounded-lg bg-muted animate-pulse">
         <span className="text-muted-foreground/60 text-sm font-medium">Đang tải...</span>

@@ -6,6 +6,7 @@ import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 import ReactMarkdown from 'react-markdown';
+import rehypeSanitize from 'rehype-sanitize';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setChatOpen } from '@/features/chat/chatSlice';
 import { ChatbotMessage } from '@/types/chat';
@@ -158,72 +159,111 @@ export default function ChatWidget() {
       setIsLoading(true);
       setStreamingContent('');
 
+      // Hard timeout cho stream: nếu quá 45s không có token mới → huỷ và báo lỗi
+      const STREAM_TIMEOUT_MS = 45_000;
+      let streamTimer: ReturnType<typeof setTimeout> | null = null;
+      let timedOut = false;
+      let controller: AbortController | null = null;
+
+      const armTimer = () => {
+        if (streamTimer) clearTimeout(streamTimer);
+        streamTimer = setTimeout(() => {
+          timedOut = true;
+          controller?.abort();
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: '⚠️ Phản hồi quá lâu, vui lòng thử lại.',
+              timestamp: new Date(),
+            },
+          ]);
+          setStreamingContent('');
+          setIsLoading(false);
+        }, STREAM_TIMEOUT_MS);
+      };
+      const disarmTimer = () => {
+        if (streamTimer) {
+          clearTimeout(streamTimer);
+          streamTimer = null;
+        }
+      };
+
       try {
+        controller = new AbortController();
         const res = await fetch(`${CHATBOT_API_BASE_URL}${ENDPOINT_CHATBOT.STREAM}`, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text.trim(), sessionId }),
+          signal: controller.signal,
         });
 
         if (!res.ok) throw new Error('Stream request failed');
+        if (!res.body) throw new Error('No response body');
 
-        const reader = res.body?.getReader();
+        const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let fullContent = '';
+        armTimer();
 
-        if (reader) {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+        while (true) {
+          if (timedOut) break;
+          const { done, value } = await reader.read();
+          if (done) break;
 
-            const chunk = decoder.decode(value);
-            const lines = chunk.split('\n');
+          armTimer(); // reset mỗi khi có data
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
 
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                try {
-                  const data = JSON.parse(line.slice(6));
-                  if (data.type === 'session' && data.sessionId) {
-                    if (data.sessionId !== sessionId) {
-                      setSessionId(data.sessionId);
-                      localStorage.setItem('chatbot_session', data.sessionId);
-                    }
-                  } else if (data.type === 'token') {
-                    fullContent += data.content;
-                    setStreamingContent(fullContent);
-                  } else if (data.type === 'done') {
-                    setMessages((prev) => [
-                      ...prev,
-                      {
-                        role: 'assistant',
-                        content: fullContent,
-                        timestamp: new Date(),
-                      },
-                    ]);
-                    setStreamingContent('');
-                  } else if (data.type === 'error') {
-                    throw new Error('Chatbot stream error');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.type === 'session' && data.sessionId) {
+                  if (data.sessionId !== sessionId) {
+                    setSessionId(data.sessionId);
+                    localStorage.setItem('chatbot_session', data.sessionId);
                   }
-                } catch (e) {
-                  console.error('Invalid JSON:', e);
+                } else if (data.type === 'token') {
+                  fullContent += data.content;
+                  setStreamingContent(fullContent);
+                } else if (data.type === 'done') {
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      role: 'assistant',
+                      content: fullContent,
+                      timestamp: new Date(),
+                    },
+                  ]);
+                  setStreamingContent('');
+                } else if (data.type === 'error') {
+                  throw new Error('Chatbot stream error');
                 }
+              } catch (e) {
+                console.error('Invalid JSON:', e);
               }
             }
           }
         }
       } catch (error) {
-        console.error('Chat error:', error);
-        setStreamingContent('');
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: 'Xin lỗi, không thể kết nối. Vui lòng thử lại! 🙏',
-            timestamp: new Date(),
-          },
-        ]);
+        if (timedOut) {
+          // đã xử lý trong timer
+        } else {
+          console.error('Chat error:', error);
+          setStreamingContent('');
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: 'Xin lỗi, không thể kết nối. Vui lòng thử lại!',
+              timestamp: new Date(),
+            },
+          ]);
+        }
       } finally {
+        disarmTimer();
         setIsLoading(false);
       }
     },
@@ -373,6 +413,7 @@ export default function ChatWidget() {
                     {msg.role === 'assistant' ? (
                       <div className="prose prose-sm max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>li]:mb-0.5 text-foreground prose-a:text-primary hover:prose-a:underline font-medium">
                         <ReactMarkdown
+                          rehypePlugins={[rehypeSanitize]}
                           components={{
                             a: ({ href, children }) => {
                               if (!href) return <span>{children}</span>;

@@ -53,9 +53,11 @@ export const ENDPOINT_CHATBOT = {
   MESSAGE: '/chatbot/message',
   ADMIN_SESSIONS: '/chatbot/admin/sessions',
   STREAM: '/chatbot/stream',
+  STATUS: '/chatbot/status',
   history: (sessionId: string) => `/chatbot/history/${sessionId}`,
   clearSession: (sessionId: string) => `/chatbot/session/${sessionId}`,
   SUGGESTIONS: '/chatbot/suggestions',
+  FEEDBACK: '/chatbot/feedback',
 } as const;
 
 export const ENDPOINT_FLASH_SALE = {

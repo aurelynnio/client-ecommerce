@@ -12,6 +12,9 @@ import {
   ThumbsUp,
   ThumbsDown,
   Check,
+  Tag,
+  Flame,
+  Shirt,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
@@ -72,9 +75,9 @@ export default function ChatWidget() {
   const quickActions = useMemo(
     () => [
       { icon: <Search className="h-4 w-4" />, label: t.quickFind, query: t.queryFind },
-      { icon: '🏷️', label: t.quickSale, query: t.querySale },
-      { icon: '🔥', label: t.quickBest, query: t.queryBest },
-      { icon: '👕', label: t.quickFashion, query: t.queryFashion },
+      { icon: <Tag className="h-4 w-4" />, label: t.quickSale, query: t.querySale },
+      { icon: <Flame className="h-4 w-4" />, label: t.quickBest, query: t.queryBest },
+      { icon: <Shirt className="h-4 w-4" />, label: t.quickFashion, query: t.queryFashion },
     ],
     [t],
   );
@@ -517,7 +520,7 @@ export default function ChatWidget() {
             <div className="p-4 space-y-4">
               <div className="bg-card border border-border rounded-xl p-4 shadow-xs">
                 <p className="text-sm text-foreground mb-1">
-                  <span className="font-bold text-primary">Xin chào! 👋</span>
+                  <span className="font-bold text-primary">Xin chào!</span>
                 </p>
                 <p className="text-sm text-muted-foreground leading-relaxed font-medium">
                   {t.welcome}

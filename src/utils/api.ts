@@ -57,6 +57,12 @@ export const ERROR_MESSAGES: Record<string, string> = {
 const BACKEND_MESSAGE_TRANSLATIONS: Record<string, string> = {
   'email already in use': 'Email đã được sử dụng',
   'username already in use': 'Tên người dùng đã được sử dụng',
+  'email already exists': 'Email đã tồn tại',
+  'username already exists': 'Tên người dùng đã tồn tại',
+  'slug already exists': 'Đường dẫn (slug) đã tồn tại',
+  'code already exists': 'Mã này đã tồn tại',
+  'name already exists': 'Tên này đã tồn tại',
+  'title already exists': 'Tiêu đề này đã tồn tại',
   'invalid email or password': 'Email hoặc mật khẩu không đúng',
   'please verify your email before logging in': 'Vui lòng xác thực email trước khi đăng nhập',
   'user not found': 'Không tìm thấy tài khoản',
@@ -122,7 +128,19 @@ function getMessageByErrorCode(code?: string): string | undefined {
 function getMessageByBackendMessage(message?: string): string | undefined {
   if (!message) return undefined;
 
-  return BACKEND_MESSAGE_TRANSLATIONS[message.trim().toLowerCase()];
+  const key = message.trim().toLowerCase();
+  const exact = BACKEND_MESSAGE_TRANSLATIONS[key];
+  if (exact) return exact;
+
+  // Backend trả lỗi duplicate-key theo dạng "{field} already exists"
+  // (vd: "voucherCode already exists"). Dịch generic thay vì hiện thông báo chung chung 409.
+  const match = key.match(/^(.+?)\s+already exists$/);
+  if (match) {
+    const field = match[1].trim();
+    return `${field} đã tồn tại`;
+  }
+
+  return undefined;
 }
 
 /**

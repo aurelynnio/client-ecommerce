@@ -37,6 +37,7 @@ const MAX_RETRIES = 1;
 
 interface Message extends Omit<ChatbotMessage, 'timestamp'> {
   id: string;
+  messageId?: string | null;
   timestamp: Date;
 }
 
@@ -290,6 +291,7 @@ export default function ChatWidget() {
                       id: uuidLikeId(),
                       role: 'assistant',
                       content: fullContent,
+                      messageId: data.messageId ?? null,
                       timestamp: new Date(),
                     },
                   ]);
@@ -374,7 +376,7 @@ export default function ChatWidget() {
   );
 
   const sendFeedback = useCallback(
-    async (msgId: string, rating: 'up' | 'down') => {
+    async (msgId: string, rating: 'up' | 'down', serverMessageId?: string | null) => {
       if (!sessionId) return;
       const prev = feedback[msgId];
       // Toggle: nếu click lại cùng loại thì bỏ
@@ -390,7 +392,9 @@ export default function ChatWidget() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             sessionId,
-            messageId: msgId,
+            // Dùng messageId thật từ server (nếu có) để feedback khớp đúng
+            // tin nhắn đã lưu; chỉ fallback sang id local khi chưa có.
+            messageId: serverMessageId || msgId,
             rating: next,
           }),
         });
@@ -626,7 +630,7 @@ export default function ChatWidget() {
                               )}
                             </button>
                             <button
-                              onClick={() => sendFeedback(msg.id, 'up')}
+                              onClick={() => sendFeedback(msg.id, 'up', msg.messageId)}
                               className={cn(
                                 'inline-flex h-6 w-6 items-center justify-center rounded hover:bg-muted transition-colors',
                                 feedback[msg.id] === 'up'
@@ -644,7 +648,7 @@ export default function ChatWidget() {
                               />
                             </button>
                             <button
-                              onClick={() => sendFeedback(msg.id, 'down')}
+                              onClick={() => sendFeedback(msg.id, 'down', msg.messageId)}
                               className={cn(
                                 'inline-flex h-6 w-6 items-center justify-center rounded hover:bg-muted transition-colors',
                                 feedback[msg.id] === 'down'

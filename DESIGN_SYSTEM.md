@@ -1,6 +1,6 @@
 # Aura Commerce Design System
 
-> Phiên bản 2.0 — Coral Red palette · Inter font · Border-over-shadow
+> Phiên bản 2.0 — JD Red palette · Inter font · Border-over-shadow
 
 ## 1. Hướng thiết kế
 
@@ -15,17 +15,17 @@ và đáng tin cậy. Thiết kế ưu tiên:
 
 ## 2. Color Palette
 
-### 2.1 Primary — Coral Red `#e2483d`
+### 2.1 Primary — JD Red `#e1251b`
 
 Màu chủ đạo của toàn bộ hệ thống. Dùng cho: CTA buttons, links, active states,
 brand highlights, price discount, focus ring.
 
 | Token | Giá trị | Mô tả |
 | :---- | :------ | :---- |
-| `--primary` | `#e2483d` | Màu thương hiệu chính |
-| `--primary-hover` | `#d13d33` | Hover/active — đậm hơn |
-| `--primary-light` | `#fef3f2` | Nền nhạt nhất — subtle tint |
-| `--primary-bg` | `#fde8e6` | Badge, label background |
+| `--primary` | `#e1251b` | Màu thương hiệu chính |
+| `--primary-hover` | `#f53415` | Hover/active — sáng hơn |
+| `--primary-light` | `#fef2f2` | Nền nhạt nhất — subtle tint |
+| `--primary-bg` | `#fde8e8` | Badge, label background |
 | `--primary-foreground` | `#ffffff` | Text trên primary |
 
 ```css
@@ -42,7 +42,7 @@ color: var(--primary-foreground);
 
 ### 2.2 Accent — Warm Amber
 
-Màu phụ trợ, ấm áp, bổ sung cho coral red. Dùng cho: secondary highlights,
+Màu phụ trợ, ấm áp, bổ sung cho JD red. Dùng cho: secondary highlights,
 sidebar active, hover backgrounds.
 
 | Token | Giá trị |
@@ -60,7 +60,7 @@ sidebar active, hover backgrounds.
 | `--destructive` | `#dc2626` | Lỗi, xóa — khác biệt với primary |
 
 > **Lưu ý:** `--destructive` dùng `#dc2626` (đỏ thuần) thay vì `#ef4444` để
-> phân biệt rõ với coral primary `#e2483d`.
+> phân biệt rõ với primary `#e1251b`.
 
 ### 2.4 Neutral / Surface
 
@@ -79,10 +79,10 @@ sidebar active, hover backgrounds.
 | Token | Giá trị | Mô tả |
 | :---- | :------ | :---- |
 | `--star` | `#f59e0b` | Sao đánh giá |
-| `--discount` | `#e2483d` | Giá khuyến mãi |
+| `--discount` | `#e1251b` | Giá khuyến mãi |
 | `--price-strikethrough` | `#9ca3af` | Giá gốc gạch ngang |
-| `--link` | `#e2483d` | Link text |
-| `--link-hover` | `#d13d33` | Link hover |
+| `--link` | `#e1251b` | Link text |
+| `--link-hover` | `#f53415` | Link hover |
 
 ```tsx
 // Ví dụ: hiển thị giá sản phẩm
@@ -97,7 +97,7 @@ sidebar active, hover backgrounds.
 
 | Token | Giá trị |
 | :---- | :------ |
-| `--chart-1` | `#e2483d` (coral) |
+| `--chart-1` | `#e1251b` (JD red) |
 | `--chart-2` | `#f59e0b` (amber) |
 | `--chart-3` | `#10b981` (green) |
 | `--chart-4` | `#3b82f6` (blue) |
@@ -182,8 +182,8 @@ dropdown, modal, hover lift).
 | `--shadow-popover` | Popover/modal floating |
 
 ```css
-/* shadow-hover có coral tint để tạo brand feel */
---shadow-hover: 0 4px 12px -4px rgba(226, 72, 61, 0.12);
+/* shadow-hover có JD red tint để tạo brand feel */
+--shadow-hover: 0 4px 12px -4px rgba(225, 37, 27, 0.12);
 ```
 
 ## 7. Z-Index Scale

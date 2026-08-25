@@ -1,17 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/hooks/redux';
 import { BRAND_CONFIG } from '@/constants';
 import { Truck, Headphones, Smartphone, Store, User } from 'lucide-react';
 
-/**
- * Tmall/JD-style top utility bar — dark strip above the main header.
- * Hosts account shortcuts, seller channel, support and app download links.
- */
 export default function TopUtilityBar() {
-  const router = useRouter();
   const { isAuthenticated, data } = useAppSelector((state) => state.auth);
 
   const linkClass =
@@ -63,14 +57,10 @@ export default function TopUtilityBar() {
             CSKH
           </Link>
           {divider}
-          <button
-            type="button"
-            onClick={() => router.push('/sitemap')}
-            className={linkClass}
-          >
+          <Link href="/download" className={linkClass}>
             <Smartphone className="h-3 w-3" aria-hidden />
             Tải app
-          </button>
+          </Link>
         </nav>
       </div>
     </div>

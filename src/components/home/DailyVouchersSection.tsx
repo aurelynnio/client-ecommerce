@@ -61,9 +61,6 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
   );
 }
 
-/**
- * Tmall-style daily vouchers section — horizontal rail of ticket-style voucher cards.
- */
 export default function DailyVouchersSection() {
   const { data: vouchers = [], isLoading } = usePlatformVouchers();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -124,7 +121,7 @@ export default function DailyVouchersSection() {
               ? Array.from({ length: 4 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-[80px] w-[200px] shrink-0 animate-pulse rounded-lg border border-border bg-muted"
+                    className="h-20 w-[200px] shrink-0 animate-pulse rounded-lg border border-border bg-muted"
                   />
                 ))
               : displayVouchers.length > 0

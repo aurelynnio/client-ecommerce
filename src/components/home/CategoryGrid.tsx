@@ -46,10 +46,6 @@ interface CategoryGridProps {
   selectedSlug?: string | null;
 }
 
-/**
- * Tmall-style rich category grid — icon cards with label, 10 items.
- * Replaces the old Category component with a denser, more visual layout.
- */
 export default function CategoryGrid({ onSelectCategory, selectedSlug }: CategoryGridProps) {
   const { data: categories } = useCategoryTree();
   if (!categories?.length) return null;

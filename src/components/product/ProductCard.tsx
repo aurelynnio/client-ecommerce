@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/types/product';
 import WishlistButton from '@/components/common/WishlistButton';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { Store, Star } from 'lucide-react';
 import { formatCurrency } from '@/utils/format';
 
@@ -51,40 +53,39 @@ const getDiscountPercent = (original: number, sale: number): number => {
   return Math.round(((original - sale) / original) * 100);
 };
 
-// Render priority badge (Tmall/JD style: no shadow, border-over)
+// Render priority badge using shadcn Badge
 const renderBadge = (product: Product, discountPercent: number) => {
   if (product.stock === 0) {
     return (
-      <span className="rounded-sm bg-destructive px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-destructive-foreground">
+      <Badge variant="destructive" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase">
         Hết hàng
-      </span>
+      </Badge>
     );
   }
   if (product.flashSale) {
     return (
-      <span className="rounded-sm bg-primary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-foreground">
+      <Badge variant="default" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase">
         Giá sốc
-      </span>
+      </Badge>
     );
   }
   if (discountPercent > 0) {
     return (
-      <span className="rounded-sm bg-warning px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warning-foreground">
+      <Badge variant="warning" className="rounded-sm px-1.5 py-0.5 text-[10px]">
         -{discountPercent}%
-      </span>
+      </Badge>
     );
   }
   if (product.soldCount === 0) {
     return (
-      <span className="rounded-sm bg-success px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success-foreground">
+      <Badge variant="success" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase">
         Mới
-      </span>
+      </Badge>
     );
   }
   return null;
 };
 
-// ProductCard Component - Tmall/JD style
 export const ProductCard = ({ product, index = 0 }: { product: Product; index?: number }) => {
   const [imageError, setImageError] = useState(false);
   const displayPrice = getDisplayPrice(product);
@@ -109,7 +110,7 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
       className="group block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       aria-label={product.name}
     >
-      <div className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors duration-200 group-hover:border-primary/50">
+      <Card className="flex h-full w-full flex-col gap-0 py-0 overflow-hidden border-border transition-colors duration-200 group-hover:border-primary/50">
         {/* Image Container - Tmall/JD square aspect */}
         <div className="relative aspect-square w-full overflow-hidden bg-muted/10">
           {productImage && !imageError ? (
@@ -146,7 +147,7 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
         {/* Product Info */}
         <div className="flex flex-1 flex-col gap-1.5 p-2.5">
           {/* Product Name */}
-          <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-medium leading-snug text-foreground transition-colors duration-200 group-hover:text-primary">
+          <h3 className="line-clamp-2 min-h-10 text-sm font-medium leading-snug text-foreground transition-colors duration-200 group-hover:text-primary">
             {product.name || 'Tên sản phẩm'}
           </h3>
 
@@ -194,7 +195,7 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
             {shopName}
           </p>
         </div>
-      </div>
+      </Card>
     </Link>
   );
 };

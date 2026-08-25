@@ -257,7 +257,7 @@ export function ViewCategoryModal({ isOpen, onClose, onEdit, category }: ViewCat
       {/* Image Zoom Modal */}
       {selectedImage && (
         <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-          <DialogContent className="max-w-screen-lg w-auto bg-transparent border-0 shadow-none p-0 overflow-visible flex items-center justify-center">
+          <DialogContent className="max-w-5xl w-auto bg-transparent border-0 shadow-none p-0 overflow-visible flex items-center justify-center">
             <div className="relative group">
               <Button
                 size="icon"

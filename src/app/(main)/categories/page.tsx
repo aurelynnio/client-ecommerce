@@ -7,8 +7,15 @@ import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { useCategoryTree } from '@/hooks/queries/useCategories';
 import { getSafeErrorMessage } from '@/api';
 import { toast } from 'sonner';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
-/** Directory view: hierarchy first, marketing second. */
 export default function CategoriesPage() {
   const { data: categories, isLoading, error } = useCategoryTree();
   useEffect(() => {
@@ -17,17 +24,22 @@ export default function CategoriesPage() {
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Danh mục</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Danh mục</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <header className="max-w-2xl border-b border-border pb-3">
           <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">Danh mục sản phẩm</h1>
           <p className="mt-1 text-sm text-muted-foreground">

@@ -35,10 +35,6 @@ const miniPromos = [
   },
 ];
 
-/**
- * Tmall-style banner section: large carousel + 2x2 mini promo grid.
- * Replaces the editorial HeroSection with a marketplace-style hero.
- */
 export default function BannerCarousel() {
   return (
     <section className="bg-card">

@@ -2,12 +2,20 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Gift, Home, Search, Ticket } from 'lucide-react';
+import { Gift, Home, Search, Ticket } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { VoucherCard } from '@/components/vouchers/VoucherCard';
 import { usePlatformVouchers } from '@/hooks/queries';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 export default function VouchersPage() {
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
@@ -25,25 +33,29 @@ export default function VouchersPage() {
       ),
     [filterType, searchQuery, vouchers],
   );
-  const collect = (id: string) => {
-    setCollectedIds((previous) => new Set(previous).add(id));
+  const collect = (voucherId: string) => {
+    setCollectedIds((prev) => new Set(prev).add(voucherId));
     toast.success('Đã lưu voucher vào ví của bạn.');
   };
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Voucher</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Voucher</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         <header className="border-b border-border pb-3">
           <div className="flex items-center gap-3">

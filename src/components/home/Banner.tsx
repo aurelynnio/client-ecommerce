@@ -136,6 +136,7 @@ export default function Banner() {
               src={banner.imageUrl}
               alt={banner.title}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 65vw"
               className="object-cover w-full h-full select-none"
               priority
             />

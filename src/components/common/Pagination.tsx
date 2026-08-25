@@ -1,11 +1,34 @@
-import { Button } from '@/components/ui/button';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { PaginationData } from '@/types/common';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationControlsProps {
   pagination: PaginationData | null;
   onPageChange: (page: number) => void;
   itemName?: string;
+}
+
+function getPageNumbers(currentPage: number, totalPages: number): (number | 'ellipsis')[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  if (currentPage <= 4) {
+    return [1, 2, 3, 4, 5, 'ellipsis', totalPages];
+  }
+
+  if (currentPage >= totalPages - 3) {
+    return [1, 'ellipsis', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  return [1, 'ellipsis', currentPage - 1, currentPage, currentPage + 1, 'ellipsis', totalPages];
 }
 
 export function PaginationControls({
@@ -26,43 +49,67 @@ export function PaginationControls({
     prevPage,
   } = pagination;
 
-  const startItem = (currentPage - 1) * pageSize + 1;
+  if (totalPages <= 1 && totalItems === 0) return null;
+
+  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const endItem = Math.min(currentPage * pageSize, totalItems);
+  const pageNumbers = getPageNumbers(currentPage, totalPages);
 
   return (
-    <div className="flex items-center justify-between px-2 w-full">
-      <div className="flex-1 text-sm text-muted-foreground">
+    <div className="flex flex-col gap-4 px-2 py-3 sm:flex-row sm:items-center sm:justify-between w-full">
+      <div className="text-sm text-muted-foreground">
         Hiển thị <span className="font-medium text-foreground">{startItem}</span> đến{' '}
         <span className="font-medium text-foreground">{endItem}</span> trong tổng số{' '}
         <span className="font-medium text-foreground">{totalItems}</span> {itemName}
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => onPageChange(prevPage || 1)}
-            disabled={!hasPrevPage}
-            className="h-9 w-9 rounded-lg disabled:opacity-50"
-            aria-label="Trang trước"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="min-w-[3.5rem] rounded-lg border border-border bg-muted py-2 text-center text-sm font-semibold text-foreground">
-            {currentPage} / {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => onPageChange(nextPage || 1)}
-            disabled={!hasNextPage}
-            className="h-9 w-9 rounded-lg disabled:opacity-50"
-            aria-label="Trang sau"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+
+      <Pagination className="mx-0 w-auto justify-end">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (hasPrevPage && prevPage) onPageChange(prevPage);
+              }}
+              aria-disabled={!hasPrevPage}
+              className={!hasPrevPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+            />
+          </PaginationItem>
+
+          {pageNumbers.map((page, index) => (
+            <PaginationItem key={`${page}-${index}`}>
+              {page === 'ellipsis' ? (
+                <PaginationEllipsis />
+              ) : (
+                <PaginationLink
+                  href="#"
+                  isActive={page === currentPage}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page !== currentPage) onPageChange(page);
+                  }}
+                  className="cursor-pointer"
+                >
+                  {page}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (hasNextPage && nextPage) onPageChange(nextPage);
+              }}
+              aria-disabled={!hasNextPage}
+              className={!hasNextPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

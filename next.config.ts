@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   images: {
-    dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     remotePatterns: [
       {
@@ -16,6 +15,27 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+      },
+      // Real product dataset image hosts (Amazon/Lazada/Shopee/Shein/Walmart)
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images-na.ssl-images-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.ltwebstatic.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'us.shein.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i5.walmartimages.com',
       },
     ],
   },

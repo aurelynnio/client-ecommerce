@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import NotificationModel from '@/components/notifications/NotificationModel';
 import TopUtilityBar from './TopUtilityBar';
@@ -42,9 +43,12 @@ import { AnimatedDropdown } from '@/components/motion/primitives';
 function Count({ value }: { value: number }) {
   if (!value) return null;
   return (
-    <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+    <Badge
+      variant="default"
+      className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold"
+    >
       {value > 99 ? '99+' : value}
-    </span>
+    </Badge>
   );
 }
 
@@ -352,7 +356,8 @@ export default function HeaderLayout() {
               alt={BRAND_CONFIG.name}
               width={100}
               height={50}
-              className="h-10 w-[100px] object-contain"
+              className="h-10 w-auto object-contain"
+              style={{ width: 'auto', height: 'auto' }}
               priority
             />
           </Link>

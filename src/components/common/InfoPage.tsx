@@ -1,5 +1,13 @@
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 interface InfoLink {
   href: string;
@@ -17,23 +25,26 @@ interface InfoPageProps {
   updatedAt?: string;
 }
 
-/** Shared readable document layout for policy, help and service content. */
 export default function InfoPage({ title, description, sections, updatedAt }: InfoPageProps) {
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container grid gap-6 lg:grid-cols-[12rem_minmax(0,46rem)]">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground lg:col-span-2 lg:mb-0"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">{title}</span>
-        </nav>
+        <Breadcrumb className="mb-3 lg:col-span-2 lg:mb-0">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <aside className="lg:pt-1">
           <nav
             aria-label="Điều hướng thông tin"

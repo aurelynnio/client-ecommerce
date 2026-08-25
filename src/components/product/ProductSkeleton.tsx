@@ -1,8 +1,9 @@
+import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function ProductCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card">
+    <Card className="flex flex-col gap-0 py-0 overflow-hidden border-border bg-card">
       {/* Image skeleton - square to match ProductCard */}
       <Skeleton className="aspect-square w-full rounded-none" />
       {/* Content skeleton */}
@@ -18,6 +19,6 @@ export function ProductCardSkeleton() {
           <Skeleton className="h-3 w-1/3" />
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

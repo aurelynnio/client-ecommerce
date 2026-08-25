@@ -9,6 +9,7 @@ import {
 } from '@/hooks/queries/useNotifications';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 import NotificationItem from './NotificationItem';
 
 export default function NotificationModel({
@@ -46,9 +47,9 @@ export default function NotificationModel({
           <div className="flex items-center gap-2">
             <DialogTitle className="text-sm font-medium">Thông báo</DialogTitle>
             {unreadCount > 0 && (
-              <span className="bg-primary text-primary-foreground text-[10px] font-medium px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+              <Badge variant="default" className="min-w-[18px] justify-center px-1.5 py-0 text-[10px]">
                 {unreadCount}
-              </span>
+              </Badge>
             )}
           </div>
           <DialogClose asChild>

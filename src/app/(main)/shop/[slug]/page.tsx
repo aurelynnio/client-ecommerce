@@ -14,7 +14,6 @@ import {
   Grid3X3,
   List,
   Home,
-  ChevronRight,
 } from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
@@ -23,6 +22,14 @@ import ProductCard from '@/components/product/ProductCard';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useShopBySlug, useShopCategories } from '@/hooks/queries/useShop';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { useInfiniteShopProducts } from '@/hooks/queries/useProducts';
 import { useStartConversation } from '@/hooks/queries';
 import { setChatOpen } from '@/features/chat/chatSlice';
@@ -131,17 +138,22 @@ export default function ShopPage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-              <Home className="h-3 w-3" />
-              <span>Trang chủ</span>
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="font-medium text-foreground">Shop</span>
-          </nav>
+          <Breadcrumb className="mb-3">
+            <BreadcrumbList className="text-xs">
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="flex items-center gap-1">
+                    <Home className="h-3 w-3" />
+                    <span>Trang chủ</span>
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Shop</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           <SpinnerLoading className="py-20" />
         </div>
       </div>
@@ -152,17 +164,22 @@ export default function ShopPage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-              <Home className="h-3 w-3" />
-              <span>Trang chủ</span>
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="font-medium text-foreground">Shop</span>
-          </nav>
+          <Breadcrumb className="mb-3">
+            <BreadcrumbList className="text-xs">
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="flex items-center gap-1">
+                    <Home className="h-3 w-3" />
+                    <span>Trang chủ</span>
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Shop</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
               <Store className="h-8 w-8 text-muted-foreground/60" />
@@ -184,18 +201,22 @@ export default function ShopPage() {
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container space-y-4">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">{currentShop.name}</span>
-        </nav>
+        <Breadcrumb>
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{currentShop.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         <section className="overflow-hidden rounded-lg border border-border bg-card">
           <div className="relative h-32 md:h-48">

@@ -16,10 +16,6 @@ interface ProductRailProps {
   accent?: 'primary' | 'warning';
 }
 
-/**
- * Tmall/JD-style horizontal product rail with scroll buttons.
- * Used for Best Sellers, New Arrivals, Recently Viewed, etc.
- */
 export function ProductRail({
   title,
   subtitle,
@@ -98,7 +94,7 @@ export function ProductRail({
                 </div>
               ))
             : products.map((product, index) => (
-                <div key={product._id} className="w-[160px] shrink-0 sm:w-[180px]">
+                <div key={`${product._id}-${index}`} className="w-[160px] shrink-0 sm:w-[180px]">
                   <ProductCard product={product} index={index} />
                 </div>
               ))}

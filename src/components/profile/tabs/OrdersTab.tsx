@@ -138,7 +138,7 @@ export default function OrdersTab() {
             <p className="text-muted-foreground mb-8 max-w-sm text-sm">
               Có vẻ như bạn chưa đặt đơn hàng nào. Hãy bắt đầu mua sắm để lấp đầy trang này!
             </p>
-            <Button onClick={() => router.push('/products')} size="lg" className="rounded-sm px-8">
+            <Button onClick={() => router.push('/products')} size="lg" className="rounded-lg px-8">
               Bắt đầu mua sắm
             </Button>
           </div>
@@ -150,7 +150,7 @@ export default function OrdersTab() {
                 variant="outline"
                 size="sm"
                 onClick={() => router.push('/products')}
-                className="rounded-sm"
+                className="rounded-lg"
               >
                 Tiếp tục mua sắm
               </Button>

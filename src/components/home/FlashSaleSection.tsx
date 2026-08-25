@@ -7,10 +7,6 @@ import { Zap, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useFlashSaleWithCountdown } from '@/hooks/queries/useFlashSale';
 import { formatCurrency } from '@/utils/format';
 
-/**
- * Tmall-style Flash Sale section — large countdown timer + horizontal product rail.
- * Replaces the old SubsidySection with a denser, more urgent layout.
- */
 export default function FlashSaleSection() {
   const { products, formattedCountdown, isLoading } = useFlashSaleWithCountdown();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -92,7 +88,7 @@ export default function FlashSaleSection() {
                   </div>
                 ))
               : displayProducts.length > 0
-                ? displayProducts.map((product) => {
+                ? displayProducts.map((product, index) => {
                     const image =
                       product.variants?.[0]?.images?.[0] || '/images/placeholder-product.svg';
                     const salePrice = product.flashSaleInfo?.salePrice || 0;
@@ -101,7 +97,7 @@ export default function FlashSaleSection() {
 
                     return (
                       <Link
-                        key={product._id}
+                        key={`${product._id}-${index}`}
                         href={`/products/${product.slug || product._id}`}
                         className="group/product flex w-[140px] shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/40"
                       >

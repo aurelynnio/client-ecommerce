@@ -30,6 +30,7 @@ export default function AuthLayout({
               src="/images/logo-aura.svg"
               alt={BRAND_CONFIG.name}
               fill
+              sizes="120px"
               className="object-contain"
               priority
             />
@@ -95,6 +96,7 @@ export default function AuthLayout({
                 src="/images/logo-aura.svg"
                 alt={BRAND_CONFIG.name}
                 fill
+                sizes="120px"
                 className="object-contain"
                 priority
               />

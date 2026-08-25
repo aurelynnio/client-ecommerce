@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useEffect } from 'react';
-import { Heart, ShoppingCart, Trash2, ArrowRight, Home, ChevronRight, Star } from 'lucide-react';
+import { Heart, ShoppingCart, Trash2, ArrowRight, Home, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,18 +13,32 @@ import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { useRouter } from 'next/navigation';
 import { getSafeErrorMessage } from '@/api';
 
-const Breadcrumb = () => (
-  <nav
-    aria-label="Breadcrumb"
-    className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-  >
-    <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-      <Home className="h-3 w-3" />
-      <span>Trang chủ</span>
-    </Link>
-    <ChevronRight className="h-3 w-3" />
-    <span className="font-medium text-foreground">Yêu thích</span>
-  </nav>
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+
+const WishlistBreadcrumb = () => (
+  <Breadcrumb className="mb-3">
+    <BreadcrumbList className="text-xs">
+      <BreadcrumbItem>
+        <BreadcrumbLink asChild>
+          <Link href="/" className="flex items-center gap-1">
+            <Home className="h-3 w-3" />
+            <span>Trang chủ</span>
+          </Link>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage>Yêu thích</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
 );
 
 export default function WishlistPage() {
@@ -94,7 +108,7 @@ export default function WishlistPage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          <Breadcrumb />
+          <WishlistBreadcrumb />
           <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
             <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full border border-border bg-muted/30">
               <Heart className="h-9 w-9 text-muted-foreground/60" />
@@ -122,7 +136,7 @@ export default function WishlistPage() {
   return (
     <div className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        <Breadcrumb />
+        <WishlistBreadcrumb />
 
         {/* Page Header */}
         <div className="mb-4 border-b border-border pb-3">

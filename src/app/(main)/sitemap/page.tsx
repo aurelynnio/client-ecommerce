@@ -1,5 +1,13 @@
 import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 const groups = [
   {
@@ -37,18 +45,22 @@ export default function SiteMapPage() {
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Sơ đồ trang web</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Sơ đồ trang web</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         <header className="border-b border-border pb-3">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">

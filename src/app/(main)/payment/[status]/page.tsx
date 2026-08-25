@@ -1,6 +1,8 @@
 'use client';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   CheckCircle2,
   XCircle,
@@ -31,8 +33,8 @@ export default function PaymentResultPage() {
       iconWrapperClass: 'bg-success/15',
       iconClass: 'text-success',
       noteClass: 'border-success/30 bg-success/10 text-foreground',
-      note: 'Bạn có thể theo dõi tiến độ ở mục Đơn hàng.',
-      primaryActionLabel: 'Xem đơn hàng của tôi',
+      note: 'Bạn có thể theo dõi đơn hàng bất cứ lúc nào trong mục Đơn mua.',
+      primaryActionLabel: 'Xem đơn hàng',
       primaryActionIcon: ShoppingBag,
       primaryAction: () => router.push('/profile?tab=orders'),
       secondaryActionLabel: 'Tiếp tục mua sắm',
@@ -121,8 +123,8 @@ export default function PaymentResultPage() {
           <h1 className="text-xl font-semibold text-foreground">Kết quả thanh toán</h1>
         </div>
 
-        <section className="rounded-xl border border-border bg-card p-6 md:p-8">
-          <div className="max-w-[700px] mx-auto text-center">
+        <Card className="p-6 md:p-8">
+          <CardContent className="p-0 max-w-[700px] mx-auto text-center">
             <div
               className={`mx-auto flex size-16 items-center justify-center rounded-full ${config.iconWrapperClass}`}
             >
@@ -145,9 +147,9 @@ export default function PaymentResultPage() {
               </div>
             )}
 
-            <div className={`mt-4 rounded-lg border px-4 py-3 text-sm ${config.noteClass}`}>
-              {config.note}
-            </div>
+            <Alert className={`mt-4 text-left ${config.noteClass}`}>
+              <AlertDescription>{config.note}</AlertDescription>
+            </Alert>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 text-left">
               {config.quickItems.map((item) => (
@@ -173,8 +175,8 @@ export default function PaymentResultPage() {
                 {config.secondaryActionLabel}
               </Button>
             </div>
-          </div>
-        </section>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );

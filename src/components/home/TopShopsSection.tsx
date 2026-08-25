@@ -9,10 +9,6 @@ interface TopShopsSectionProps {
   shops: Shop[];
 }
 
-/**
- * Tmall-style top shops section — displays shop cards with logo, rating, followers.
- * Data is extracted from product listings (products contain shop info).
- */
 export default function TopShopsSection({ shops }: TopShopsSectionProps) {
   const displayShops = shops.slice(0, 6);
 

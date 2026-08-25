@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function RouteLoading() {
@@ -13,11 +14,13 @@ export function RouteLoading() {
         <Skeleton className="h-4 w-80" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }, (_, index) => (
-            <div key={index} className="space-y-3 rounded-xl border border-border bg-card p-4">
-              <Skeleton className="aspect-square w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
+            <Card key={index} className="gap-0 py-0 overflow-hidden">
+              <CardContent className="p-4 space-y-3">
+                <Skeleton className="aspect-square w-full" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

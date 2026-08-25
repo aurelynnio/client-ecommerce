@@ -2,6 +2,7 @@
 import { MapPin, Plus, Star, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import AddressDialog from '../address/AddressDialog';
 import { useState } from 'react';
 import { useDeleteAddress, useProfile } from '@/hooks/queries/useProfile';
@@ -72,7 +73,7 @@ export default function AddressTab({ user }: AddressTabProps) {
       <p className="text-muted-foreground mb-6 max-w-xs text-sm">
         Thêm địa chỉ giao hàng để đảm bảo thanh toán nhanh hơn.
       </p>
-      <Button onClick={openAddDialog} className="rounded-sm px-6">
+      <Button onClick={openAddDialog} className="rounded-lg px-6">
         <Plus className="h-4 w-4 mr-2" />
         Thêm địa chỉ mới
       </Button>
@@ -80,10 +81,10 @@ export default function AddressTab({ user }: AddressTabProps) {
   );
 
   const renderAddressCard = (address: Address) => (
-    <div
+    <Card
       key={address._id}
       className={cn(
-        'group relative flex flex-col justify-between rounded-md border p-5 transition-[border-color,background-color,box-shadow] duration-200 md:flex-row',
+        'group relative flex flex-col justify-between py-5 px-5 transition-[border-color,background-color,box-shadow] duration-200 md:flex-row',
         address.isDefault
           ? 'border-primary/30 bg-primary/5'
           : 'border-border/50 bg-muted/30 hover:bg-muted/50',
@@ -139,7 +140,7 @@ export default function AddressTab({ user }: AddressTabProps) {
           </Button>
         )}
       </div>
-    </div>
+    </Card>
   );
 
   return (
@@ -152,7 +153,7 @@ export default function AddressTab({ user }: AddressTabProps) {
             <p className="text-muted-foreground text-sm">Quản lý các địa điểm nhận hàng của bạn</p>
           </div>
           {addresses.length > 0 && (
-            <Button onClick={openAddDialog} className="rounded-sm">
+            <Button onClick={openAddDialog} className="rounded-lg">
               <Plus className="h-4 w-4 mr-2" />
               Thêm địa chỉ
             </Button>
@@ -176,5 +177,3 @@ export default function AddressTab({ user }: AddressTabProps) {
     </div>
   );
 }
-
-// End of file

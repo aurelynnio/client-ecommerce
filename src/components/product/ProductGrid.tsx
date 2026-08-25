@@ -75,14 +75,11 @@ export function ProductGrid({
     <StaggerContainer
       className={`grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 ${className}`}
     >
-      {products.map((product, idx) => {
-        const isFeatured = (idx + 1) % 8 === 0;
-        return (
-          <StaggerItem key={product._id} className={`${isFeatured ? 'md:col-span-2' : ''}`}>
-            <ProductCard product={product} index={idx} />
-          </StaggerItem>
-        );
-      })}
+      {products.map((product, idx) => (
+        <StaggerItem key={product._id}>
+          <ProductCard product={product} index={idx} />
+        </StaggerItem>
+      ))}
     </StaggerContainer>
   );
 }

@@ -1,29 +1,41 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Home, Zap } from 'lucide-react';
+import { Home, Zap } from 'lucide-react';
 import FlashSaleSection from '@/components/product/FlashSaleSection';
 import ProductGrid from '@/components/product/ProductGrid';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { useFlashSaleWithCountdown } from '@/hooks/queries/useFlashSale';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 export default function FlashSalePage() {
   const { products = [], isLoading, error, formattedCountdown } = useFlashSaleWithCountdown();
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Flash Sale</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Flash Sale</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         <header className="flex flex-col gap-3 border-b border-border pb-3 sm:flex-row sm:items-end sm:justify-between">
           <div>

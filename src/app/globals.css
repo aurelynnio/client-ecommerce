@@ -70,30 +70,18 @@
 }
 
 :root {
-  /* ========================================
-     AURA COMMERCE DESIGN SYSTEM TOKENS
-     Tmall Premium + JD Red scheme — marketplace
-     Primary: #e1251b (JD red)
-     Accent: #1a1a1a (Tmall black)
-     ======================================== */
   --radius-sm-token: 6px;
   --radius-md-token: 10px;
   --radius-lg-token: 12px;
   --radius-xl-token: 16px;
   --radius-2xl-token: 20px;
-
-  /* Primary Colors — JD Red */
   --primary: #e1251b;           /* JD red — main brand */
   --primary-hover: #f53415;     /* Brighter red — hover/active */
   --primary-light: #fef2f2;     /* Very subtle red tint */
   --primary-bg: #fde8e8;         /* Light red — badges, labels */
   --primary-foreground: #ffffff;
-
-  /* Tmall Black — premium dark accent */
   --tmall-black: #1a1a1a;
   --tmall-black-foreground: #ffffff;
-
-  /* Secondary Colors */
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
 

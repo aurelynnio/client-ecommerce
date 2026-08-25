@@ -1,6 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
 
 export const adminShellClass = 'bg-background text-foreground';
@@ -160,29 +161,31 @@ export function AdminStatCard({
   meta,
 }: AdminStatCardProps) {
   return (
-    <div className={cn(adminSurfaceClass, 'p-6')}>
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            {title}
-          </p>
-          <div className="text-2xl font-semibold tracking-tight text-foreground">{value}</div>
+    <Card className="gap-0 py-0 border-border shadow-xs">
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              {title}
+            </p>
+            <div className="text-2xl font-semibold tracking-tight text-foreground">{value}</div>
+          </div>
+          <div
+            className={cn(
+              'flex h-11 w-11 items-center justify-center rounded-lg',
+              statAccentClasses[accent],
+            )}
+          >
+            <Icon className="h-5 w-5" />
+          </div>
         </div>
-        <div
-          className={cn(
-            'flex h-11 w-11 items-center justify-center rounded-lg',
-            statAccentClasses[accent],
-          )}
-        >
-          <Icon className="h-5 w-5" />
-        </div>
-      </div>
-      {description || meta ? (
-        <div className="mt-4 flex items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">{description}</p>
-          {meta ? <div className="shrink-0">{meta}</div> : null}
-        </div>
-      ) : null}
-    </div>
+        {description || meta ? (
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">{description}</p>
+            {meta ? <div className="shrink-0">{meta}</div> : null}
+          </div>
+        ) : null}
+      </CardContent>
+    </Card>
   );
 }

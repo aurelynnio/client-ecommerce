@@ -16,6 +16,14 @@ import AddressTab from '@/components/profile/tabs/AddressTab';
 import SettingsTab from '@/components/profile/tabs/SettingsTab';
 import ShopTab from '@/components/profile/tabs/ShopTab';
 import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import {
   User,
   Package,
   MapPin,
@@ -129,18 +137,22 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          {/* Breadcrumb */}
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-              <Home className="h-3 w-3" />
-              <span>Trang chủ</span>
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="font-medium text-foreground">Hồ sơ</span>
-          </nav>
+          <Breadcrumb className="mb-3">
+            <BreadcrumbList className="text-xs">
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="flex items-center gap-1">
+                    <Home className="h-3 w-3" />
+                    <span>Trang chủ</span>
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Hồ sơ</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
           <div className="flex flex-col items-center justify-center space-y-6 py-20 text-center">
             <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border bg-muted/30">
@@ -177,18 +189,22 @@ export default function ProfilePage() {
             'pointer-events-none opacity-50',
         )}
       >
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Hồ sơ</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Hồ sơ</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         {/* Page Header */}
         <div className="mb-4 border-b border-border pb-3">

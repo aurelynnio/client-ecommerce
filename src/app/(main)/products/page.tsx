@@ -8,12 +8,20 @@ import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useInfiniteProducts } from '@/hooks/queries/useProducts';
 import { useActiveCategories } from '@/hooks/queries/useCategories';
 import { Button } from '@/components/ui/button';
-import { SlidersHorizontal, ChevronDown, Loader2, ChevronRight, Home } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown, Loader2, Home } from 'lucide-react';
 import ProductFilter from '@/components/product/ProductFilter';
 import ProductGrid from '@/components/product/ProductGrid';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { ProductFilters, ProductUrlFilters } from '@/types/product';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 const PAGE_SIZE = 50;
 
@@ -270,21 +278,22 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-[1440px] px-4 pt-4 pb-2 lg:px-6">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link
-            href="/"
-            className="flex items-center gap-1 transition-colors hover:text-primary"
-          >
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Sản phẩm</span>
-        </nav>
+        <Breadcrumb>
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Sản phẩm</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         {/* Page Header */}
         <div className="flex items-end justify-between border-b border-border pb-4 pt-3">

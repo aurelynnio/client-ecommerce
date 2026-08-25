@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { authSlice } from '@/features/auth/authSlice';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -16,12 +16,16 @@ import { ENDPOINT_USER } from '@/constants/endpoint';
 export const useAuthPersistence = () => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const initialized = useRef(false);
 
   useEffect(() => {
     // Only run once on mount
     if (initialized.current) return;
     initialized.current = true;
+
+    // Do not make unauthorized requests if the user is in guest state
+    if (!isAuthenticated) return;
 
     const checkAuthStatus = async () => {
       try {
@@ -48,5 +52,5 @@ export const useAuthPersistence = () => {
     };
 
     checkAuthStatus();
-  }, [dispatch, queryClient]);
+  }, [dispatch, queryClient, isAuthenticated]);
 };

@@ -1,32 +1,5 @@
 import Link from 'next/link';
-import { CreditCard, Headphones, RotateCcw, Truck } from 'lucide-react';
-
-const services = [
-  {
-    title: 'Giao hàng rõ ràng',
-    description: 'Theo dõi chính sách và trạng thái giao hàng.',
-    href: '/shipping',
-    icon: Truck,
-  },
-  {
-    title: 'Đổi trả dễ hiểu',
-    description: 'Xem hướng dẫn đổi trả trước khi mua.',
-    href: '/returns',
-    icon: RotateCcw,
-  },
-  {
-    title: 'Thanh toán an toàn',
-    description: 'Lựa chọn phương thức phù hợp ở bước thanh toán.',
-    href: '/payment/success',
-    icon: CreditCard,
-  },
-  {
-    title: 'Cần hỗ trợ?',
-    description: 'Tìm câu trả lời hoặc gửi yêu cầu hỗ trợ.',
-    href: '/support',
-    icon: Headphones,
-  },
-];
+import {services} from "@/constants/promoGrid";
 
 /** A compact service row, deliberately not another promo-card grid. */
 export default function PromoGrid() {

@@ -4,6 +4,7 @@ import { Heart } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useWishlistManager } from '@/hooks/queries/useWishlist';
 import { useAppSelector } from '@/hooks/redux';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface WishlistButtonProps {
   productId: string;
@@ -14,10 +15,6 @@ interface WishlistButtonProps {
   showText?: boolean;
 }
 
-/**
- * Reusable Wishlist Button Component
- * Tối ưu: memo để tránh re-render không cần thiết
- */
 export const WishlistButton = memo(function WishlistButton({
   productId,
   productName,
@@ -51,6 +48,8 @@ export const WishlistButton = memo(function WishlistButton({
     lg: 'h-5 w-5',
   };
 
+  const tooltipLabel = isWishlisted ? 'Bỏ yêu thích' : 'Thêm vào yêu thích';
+
   if (variant === 'button') {
     return (
       <button
@@ -72,20 +71,27 @@ export const WishlistButton = memo(function WishlistButton({
   }
 
   return (
-    <button
-      onClick={handleClick}
-      className={cn(
-        'flex items-center justify-center rounded-full transition-colors',
-        sizeClasses[size],
-        isWishlisted
-          ? 'bg-primary/10 text-primary'
-          : 'bg-card/90 text-muted-foreground hover:bg-card hover:text-primary',
-        className,
-      )}
-      aria-label={isWishlisted ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
-    >
-      <Heart className={cn(iconSizes[size], isWishlisted && 'fill-current')} />
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          onClick={handleClick}
+          className={cn(
+            'flex items-center justify-center rounded-full transition-colors',
+            sizeClasses[size],
+            isWishlisted
+              ? 'bg-primary/10 text-primary'
+              : 'bg-card/90 text-muted-foreground hover:bg-card hover:text-primary',
+            className,
+          )}
+          aria-label={tooltipLabel}
+        >
+          <Heart className={cn(iconSizes[size], isWishlisted && 'fill-current')} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top">
+        <p>{tooltipLabel}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 });
 

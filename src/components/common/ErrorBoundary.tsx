@@ -3,6 +3,7 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { errorHandler } from '@/lib/error-handler';
 
 interface Props {
@@ -80,11 +81,11 @@ export class ErrorBoundary extends Component<Props, State> {
             </p>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
-              <div className="mb-6 rounded-lg bg-muted p-4 text-left">
-                <p className="break-all font-mono text-sm text-destructive">
+              <Alert variant="destructive" className="mb-6 text-left">
+                <AlertDescription className="break-all font-mono text-sm">
                   {this.state.error.message}
-                </p>
-              </div>
+                </AlertDescription>
+              </Alert>
             )}
 
             <div className="flex gap-3 justify-center">

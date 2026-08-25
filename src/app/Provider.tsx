@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from '@/components/ui/sonner';
 import { useAuthPersistence } from '@/hooks/useAuthPersistence';
 import { store, persistor } from '@/store/configStore';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { PermissionProvider } from '@/context/PermissionContext';
 import { queryClient } from '@/lib/queryClient';
 
@@ -20,9 +21,11 @@ export const ReduxProvider = ({ children }: { children: React.ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <PermissionProvider>
-            <AppInitializer>{children}</AppInitializer>
-          </PermissionProvider>
+          <TooltipProvider>
+            <PermissionProvider>
+              <AppInitializer>{children}</AppInitializer>
+            </PermissionProvider>
+          </TooltipProvider>
           <Toaster position="top-right" richColors />
         </PersistGate>
       </Provider>

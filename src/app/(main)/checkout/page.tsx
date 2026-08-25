@@ -20,6 +20,14 @@ import { toast } from 'sonner';
 import { ApplyVoucherResult } from '@/types/voucher';
 import { Address } from '@/types/address';
 import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import {
   Check,
   CreditCard,
   Truck,
@@ -279,21 +287,28 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-              <Home className="h-3 w-3" />
-              <span>Trang chủ</span>
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link href="/cart" className="transition-colors hover:text-primary">
-              Giỏ hàng
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="font-medium text-foreground">Thanh toán</span>
-          </nav>
+          <Breadcrumb className="mb-3">
+            <BreadcrumbList className="text-xs">
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="flex items-center gap-1">
+                    <Home className="h-3 w-3" />
+                    <span>Trang chủ</span>
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/cart">Giỏ hàng</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Thanh toán</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           <SpinnerLoading className="py-20" />
         </div>
       </div>
@@ -304,21 +319,28 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-              <Home className="h-3 w-3" />
-              <span>Trang chủ</span>
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link href="/cart" className="transition-colors hover:text-primary">
-              Giỏ hàng
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="font-medium text-foreground">Thanh toán</span>
-          </nav>
+          <Breadcrumb className="mb-3">
+            <BreadcrumbList className="text-xs">
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="flex items-center gap-1">
+                    <Home className="h-3 w-3" />
+                    <span>Trang chủ</span>
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/cart">Giỏ hàng</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Thanh toán</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           <SpinnerLoading className="py-20" />
         </div>
       </div>
@@ -328,22 +350,28 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link href="/cart" className="transition-colors hover:text-primary">
-            Giỏ hàng
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">Thanh toán</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/cart">Giỏ hàng</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Thanh toán</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         {/* Header with title + checkout steps */}
         <div className="mb-4 flex items-end justify-between border-b border-border pb-3">

@@ -35,7 +35,7 @@ export default function ShopTab() {
         </div>
         <Button
           onClick={() => router.push('/seller/register')}
-          className="bg-primary hover:bg-primary/90"
+          className="bg-primary hover:bg-primary-hover"
         >
           <Store className="h-4 w-4 mr-2" />
           Đăng ký bán hàng

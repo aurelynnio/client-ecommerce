@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, ChevronRight, Home, Package, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, Home, Package, SlidersHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,15 @@ import ProductGrid from '@/components/product/ProductGrid';
 import { useCategoryTree } from '@/hooks/queries/useCategories';
 import { useProductsByCategory } from '@/hooks/queries/useProducts';
 import { getSafeErrorMessage } from '@/api';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 type SortType = 'default' | 'price-asc' | 'price-desc' | 'newest';
 
@@ -42,21 +51,28 @@ export default function CategoryDetailPage() {
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-3 flex items-center gap-1 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="flex items-center gap-1 transition-colors hover:text-primary">
-            <Home className="h-3 w-3" />
-            <span>Trang chủ</span>
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link href="/categories" className="transition-colors hover:text-primary">
-            Danh mục
-          </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-foreground">{category?.name || 'Sản phẩm'}</span>
-        </nav>
+        <Breadcrumb className="mb-3">
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="flex items-center gap-1">
+                  <Home className="h-3 w-3" />
+                  <span>Trang chủ</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/categories">Danh mục</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{category?.name || 'Sản phẩm'}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <header className="border-b border-border pb-3">
           <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">
             {category?.name || 'Danh mục sản phẩm'}

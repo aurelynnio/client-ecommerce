@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useInfiniteProducts, useInfiniteProductsByCategory } from '@/hooks/queries/useProducts';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -45,10 +45,19 @@ export default function HomeProductList({ selectedCategorySlug }: HomeProductLis
     ? isFetchingNextCategoryPage
     : isFetchingNextAllPage;
 
-  // Flatten infinite pages into single array
-  const products = selectedCategorySlug
-    ? categoryData?.pages.flatMap((page) => page.products) || []
-    : infiniteData?.pages.flatMap((page) => page.products) || [];
+  // Flatten infinite pages and deduplicate products by ID
+  const products = useMemo(() => {
+    const rawProducts = selectedCategorySlug
+      ? categoryData?.pages.flatMap((page) => page.products) || []
+      : infiniteData?.pages.flatMap((page) => page.products) || [];
+
+    const seen = new Set<string>();
+    return rawProducts.filter((p) => {
+      if (!p?._id || seen.has(p._id)) return false;
+      seen.add(p._id);
+      return true;
+    });
+  }, [selectedCategorySlug, categoryData, infiniteData]);
 
   // Intersection Observer for infinite scroll
   const handleObserver = useCallback(
@@ -109,7 +118,7 @@ export default function HomeProductList({ selectedCategorySlug }: HomeProductLis
           {products && products.length > 0
             ? products.map((p, index) => (
                 <motion.div
-                  key={p._id}
+                  key={`${p._id}-${index}`}
                   variants={item}
                   initial="hidden"
                   animate="show"

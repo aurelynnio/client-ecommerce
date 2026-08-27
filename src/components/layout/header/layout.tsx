@@ -352,12 +352,11 @@ export default function HeaderLayout() {
 
           <Link href="/" className="flex shrink-0 items-center" aria-label={BRAND_CONFIG.name}>
             <Image
-              src="/images/logo-aura.svg"
+              src="/images/logo-aura-red.png"
               alt={BRAND_CONFIG.name}
-              width={100}
-              height={50}
-              className="h-10 w-auto object-contain"
-              style={{ width: 'auto', height: 'auto' }}
+              width={110}
+              height={40}
+              className="h-9 w-28 object-contain"
               priority
             />
           </Link>
@@ -436,41 +435,41 @@ export default function HeaderLayout() {
               aria-controls="desktop-category-panel"
               onClick={() => setCategoriesOpen((open) => !open)}
               onMouseEnter={() => setCategoriesOpen(true)}
-              className="inline-flex h-11 items-center gap-2 bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-8 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground shadow-xs transition-all hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
             >
-              <Menu className="h-4 w-4" aria-hidden="true" />
+              <Menu className="h-3.5 w-3.5" aria-hidden="true" />
               Tất cả danh mục
               <ChevronDown
-                className={cn('h-4 w-4 transition-transform', categoriesOpen && 'rotate-180')}
+                className={cn('h-3.5 w-3.5 transition-transform duration-200', categoriesOpen && 'rotate-180')}
                 aria-hidden="true"
               />
             </button>
 
-            <nav className="flex items-center" aria-label="Khám phá">
+            <nav className="flex items-center gap-0.5" aria-label="Khám phá">
               <Link
                 href="/flash-sale"
-                className="inline-flex items-center gap-1.5 px-3 text-sm font-medium text-foreground hover:text-primary"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <Zap className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Flash Sale
               </Link>
               <Link
                 href="/vouchers"
-                className="inline-flex items-center gap-1.5 px-3 text-sm font-medium text-foreground hover:text-primary"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <Ticket className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Vouchers
               </Link>
               <Link
                 href="/new-arrivals"
-                className="inline-flex items-center gap-1.5 px-3 text-sm font-medium text-foreground hover:text-primary"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Hàng mới về
               </Link>
               <Link
                 href="/seller"
-                className="inline-flex items-center gap-1.5 px-3 text-sm font-medium text-foreground hover:text-primary"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <Store className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Kênh người bán
@@ -483,20 +482,20 @@ export default function HeaderLayout() {
                   id="desktop-category-panel"
                   role="region"
                   aria-label="Danh mục sản phẩm"
-                  className="absolute left-0 top-[calc(100%+1px)] z-50 flex w-[min(56rem,calc(100vw-2rem))] overflow-hidden rounded-b-lg border border-t-0 border-border bg-card shadow-lg"
+                  className="absolute left-0 top-[calc(100%+0.5rem)] z-50 flex w-[min(56rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-xl"
                 >
                   {/* Left rail — category list */}
-                  <ul className="w-56 shrink-0 overflow-y-auto border-r border-border bg-muted/30 py-1">
+                  <ul className="w-56 shrink-0 overflow-y-auto border-r border-border bg-muted/20 p-1.5 space-y-0.5">
                     {categories.map((category) => (
                       <li key={category._id}>
                         <button
                           type="button"
                           onMouseEnter={() => setHoveredCategory(category._id)}
                           className={cn(
-                            'flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors',
+                            'flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition-colors',
                             hoveredCategory === category._id
-                              ? 'bg-card font-medium text-primary'
-                              : 'text-foreground hover:bg-card hover:text-primary',
+                              ? 'bg-primary-light font-semibold text-primary'
+                              : 'text-foreground hover:bg-muted hover:text-primary',
                           )}
                         >
                           {category.name}

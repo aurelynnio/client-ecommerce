@@ -27,7 +27,7 @@ export default function AuthLayout({
         <Link href="/" className="relative z-10 flex items-center gap-2">
           <div className="relative h-16 w-[120px]">
             <Image
-              src="/images/logo-aura.svg"
+              src="/images/logo-white.png"
               alt={BRAND_CONFIG.name}
               fill
               sizes="120px"
@@ -93,7 +93,7 @@ export default function AuthLayout({
           <Link href="/" className="flex flex-col items-center">
             <div className="relative h-16 w-[120px]">
               <Image
-                src="/images/logo-aura.svg"
+                src="/images/logo-aura-red.png"
                 alt={BRAND_CONFIG.name}
                 fill
                 sizes="120px"

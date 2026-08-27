@@ -50,10 +50,11 @@ export function ProductActions({
       {/* Desktop Actions */}
       <div className="hidden lg:flex items-center gap-4 mt-8 pb-6">
         <button
+          type="button"
           onClick={handleAddClick}
           disabled={disabled || loading}
           className={cn(
-            'w-[180px] h-12 rounded-lg border border-primary text-primary font-bold text-sm bg-primary-light hover:bg-primary/20 transition-colors flex items-center justify-center gap-2',
+            'w-[180px] h-12 rounded-lg border border-primary text-primary font-bold text-sm bg-primary-light hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors flex items-center justify-center gap-2',
             (disabled || loading) && 'opacity-50 cursor-not-allowed',
           )}
         >
@@ -61,10 +62,11 @@ export function ProductActions({
         </button>
 
         <button
+          type="button"
           onClick={onBuyNow}
           disabled={disabled || loading}
           className={cn(
-            'flex h-12 w-[180px] items-center justify-center gap-2 rounded-lg bg-primary text-sm font-bold text-primary-foreground transition-[background-color,transform] duration-150 hover:bg-primary-hover active:scale-95 motion-reduce:transition-none',
+            'flex h-12 w-[180px] items-center justify-center gap-2 rounded-lg bg-primary text-sm font-bold text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-[background-color,transform] duration-150 hover:bg-primary-hover active:scale-95 motion-reduce:transition-none',
             (disabled || loading) && 'opacity-50 cursor-not-allowed',
           )}
         >
@@ -75,10 +77,11 @@ export function ProductActions({
       {/* Mobile Fixed Bottom Bar */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4 flex gap-3 z-50 safe-area-inset-bottom">
         <button
+          type="button"
           onClick={handleAddClick}
           disabled={disabled || loading}
           className={cn(
-            'flex-1 h-12 rounded-lg border border-primary text-primary font-bold text-sm bg-primary-light flex items-center justify-center gap-2',
+            'flex-1 h-12 rounded-lg border border-primary text-primary font-bold text-sm bg-primary-light hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors flex items-center justify-center gap-2',
             (disabled || loading) && 'opacity-50 cursor-not-allowed',
           )}
         >
@@ -86,10 +89,11 @@ export function ProductActions({
         </button>
 
         <button
+          type="button"
           onClick={onBuyNow}
           disabled={disabled || loading}
           className={cn(
-            'flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-bold text-sm flex items-center justify-center gap-2',
+            'flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-bold text-sm hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors flex items-center justify-center gap-2 active:scale-98',
             (disabled || loading) && 'opacity-50 cursor-not-allowed',
           )}
         >

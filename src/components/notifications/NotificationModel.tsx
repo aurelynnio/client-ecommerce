@@ -41,7 +41,7 @@ export default function NotificationModel({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="fixed right-4 top-14 left-auto z-[70] flex max-h-[75vh] w-[340px] translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-xl border-0 p-0 shadow-lg data-[state=open]:slide-in-from-top-2 sm:max-w-none"
+        className="fixed right-4 top-14 left-auto z-[70] flex max-h-[75vh] w-[340px] translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-xl border border-border p-0 shadow-lg data-[state=open]:slide-in-from-top-2 sm:max-w-none"
       >
         <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
           <div className="flex items-center gap-2">

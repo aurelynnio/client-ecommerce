@@ -154,24 +154,26 @@ export function ProductGallery({
           {images.length > 1 && (
             <>
               <button
+                type="button"
                 onClick={handlePrev}
                 disabled={selectedIndex === 0}
                 className={cn(
-                  'absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white transition-opacity',
-                  selectedIndex === 0 ? 'opacity-30' : 'opacity-70 hover:opacity-100',
+                  'absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur-xs shadow-xs transition-opacity',
+                  selectedIndex === 0 ? 'opacity-30' : 'opacity-80 hover:opacity-100',
                 )}
                 aria-label="Ảnh trước"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
+                type="button"
                 onClick={handleNext}
                 disabled={selectedIndex === images.length - 1}
                 className={cn(
-                  'absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white transition-opacity',
+                  'absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur-xs shadow-xs transition-opacity',
                   selectedIndex === images.length - 1
                     ? 'opacity-30'
-                    : 'opacity-70 hover:opacity-100',
+                    : 'opacity-80 hover:opacity-100',
                 )}
                 aria-label="Ảnh sau"
               >
@@ -181,7 +183,7 @@ export function ProductGallery({
           )}
 
           {/* Image Counter */}
-          <div className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white">
+          <div className="absolute bottom-3 right-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur-xs shadow-xs">
             {selectedIndex + 1} / {images.length}
           </div>
         </div>

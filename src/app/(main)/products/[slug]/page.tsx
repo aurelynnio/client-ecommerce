@@ -238,7 +238,7 @@ export default function ProductDetailPage() {
 function ProductDetailSkeleton() {
   return (
     <div className="bg-background min-h-screen">
-      <div className="max-w-[1240px] mx-auto px-4 py-6">
+      <div className="aura-container py-6">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
           {/* Gallery Skeleton */}
           <div className="hidden lg:flex gap-4">

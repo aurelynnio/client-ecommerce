@@ -277,7 +277,7 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-[1440px] px-4 pt-4 pb-2 lg:px-6">
+      <div className="aura-container pt-4 pb-2">
         <Breadcrumb>
           <BreadcrumbList className="text-xs">
             <BreadcrumbItem>
@@ -398,7 +398,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md transition-colors md:top-[108px]">
-        <div className="mx-auto max-w-[1440px] px-4 py-3 lg:px-6">
+        <div className="aura-container py-3">
           <div className="w-full py-1">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="space-y-2">
@@ -500,7 +500,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1440px] px-4 py-6 lg:px-6">
+      <div className="aura-container py-6">
         <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
           <ProductFilter
             filters={filters}

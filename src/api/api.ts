@@ -67,12 +67,18 @@ instance.interceptors.response.use(
       _retry?: boolean;
     };
 
-    // If error is 401 and it's not a retry and not the refresh token call itself
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !originalRequest.url?.includes(ENDPOINT_AUTH.REFRESH)
-    ) {
+    // Skip token refresh for auth endpoints (e.g. login, register, verify, forgot-password, etc.)
+    const isAuthEndpoint =
+      originalRequest?.url?.includes('/auth/login') ||
+      originalRequest?.url?.includes('/auth/register') ||
+      originalRequest?.url?.includes('/auth/refresh-token') ||
+      originalRequest?.url?.includes('/auth/verify-code') ||
+      originalRequest?.url?.includes('/auth/forgot-password') ||
+      originalRequest?.url?.includes('/auth/reset-password') ||
+      originalRequest?.url?.includes('/auth/2fa/');
+
+    // If error is 401 and it's not a retry and not an auth endpoint
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       if (isRefreshing) {
         // If already refreshing, add request to queue
         return new Promise((resolve, reject) => {

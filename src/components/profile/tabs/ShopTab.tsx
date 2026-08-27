@@ -49,7 +49,7 @@ export default function ShopTab() {
       {/* Shop Header */}
       <div className="relative">
         {/* Banner */}
-        <div className="h-32 rounded-xl overflow-hidden bg-primary-light">
+        <div className="relative h-32 rounded-xl overflow-hidden bg-primary-light">
           {myShop.banner && (
             <Image src={myShop.banner} alt="Shop Banner" fill className="object-cover" />
           )}
@@ -124,7 +124,7 @@ export default function ShopTab() {
         </Button>
         <Button
           onClick={() => router.push('/seller/products')}
-          className="flex-1 bg-primary hover:bg-primary/90"
+          className="flex-1 bg-primary hover:bg-primary-hover"
         >
           <Package className="h-4 w-4 mr-2" />
           Quản lý sản phẩm

@@ -284,17 +284,25 @@ export default function ChatWidget() {
         }
       };
 
+      const payload: Record<string, unknown> = { message: trimmedText };
+      if (sessionId) {
+        payload.sessionId = sessionId;
+      }
+
       const tryFetch = async (attempt: number): Promise<void> => {
         try {
           const res = await fetch(`${CHATBOT_API_BASE_URL}${ENDPOINT_CHATBOT.STREAM}`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: trimmedText, sessionId }),
+            body: JSON.stringify(payload),
             signal: controller.signal,
           });
 
-          if (!res.ok) throw new Error(`Stream request failed: ${res.status}`);
+          if (!res.ok) {
+            const errData = await res.json().catch(() => null);
+            throw new Error(errData?.message || `Stream request failed: ${res.status}`);
+          }
           if (!res.body) throw new Error('No response body');
 
           const reader = res.body.getReader();
@@ -541,7 +549,7 @@ export default function ChatWidget() {
         <button
           type="button"
           aria-label={t.closeDialogLabel}
-          className="fixed inset-0 z-40 cursor-default bg-black/20 backdrop-blur-2xs transition-opacity"
+          className="fixed inset-0 z-40 cursor-default bg-black/20 backdrop-blur-xs transition-opacity"
           onClick={() => dispatch(setChatOpen(false))}
         />
       )}

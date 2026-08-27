@@ -240,7 +240,7 @@ export default function Banner() {
               }}
               className={cn(
                 'h-2 w-2 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none',
-                idx === currentIndex ? 'bg-card w-5' : 'bg-muted-foreground/40 hover:bg-muted-foreground/70',
+                idx === currentIndex ? 'bg-primary w-5' : 'bg-muted-foreground/40 hover:bg-muted-foreground/70',
               )}
             />
           ))}

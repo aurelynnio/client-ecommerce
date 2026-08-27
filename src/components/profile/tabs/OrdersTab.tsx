@@ -118,9 +118,9 @@ export default function OrdersTab() {
         <p className="text-muted-foreground mb-8 max-w-sm text-sm">
           Chúng tôi không thể tải đơn hàng của bạn. Đây có thể là sự cố tạm thời.
         </p>
-        <button onClick={() => refetch()} className="rounded-lg px-6 py-2">
+        <Button onClick={() => refetch()} className="rounded-lg px-6">
           Thử lại
-        </button>
+        </Button>
       </div>
     );
   }

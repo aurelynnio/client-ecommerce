@@ -96,7 +96,7 @@ export default function WishlistPage() {
     return (
       <div className="min-h-screen bg-background py-4">
         <div className="aura-container">
-          <Breadcrumb />
+          <WishlistBreadcrumb />
           <SpinnerLoading className="py-20" />
         </div>
       </div>

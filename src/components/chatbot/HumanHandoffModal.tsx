@@ -44,7 +44,7 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
             className="group flex items-center justify-between rounded-xl border border-border bg-card p-3 transition-all hover:border-primary/50 hover:bg-primary-light"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info/10 text-info">
                 <MessageSquare className="h-4 w-4" />
               </div>
               <div>
@@ -85,14 +85,14 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
           {/* Option 3: Email Support */}
           <a
             href="mailto:cyhincdr@gmail.com?subject=Yêu%20cầu%20hỗ%20trợ%20từ%20khách%20hàng"
-            className="group flex items-center justify-between rounded-xl border border-border bg-card p-3 transition-all hover:border-amber-500/50 hover:bg-amber-500/5"
+            className="group flex items-center justify-between rounded-xl border border-border bg-card p-3 transition-all hover:border-warning/50 hover:bg-warning/5"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10 text-warning">
                 <Mail className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-foreground group-hover:text-amber-600 transition-colors">
+                <h4 className="text-xs font-bold text-foreground group-hover:text-warning transition-colors">
                   Hỗ trợ qua Email
                 </h4>
                 <p className="text-[11px] text-muted-foreground">
@@ -100,7 +100,7 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
                 </p>
               </div>
             </div>
-            <span className="text-[11px] text-muted-foreground group-hover:text-amber-600">
+            <span className="text-[11px] text-muted-foreground group-hover:text-warning">
               Gửi thư
             </span>
           </a>

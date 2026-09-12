@@ -9,6 +9,12 @@ export interface Address {
   district: string;
   ward: string;
   isDefault: boolean;
+  // Shipmondo-compatible fields (optional)
+  postalCode?: string;
+  postal_code?: string;
+  countryCode?: string;
+  country_code?: string;
+  email?: string;
 }
 
 export interface AddressFormData {

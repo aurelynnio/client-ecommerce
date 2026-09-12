@@ -264,6 +264,15 @@ export {
   useDeleteShippingTemplate,
 } from './useShipping';
 
+// Shipmondo queries
+export {
+  useShippingQuotes,
+  useCreateShipment,
+  useOrderShipment,
+  useSyncSalesOrder,
+  type ShippingOption,
+} from './useShipmondo';
+
 // Shop Category queries
 export {
   useMyShopCategories,

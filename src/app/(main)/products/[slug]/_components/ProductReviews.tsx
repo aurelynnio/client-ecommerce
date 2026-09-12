@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Star, ChevronRight } from 'lucide-react';
+import { Star, ChevronRight, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/common/EmptyState';
 import ReviewItem from '@/components/review/ReviewItem';
 import { useProductReviews } from '@/hooks/queries/useReviews';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -144,10 +145,12 @@ export function ProductReviews({
           ))}
         </div>
       ) : reviews.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
-          <p>Chưa có đánh giá nào cho sản phẩm này</p>
-          <p className="text-sm mt-1">Hãy là người đầu tiên đánh giá!</p>
-        </div>
+        <EmptyState
+          icon={MessageSquare}
+          title="Chưa có đánh giá nào cho sản phẩm này"
+          description="Hãy là người đầu tiên đánh giá sản phẩm này!"
+          className="my-6 border-dashed"
+        />
       ) : (
         <div className="space-y-0">
           {reviews.map((review) => (

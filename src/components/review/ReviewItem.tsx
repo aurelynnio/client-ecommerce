@@ -1,8 +1,8 @@
-import { Star, CheckCircle } from 'lucide-react';
-import { Badge } from '../ui/badge';
+import { CheckCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { StarRating } from '@/components/common/StarRating';
 
-// Review Item Component
 export default function ReviewItem({
   initial,
   name,
@@ -42,16 +42,7 @@ export default function ReviewItem({
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3 w-3 ${
-                        i < rating ? 'fill-star text-star' : 'text-muted-foreground/30'
-                      }`}
-                    />
-                  ))}
-                </div>
+                <StarRating value={rating} size="sm" readOnly />
                 <span className="text-xs text-muted-foreground">• {date}</span>
               </div>
             </div>

@@ -7,6 +7,8 @@ import { Zap, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useFlashSaleWithCountdown } from '@/hooks/queries/useFlashSale';
 import { formatCurrency } from '@/utils/format';
 
+import { Button } from '@/components/ui/button';
+
 export default function FlashSaleSection() {
   const { products, formattedCountdown, isLoading } = useFlashSaleWithCountdown();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -55,22 +57,26 @@ export default function FlashSaleSection() {
 
         {/* Product rail */}
         <div className="group/rail relative p-3">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="icon-sm"
             onClick={() => scroll('left')}
             aria-label="Cuộn trái"
-            className="absolute left-2 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md transition-colors hover:text-primary md:flex opacity-0 group-hover/rail:opacity-100"
+            className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
           >
             <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="outline"
+            size="icon-sm"
             onClick={() => scroll('right')}
             aria-label="Cuộn phải"
-            className="absolute right-2 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md transition-colors hover:text-primary md:flex opacity-0 group-hover/rail:opacity-100"
+            className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
           >
             <ChevronRight className="h-4 w-4" />
-          </button>
+          </Button>
 
           <div
             ref={scrollRef}

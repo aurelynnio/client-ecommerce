@@ -4,7 +4,9 @@ import React from 'react';
 import { Ticket, Store, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { Voucher } from '@/types/voucher';
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface VoucherCardProps {
   voucher: Voucher;
@@ -46,15 +48,25 @@ export function VoucherCard({
     return (
       <div
         className={cn(
-          'relative cursor-pointer overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30',
+          'relative overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30',
           className,
         )}
       >
-        {/* Discount Badge */}
-        <div className={cn('bg-muted px-3 py-3 text-center')}>
-          <div className={cn('text-xl font-bold', accentColor)}>{formatValue()}</div>
-          <div className="text-xs text-muted-foreground">
-            {voucher.type === 'percentage' ? 'Giảm' : 'Giảm'}
+        {/* Top - Value */}
+        <div className="relative bg-muted p-3 text-center">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            {isPlatform ? (
+              <Ticket size={10} className={accentColor} />
+            ) : (
+              <Store size={10} className={accentColor} />
+            )}
+            <span className={cn('text-[9px] font-medium uppercase', accentColor)}>
+              {isPlatform ? 'Toàn sàn' : 'Cửa hàng'}
+            </span>
+          </div>
+          <div className={cn('text-lg font-bold', accentColor)}>{formatValue()}</div>
+          <div className="text-[10px] text-muted-foreground">
+            Đơn từ ₫{voucher.minOrderValue.toLocaleString('vi-VN')}
           </div>
         </div>
 
@@ -75,16 +87,13 @@ export function VoucherCard({
               Đã lưu
             </div>
           ) : (
-            <button
+            <Button
+              size="sm"
               onClick={() => onCollect?.(voucher._id)}
-              className={cn(
-                'w-full py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-90',
-                accentBg,
-                accentFg,
-              )}
+              className={cn('w-full h-7 text-xs font-medium', accentBg, accentFg)}
             >
               Lưu
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -121,13 +130,15 @@ export function VoucherCard({
           <div>
             <div className="flex items-start justify-between gap-2 mb-1">
               <h3 className="line-clamp-1 text-sm font-medium text-foreground">{voucher.name}</h3>
-              <button
+              <Button
+                variant="ghost"
+                size="icon-sm"
                 onClick={handleCopyCode}
-                className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+                className="h-5 w-5 shrink-0 text-muted-foreground hover:text-foreground"
                 aria-label={`Sao chép mã ${voucher.code}`}
               >
                 <Copy size={12} />
-              </button>
+              </Button>
             </div>
             <p className="text-[10px] text-muted-foreground">
               Đơn tối thiểu ₫{voucher.minOrderValue.toLocaleString('vi-VN')}
@@ -147,18 +158,17 @@ export function VoucherCard({
             </div>
 
             {isCollected ? (
-              <span className="text-[10px] font-medium text-success">Đã Lưu</span>
+              <Badge variant="outline" className="text-[10px] font-medium text-success border-success/30">
+                Đã Lưu
+              </Badge>
             ) : (
-              <button
+              <Button
+                size="sm"
                 onClick={() => onCollect?.(voucher._id)}
-                className={cn(
-                  'text-[10px] font-medium px-3 py-1 rounded-lg transition-opacity hover:opacity-90',
-                  accentBg,
-                  accentFg,
-                )}
+                className={cn('h-6 text-[10px] font-medium px-3', accentBg, accentFg)}
               >
                 Lưu
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -234,13 +244,15 @@ export function VoucherCard({
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={handleCopyCode}
-            className="flex h-9 flex-1 items-center justify-center gap-1 rounded-lg bg-muted text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="flex-1 h-9 gap-1 text-xs font-medium"
           >
             <Copy size={12} />
             Sao chép
-          </button>
+          </Button>
 
           {isCollected ? (
             <div className="flex h-9 flex-1 items-center justify-center gap-1 rounded-lg bg-success/15 text-xs font-medium text-success">
@@ -248,16 +260,13 @@ export function VoucherCard({
               Đã lưu
             </div>
           ) : (
-            <button
+            <Button
+              size="sm"
               onClick={() => onCollect?.(voucher._id)}
-              className={cn(
-                'flex-1 h-9 rounded-lg text-xs font-medium transition-opacity hover:opacity-90',
-                accentBg,
-                accentFg,
-              )}
+              className={cn('flex-1 h-9 text-xs font-medium', accentBg, accentFg)}
             >
               Lưu ngay
-            </button>
+            </Button>
           )}
         </div>
       </div>

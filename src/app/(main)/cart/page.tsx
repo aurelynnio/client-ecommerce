@@ -4,7 +4,6 @@ import {
   Plus,
   Minus,
   ShoppingBag,
-  ArrowRight,
   Store,
   Trash2,
   Tag,
@@ -51,6 +50,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { groupCartItemsByShop, CartItem } from '@/types/cart';
 import { ForYouSection } from '@/components/product/RecommendationSection';
+import { EmptyState } from '@/components/common/EmptyState';
 import { getSafeErrorMessage } from '@/api';
 
 const FREE_SHIPPING_THRESHOLD = 500000;
@@ -365,28 +365,17 @@ export default function CartPage() {
             </BreadcrumbList>
           </Breadcrumb>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mx-auto max-w-md space-y-4 pt-12 text-center"
-          >
-            <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-border bg-muted/30">
-              <ShoppingBag className="h-10 w-10 text-muted-foreground/60" />
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-foreground">Giỏ hàng trống</h2>
-              <p className="text-sm text-muted-foreground">
-                Hãy thêm sản phẩm vào giỏ hàng của bạn
-              </p>
-            </div>
-
-            <Link href="/products" className="block pt-4">
-              <Button className="h-11 rounded-lg bg-primary px-8 text-sm font-medium hover:bg-primary-hover">
-                Mua sắm ngay <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </motion.div>
+          <EmptyState
+            icon={ShoppingBag}
+            title="Giỏ hàng trống"
+            description="Hãy thêm sản phẩm vào giỏ hàng của bạn"
+            action={{
+              label: 'Mua sắm ngay',
+              href: '/products',
+              variant: 'default',
+            }}
+            className="my-12 max-w-md mx-auto"
+          />
         </div>
       </div>
     );

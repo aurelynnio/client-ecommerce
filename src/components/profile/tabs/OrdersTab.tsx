@@ -10,11 +10,19 @@ import { Order } from '@/types/order';
 import OrderCard from '../order/OrderCard';
 import OrderDialog from '../order/OrderDialog';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
-import { cn } from '@/utils/cn';
+import { EmptyState } from '@/components/common/EmptyState';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import { cn } from '@/lib/utils';
 import { getSafeErrorMessage } from '@/api';
 
 type OrderStatus =
-  'all' | 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  | 'all'
+  | 'pending'
+  | 'confirmed'
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled';
 
 export default function OrdersTab() {
   const router = useRouter();
@@ -25,7 +33,8 @@ export default function OrdersTab() {
   const userOrders = data?.orders || [];
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [cancellingOrder, setCancellingOrder] = useState<string | null>(null);
+  const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
+  const [isCancelling, setIsCancelling] = useState(false);
   const [activeStatus, setActiveStatus] = useState<OrderStatus>('all');
 
   useEffect(() => {
@@ -53,20 +62,18 @@ export default function OrdersTab() {
     setSelectedOrder(null);
   };
 
-  const handleCancelOrder = async (orderId: string) => {
-    if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
-      return;
-    }
-
-    setCancellingOrder(orderId);
+  const handleConfirmCancel = async () => {
+    if (!orderToCancel) return;
+    setIsCancelling(true);
     try {
-      await cancelOrderMutation.mutateAsync(orderId);
+      await cancelOrderMutation.mutateAsync(orderToCancel);
       toast.success('Đã hủy đơn hàng thành công');
+      setOrderToCancel(null);
     } catch (error: unknown) {
       console.error('Error cancelling order:', error);
       toast.error(getSafeErrorMessage(error, 'Không thể hủy đơn hàng'));
     } finally {
-      setCancellingOrder(null);
+      setIsCancelling(false);
     }
   };
 
@@ -108,54 +115,50 @@ export default function OrdersTab() {
     },
   ];
 
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="h-16 w-16 rounded-full bg-destructive/15 flex items-center justify-center mb-6">
-          <Package className="h-8 w-8 text-destructive" />
-        </div>
-        <h3 className="text-lg font-semibold tracking-tight mb-2">Đã xảy ra lỗi</h3>
-        <p className="text-muted-foreground mb-8 max-w-sm text-sm">
-          Chúng tôi không thể tải đơn hàng của bạn. Đây có thể là sự cố tạm thời.
-        </p>
-        <Button onClick={() => refetch()} className="rounded-lg px-6">
-          Thử lại
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-8 relative min-h-[400px]">
-      {isLoading && <SpinnerLoading className="absolute inset-0 m-auto" />}
-      <div className={isLoading ? 'opacity-50 pointer-events-none' : ''}>
-        {!userOrders || userOrders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="h-20 w-20 rounded-full bg-muted/50 flex items-center justify-center mb-6">
-              <Package className="h-10 w-10 text-muted-foreground/50" />
-            </div>
-            <h3 className="text-xl font-semibold tracking-tight mb-2">Chưa có đơn hàng nào</h3>
-            <p className="text-muted-foreground mb-8 max-w-sm text-sm">
-              Có vẻ như bạn chưa đặt đơn hàng nào. Hãy bắt đầu mua sắm để lấp đầy trang này!
-            </p>
-            <Button onClick={() => router.push('/products')} size="lg" className="rounded-lg px-8">
-              Bắt đầu mua sắm
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-xl font-bold tracking-tight text-foreground">Đơn hàng của tôi</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Quản lý và theo dõi trạng thái tất cả đơn hàng đã đặt
+        </p>
+      </div>
+
+      {/* Content */}
+      <div className="min-h-[400px]">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <SpinnerLoading size={40} className="text-primary mb-4" />
+            <p className="text-sm text-muted-foreground">Đang tải danh sách đơn hàng...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-destructive/30 rounded-md bg-destructive/5 p-6">
+            <p className="text-destructive font-medium mb-1">Không thể tải danh sách đơn hàng</p>
+            <p className="text-xs text-muted-foreground mb-4">Vui lòng thử lại sau</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              className="border-destructive/30 text-destructive hover:bg-destructive/10"
+            >
+              Thử lại
             </Button>
           </div>
+        ) : userOrders.length === 0 ? (
+          <EmptyState
+            icon={Package}
+            title="Bạn chưa có đơn hàng nào"
+            description="Hãy khám phá các sản phẩm và bắt đầu mua sắm ngay hôm nay!"
+            action={{
+              label: 'Khám phá sản phẩm',
+              onClick: () => router.push('/products'),
+              variant: 'default',
+            }}
+            className="my-8"
+          />
         ) : (
           <>
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <h2 className="text-xl font-semibold tracking-tight">Lịch sử đơn hàng</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => router.push('/products')}
-                className="rounded-lg"
-              >
-                Tiếp tục mua sắm
-              </Button>
-            </div>
-
             <Tabs
               value={activeStatus}
               onValueChange={(value) => setActiveStatus(value as OrderStatus)}
@@ -181,18 +184,12 @@ export default function OrdersTab() {
 
               <TabsContent value={activeStatus} className="mt-6 space-y-4">
                 {filteredOrders.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-border rounded-md bg-muted/20">
-                    <Filter className="h-10 w-10 text-muted-foreground/40 mb-4" />
-                    <h3 className="text-lg font-medium mb-1">
-                      Không có đơn hàng{' '}
-                      {activeStatus === 'all'
-                        ? ''
-                        : statusTabs.find((t) => t.value === activeStatus)?.label}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Chúng tôi không tìm thấy đơn hàng nào với trạng thái này.
-                    </p>
-                  </div>
+                  <EmptyState
+                    icon={Filter}
+                    title={`Không có đơn hàng ${activeStatus === 'all' ? '' : statusTabs.find((t) => t.value === activeStatus)?.label}`}
+                    description="Chúng tôi không tìm thấy đơn hàng nào với trạng thái này."
+                    className="my-8"
+                  />
                 ) : (
                   <div className="grid gap-4">
                     {filteredOrders.map((order: Order, index: number) => (
@@ -200,8 +197,8 @@ export default function OrdersTab() {
                         key={order._id || `order-${index}`}
                         order={order}
                         onViewOrder={handleViewOrder}
-                        onCancelOrder={handleCancelOrder}
-                        isCancelling={cancellingOrder === order._id}
+                        onCancelOrder={(id) => setOrderToCancel(id)}
+                        isCancelling={orderToCancel === order._id && isCancelling}
                       />
                     ))}
                   </div>
@@ -210,6 +207,17 @@ export default function OrdersTab() {
             </Tabs>
 
             <OrderDialog order={selectedOrder} open={isDialogOpen} onClose={handleCloseDialog} />
+
+            <ConfirmDialog
+              open={!!orderToCancel}
+              onOpenChange={(open) => !open && setOrderToCancel(null)}
+              title="Xác nhận hủy đơn hàng"
+              description="Bạn có chắc chắn muốn hủy đơn hàng này không? Thao tác này không thể hoàn tác."
+              confirmLabel="Hủy đơn hàng"
+              variant="destructive"
+              isLoading={isCancelling}
+              onConfirm={handleConfirmCancel}
+            />
           </>
         )}
       </div>

@@ -35,6 +35,12 @@ export interface ShippingAddress {
   district?: string;
   ward?: string;
   note?: string;
+  // Shipmondo-compatible fields (optional)
+  postalCode?: string;
+  postal_code?: string;
+  countryCode?: string;
+  country_code?: string;
+  email?: string;
 }
 
 // Order status type
@@ -68,6 +74,25 @@ export interface Order extends BaseEntity {
   status: OrderStatus;
   trackingNumber?: string;
   carrier?: string;
+
+  // Shipmondo integration snapshot
+  shippingCarrierCode?: string;
+  shippingProductCode?: string;
+  servicePoint?: {
+    id?: string;
+    name?: string;
+    address1?: string;
+    postalCode?: string;
+    city?: string;
+    countryCode?: string;
+  };
+  shipmondoShipmentId?: string;
+  shipmondoSalesOrderId?: string;
+  shipmondoStatus?: string;
+  shipmondoCurrency?: string;
+  trackingNumbers?: string[];
+  shipmentLabels?: string[];
+  shipmondoSyncedAt?: string;
 
   deliveredAt?: string;
   cancelledAt?: string;

@@ -198,6 +198,14 @@ export const shippingKeys = {
   calculate: (params: unknown) => [...shippingKeys.all, 'calculate', params] as const,
 };
 
+// Shipmondo query keys
+export const shipmondoKeys = {
+  all: ['shipmondo'] as const,
+  quotes: (params: unknown) => [...shipmondoKeys.all, 'quotes', params] as const,
+  products: (params?: unknown) => [...shipmondoKeys.all, 'products', params] as const,
+  orderShipment: (orderId: string) => [...shipmondoKeys.all, 'shipment', orderId] as const,
+};
+
 // Chat query keys
 export const chatKeys = {
   all: ['chat'] as const,

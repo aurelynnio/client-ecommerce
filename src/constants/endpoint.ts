@@ -165,6 +165,16 @@ export const ENDPOINT_SHIPPING = {
   byTemplateId: (templateId: string) => `/shipping/${templateId}`,
 } as const;
 
+export const ENDPOINT_SHIPMONDO = {
+  ROOT: '/shipmondo',
+  QUOTES: '/shipmondo/quotes',
+  SHIPMENTS: '/shipmondo/shipments',
+  PRODUCTS: '/shipmondo/products',
+  orderShipment: (orderId: string) => `/shipmondo/orders/${orderId}/shipment`,
+  orderSalesOrder: (orderId: string) => `/shipmondo/orders/${orderId}/sales-order`,
+  WEBHOOKS_SETUP: '/shipmondo/webhooks/setup',
+} as const;
+
 export const ENDPOINT_SHOP = {
   ROOT: '/shops',
   MY: '/shops/my',

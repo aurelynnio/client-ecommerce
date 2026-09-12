@@ -15,6 +15,8 @@ import {
   useClearCart,
   useProfile,
 } from '@/hooks/queries';
+import { useShippingQuotes } from '@/hooks/queries/useShipmondo';
+import { ShipmondoQuote } from '@/types/shipmondo';
 import { formatCurrency } from '@/utils/format';
 import { toast } from 'sonner';
 import { ApplyVoucherResult } from '@/types/voucher';
@@ -62,6 +64,97 @@ const hasCompleteAddress = (address: Address | null) =>
     address.ward?.trim()
   );
 
+/**
+ * Shipmondo shipping options for one shop group at checkout.
+ * Fetches quotes from the server (which proxies Shipmondo) and lets the user
+ * pick one. Falls back to "free shipping" when quotes are unavailable.
+ */
+function ShopShippingOptions({
+  shopId,
+  items,
+  address,
+  selected,
+  onSelect,
+}: {
+  shopId: string;
+  items: Array<{ productId: unknown; quantity: number }>;
+  address: Address | null;
+  selected: ShipmondoQuote | null;
+  onSelect: (quote: ShipmondoQuote | null) => void;
+}) {
+  const quoteItems = items.map((item) => {
+    const product =
+      typeof item.productId === 'object' && item.productId !== null
+        ? (item.productId as { weight?: number })
+        : null;
+    return { weight: product?.weight && product.weight > 0 ? product.weight : undefined };
+  });
+
+  const { data: quotes, isLoading } = useShippingQuotes(
+    quoteItems,
+    {
+      postalCode: address?.postalCode,
+      countryCode: address?.countryCode || 'DK',
+    },
+    { enabled: items.length > 0 },
+  );
+
+  const options = quotes || [];
+
+  return (
+    <div className="border-t border-border bg-muted/30 px-4 py-3">
+      <p className="mb-2 text-sm font-medium text-foreground">Phương thức vận chuyển</p>
+
+      {isLoading && <p className="text-xs text-muted-foreground">Đang tải phí vận chuyển...</p>}
+
+      {!isLoading && options.length === 0 && (
+        <p className="text-xs text-success">Miễn phí vận chuyển</p>
+      )}
+
+      {options.length > 0 && (
+        <div className="space-y-2">
+          {options.map((quote) => {
+            const active = selected?.productCode === quote.productCode;
+            return (
+              <label
+                key={quote.productCode}
+                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
+                  active
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border bg-card hover:border-muted-foreground/30'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={`shipping-${shopId}`}
+                  className="sr-only"
+                  checked={active}
+                  onChange={() => onSelect(active ? null : quote)}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-foreground">
+                    {quote.productName || quote.productCode}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {[quote.carrierName, quote.deliveryDays ? `${quote.deliveryDays} ngày` : null]
+                      .filter(Boolean)
+                      .join(' • ')}
+                  </p>
+                </div>
+                <span className="shrink-0 text-sm font-semibold text-primary">
+                  {quote.price !== null && quote.price !== undefined
+                    ? `${quote.price.toLocaleString('vi-VN')} ${quote.currency || ''}`
+                    : 'Liên hệ'}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Step indicator (Tmall/JD checkout flow: Cart > Checkout > Done)
 function CheckoutSteps() {
   const steps = [
@@ -103,6 +196,10 @@ export default function CheckoutPage() {
     null,
   );
   const [note, setNote] = useState('');
+  // Shipmondo: per-shop selected shipping quote (shopId -> quote)
+  const [shippingSelections, setShippingSelections] = useState<
+    Record<string, ShipmondoQuote | null>
+  >({});
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { checkoutTotal, selectedItems } = useAppSelector((state) => state.cart);
@@ -134,7 +231,13 @@ export default function CheckoutPage() {
   const platformDiscount = appliedPlatformVoucher?.discountAmount || 0;
   const totalDiscount = shopDiscount + platformDiscount;
 
-  const finalTotal = (checkoutTotal || 0) - totalDiscount;
+  // Shipmondo: sum of selected shipping fees
+  const totalShippingFee = Object.values(shippingSelections).reduce(
+    (sum, quote) => sum + (quote?.price && quote.price > 0 ? quote.price : 0),
+    0,
+  );
+
+  const finalTotal = (checkoutTotal || 0) - totalDiscount + totalShippingFee;
   const cartItemIds = cartItems.map((item) => item._id);
   const primaryAddress = useMemo(
     () => getPrimaryAddress(currentUser?.addresses),
@@ -177,6 +280,20 @@ export default function CheckoutPage() {
     }
 
     try {
+      // Shipmondo: per-shop shipping options selected at checkout
+      const shippingOptions = itemsByShop
+        .map((group) => {
+          const quote = shippingSelections[group.shop._id];
+          if (!quote) return null;
+          return {
+            shopId: group.shop._id,
+            fee: quote.price ?? 0,
+            carrierCode: quote.carrierCode || undefined,
+            productCode: quote.productCode,
+          };
+        })
+        .filter((option): option is NonNullable<typeof option> => option !== null);
+
       const orderData = {
         cartItemIds,
         addressId: primaryAddress._id,
@@ -191,6 +308,7 @@ export default function CheckoutPage() {
             ].filter((voucher) => voucher.shopId)
           : [],
         note,
+        shippingOptions,
       };
 
       const result = await createOrderMutation.mutateAsync(orderData);
@@ -530,9 +648,7 @@ export default function CheckoutPage() {
                               .join(', ')}
                           </p>
                         )}
-                        <p className="mt-0.5 text-xs text-muted-foreground">
-                          x{item.quantity}
-                        </p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">x{item.quantity}</p>
                       </div>
                       <div className="text-left sm:text-right">
                         <span className="font-medium text-primary">
@@ -541,6 +657,22 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                   ))}
+
+                  {/* Shipmondo shipping options */}
+                  {hasValidAddress && (
+                    <ShopShippingOptions
+                      shopId={shopGroup.shop._id}
+                      items={shopGroup.items}
+                      address={primaryAddress}
+                      selected={shippingSelections[shopGroup.shop._id] ?? null}
+                      onSelect={(quote) =>
+                        setShippingSelections((prev) => ({
+                          ...prev,
+                          [shopGroup.shop._id]: quote,
+                        }))
+                      }
+                    />
+                  )}
 
                   {/* Shop Voucher */}
                   <div className="flex flex-col gap-2 border-t border-border bg-muted/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
@@ -610,9 +742,7 @@ export default function CheckoutPage() {
               <div className="overflow-hidden rounded-lg border border-border bg-card">
                 <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
                   <Wallet className="h-4 w-4 text-primary" />
-                  <h2 className="text-sm font-semibold text-foreground">
-                    Phương thức thanh toán
-                  </h2>
+                  <h2 className="text-sm font-semibold text-foreground">Phương thức thanh toán</h2>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2">
@@ -645,9 +775,7 @@ export default function CheckoutPage() {
                       </span>
                       <p className="text-xs text-muted-foreground">COD</p>
                     </div>
-                    {paymentMethod === 'cod' && (
-                      <Check className="ml-auto h-4 w-4 text-primary" />
-                    )}
+                    {paymentMethod === 'cod' && <Check className="ml-auto h-4 w-4 text-primary" />}
                   </label>
 
                   <label
@@ -694,56 +822,57 @@ export default function CheckoutPage() {
                   Chi tiết thanh toán
                 </h2>
 
-                {/* Freeship Progress Bar (Tmall/JD style) */}
-                {(() => {
-                  const baseTotal = checkoutTotal || 0;
-                  const remaining = FREE_SHIPPING_THRESHOLD - baseTotal;
-                  const reached = baseTotal >= FREE_SHIPPING_THRESHOLD;
-                  const percent = Math.min(
-                    100,
-                    Math.round((baseTotal / FREE_SHIPPING_THRESHOLD) * 100),
-                  );
-                  return (
-                    <div
-                      className={
-                        reached
-                          ? 'mb-3 rounded border border-success/30 bg-success/10 p-2.5 text-xs'
-                          : 'mb-3 rounded border border-warning/30 bg-warning/10 p-2.5 text-xs'
-                      }
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <Truck
-                          className={
-                            reached ? 'h-3.5 w-3.5 text-success' : 'h-3.5 w-3.5 text-warning'
-                          }
-                        />
-                        {reached ? (
-                          <span className="font-medium text-success">
-                            Bạn được miễn phí vận chuyển
-                          </span>
-                        ) : (
-                          <span className="text-muted-foreground">
-                            Mua thêm{' '}
-                            <span className="font-semibold text-warning">
-                              {formatCurrency(remaining)}
-                            </span>{' '}
-                            để được freeship
-                          </span>
-                        )}
+                {/* Freeship Progress Bar (Tmall/JD style) — hidden when a Shipmondo fee is selected */}
+                {totalShippingFee === 0 &&
+                  (() => {
+                    const baseTotal = checkoutTotal || 0;
+                    const remaining = FREE_SHIPPING_THRESHOLD - baseTotal;
+                    const reached = baseTotal >= FREE_SHIPPING_THRESHOLD;
+                    const percent = Math.min(
+                      100,
+                      Math.round((baseTotal / FREE_SHIPPING_THRESHOLD) * 100),
+                    );
+                    return (
+                      <div
+                        className={
+                          reached
+                            ? 'mb-3 rounded border border-success/30 bg-success/10 p-2.5 text-xs'
+                            : 'mb-3 rounded border border-warning/30 bg-warning/10 p-2.5 text-xs'
+                        }
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <Truck
+                            className={
+                              reached ? 'h-3.5 w-3.5 text-success' : 'h-3.5 w-3.5 text-warning'
+                            }
+                          />
+                          {reached ? (
+                            <span className="font-medium text-success">
+                              Bạn được miễn phí vận chuyển
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">
+                              Mua thêm{' '}
+                              <span className="font-semibold text-warning">
+                                {formatCurrency(remaining)}
+                              </span>{' '}
+                              để được freeship
+                            </span>
+                          )}
+                        </div>
+                        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
+                          <div
+                            className={
+                              reached
+                                ? 'h-full rounded-full bg-success transition-[width]'
+                                : 'h-full rounded-full bg-warning transition-[width]'
+                            }
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
-                        <div
-                          className={
-                            reached
-                              ? 'h-full rounded-full bg-success transition-[width]'
-                              : 'h-full rounded-full bg-warning transition-[width]'
-                          }
-                          style={{ width: `${percent}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })()}
+                    );
+                  })()}
 
                 <div className="space-y-2.5 text-sm">
                   <div className="flex justify-between">
@@ -769,7 +898,13 @@ export default function CheckoutPage() {
 
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Phí vận chuyển</span>
-                    <span className="text-success">Miễn phí</span>
+                    {totalShippingFee > 0 ? (
+                      <span className="font-medium text-foreground">
+                        {formatCurrency(totalShippingFee)}
+                      </span>
+                    ) : (
+                      <span className="text-success">Miễn phí</span>
+                    )}
                   </div>
 
                   <div className="border-t border-border pt-3">
@@ -779,9 +914,7 @@ export default function CheckoutPage() {
                         {formatCurrency(finalTotal > 0 ? finalTotal : 0)}
                       </span>
                     </div>
-                    <p className="mt-1 text-right text-xs text-muted-foreground">
-                      Đã bao gồm VAT
-                    </p>
+                    <p className="mt-1 text-right text-xs text-muted-foreground">Đã bao gồm VAT</p>
                   </div>
                 </div>
 

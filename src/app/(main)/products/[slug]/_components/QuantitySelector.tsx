@@ -1,7 +1,8 @@
 'use client';
 
 import { Minus, Plus } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface QuantitySelectorProps {
   value: number;
@@ -19,9 +20,13 @@ export function QuantitySelector({
   onDecrement,
 }: QuantitySelectorProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value, 10);
-    if (!isNaN(newValue) && newValue >= 1 && newValue <= max) {
-      onChange(newValue);
+    const rawVal = e.target.value.replace(/[^0-9]/g, '');
+    if (rawVal === '') return;
+    const newValue = parseInt(rawVal, 10);
+    if (!isNaN(newValue)) {
+      if (newValue < 1) onChange(1);
+      else if (newValue > max) onChange(max);
+      else onChange(newValue);
     }
   };
 
@@ -29,37 +34,39 @@ export function QuantitySelector({
     <div className="flex items-center gap-4">
       <span className="text-sm text-muted-foreground/60 w-16 shrink-0">Số lượng</span>
 
-      <div className="flex items-center h-9 border border-border rounded-lg overflow-hidden">
-        <button
+      <div className="flex items-center h-9 border border-border rounded-lg overflow-hidden bg-card">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
           onClick={onDecrement}
           disabled={value <= 1}
-          className={cn(
-            'w-9 h-full flex items-center justify-center bg-muted/30 text-muted-foreground hover:text-foreground transition-colors',
-            value <= 1 && 'opacity-30 cursor-not-allowed',
-          )}
+          className="w-9 h-full rounded-none text-muted-foreground hover:text-foreground"
+          aria-label="Giảm số lượng"
         >
           <Minus className="w-3.5 h-3.5" />
-        </button>
+        </Button>
 
-        <input
-          type="number"
+        <Input
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           value={value}
           onChange={handleInputChange}
-          min={1}
-          max={max}
-          className="w-12 h-full text-center text-sm font-bold border-x border-border focus:outline-none focus:ring-1 focus:ring-primary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent"
+          className="w-12 h-full text-center text-sm font-bold border-0 border-x border-border rounded-none shadow-none focus-visible:ring-0 bg-transparent p-0"
         />
 
-        <button
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
           onClick={onIncrement}
           disabled={value >= max}
-          className={cn(
-            'w-9 h-full flex items-center justify-center bg-muted/30 text-muted-foreground hover:text-foreground transition-colors',
-            value >= max && 'opacity-30 cursor-not-allowed',
-          )}
+          className="w-9 h-full rounded-none text-muted-foreground hover:text-foreground"
+          aria-label="Tăng số lượng"
         >
           <Plus className="w-3.5 h-3.5" />
-        </button>
+        </Button>
       </div>
 
       <div className="flex items-center gap-2 text-xs text-muted-foreground/60">

@@ -1,10 +1,11 @@
 'use client';
 import { memo, useCallback } from 'react';
 import { Heart } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils';
 import { useWishlistManager } from '@/hooks/queries/useWishlist';
 import { useAppSelector } from '@/hooks/redux';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
 
 interface WishlistButtonProps {
   productId: string;
@@ -36,29 +37,31 @@ export const WishlistButton = memo(function WishlistButton({
     [productId, productName, toggleWishlist],
   );
 
-  const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-8 h-8',
-    lg: 'w-10 h-10',
-  };
-
   const iconSizes = {
     sm: 'h-3.5 w-3.5',
     md: 'h-4 w-4',
     lg: 'h-5 w-5',
   };
 
+  const buttonSizes = {
+    sm: 'icon-sm' as const,
+    md: 'icon' as const,
+    lg: 'icon-lg' as const,
+  };
+
   const tooltipLabel = isWishlisted ? 'Bỏ yêu thích' : 'Thêm vào yêu thích';
 
   if (variant === 'button') {
     return (
-      <button
+      <Button
+        variant="outline"
+        size={size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'default'}
         onClick={handleClick}
         className={cn(
-          'flex items-center gap-2 rounded-lg border px-4 py-2 transition-colors',
+          'gap-2 transition-colors',
           isWishlisted
-            ? 'border-primary/30 bg-primary/10 text-primary'
-            : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-primary',
+            ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'
+            : 'text-muted-foreground hover:text-primary',
           className,
         )}
       >
@@ -66,27 +69,28 @@ export const WishlistButton = memo(function WishlistButton({
         {showText && (
           <span className="text-sm font-medium">{isWishlisted ? 'Đã thích' : 'Yêu thích'}</span>
         )}
-      </button>
+      </Button>
     );
   }
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button
+        <Button
+          variant="ghost"
+          size={buttonSizes[size]}
           onClick={handleClick}
           className={cn(
-            'flex items-center justify-center rounded-full transition-colors',
-            sizeClasses[size],
+            'rounded-full transition-colors p-0',
             isWishlisted
-              ? 'bg-primary/10 text-primary'
+              ? 'bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'
               : 'bg-card/90 text-muted-foreground hover:bg-card hover:text-primary',
             className,
           )}
           aria-label={tooltipLabel}
         >
           <Heart className={cn(iconSizes[size], isWishlisted && 'fill-current')} />
-        </button>
+        </Button>
       </TooltipTrigger>
       <TooltipContent side="top">
         <p>{tooltipLabel}</p>

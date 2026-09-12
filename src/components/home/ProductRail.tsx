@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Product } from '@/types/product';
 import { ProductCard } from '@/components/product/ProductCard';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
 interface ProductRailProps {
@@ -60,22 +61,26 @@ export function ProductRail({
 
       <div className="group/rail relative">
         {/* Scroll buttons */}
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="icon-sm"
           onClick={() => scroll('left')}
           aria-label="Cuộn trái"
-          className="absolute left-0 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md transition-colors hover:text-primary md:flex opacity-0 group-hover/rail:opacity-100"
+          className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
         >
           <ChevronLeft className="h-4 w-4" />
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="outline"
+          size="icon-sm"
           onClick={() => scroll('right')}
           aria-label="Cuộn phải"
-          className="absolute right-0 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md transition-colors hover:text-primary md:flex opacity-0 group-hover/rail:opacity-100"
+          className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
         >
           <ChevronRight className="h-4 w-4" />
-        </button>
+        </Button>
 
         {/* Rail */}
         <div

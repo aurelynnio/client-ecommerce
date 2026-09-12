@@ -42,9 +42,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useMyShop, useShopOrders, useUpdateOrderStatus } from '@/hooks/queries';
+import { useCreateShipment, useOrderShipment, useSyncSalesOrder } from '@/hooks/queries/useShipmondo';
 import { formatCurrency, formatDate } from '@/utils/format';
 import { Order } from '@/types/order';
 import { getSafeErrorMessage } from '@/api';
+import {
+  FileDown,
+  Send,
+  PackageSearch,
+  Link2,
+  MapPin,
+} from 'lucide-react';
 
 const statusConfig: Record<
   string,
@@ -118,13 +126,23 @@ export default function SellerOrdersPage() {
   const updateStatusMutation = useUpdateOrderStatus();
   const isUpdating = updateStatusMutation.isPending;
 
-  const orders = ordersData?.orders || [];
-  const shopOrdersPagination = ordersData?.pagination;
+  const createShipmentMutation = useCreateShipment();
+  const syncSalesOrderMutation = useSyncSalesOrder();
+  const isShipmentBusy = createShipmentMutation.isPending || syncSalesOrderMutation.isPending;
 
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [updateStatusModalOpen, setUpdateStatusModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [newStatus, setNewStatus] = useState<string>('');
+
+  const orders = ordersData?.orders || [];
+  const shopOrdersPagination = ordersData?.pagination;
+
+  // Fetch Shipmondo shipment info (labels/tracking) when the detail modal shows
+  // an order that already has a shipment.
+  const shipmentQuery = useOrderShipment(selectedOrder?._id || '', {
+    enabled: viewModalOpen && !!selectedOrder?.shipmondoShipmentId,
+  });
 
   const handleSearch = () => {
     setPage(1);
@@ -156,6 +174,32 @@ export default function SellerOrdersPage() {
       toast.error(getSafeErrorMessage(error, 'Không thể cập nhật trạng thái đơn hàng'));
     }
   };
+
+  const handleCreateShipment = async (order: Order) => {
+    try {
+      const result = await createShipmentMutation.mutateAsync({ orderId: order._id });
+      const tracking = result.order?.trackingNumber;
+      toast.success(
+        tracking
+          ? `Đã tạo vận đơn Shipmondo. Mã vận đơn: ${tracking}`
+          : 'Đã tạo vận đơn Shipmondo thành công!',
+      );
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể tạo vận đơn Shipmondo'));
+    }
+  };
+
+  const handleSyncSalesOrder = async (order: Order) => {
+    try {
+      await syncSalesOrderMutation.mutateAsync(order._id);
+      toast.success('Đã đồng bộ đơn hàng lên Shipmondo!');
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể đồng bộ đơn hàng lên Shipmondo'));
+    }
+  };
+
+  const canBookShipment = (order: Order) =>
+    !order.shipmondoShipmentId && ['pending', 'confirmed', 'processing'].includes(order.status);
 
   const getAvailableStatuses = (currentStatus: string) => {
     return allowedTransitions[currentStatus] || [];
@@ -291,7 +335,7 @@ export default function SellerOrdersPage() {
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuContent align="end" className="w-56">
                           <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={() => handleOpenViewModal(order)}
@@ -299,6 +343,26 @@ export default function SellerOrdersPage() {
                             <Eye className="h-4 w-4 mr-2" />
                             Xem chi tiết
                           </DropdownMenuItem>
+                          {canBookShipment(order) && (
+                            <DropdownMenuItem
+                              className="cursor-pointer"
+                              disabled={isShipmentBusy}
+                              onClick={() => handleCreateShipment(order)}
+                            >
+                              <Send className="h-4 w-4 mr-2" />
+                              Tạo vận đơn Shipmondo
+                            </DropdownMenuItem>
+                          )}
+                          {!order.shipmondoSalesOrderId && (
+                            <DropdownMenuItem
+                              className="cursor-pointer"
+                              disabled={isShipmentBusy}
+                              onClick={() => handleSyncSalesOrder(order)}
+                            >
+                              <PackageSearch className="h-4 w-4 mr-2" />
+                              Đồng bộ sales order
+                            </DropdownMenuItem>
+                          )}
                           {availableStatuses.length > 0 && (
                             <>
                               <DropdownMenuSeparator />
@@ -428,6 +492,76 @@ export default function SellerOrdersPage() {
                   {statusConfig[selectedOrder.status]?.label}
                 </Badge>
               </div>
+
+              {/* Shipmondo shipment info */}
+              {selectedOrder.shipmondoShipmentId && (
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                  <h4 className="mb-2 flex items-center gap-2 font-medium text-foreground">
+                    <Truck className="h-4 w-4 text-primary" />
+                    Vận đơn Shipmondo
+                  </h4>
+                  <div className="space-y-1.5 text-sm">
+                    {selectedOrder.carrier && (
+                      <p className="text-muted-foreground">
+                        Hãng vận chuyển:{' '}
+                        <span className="font-medium text-foreground">
+                          {selectedOrder.carrier}
+                        </span>
+                      </p>
+                    )}
+                    {selectedOrder.trackingNumber && (
+                      <p className="text-muted-foreground">
+                        Mã vận đơn:{' '}
+                        <span className="font-medium text-foreground">
+                          {selectedOrder.trackingNumber}
+                        </span>
+                      </p>
+                    )}
+                    {selectedOrder.shipmondoStatus && (
+                      <p className="text-muted-foreground">
+                        Trạng thái Shipmondo:{' '}
+                        <span className="font-medium text-foreground">
+                          {selectedOrder.shipmondoStatus}
+                        </span>
+                      </p>
+                    )}
+                    {selectedOrder.servicePoint?.name && (
+                      <p className="flex items-center gap-1 text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5" />
+                        Điểm nhận: {selectedOrder.servicePoint.name}
+                      </p>
+                    )}
+                    {shipmentQuery.isFetching && (
+                      <p className="text-xs text-muted-foreground">Đang tải thông tin mới...</p>
+                    )}
+                    {((shipmentQuery.data?.labelUrls || selectedOrder.shipmentLabels)?.length ?? 0) >
+                      0 && (
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {(shipmentQuery.data?.labelUrls || selectedOrder.shipmentLabels || []).map(
+                          (url, i) => (
+                            <a
+                              key={url}
+                              href={url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground hover:bg-primary-hover"
+                            >
+                              <FileDown className="h-3.5 w-3.5" />
+                              Nhãn {i + 1}
+                            </a>
+                          ),
+                        )}
+                      </div>
+                    )}
+                    {selectedOrder.shipmondoShipmentId && (
+                      <p className="flex items-center gap-1 pt-1 text-xs text-muted-foreground">
+                        <Link2 className="h-3 w-3" />
+                        Shipment ID: {selectedOrder.shipmondoShipmentId}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Customer Info */}
               <div className="bg-muted/50 rounded-lg p-4">

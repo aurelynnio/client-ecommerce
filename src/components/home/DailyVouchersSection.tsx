@@ -6,6 +6,8 @@ import { Ticket, ChevronLeft, ChevronRight, ArrowRight, Copy } from 'lucide-reac
 import { usePlatformVouchers } from '@/hooks/queries';
 import { toast } from 'sonner';
 import { Voucher } from '@/types/voucher';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 function formatVoucherValue(voucher: Voucher) {
   if (voucher.type === 'percentage') return `${voucher.value}%`;
@@ -47,14 +49,16 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
           <span className="text-[10px] font-medium text-primary">
             {voucher.code}
           </span>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-sm"
             onClick={handleCopy}
             aria-label={`Sao chép mã ${voucher.code}`}
-            className="rounded p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
+            className="h-6 w-6 rounded p-1 text-muted-foreground hover:text-primary"
           >
             <Copy className="h-3 w-3" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -62,9 +66,8 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
 }
 
 export default function DailyVouchersSection() {
-  const { data: vouchers = [], isLoading } = usePlatformVouchers();
+  const { data: vouchers, isLoading } = usePlatformVouchers();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const displayVouchers = vouchers.slice(0, 6);
 
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
@@ -75,16 +78,21 @@ export default function DailyVouchersSection() {
     });
   };
 
+  const activeVouchers =
+    vouchers?.filter((v) => v.isActive && new Date(v.endDate) > new Date()) || [];
+
+  if (!isLoading && activeVouchers.length === 0) return null;
+
   return (
-    <section className="bg-card">
+    <section className="bg-muted/30">
       <div className="aura-container py-5">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Ticket className="h-5 w-5 text-primary" aria-hidden="true" />
             <h2 className="text-base font-semibold text-foreground">Voucher hôm nay</h2>
-            <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
+            <Badge variant="default" className="text-[10px] font-bold px-2 py-0.5">
               HOT
-            </span>
+            </Badge>
           </div>
           <Link
             href="/vouchers"
@@ -96,46 +104,41 @@ export default function DailyVouchersSection() {
         </div>
 
         <div className="group/rail relative">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="icon-sm"
             onClick={() => scroll('left')}
             aria-label="Cuộn trái"
-            className="absolute left-0 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md transition-colors hover:text-primary md:flex opacity-0 group-hover/rail:opacity-100"
+            className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
           >
             <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="outline"
+            size="icon-sm"
             onClick={() => scroll('right')}
             aria-label="Cuộn phải"
-            className="absolute right-0 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md transition-colors hover:text-primary md:flex opacity-0 group-hover/rail:opacity-100"
+            className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
           >
             <ChevronRight className="h-4 w-4" />
-          </button>
+          </Button>
 
           <div
             ref={scrollRef}
             className="no-scrollbar flex gap-3 overflow-x-auto scroll-smooth pb-1"
           >
             {isLoading
-              ? Array.from({ length: 4 }).map((_, i) => (
+              ? Array.from({ length: 5 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-20 w-[200px] shrink-0 animate-pulse rounded-lg border border-border bg-muted"
+                    className="h-20 w-[200px] shrink-0 animate-pulse rounded-lg bg-muted"
                   />
                 ))
-              : displayVouchers.length > 0
-                ? displayVouchers.map((voucher) => (
-                    <VoucherTicket key={voucher._id} voucher={voucher} />
-                  ))
-                : (
-                  <div className="w-full py-6 text-center">
-                    <Ticket className="mx-auto mb-2 h-8 w-8 text-muted-foreground/40" />
-                    <p className="text-sm text-muted-foreground">
-                      Hiện chưa có voucher nào.
-                    </p>
-                  </div>
-                )}
+              : activeVouchers.map((voucher) => (
+                  <VoucherTicket key={voucher._id} voucher={voucher} />
+                ))}
           </div>
         </div>
       </div>

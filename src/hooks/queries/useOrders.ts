@@ -35,6 +35,21 @@ export interface CreateOrderData {
   voucherPlatformCode?: string;
   discountCode?: string; // DEPRECATED
   note?: string;
+  // Shipmondo: per-shop shipping selections [{ shopId, fee, carrierCode, productCode, servicePoint }]
+  shippingOptions?: Array<{
+    shopId: string;
+    fee: number;
+    carrierCode?: string;
+    productCode?: string;
+    servicePoint?: {
+      id: string;
+      name?: string;
+      address1?: string;
+      postalCode?: string;
+      city?: string;
+      countryCode?: string;
+    };
+  }>;
 }
 
 export interface OrderListResponse {

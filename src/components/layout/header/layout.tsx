@@ -27,10 +27,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import NotificationModel from '@/components/notifications/NotificationModel';
 import TopUtilityBar from './TopUtilityBar';
 import { BRAND_CONFIG, pathArray } from '@/constants';
+import { useQueryClient } from '@tanstack/react-query';
 import { toggleChat } from '@/features/chat/chatSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useCart } from '@/hooks/queries/useCart';
 import { useCategoryTree } from '@/hooks/queries/useCategories';
+import { productKeys, flashSaleKeys, bannerKeys, voucherKeys } from '@/lib/queryKeys';
 import { useUnreadNotificationCount } from '@/hooks/queries/useNotifications';
 import { useSearchSuggestions } from '@/hooks/queries/useSearch';
 import { useWishlistCount } from '@/hooks/queries/useWishlist';
@@ -79,6 +81,7 @@ export default function HeaderLayout() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
   const { isAuthenticated, data } = useAppSelector((state) => state.auth);
   const isChatOpen = useAppSelector((state) => state.chat.isOpen);
   const { data: cartQueryData } = useCart({ enabled: isAuthenticated });
@@ -100,6 +103,8 @@ export default function HeaderLayout() {
   });
   const categoryRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hoverCategoryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const debouncedQuery = useDebounce(searchQuery, 300);
   const { data: searchResults, isLoading: isSearching } = useSearchSuggestions(
     debouncedQuery.trim(),
@@ -109,10 +114,54 @@ export default function HeaderLayout() {
   const categories = useMemo(() => categoryTree.slice(0, 10), [categoryTree]);
   const cartCount = cartQueryData?.items?.reduce((total, item) => total + item.quantity, 0) ?? 0;
 
+  const handleOpenCategories = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setCategoriesOpen(true);
+    setHoveredCategory((prev) => prev || categories[0]?._id || null);
+  };
+
+  const handleScheduleClose = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
+    closeTimeoutRef.current = setTimeout(() => {
+      setCategoriesOpen(false);
+      setHoveredCategory(null);
+    }, 200);
+  };
+
+  const handleCancelClose = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  };
+
+  const handleCategoryMouseEnter = (catId: string) => {
+    handleCancelClose();
+    if (hoverCategoryTimeoutRef.current) {
+      clearTimeout(hoverCategoryTimeoutRef.current);
+    }
+    if (!hoveredCategory) {
+      setHoveredCategory(catId);
+      return;
+    }
+    if (hoveredCategory === catId) return;
+
+    hoverCategoryTimeoutRef.current = setTimeout(() => {
+      setHoveredCategory(catId);
+    }, 65);
+  };
+
   useEffect(() => {
     const close = (event: MouseEvent) => {
       const target = event.target as Node;
       if (categoryRef.current && !categoryRef.current.contains(target)) {
+        if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+        if (hoverCategoryTimeoutRef.current) clearTimeout(hoverCategoryTimeoutRef.current);
         setCategoriesOpen(false);
         setHoveredCategory(null);
       }
@@ -120,6 +169,8 @@ export default function HeaderLayout() {
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+        if (hoverCategoryTimeoutRef.current) clearTimeout(hoverCategoryTimeoutRef.current);
         setCategoriesOpen(false);
         setHoveredCategory(null);
         setSearchOpen(false);
@@ -130,6 +181,8 @@ export default function HeaderLayout() {
     return () => {
       document.removeEventListener('mousedown', close);
       document.removeEventListener('keydown', onKeyDown);
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      if (hoverCategoryTimeoutRef.current) clearTimeout(hoverCategoryTimeoutRef.current);
     };
   }, []);
 
@@ -350,7 +403,20 @@ export default function HeaderLayout() {
             </SheetContent>
           </Sheet>
 
-          <Link href="/" className="flex shrink-0 items-center" aria-label={BRAND_CONFIG.name}>
+          <Link
+            href="/"
+            onClick={() => {
+              if (pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                queryClient.invalidateQueries({ queryKey: productKeys.all });
+                queryClient.invalidateQueries({ queryKey: flashSaleKeys.all });
+                queryClient.invalidateQueries({ queryKey: bannerKeys.all });
+                queryClient.invalidateQueries({ queryKey: voucherKeys.all });
+              }
+            }}
+            className="flex shrink-0 items-center"
+            aria-label={BRAND_CONFIG.name}
+          >
             <Image
               src="/images/logo-aura-red.png"
               alt={BRAND_CONFIG.name}
@@ -424,17 +490,22 @@ export default function HeaderLayout() {
           <div
             className="aura-container relative flex h-11 items-center gap-1"
             ref={categoryRef}
-            onMouseLeave={() => {
-              setCategoriesOpen(false);
-              setHoveredCategory(null);
-            }}
+            onMouseEnter={handleCancelClose}
+            onMouseLeave={handleScheduleClose}
           >
             <button
               type="button"
               aria-expanded={categoriesOpen}
               aria-controls="desktop-category-panel"
-              onClick={() => setCategoriesOpen((open) => !open)}
-              onMouseEnter={() => setCategoriesOpen(true)}
+              onClick={() => {
+                if (categoriesOpen) {
+                  setCategoriesOpen(false);
+                  setHoveredCategory(null);
+                } else {
+                  handleOpenCategories();
+                }
+              }}
+              onMouseEnter={handleOpenCategories}
               className="inline-flex h-8 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground shadow-xs transition-all hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
             >
               <Menu className="h-3.5 w-3.5" aria-hidden="true" />
@@ -482,75 +553,90 @@ export default function HeaderLayout() {
                   id="desktop-category-panel"
                   role="region"
                   aria-label="Danh mục sản phẩm"
-                  className="absolute left-0 top-[calc(100%+0.5rem)] z-50 flex w-[min(56rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-xl"
+                  className="absolute left-0 top-full z-50 pt-2 w-[min(56rem,calc(100vw-2rem))]"
                 >
-                  {/* Left rail — category list */}
-                  <ul className="w-56 shrink-0 overflow-y-auto border-r border-border bg-muted/20 p-1.5 space-y-0.5">
-                    {categories.map((category) => (
-                      <li key={category._id}>
-                        <button
-                          type="button"
-                          onMouseEnter={() => setHoveredCategory(category._id)}
-                          className={cn(
-                            'flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition-colors',
-                            hoveredCategory === category._id
-                              ? 'bg-primary-light font-semibold text-primary'
-                              : 'text-foreground hover:bg-muted hover:text-primary',
-                          )}
-                        >
-                          {category.name}
-                          <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" aria-hidden="true" />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Right panel — subcategories grid */}
-                  <div className="flex-1 p-4">
-                    {hoveredCat ? (
-                      <>
-                        <div className="mb-3 flex items-center justify-between">
-                          <h3 className="text-sm font-semibold text-foreground">
-                            {hoveredCat.name}
-                          </h3>
-                          <Link
-                            href={`/products?category=${hoveredCat.slug}`}
+                  <div className="flex overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+                    {/* Left rail — category list */}
+                    <ul className="w-56 shrink-0 overflow-y-auto border-r border-border bg-muted/20 p-1.5 space-y-0.5">
+                      {categories.map((category) => (
+                        <li key={category._id}>
+                          <button
+                            type="button"
+                            onMouseEnter={() => handleCategoryMouseEnter(category._id)}
                             onClick={() => {
+                              setHoveredCategory(category._id);
+                              router.push(`/products?category=${category.slug}`);
                               setCategoriesOpen(false);
-                              setHoveredCategory(null);
                             }}
-                            className="text-xs font-medium text-primary hover:text-primary-hover"
+                            className={cn(
+                              'flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition-colors',
+                              hoveredCategory === category._id
+                                ? 'bg-primary-light font-semibold text-primary'
+                                : 'text-foreground hover:bg-muted hover:text-primary',
+                            )}
                           >
-                            Xem tất cả →
-                          </Link>
-                        </div>
-                        {hoveredCat.subcategories?.length ? (
-                          <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                            {hoveredCat.subcategories.map((child) => (
-                              <Link
-                                key={child._id}
-                                href={`/products?category=${hoveredCat.slug}&subcategory=${child.slug}`}
-                                onClick={() => {
-                                  setCategoriesOpen(false);
-                                  setHoveredCategory(null);
-                                }}
-                                className="truncate rounded px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-primary-light hover:text-primary"
-                              >
-                                {child.name}
-                              </Link>
-                            ))}
+                            {category.name}
+                            <ChevronDown className="h-3 w-3 -rotate-90 opacity-50" aria-hidden="true" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Right panel — subcategories grid */}
+                    <div
+                      className="flex-1 p-4"
+                      onMouseEnter={() => {
+                        if (hoverCategoryTimeoutRef.current) {
+                          clearTimeout(hoverCategoryTimeoutRef.current);
+                          hoverCategoryTimeoutRef.current = null;
+                        }
+                      }}
+                    >
+                      {hoveredCat ? (
+                        <>
+                          <div className="mb-3 flex items-center justify-between">
+                            <h3 className="text-sm font-semibold text-foreground">
+                              {hoveredCat.name}
+                            </h3>
+                            <Link
+                              href={`/products?category=${hoveredCat.slug}`}
+                              onClick={() => {
+                                setCategoriesOpen(false);
+                                setHoveredCategory(null);
+                              }}
+                              className="text-xs font-medium text-primary hover:text-primary-hover"
+                            >
+                              Xem tất cả →
+                            </Link>
                           </div>
-                        ) : (
-                          <p className="py-4 text-sm text-muted-foreground">
-                            Chưa có danh mục con.
-                          </p>
-                        )}
-                      </>
-                    ) : (
-                      <p className="py-4 text-sm text-muted-foreground">
-                        Di chuột lên danh mục để xem chi tiết.
-                      </p>
-                    )}
+                          {hoveredCat.subcategories?.length ? (
+                            <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+                              {hoveredCat.subcategories.map((child) => (
+                                <Link
+                                  key={child._id}
+                                  href={`/products?category=${hoveredCat.slug}&subcategory=${child.slug}`}
+                                  onClick={() => {
+                                    setCategoriesOpen(false);
+                                    setHoveredCategory(null);
+                                  }}
+                                  className="truncate rounded px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-primary-light hover:text-primary"
+                                >
+                                  {child.name}
+                                </Link>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="py-4 text-sm text-muted-foreground">
+                              Chưa có danh mục con.
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <p className="py-4 text-sm text-muted-foreground">
+                          Di chuột lên danh mục để xem chi tiết.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </AnimatedDropdown>
               )}

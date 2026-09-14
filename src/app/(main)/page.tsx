@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import BannerCarousel from '@/components/home/BannerCarousel';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import TrustBar from '@/components/home/TrustBar';
@@ -11,10 +12,36 @@ import ProductRail from '@/components/home/ProductRail';
 import HomeProductList from '@/components/home/HomeProductList';
 import PromoGrid from '@/components/home/PromoGrid';
 import { useNewArrivals } from '@/hooks/queries';
+import { productKeys, flashSaleKeys, bannerKeys, voucherKeys, categoryKeys } from '@/lib/queryKeys';
 import { Shop } from '@/types/shop';
 
 export default function Home() {
   const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const refreshHomeData = () => {
+      queryClient.invalidateQueries({ queryKey: productKeys.all });
+      queryClient.invalidateQueries({ queryKey: flashSaleKeys.all });
+      queryClient.invalidateQueries({ queryKey: bannerKeys.all });
+      queryClient.invalidateQueries({ queryKey: voucherKeys.all });
+      queryClient.invalidateQueries({ queryKey: categoryKeys.tree() });
+    };
+
+    // Refresh immediately on mount / return to Home
+    refreshHomeData();
+
+    // Also refresh if restored from browser bfcache
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        refreshHomeData();
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, [queryClient]);
+
   const { data: newArrivals = [], isLoading: newArrivalsLoading } = useNewArrivals();
 
   // Extract unique shops from new arrivals products

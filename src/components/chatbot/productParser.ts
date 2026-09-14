@@ -6,6 +6,7 @@ export interface ParsedProduct {
   discountPercent?: number;
   brand?: string;
   category?: string;
+  size?: string;
   inStock?: boolean;
   productUrl: string;
   checkoutUrl?: string;
@@ -28,6 +29,12 @@ export function extractProductIdFromUrl(url?: string): string | undefined {
   return match ? match[1] : undefined;
 }
 
+const cleanMarkdownBorder = (text: string) =>
+  text
+    .replace(/^\s*(?:---+|\*\*\*+|___+)\s*/g, '')
+    .replace(/\s*(?:---+|\*\*\*+|___+)\s*$/g, '')
+    .trim();
+
 /**
  * Parses markdown message from Mia Assistant to identify recommended products
  * and separate conversational text from structured product items.
@@ -42,9 +49,10 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
   // **Áo Thun Basic Cotton**
   // - Giá: 299.000đ
   // - Thương hiệu: Uniqlo
+  // - Size: S, M, L
   // - [Xem chi tiết](/products/ao-thun-basic-cotton) | [Mua ngay](/checkout?product=123)
   const productBlockRegex =
-    /(?:^|\n)(?:(?:\d+\.|\*|-)\s*)?\*\*([^*\n]+)\*\*\s*(?:\n\s*[-*]\s*Giá:\s*([^\n\r]+))?(?:\n\s*[-*]\s*Thương hiệu:\s*([^\n\r]+))?(?:\n\s*[-*]\s*Danh mục:\s*([^\n\r]+))?(?:\n\s*[-*]\s*Tình trạng:\s*([^\n\r]+))?\s*\n\s*[-*]?\s*\[(?:Xem chi tiết|Chi tiết)\]\(([^)]+)\)\s*(?:\||\/|-)?\s*(?:\[(?:Mua ngay|Đặt mua)\]\(([^)]+)\))?/gi;
+    /(?:^|\n)(?:(?:\d+\.|\*|-)\s*)?\*\*([^*\n]+)\*\*\s*\n([\s\S]*?)(?:[-*]?\s*\[(?:Xem chi tiết|Chi tiết)\]\(([^)]+)\)\s*(?:\||\/|-)?\s*(?:\[(?:Mua ngay|Đặt mua)\]\(([^)]+)\))?)/gi;
 
   const products: ParsedProduct[] = [];
   let firstProductIndex = -1;
@@ -53,19 +61,28 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
   let match: RegExpExecArray | null;
   while ((match = productBlockRegex.exec(content)) !== null) {
     const rawName = match[1]?.trim();
-    const rawPrice = match[2]?.trim();
-    const rawBrand = match[3]?.trim();
-    const rawCategory = match[4]?.trim();
-    const rawStatus = match[5]?.trim();
-    const productUrl = match[6]?.trim() || '';
-    const checkoutUrl = match[7]?.trim() || '';
+    const body = match[2];
+    const productUrl = match[3]?.trim() || '';
+    const checkoutUrl = match[4]?.trim() || '';
 
-    // Only consider it a product card if it has a productUrl
+    // Only consider it a product card if it has a valid productUrl and name
     if (rawName && productUrl) {
       if (firstProductIndex === -1) {
         firstProductIndex = match.index;
       }
       lastProductEndIndex = match.index + match[0].length;
+
+      const priceMatch = body.match(/[-*]\s*Giá:\s*([^\n\r]+)/i);
+      const brandMatch = body.match(/[-*]\s*Thương hiệu:\s*([^\n\r]+)/i);
+      const categoryMatch = body.match(/[-*]\s*Danh mục:\s*([^\n\r]+)/i);
+      const statusMatch = body.match(/[-*]\s*Tình trạng:\s*([^\n\r]+)/i);
+      const sizeMatch = body.match(/[-*]\s*(?:\*\*)?Size(?:\*\*)?:\s*([^\n\r]+)/i);
+
+      const rawPrice = priceMatch ? priceMatch[1].trim() : undefined;
+      const rawBrand = brandMatch ? brandMatch[1].trim() : undefined;
+      const rawCategory = categoryMatch ? categoryMatch[1].trim() : undefined;
+      const rawStatus = statusMatch ? statusMatch[1].trim() : undefined;
+      const rawSize = sizeMatch ? sizeMatch[1].trim() : undefined;
 
       const productId = extractProductIdFromUrl(checkoutUrl);
 
@@ -91,33 +108,11 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
         discountPercent,
         brand: rawBrand && rawBrand !== 'N/A' ? rawBrand : undefined,
         category: rawCategory && rawCategory !== 'N/A' ? rawCategory : undefined,
+        size: rawSize && rawSize !== 'N/A' ? rawSize : undefined,
         inStock: rawStatus ? !rawStatus.toLowerCase().includes('hết') : true,
         productUrl,
         checkoutUrl: checkoutUrl || undefined,
         productId,
-      });
-    }
-  }
-
-  // Fallback pattern if format is slightly different (e.g. single product link format)
-  if (products.length === 0) {
-    const linkPairRegex =
-      /\[(?:Xem chi tiết|Chi tiết)\]\((\/products\/[^)]+)\)\s*(?:\||\/|-)\s*\[(?:Mua ngay|Đặt mua)\]\((\/checkout[^)]+)\)/gi;
-    let linkMatch: RegExpExecArray | null;
-    let idx = 0;
-    while ((linkMatch = linkPairRegex.exec(content)) !== null) {
-      const pUrl = linkMatch[1];
-      const cUrl = linkMatch[2];
-      const pId = extractProductIdFromUrl(cUrl);
-      const slugName = pUrl.replace('/products/', '').replace(/-/g, ' ');
-      const capitalized = slugName.charAt(0).toUpperCase() + slugName.slice(1);
-
-      products.push({
-        id: pId || `prod-fallback-${idx++}`,
-        name: capitalized,
-        productUrl: pUrl,
-        checkoutUrl: cUrl,
-        productId: pId,
       });
     }
   }
@@ -131,12 +126,12 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
     };
   }
 
-  // Split text into intro and outro
+  // Split text into intro and outro, cleaning up any markdown boundary delimiters
   const introText =
-    firstProductIndex > 0 ? content.slice(0, firstProductIndex).trim() : '';
+    firstProductIndex > 0 ? cleanMarkdownBorder(content.slice(0, firstProductIndex)) : '';
   const outroText =
     lastProductEndIndex > 0 && lastProductEndIndex < content.length
-      ? content.slice(lastProductEndIndex).trim()
+      ? cleanMarkdownBorder(content.slice(lastProductEndIndex))
       : '';
 
   return {

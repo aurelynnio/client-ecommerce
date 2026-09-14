@@ -68,7 +68,7 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
   return (
     <div
       className={cn(
-        'group relative flex flex-col rounded-xl border border-border/80 bg-card p-3 shadow-xs transition-all duration-200 hover:border-primary/40 hover:shadow-md',
+        'group relative flex flex-col rounded-xl border border-border/70 bg-card p-3 shadow-2xs transition-all duration-200 hover:border-primary/40 hover:shadow-xs',
         className,
       )}
     >
@@ -76,7 +76,7 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
       <div className="mb-2 flex items-center justify-between gap-1.5">
         <div className="flex flex-wrap items-center gap-1">
           {product.brand && (
-            <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-semibold text-primary">
+            <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-semibold text-primary border-primary/30">
               <Tag className="mr-0.5 h-2.5 w-2.5" />
               {product.brand}
             </Badge>
@@ -86,10 +86,15 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
               {product.category}
             </Badge>
           )}
+          {product.size && (
+            <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40">
+              Size: {product.size}
+            </Badge>
+          )}
         </div>
 
         {product.discountPercent !== undefined && product.discountPercent > 0 && (
-          <Badge className="h-5 bg-destructive px-1.5 text-[10px] font-bold text-destructive-foreground">
+          <Badge className="h-5 bg-destructive/10 text-destructive border-0 px-1.5 text-[10px] font-bold">
             -{product.discountPercent}%
           </Badge>
         )}
@@ -98,7 +103,7 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
       {/* Product Title */}
       <Link
         href={product.productUrl}
-        className="line-clamp-2 text-xs font-bold text-foreground transition-colors hover:text-primary hover:underline"
+        className="line-clamp-2 text-xs font-semibold text-foreground transition-colors hover:text-primary"
         title={product.name}
       >
         {product.name}
@@ -107,7 +112,7 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
       {/* Price section */}
       <div className="mt-2 flex items-baseline gap-1.5">
         {product.price && (
-          <span className="text-sm font-extrabold text-primary">
+          <span className="text-sm font-bold text-primary">
             {product.price}
           </span>
         )}
@@ -119,10 +124,10 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-3 flex items-center gap-1.5 pt-2 border-t border-border/60">
+      <div className="mt-2.5 flex items-center gap-1.5 pt-2 border-t border-border/60">
         <Link
           href={product.productUrl}
-          className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-md border border-border bg-background px-2 text-[11px] font-semibold text-foreground transition-colors hover:bg-muted hover:text-primary"
+          className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-lg border border-border bg-background px-2 text-[11px] font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
         >
           <ExternalLink className="h-3 w-3" />
           <span>Chi tiết</span>
@@ -131,7 +136,7 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
         {product.checkoutUrl ? (
           <Link
             href={product.checkoutUrl}
-            className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-md bg-primary px-2 text-[11px] font-semibold text-primary-foreground transition-colors hover:bg-primary-hover shadow-xs"
+            className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-lg bg-primary px-2 text-[11px] font-semibold text-primary-foreground transition-colors hover:bg-primary-hover shadow-2xs"
           >
             <ShoppingBag className="h-3 w-3" />
             <span>Mua ngay</span>
@@ -142,11 +147,11 @@ export default function ChatProductCard({ product, className }: ChatProductCardP
             variant="default"
             onClick={handleAddToCart}
             disabled={addToCartMutation.isPending || isAdded}
-            className="flex-1 h-7 text-[11px] px-2 font-semibold shadow-xs"
+            className="flex-1 h-7 text-[11px] px-2 font-semibold shadow-2xs rounded-lg"
           >
             {isAdded ? (
               <>
-                <Check className="h-3 w-3 text-success" />
+                <Check className="h-3 w-3 text-white" />
                 <span>Đã thêm</span>
               </>
             ) : (

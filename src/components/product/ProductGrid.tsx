@@ -4,7 +4,6 @@
 import { Product } from '@/types/product';
 import { ProductCard } from './ProductCard';
 import { ProductCardSkeleton } from './ProductSkeleton';
-import { StaggerContainer, StaggerItem } from '@/components/motion/primitives';
 
 interface ProductGridProps {
   products: Product[];
@@ -72,15 +71,14 @@ export function ProductGrid({
   }
 
   return (
-    <StaggerContainer
+    <div
       className={`grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 ${className}`}
+      data-testid="product-grid"
     >
       {products.map((product, idx) => (
-        <StaggerItem key={product._id}>
-          <ProductCard product={product} index={idx} />
-        </StaggerItem>
+        <ProductCard key={product._id} product={product} index={idx} />
       ))}
-    </StaggerContainer>
+    </div>
   );
 }
 

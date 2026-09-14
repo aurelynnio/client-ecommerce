@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/types/product';
@@ -21,13 +21,34 @@ const getPriceRange = (product: Product): { min: number; max: number } | null =>
 
 // Helper function to get display price
 const getDisplayPrice = (product: Product): { current: number; discount?: number } => {
+  const flashSalePrice =
+    product.flashSale?.isActive && product.flashSale?.salePrice
+      ? product.flashSale.salePrice
+      : (product as unknown as { flashSaleInfo?: { salePrice?: number } }).flashSaleInfo?.salePrice;
+
+  const originalPrice =
+    product.price?.currentPrice ||
+    (product as unknown as { flashSaleInfo?: { originalPrice?: number } }).flashSaleInfo?.originalPrice ||
+    0;
+
+  if (flashSalePrice && flashSalePrice < originalPrice) {
+    return {
+      current: originalPrice,
+      discount: flashSalePrice,
+    };
+  }
+
   const priceRange = getPriceRange(product);
-  if (priceRange) {
+  if (priceRange && priceRange.min !== priceRange.max) {
     return { current: priceRange.min };
   }
+
+  const basePrice = priceRange ? priceRange.min : product.price?.currentPrice || 0;
+  const discountPrice = product.price?.discountPrice ?? undefined;
+
   return {
-    current: product.price?.currentPrice || 0,
-    discount: product.price?.discountPrice || undefined,
+    current: basePrice,
+    discount: discountPrice && discountPrice < basePrice ? discountPrice : undefined,
   };
 };
 
@@ -35,6 +56,13 @@ const getDisplayPrice = (product: Product): { current: number; discount?: number
 const getProductImage = (product: Product): string | null => {
   if (product.variants?.[0]?.images?.[0]) {
     return product.variants[0].images[0];
+  }
+  const descImages = product.descriptionImages as unknown;
+  if (Array.isArray(descImages) && descImages.length > 0 && typeof descImages[0] === 'string') {
+    return descImages[0];
+  }
+  if (typeof descImages === 'string' && descImages.trim()) {
+    return descImages.trim().split(/\s+/)[0];
   }
   return null;
 };
@@ -62,10 +90,10 @@ const renderBadge = (product: Product, discountPercent: number) => {
       </Badge>
     );
   }
-  if (product.flashSale) {
+  if (product.flashSale?.isActive) {
     return (
-      <Badge variant="default" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase">
-        Giá sốc
+      <Badge variant="destructive" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wide">
+        Flash Sale
       </Badge>
     );
   }
@@ -86,18 +114,35 @@ const renderBadge = (product: Product, discountPercent: number) => {
   return null;
 };
 
-export const ProductCard = ({ product, index = 0 }: { product: Product; index?: number }) => {
+export const ProductCard = memo(function ProductCard({
+  product,
+  index = 0,
+}: {
+  product: Product;
+  index?: number;
+}) {
   const [imageError, setImageError] = useState(false);
   const displayPrice = getDisplayPrice(product);
   const productImage = getProductImage(product);
   const priceRange = getPriceRange(product);
 
-  const hasDiscount =
-    product.onSale && displayPrice.discount && displayPrice.discount < displayPrice.current;
+  const isFlashSale = Boolean(
+    (product.flashSale?.isActive && product.flashSale?.salePrice) ||
+      (product as unknown as { flashSaleInfo?: { salePrice?: number } }).flashSaleInfo?.salePrice,
+  );
 
-  const discountPercent = hasDiscount
-    ? getDiscountPercent(displayPrice.current, displayPrice.discount!)
-    : 0;
+  const hasDiscount = Boolean(
+    displayPrice.discount &&
+      displayPrice.discount < displayPrice.current &&
+      (isFlashSale || product.onSale || product.price?.discountPrice),
+  );
+
+  const discountPercent =
+    hasDiscount && displayPrice.discount
+      ? isFlashSale && product.flashSale?.discountPercent
+        ? product.flashSale.discountPercent
+        : getDiscountPercent(displayPrice.current, displayPrice.discount)
+      : 0;
 
   const shopName =
     typeof product.shop === 'object' && product.shop?.name
@@ -198,6 +243,6 @@ export const ProductCard = ({ product, index = 0 }: { product: Product; index?: 
       </Card>
     </Link>
   );
-};
+});
 
 export default ProductCard;

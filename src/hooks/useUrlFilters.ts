@@ -122,7 +122,7 @@ export function useUrlFilters<T extends Filters>({
       const queryString = params.toString();
       const url = basePath || window.location.pathname;
 
-      router.push(queryString ? `${url}?${queryString}` : url, { scroll: false });
+      router.replace(queryString ? `${url}?${queryString}` : url, { scroll: false });
     },
     [filters, createSearchParams, router, basePath],
   );
@@ -152,7 +152,7 @@ export function useUrlFilters<T extends Filters>({
    */
   const resetFilters = useCallback(() => {
     const url = basePath || window.location.pathname;
-    router.push(url);
+    router.replace(url, { scroll: false });
   }, [router, basePath]);
 
   /**

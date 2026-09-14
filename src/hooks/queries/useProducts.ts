@@ -10,6 +10,7 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
+  keepPreviousData,
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import instance from '@/api/api';
@@ -281,6 +282,7 @@ export function useProducts(params: ProductListParams = { page: 1, limit: 20 }) 
     queryKey: productKeys.list(params),
     queryFn: () => productApi.getAll(params),
     staleTime: STALE_TIME.LONG,
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -295,6 +297,7 @@ export function useInfiniteProducts(params: Omit<ProductListParams, 'page'> = { 
     initialPageParam: 1,
     getNextPageParam,
     staleTime: STALE_TIME.LONG,
+    placeholderData: keepPreviousData,
   });
 }
 

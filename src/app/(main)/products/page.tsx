@@ -1,9 +1,8 @@
 // Products page with URL-backed filters
 'use client';
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { useDebounce } from '@/hooks/useDebounce';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useInfiniteProducts } from '@/hooks/queries/useProducts';
 import { useActiveCategories } from '@/hooks/queries/useCategories';
@@ -11,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { SlidersHorizontal, ChevronDown, Loader2, Home } from 'lucide-react';
 import ProductFilter from '@/components/product/ProductFilter';
 import ProductGrid from '@/components/product/ProductGrid';
-import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { ProductFilters, ProductUrlFilters } from '@/types/product';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -23,7 +21,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 24;
 
 const DEFAULT_FILTERS: ProductUrlFilters = {
   search: '',
@@ -51,6 +49,14 @@ const formatCompactPrice = (value: number) =>
     maximumFractionDigits: 0,
   });
 
+const subscribeWindowResize = (callback: () => void) => {
+  window.addEventListener('resize', callback, { passive: true });
+  return () => window.removeEventListener('resize', callback);
+};
+
+const getWindowWidth = () => window.innerWidth;
+const getServerWindowWidth = () => 1024;
+
 export default function ProductsPage() {
   const {
     filters: urlFilters,
@@ -67,18 +73,12 @@ export default function ProductsPage() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const activeCategory = (urlFilters.category as string) || null;
 
-  const [mounted, setMounted] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(1024);
+  const windowWidth = useSyncExternalStore(
+    subscribeWindowResize,
+    getWindowWidth,
+    getServerWindowWidth,
+  );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     if (!isDropdownOpen) return;
@@ -92,11 +92,10 @@ export default function ProductsPage() {
   }, [isDropdownOpen]);
 
   const visibleCount = useMemo(() => {
-    if (!mounted) return 7;
     if (windowWidth >= 1024) return 7;
     if (windowWidth >= 768) return 4;
     return 2;
-  }, [mounted, windowWidth]);
+  }, [windowWidth]);
 
   const visibleCategories = useMemo(() => {
     return categories.slice(0, visibleCount);
@@ -138,32 +137,31 @@ export default function ProductsPage() {
   const priceSort =
     filters.sortBy === 'price_desc' ? 'desc' : filters.sortBy === 'price_asc' ? 'asc' : null;
 
-  // Debounced filters using custom hook
-  const debouncedFilters = useDebounce(filters, 300);
-  const debouncedCategory = useDebounce(activeCategory, 300);
-
   const infiniteParams = useMemo(() => {
     const params: Record<string, string | number | boolean> = { limit: PAGE_SIZE };
 
-    if (debouncedFilters.search) params.search = debouncedFilters.search;
-    if (debouncedFilters.minPrice > 0) params.minPrice = debouncedFilters.minPrice;
-    if (debouncedFilters.maxPrice < 10000000) params.maxPrice = debouncedFilters.maxPrice;
-    if (debouncedFilters.sortBy !== 'newest') params.sort = debouncedFilters.sortBy;
-    if (debouncedFilters.rating.length > 0) params.rating = debouncedFilters.rating.join(',');
-    if (debouncedFilters.colors.length > 0) params.colors = debouncedFilters.colors.join(',');
-    if (debouncedFilters.sizes.length > 0) params.sizes = debouncedFilters.sizes.join(',');
-    if (debouncedCategory) params.category = debouncedCategory;
+    if (filters.search) params.search = filters.search;
+    if (filters.minPrice > 0) params.minPrice = filters.minPrice;
+    if (filters.maxPrice < 10000000) params.maxPrice = filters.maxPrice;
+    if (filters.sortBy !== 'newest') params.sort = filters.sortBy;
+    if (filters.rating.length > 0) params.rating = filters.rating.join(',');
+    if (filters.colors.length > 0) params.colors = filters.colors.join(',');
+    if (filters.sizes.length > 0) params.sizes = filters.sizes.join(',');
+    if (activeCategory) params.category = activeCategory;
 
     return params;
-  }, [debouncedFilters, debouncedCategory]);
+  }, [filters, activeCategory]);
 
   const {
     data: infiniteData,
     isLoading,
+    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteProducts(infiniteParams);
+
+  const isFilterFetching = isFetching && !isFetchingNextPage;
 
   const products = useMemo(
     () => infiniteData?.pages.flatMap((page) => page.products) ?? [],
@@ -217,28 +215,45 @@ export default function ProductsPage() {
     return labels;
   }, [activeCategory, activeCategoryName, filters]);
 
+  const [knownColors, setKnownColors] = useState<string[]>([]);
+  const [knownSizes, setKnownSizes] = useState<string[]>([]);
+  const [prevProducts, setPrevProducts] = useState(products);
+
+  if (products !== prevProducts) {
+    setPrevProducts(products);
+    if (products.length > 0) {
+      const newColors = products.flatMap((product) =>
+        (product.variants || [])
+          .map((variant) => variant.color?.trim())
+          .filter((color): color is string => Boolean(color)),
+      );
+      if (newColors.length > 0) {
+        const merged = Array.from(new Set([...knownColors, ...newColors])).slice(0, 25);
+        if (merged.length !== knownColors.length || merged.some((c, i) => c !== knownColors[i])) {
+          setKnownColors(merged);
+        }
+      }
+
+      const newSizes = products
+        .flatMap((product) => (product.sizes || []).map((size) => size.trim()))
+        .filter((size): size is string => Boolean(size));
+      if (newSizes.length > 0) {
+        const merged = Array.from(new Set([...knownSizes, ...newSizes])).slice(0, 25);
+        if (merged.length !== knownSizes.length || merged.some((s, i) => s !== knownSizes[i])) {
+          setKnownSizes(merged);
+        }
+      }
+    }
+  }
+
   const availableColors = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          products.flatMap((product) =>
-            (product.variants || [])
-              .map((variant) => variant.color?.trim())
-              .filter((color): color is string => Boolean(color)),
-          ),
-        ),
-      ).slice(0, 20),
-    [products],
+    () => Array.from(new Set([...knownColors, ...filters.colors])).slice(0, 20),
+    [knownColors, filters.colors],
   );
 
   const availableSizes = useMemo(
-    () =>
-      Array.from(
-        new Set(products.flatMap((product) => (product.sizes || []).map((size) => size.trim()))),
-      )
-        .filter((size): size is string => Boolean(size))
-        .slice(0, 20),
-    [products],
+    () => Array.from(new Set([...knownSizes, ...filters.sizes])).slice(0, 20),
+    [knownSizes, filters.sizes],
   );
 
   const handleFilterChange = useCallback(
@@ -397,7 +412,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md transition-colors md:top-[108px]">
+      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md md:top-[108px]">
         <div className="aura-container py-3">
           <div className="w-full py-1">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -511,13 +526,17 @@ export default function ProductsPage() {
           />
 
           <div className="flex-1 min-h-[500px] relative">
-            {isLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-background/80">
-                <SpinnerLoading />
+            {isFilterFetching && (
+              <div className="absolute top-0 left-0 right-0 z-20 h-1 overflow-hidden rounded-full bg-primary/15">
+                <div className="h-full w-2/5 animate-[pulse_1s_ease-in-out_infinite] bg-primary rounded-full" />
               </div>
             )}
 
-            <div className="w-full">
+            <div
+              className={`w-full transition-opacity duration-200 ${
+                isFilterFetching ? 'opacity-70 pointer-events-none' : 'opacity-100'
+              }`}
+            >
               <ProductGrid products={products || []} isLoading={isLoading && !products?.length} />
             </div>
 

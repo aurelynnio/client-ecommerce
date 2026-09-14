@@ -51,6 +51,14 @@ export default function ProductFilter({
   onMobileClose,
 }: ProductFilterProps) {
   const [priceRange, setPriceRange] = useState([filters.minPrice, filters.maxPrice]);
+  const [prevMinPrice, setPrevMinPrice] = useState(filters.minPrice);
+  const [prevMaxPrice, setPrevMaxPrice] = useState(filters.maxPrice);
+
+  if (filters.minPrice !== prevMinPrice || filters.maxPrice !== prevMaxPrice) {
+    setPrevMinPrice(filters.minPrice);
+    setPrevMaxPrice(filters.maxPrice);
+    setPriceRange([filters.minPrice, filters.maxPrice]);
+  }
 
   const handlePriceChange = (values: number[]) => {
     setPriceRange(values);
@@ -110,7 +118,7 @@ export default function ProductFilter({
       if (searchTerm !== filters.search) {
         onFilterChange({ search: searchTerm });
       }
-    }, 500);
+    }, 250);
     return () => clearTimeout(timeout);
   }, [searchTerm, onFilterChange, filters.search]);
 

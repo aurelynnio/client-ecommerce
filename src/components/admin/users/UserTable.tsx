@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
   Table,
@@ -34,6 +35,7 @@ import {
   XCircle,
   Shield,
   Filter,
+  Key,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { User } from '@/types/user';
@@ -123,6 +125,7 @@ export function UsersTable({
   selectedRole = '',
   selectedVerified = null,
 }: UsersTableProps) {
+  const router = useRouter();
   const [localSearch, setLocalSearch] = useState(searchTerm);
   const debouncedSearch = useDebounce(localSearch);
   const onSearchRef = useRef(onSearch);
@@ -397,6 +400,13 @@ export function UsersTable({
                           >
                             <Edit className="h-4 w-4" />
                             Chỉnh sửa
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => router.push(`/admin/permissions?userId=${user._id}`)}
+                            className="cursor-pointer rounded-lg gap-2 text-primary focus:text-primary"
+                          >
+                            <Key className="h-4 w-4" />
+                            Phân quyền
                           </DropdownMenuItem>
                           <DropdownMenuSeparator className={adminMenuSeparatorClass} />
                           <DropdownMenuItem

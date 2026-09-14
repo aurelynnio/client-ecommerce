@@ -1,42 +1,79 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { Shield, Users, History, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import {
+  Shield,
+  Users,
+  History,
+  Key,
+  Layers,
+  Sparkles,
+  Sliders,
+} from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Card, CardContent } from '@/components/ui/card';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { getSafeErrorMessage } from '@/api';
-import { RESOURCES } from '@/constants/permissions';
 import {
   getAllPermissions,
   getRolePermissions,
   getAuditLogs,
-  type AuditLogEntry,
 } from '@/api';
 import {
   AdminPageHeader,
-  adminFilterBarClass,
-  adminRowHoverClass,
   adminSubtleSurfaceClass,
-  adminTableHeaderClass,
-  adminTableShellClass,
+  adminSurfaceClass,
 } from '@/components/admin/shared/AdminPrimitives';
+import {
+  UserPermissionEditor,
+  RoleMatrixTable,
+  PermissionSimulator,
+  AuditLogViewer,
+} from '@/components/admin/permissions';
 import { cn } from '@/utils/cn';
 
-export default function AdminPermissionsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+function AdminPermissionsContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
+  const queryUserId = searchParams.get('userId');
+  const queryTab = searchParams.get('tab');
+
+  const [activeTab, setActiveTab] = useState<string>(queryTab || 'user-delegation');
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(queryUserId);
+  const [prevQueryUserId, setPrevQueryUserId] = useState<string | null>(queryUserId);
+  const [prevQueryTab, setPrevQueryTab] = useState<string | null>(queryTab);
+
+  if (queryUserId !== prevQueryUserId) {
+    setPrevQueryUserId(queryUserId);
+    setSelectedUserId(queryUserId);
+    if (queryUserId) {
+      setActiveTab('user-delegation');
+    }
+  }
+
+  if (queryTab !== prevQueryTab) {
+    setPrevQueryTab(queryTab);
+    if (queryTab) {
+      setActiveTab(queryTab);
+    }
+  }
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    // Keep URL in sync without full reload
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tab);
+    if (!selectedUserId) {
+      params.delete('userId');
+    }
+    router.replace(`/admin/permissions?${params.toString()}`, { scroll: false });
+  };
+
+  // Pre-fetch system-wide permissions & roles for KPI metrics
   const {
     data: permsData,
     isLoading: permsLoading,
@@ -59,37 +96,25 @@ export default function AdminPermissionsPage() {
 
   const {
     data: logsData,
-    isLoading: logsLoading,
-    error: logsError,
     refetch: refetchLogs,
   } = useQuery({
-    queryKey: ['admin-permissions-audit'],
-    queryFn: () => getAuditLogs({ limit: 50 }),
+    queryKey: ['admin-permissions-audit-overview'],
+    queryFn: () => getAuditLogs({ limit: 1 }),
   });
 
-  const loading = permsLoading || rolesLoading || logsLoading;
+  const loading = permsLoading || rolesLoading;
+  const hasError = permsError || rolesError;
+
   const allPermissions = permsData?.permissions || [];
+  const groupedPerms = permsData?.grouped || {};
+  const totalResources = Object.keys(groupedPerms).length || 17;
   const rolePermissions = rolesData?.rolePermissions || {};
-  const auditLogs: AuditLogEntry[] = logsData?.logs || [];
-  const hasError = permsError || rolesError || logsError;
-
-  // Ensure allPermissions is always an array before filtering
-  const filteredPermissions = Array.isArray(allPermissions)
-    ? allPermissions.filter((p) => p.toLowerCase().includes(searchTerm.toLowerCase()))
-    : [];
-
-  const groupedPermissions = Object.values(RESOURCES).reduce(
-    (acc, resource) => {
-      acc[resource] = filteredPermissions.filter((p) => p.startsWith(`${resource}:`));
-      return acc;
-    },
-    {} as Record<string, string[]>,
-  );
+  const totalAuditLogs = logsData?.pagination?.total || 0;
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <SpinnerLoading size={32} />
+      <div className="flex items-center justify-center py-24">
+        <SpinnerLoading size={36} />
       </div>
     );
   }
@@ -98,21 +123,21 @@ export default function AdminPermissionsPage() {
     return (
       <div className="space-y-6">
         <AdminPageHeader
-          title="Phân quyền"
-          description="Kiểm tra quyền truy cập theo vai trò và lịch sử thay đổi vận hành."
+          title="Trung tâm phân quyền (RBAC Hub)"
+          description="Quản lý ủy quyền nhân sự, ma trận quyền và nhật ký kiểm toán hệ thống."
         />
         <div className={cn(adminSubtleSurfaceClass, 'space-y-4 p-8 text-center')}>
-          <p className="text-destructive">
-            {getSafeErrorMessage(hasError, 'Không thể tải dữ liệu permissions')}
+          <p className="text-destructive font-medium">
+            {getSafeErrorMessage(hasError, 'Không thể tải dữ liệu phân quyền hệ thống')}
           </p>
           <div className="flex items-center justify-center gap-2">
             <Button onClick={() => refetchPerms()} variant="outline">
-              Reload Permissions
+              Tải lại Permissions
             </Button>
             <Button onClick={() => refetchRoles()} variant="outline">
-              Reload Role Defaults
+              Tải lại Vai trò
             </Button>
-            <Button onClick={() => refetchLogs()}>Reload Audit Logs</Button>
+            <Button onClick={() => refetchLogs()}>Tải lại Logs</Button>
           </div>
         </div>
       </div>
@@ -121,151 +146,135 @@ export default function AdminPermissionsPage() {
 
   return (
     <div className="space-y-6">
+      {/* 1. Header */}
       <AdminPageHeader
-        title="Phân quyền"
-        description="Kiểm tra quyền truy cập theo vai trò và lịch sử thay đổi vận hành."
+        title="Trung tâm phân quyền & Ủy quyền (RBAC)"
+        description="Quản lý quyền hạn chi tiết cho từng nhân viên, thiết lập đặc quyền, xem ma trận vai trò và kiểm tra giả lập quyền truy cập."
       />
 
-      <Tabs defaultValue="permissions" className="space-y-6">
-        <TabsList className="w-full justify-start rounded-lg border border-border bg-muted/50 p-1 sm:w-fit">
-          <TabsTrigger value="permissions" className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            All Permissions
+      {/* 2. KPI Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className={adminSurfaceClass}>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Tài nguyên quản lý
+              </p>
+              <h3 className="text-2xl font-bold text-foreground mt-1">{totalResources}</h3>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Sản phẩm, Đơn hàng, Voucher...</p>
+            </div>
+            <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+              <Layers className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={adminSurfaceClass}>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Tổng số quyền hạn
+              </p>
+              <h3 className="text-2xl font-bold text-foreground mt-1">{allPermissions.length}</h3>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Quy tắc quyền hạn chi tiết</p>
+            </div>
+            <div className="h-10 w-10 rounded-lg bg-info/10 text-info flex items-center justify-center">
+              <Shield className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={adminSurfaceClass}>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Vai trò hệ thống
+              </p>
+              <h3 className="text-2xl font-bold text-foreground mt-1">
+                {Object.keys(rolePermissions).length || 3}
+              </h3>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Admin, Seller, Buyer</p>
+            </div>
+            <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <Users className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={adminSurfaceClass}>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Lịch sử kiểm toán
+              </p>
+              <h3 className="text-2xl font-bold text-foreground mt-1">{totalAuditLogs}</h3>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Lần thay đổi quyền đã ghi nhận</p>
+            </div>
+            <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <History className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 3. Main Tabs Navigation */}
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
+        <TabsList className="w-full justify-start rounded-lg border border-border bg-muted/50 p-1 flex-wrap sm:w-fit h-auto gap-1">
+          <TabsTrigger value="user-delegation" className="flex items-center gap-2">
+            <Key className="h-4 w-4" />
+            Ủy quyền nhân sự & Tài khoản
           </TabsTrigger>
-          <TabsTrigger value="roles" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Role Defaults
+          <TabsTrigger value="matrix" className="flex items-center gap-2">
+            <Sliders className="h-4 w-4" />
+            Ma trận quyền (Role Matrix)
+          </TabsTrigger>
+          <TabsTrigger value="simulator" className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4" />
+            Giả lập kiểm tra quyền
           </TabsTrigger>
           <TabsTrigger value="audit" className="flex items-center gap-2">
             <History className="h-4 w-4" />
-            Audit Logs
+            Nhật ký kiểm toán (Audit)
           </TabsTrigger>
         </TabsList>
 
-        {/* All Permissions Tab */}
-        <TabsContent value="permissions" className="space-y-4">
-          <div className={adminFilterBarClass}>
-            <div className="relative w-full sm:flex-1 sm:max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Tìm kiếm permission..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Badge variant="outline" className="w-fit">
-              {filteredPermissions.length} permissions
-            </Badge>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {Object.entries(groupedPermissions).map(
-              ([resource, perms]) =>
-                perms.length > 0 && (
-                  <section key={resource} className="rounded-lg border border-border bg-card p-4">
-                    <h3 className="font-semibold capitalize mb-3 flex items-center gap-2">
-                      {resource}
-                      <Badge variant="secondary">{perms.length}</Badge>
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {perms.map((perm) => (
-                        <Badge key={perm} variant="outline" className="font-mono text-xs">
-                          {perm}
-                        </Badge>
-                      ))}
-                    </div>
-                  </section>
-                ),
-            )}
-          </div>
+        {/* Tab 1: User Delegation & Permissions Editor */}
+        <TabsContent value="user-delegation" className="space-y-4">
+          <UserPermissionEditor
+            initialUserId={selectedUserId}
+            onUserChange={(userId) => setSelectedUserId(userId)}
+          />
         </TabsContent>
 
-        {/* Role Defaults Tab */}
-        <TabsContent value="roles" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            {Object.entries(rolePermissions).map(([role, perms]) => (
-              <section key={role} className="rounded-lg border border-border bg-card p-4">
-                <h3 className="font-semibold capitalize mb-3 flex items-center gap-2">
-                  <Badge
-                    className={
-                      role === 'admin'
-                        ? 'bg-info/15 text-foreground'
-                        : role === 'seller'
-                          ? 'bg-primary/15 text-foreground'
-                          : ''
-                    }
-                  >
-                    {role}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground">{perms.length} permissions</span>
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {perms.map((perm) => (
-                    <Badge key={perm} variant="outline" className="font-mono text-xs">
-                      {perm}
-                    </Badge>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
+        {/* Tab 2: Role Matrix Table */}
+        <TabsContent value="matrix" className="space-y-4">
+          <RoleMatrixTable rolePermissions={rolePermissions} />
         </TabsContent>
 
-        {/* Audit Logs Tab */}
-        <TabsContent value="audit">
-          <div className={adminTableShellClass}>
-            <div className="overflow-x-auto no-scrollbar">
-              <Table className="min-w-[640px]">
-                <TableHeader className={adminTableHeaderClass}>
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead>Thời gian</TableHead>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Admin</TableHead>
-                    <TableHead>User</TableHead>
-                    <TableHead>Permission</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {auditLogs.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                        Chưa có lịch sử thay đổi permission
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    auditLogs.map((log) => (
-                      <TableRow key={log._id} className={adminRowHoverClass}>
-                        <TableCell className="text-sm">
-                          {new Date(log.createdAt).toLocaleString('vi-VN')}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={log.action === 'grant' ? 'default' : 'destructive'}>
-                            {log.action}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {typeof log.adminId === 'object' ? log.adminId.username : log.adminId}
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {typeof log.targetUserId === 'object'
-                            ? log.targetUserId.username
-                            : log.targetUserId}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="font-mono text-xs">
-                            {log.permission}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
+        {/* Tab 3: Permission Simulator */}
+        <TabsContent value="simulator" className="space-y-4">
+          <PermissionSimulator rolePermissions={rolePermissions} />
+        </TabsContent>
+
+        {/* Tab 4: Audit Logs */}
+        <TabsContent value="audit" className="space-y-4">
+          <AuditLogViewer />
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+export default function AdminPermissionsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-24">
+          <SpinnerLoading size={36} />
+        </div>
+      }
+    >
+      <AdminPermissionsContent />
+    </Suspense>
   );
 }

@@ -26,7 +26,7 @@ export interface UserPermissionsResponse {
 
 export interface AuditLogEntry {
   _id: string;
-  action: 'grant' | 'revoke';
+  action: 'grant' | 'revoke' | 'bulk_update' | string;
   adminId: {
     _id: string;
     username: string;
@@ -129,6 +129,7 @@ export const revokePermission = async (
 
 export const getAuditLogs = async (params?: {
   userId?: string;
+  action?: string;
   page?: number;
   limit?: number;
 }): Promise<AuditLogsResponse> => {

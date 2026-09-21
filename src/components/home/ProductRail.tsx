@@ -67,7 +67,7 @@ export function ProductRail({
           size="icon-sm"
           onClick={() => scroll('left')}
           aria-label="Cuộn trái"
-          className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
+          className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -77,7 +77,7 @@ export function ProductRail({
           size="icon-sm"
           onClick={() => scroll('right')}
           aria-label="Cuộn phải"
-          className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100"
+          className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>

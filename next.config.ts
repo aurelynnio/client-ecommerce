@@ -1,7 +1,13 @@
 import type { NextConfig } from 'next';
 
+// On Vercel, standalone output must NOT be enabled.
+// Next.js 16.3+ with Turbopack and Vercel's build adapter triggers regression #96657:
+// "Error: ENOENT: no such file or directory, open '/vercel/path0/.next/next-server.js.nft.json'".
+// Standalone is only intended for self-hosted Docker builds.
+const isVercel = process.env.VERCEL === '1';
+
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  ...(isVercel ? {} : { output: 'standalone' }),
   turbopack: {
     root: process.cwd(),
   },

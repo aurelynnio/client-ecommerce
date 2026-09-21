@@ -87,7 +87,7 @@ export default function PromotionsPage() {
         <header className="border-b border-border pb-4">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
             <Gift className="h-4 w-4" />
-            <span>Trung tâm ưu đãi Aura Commerce</span>
+            <span>Trung tâm ưu đãi 南天 NANTIAN.COM</span>
           </div>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
             Chương trình khuyến mãi

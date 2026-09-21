@@ -1,8 +1,8 @@
 export const BRAND_CONFIG = {
-  name: 'Aura Commerce',
-  shortName: 'Aura',
+  name: '南天 NANTIAN.COM',
+  shortName: '南天',
   tagline: 'Modern refined e-commerce experience.',
-  copyright: `© ${new Date().getFullYear()} Aura Commerce. All rights reserved.`,
+  copyright: `© ${new Date().getFullYear()} 南天 NANTIAN.COM. All rights reserved.`,
   support: {
     phone: process.env.NEXT_PUBLIC_BRAND_PHONE || null,
     email: process.env.NEXT_PUBLIC_BRAND_EMAIL || null,

@@ -18,7 +18,7 @@ export default function Banner() {
       : [
           {
             _id: 'default-banner-1',
-            title: 'Chào mừng bạn đến với Aura',
+            title: 'Chào mừng bạn đến với 南天 NANTIAN.COM',
             subtitle: 'Những lựa chọn tốt hơn, cho nhịp sống hằng ngày.',
             imageUrl: '/images/default-banner.svg',
             link: '/products',

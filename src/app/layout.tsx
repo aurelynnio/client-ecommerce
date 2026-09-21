@@ -13,10 +13,10 @@ const auraSans = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Aura Commerce',
-    template: '%s | Aura',
+    default: '南天 NANTIAN.COM',
+    template: '%s | 南天 NANTIAN.COM',
   },
-  description: 'Modern refined e-commerce experience.',
+  description: 'Sàn thương mại điện tử 南天 NANTIAN.COM.',
   icons: {
     icon: '/images/logo-aura.svg',
     shortcut: '/images/logo-aura.svg',

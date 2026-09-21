@@ -113,7 +113,7 @@ export default function FreeShippingPage() {
               Miễn phí vận chuyển
             </h1>
             <p className="mt-0.5 text-sm text-muted-foreground">
-              Mua sắm thả ga không lo về phí vận chuyển trên toàn hệ thống Aura Commerce
+              Mua sắm thả ga không lo về phí vận chuyển trên toàn hệ thống 南天 NANTIAN.COM
             </p>
           </div>
           <Link href="/vouchers">

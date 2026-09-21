@@ -95,7 +95,7 @@ export default function NewArrivalsPage() {
               Hàng mới về
             </h1>
             <p className="mt-0.5 text-sm text-muted-foreground">
-              Khám phá các sản phẩm vừa được cập nhật trên Aura Commerce
+              Khám phá các sản phẩm vừa được cập nhật trên 南天 NANTIAN.COM
             </p>
           </div>
           <div className="text-sm text-muted-foreground">

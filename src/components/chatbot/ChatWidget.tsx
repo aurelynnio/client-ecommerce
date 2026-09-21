@@ -403,6 +403,7 @@ export default function ChatWidget() {
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
           let fullContent = '';
+          let sseBuffer = '';
           armTimer();
 
           while (true) {
@@ -411,8 +412,13 @@ export default function ChatWidget() {
             if (done) break;
             armTimer();
 
-            const chunk = decoder.decode(value);
-            const lines = chunk.split('\n');
+            // stream: true để không cắt vỡ ký tự UTF-8 (tiếng Việt) ở ranh giới chunk
+            sseBuffer += decoder.decode(value, { stream: true });
+
+            // Một frame SSE có thể bị cắt ngang giữa 2 network chunk → chỉ xử lý
+            // các dòng đã hoàn chỉnh, giữ lại dòng cuối còn dở cho chunk kế tiếp.
+            const lines = sseBuffer.split('\n');
+            sseBuffer = lines.pop() ?? '';
 
             for (const line of lines) {
               if (!line.startsWith('data: ')) continue;

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Search,
   User as UserIcon,
+  Shield,
   Key,
   Check,
   RotateCcw,
@@ -13,6 +14,7 @@ import {
   Sparkles,
   AlertCircle,
   Sliders,
+  UserCheck,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
@@ -37,6 +39,7 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
+  adminSubtleSurfaceClass,
   adminSurfaceClass,
 } from '@/components/admin/shared/AdminPrimitives';
 
@@ -130,6 +133,7 @@ export default function UserPermissionEditor({
   // User's custom overrides: e.g. ['product:create', '-order:cancel']
   const [userOverrides, setUserOverrides] = useState<string[]>([]);
   const [originalOverrides, setOriginalOverrides] = useState<string[]>([]);
+  const [effectivePermissions, setEffectivePermissions] = useState<string[]>([]);
 
   // Resource Filter & Expand
   const [resourceFilter, setResourceFilter] = useState('');
@@ -176,6 +180,7 @@ export default function UserPermissionEditor({
       const overrides = res?.userPermissions || [];
       setUserOverrides(overrides);
       setOriginalOverrides(overrides);
+      setEffectivePermissions(res?.effectivePermissions || []);
     } catch (err) {
       toast.error(getSafeErrorMessage(err, 'Không thể tải quyền của người dùng'));
     } finally {
@@ -249,6 +254,7 @@ export default function UserPermissionEditor({
   // If none -> Grant (perm) -> Revoke (-perm) -> None
   const handleCyclePermission = (perm: string) => {
     const currentState = getPermissionState(perm);
+    const isRoleDefault = roleDefaultPerms.has(perm);
 
     setUserOverrides((prev) => {
       const cleanList = prev.filter((p) => p !== perm && p !== `-${perm}`);
@@ -546,6 +552,9 @@ export default function UserPermissionEditor({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {displayedResources.map((resource) => {
                   const isExpanded = expandedResources[resource] !== false; // default expanded
+                  const resourcePerms = Object.values(ACTIONS).map(
+                    (act) => `${resource}:${act}`,
+                  );
 
                   return (
                     <div

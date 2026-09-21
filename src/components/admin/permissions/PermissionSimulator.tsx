@@ -8,6 +8,7 @@ import {
   Search,
   CheckCircle2,
   XCircle,
+  HelpCircle,
   Sparkles,
   ArrowRight,
 } from 'lucide-react';

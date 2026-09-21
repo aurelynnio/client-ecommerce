@@ -5,9 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import {
   History,
   Search,
+  Filter,
   CheckCircle,
   XCircle,
   Clock,
+  User as UserIcon,
   ChevronLeft,
   ChevronRight,
   ShieldAlert,
@@ -45,6 +47,7 @@ export default function AuditLogViewer() {
     data: logsData,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ['admin-permissions-audit', page, selectedAction],
     queryFn: () =>

@@ -30,11 +30,32 @@ import api from '@/api/api';
 import { ENDPOINT_CHATBOT } from '@/constants/endpoint';
 import { useT } from '@/i18n/chatbot';
 import { toast } from 'sonner';
-import { parseProductsFromContent } from './productParser';
-import ChatProductCard from './ChatProductCard';
+import { parseProductsFromContent, ParsedProduct } from './productParser';
+import ProductCarousel from './ProductCarousel';
+import ComparisonMatrix from './ComparisonMatrix';
+import SizeAdvisorCard from './SizeAdvisorCard';
+import QuickBuyDrawer from './QuickBuyDrawer';
 import ContextualChips from './ContextualChips';
 import FeedbackDialog from './FeedbackDialog';
 import HumanHandoffModal from './HumanHandoffModal';
+
+const TOOL_NAME_MAP: Record<string, string> = {
+  search_products: 'Mia đang tìm kiếm sản phẩm phù hợp...',
+  search_products_advanced: 'Mia đang lọc sản phẩm theo yêu cầu...',
+  search_products_by_brand: 'Mia đang tìm sản phẩm theo thương hiệu...',
+  search_products_by_price_range: 'Mia đang lọc theo khoảng giá...',
+  get_discounted_products: 'Mia đang săn deal & mã giảm giá...',
+  get_bestseller_products: 'Mia đang lấy danh sách bán chạy...',
+  get_new_arrival_products: 'Mia đang tìm các mẫu mới về...',
+  get_related_products: 'Mia đang tìm các mẫu tương tự...',
+  get_search_filter_options: 'Mia đang tải bộ lọc sản phẩm...',
+  get_product_details: 'Mia đang xem thông tin chi tiết...',
+  get_categories: 'Mia đang tra cứu danh mục...',
+  get_featured_products: 'Mia đang chọn sản phẩm nổi bật...',
+  check_product_availability: 'Mia đang kiểm tra tồn kho & size...',
+  generate_checkout_link: 'Mia đang chuẩn bị link thanh toán...',
+  compare_products: 'Mia đang đối chiếu và lập bảng so sánh...',
+};
 
 const CHATBOT_API_BASE_URL = api.defaults.baseURL || '/api';
 const CHATBOT_ENABLED = process.env.NEXT_PUBLIC_CHATBOT_ENABLED !== 'false';
@@ -81,6 +102,14 @@ export default function ChatWidget() {
   } | null>(null);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(false);
+  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const [quickBuyProduct, setQuickBuyProduct] = useState<ParsedProduct | null>(null);
+  const [isQuickBuyOpen, setIsQuickBuyOpen] = useState(false);
+
+  const handleOpenQuickBuy = useCallback((product: ParsedProduct) => {
+    setQuickBuyProduct(product);
+    setIsQuickBuyOpen(true);
+  }, []);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -315,6 +344,7 @@ export default function ChatWidget() {
       setInput('');
       setIsLoading(true);
       setStreamingContent('');
+      setActiveTool(null);
       lastUserTextRef.current = trimmedText;
 
       let timedOut = false;
@@ -393,10 +423,18 @@ export default function ChatWidget() {
                     setSessionId(data.sessionId);
                     localStorage.setItem(SESSION_KEY, data.sessionId);
                   }
+                } else if (data.type === 'tool' && data.name) {
+                  setActiveTool(TOOL_NAME_MAP[data.name] || 'Mia đang xử lý yêu cầu...');
                 } else if (data.type === 'token') {
+                  setActiveTool(null);
                   fullContent += data.content;
                   setStreamingContent(fullContent);
+                } else if (data.type === 'correction') {
+                  setActiveTool(null);
+                  fullContent = data.content;
+                  setStreamingContent(data.content);
                 } else if (data.type === 'done') {
+                  setActiveTool(null);
                   const finalContent =
                     fullContent.trim() ||
                     (data.success === false
@@ -414,6 +452,7 @@ export default function ChatWidget() {
                   ]);
                   setStreamingContent('');
                 } else if (data.type === 'error') {
+                  setActiveTool(null);
                   const errorMsg = data.message || t.networkError;
                   setMessages((prev) => [
                     ...prev,
@@ -433,6 +472,7 @@ export default function ChatWidget() {
             }
           }
         } catch (error) {
+          setActiveTool(null);
           if (timedOut) {
             setMessages((prev) => [
               ...prev,
@@ -836,7 +876,7 @@ export default function ChatWidget() {
                     >
                       {msg.role === 'assistant' ? (
                         <>
-                          {/* Case 1: Structured response with Rich Product Cards */}
+                          {/* Case 1: Structured response with Adaptive Components */}
                           {parsedContent?.hasProducts ? (
                             <div className="space-y-2.5">
                               {parsedContent.introText && (
@@ -847,12 +887,23 @@ export default function ChatWidget() {
                                 </div>
                               )}
 
-                              {/* Interactive Product Grid */}
-                              <div className="grid grid-cols-1 gap-2 pt-1">
-                                {parsedContent.products.map((product) => (
-                                  <ChatProductCard key={product.id} product={product} />
-                                ))}
-                              </div>
+                              {/* Adaptive Product Layout: Comparison Matrix or Horizontal Carousel */}
+                              {parsedContent.isComparison ? (
+                                <ComparisonMatrix
+                                  products={parsedContent.products}
+                                  onQuickBuy={handleOpenQuickBuy}
+                                />
+                              ) : (
+                                <ProductCarousel
+                                  products={parsedContent.products}
+                                  onQuickBuy={handleOpenQuickBuy}
+                                />
+                              )}
+
+                              {/* Interactive Sizing Advisor Guide */}
+                              {parsedContent.isSizeAdvice && (
+                                <SizeAdvisorCard onSelectSizeQuery={sendMessage} />
+                              )}
 
                               {parsedContent.outroText && (
                                 <div className="prose prose-sm max-w-none text-foreground pt-1">
@@ -864,37 +915,44 @@ export default function ChatWidget() {
                             </div>
                           ) : (
                             /* Case 2: Standard Markdown text */
-                            <div className="prose prose-sm max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>li]:mb-0.5 text-foreground prose-a:text-primary hover:prose-a:underline font-normal leading-relaxed">
-                              <ReactMarkdown
-                                rehypePlugins={[rehypeSanitize]}
-                                components={{
-                                  a: ({ href, children }) => {
-                                    if (!href) return <span>{children}</span>;
-                                    if (href.startsWith('/')) {
+                            <div className="space-y-2">
+                              <div className="prose prose-sm max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>li]:mb-0.5 text-foreground prose-a:text-primary hover:prose-a:underline font-normal leading-relaxed">
+                                <ReactMarkdown
+                                  rehypePlugins={[rehypeSanitize]}
+                                  components={{
+                                    a: ({ href, children }) => {
+                                      if (!href) return <span>{children}</span>;
+                                      if (href.startsWith('/')) {
+                                        return (
+                                          <Link
+                                            href={href}
+                                            className="text-primary hover:underline font-bold"
+                                          >
+                                            {children}
+                                          </Link>
+                                        );
+                                      }
                                       return (
-                                        <Link
+                                        <a
                                           href={href}
                                           className="text-primary hover:underline font-bold"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
                                         >
                                           {children}
-                                        </Link>
+                                        </a>
                                       );
-                                    }
-                                    return (
-                                      <a
-                                        href={href}
-                                        className="text-primary hover:underline font-bold"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        {children}
-                                      </a>
-                                    );
-                                  },
-                                }}
-                              >
-                                {msg.content || 'Dạ em chào anh/chị, em có thể hỗ trợ gì cho mình hôm nay ạ?'}
-                              </ReactMarkdown>
+                                    },
+                                  }}
+                                >
+                                  {msg.content || 'Dạ em chào anh/chị, em có thể hỗ trợ gì cho mình hôm nay ạ?'}
+                                </ReactMarkdown>
+                              </div>
+
+                              {/* Standalone Sizing Guide when customer asks for sizing without product cards */}
+                              {parsedContent?.isSizeAdvice && (
+                                <SizeAdvisorCard onSelectSizeQuery={sendMessage} />
+                              )}
                             </div>
                           )}
 
@@ -975,6 +1033,14 @@ export default function ChatWidget() {
                   </div>
                 );
               })}
+
+              {/* Active Tool Execution Indicator */}
+              {activeTool && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold animate-pulse w-fit mx-auto my-2 border border-primary/20 shadow-2xs">
+                  <Sparkles className="h-3.5 w-3.5 animate-spin" />
+                  <span>{activeTool}</span>
+                </div>
+              )}
 
               {/* Streaming content (live region) */}
               {streamingContent && (
@@ -1104,6 +1170,13 @@ export default function ChatWidget() {
         onClose={() => setFeedbackDialogData(null)}
         onSubmit={handleFeedbackSubmit}
         isSubmitting={isSubmittingFeedback}
+      />
+
+      {/* Quick Buy Variant Selection Sheet */}
+      <QuickBuyDrawer
+        product={quickBuyProduct}
+        isOpen={isQuickBuyOpen}
+        onClose={() => setIsQuickBuyOpen(false)}
       />
     </>
   );

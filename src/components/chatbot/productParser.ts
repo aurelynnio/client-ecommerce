@@ -7,6 +7,9 @@ export interface ParsedProduct {
   brand?: string;
   category?: string;
   size?: string;
+  sizes?: string[];
+  colors?: string[];
+  image?: string;
   inStock?: boolean;
   productUrl: string;
   checkoutUrl?: string;
@@ -18,6 +21,8 @@ export interface ParsedMessageContent {
   products: ParsedProduct[];
   outroText: string;
   hasProducts: boolean;
+  isComparison?: boolean;
+  isSizeAdvice?: boolean;
 }
 
 /**
@@ -44,13 +49,22 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
     return { introText: '', products: [], outroText: '', hasProducts: false };
   }
 
+  const lowerContent = content.toLowerCase();
+  const isSizeAdvice =
+    lowerContent.includes('bảng size') ||
+    lowerContent.includes('chiều cao') ||
+    lowerContent.includes('cân nặng') ||
+    lowerContent.includes('tư vấn size') ||
+    lowerContent.includes('mặc size');
+
   // Regex to match a single product block formatted by Mia
-  // Example:
-  // **Áo Thun Basic Cotton**
-  // - Giá: 299.000đ
+  // Supports:
+  // **[Product Name]**
+  // - Giá: 299.000đ (gốc 399.000đ, giảm 25%)
   // - Thương hiệu: Uniqlo
+  // - Ảnh: https://... (or ![alt](url))
   // - Size: S, M, L
-  // - [Xem chi tiết](/products/ao-thun-basic-cotton) | [Mua ngay](/checkout?product=123)
+  // - [Xem chi tiết](...) | [Mua ngay](...)
   const productBlockRegex =
     /(?:^|\n)(?:(?:\d+\.|\*|-)\s*)?\*\*([^*\n]+)\*\*\s*\n([\s\S]*?)(?:[-*]?\s*\[(?:Xem chi tiết|Chi tiết)\]\(([^)]+)\)\s*(?:\||\/|-)?\s*(?:\[(?:Mua ngay|Đặt mua)\]\(([^)]+)\))?)/gi;
 
@@ -72,17 +86,23 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
       }
       lastProductEndIndex = match.index + match[0].length;
 
-      const priceMatch = body.match(/[-*]\s*Giá:\s*([^\n\r]+)/i);
-      const brandMatch = body.match(/[-*]\s*Thương hiệu:\s*([^\n\r]+)/i);
-      const categoryMatch = body.match(/[-*]\s*Danh mục:\s*([^\n\r]+)/i);
-      const statusMatch = body.match(/[-*]\s*Tình trạng:\s*([^\n\r]+)/i);
-      const sizeMatch = body.match(/[-*]\s*(?:\*\*)?Size(?:\*\*)?:\s*([^\n\r]+)/i);
+      const priceMatch = body.match(/[-*]?\s*(?:\*\*)?Giá(?:\*\*)?:\s*([^\n\r]+)/i);
+      const brandMatch = body.match(/[-*]?\s*(?:\*\*)?Thương hiệu(?:\*\*)?:\s*([^\n\r]+)/i);
+      const categoryMatch = body.match(/[-*]?\s*(?:\*\*)?Danh mục(?:\*\*)?:\s*([^\n\r]+)/i);
+      const statusMatch = body.match(/[-*]?\s*(?:\*\*)?Tình trạng|Còn hàng(?:\*\*)?:\s*([^\n\r]+)/i);
+      const sizeMatch = body.match(/[-*]?\s*(?:\*\*)?Size|Kích cỡ(?:\*\*)?:\s*([^\n\r]+)/i);
+      const colorMatch = body.match(/[-*]?\s*(?:\*\*)?Màu|Màu sắc(?:\*\*)?:\s*([^\n\r]+)/i);
+      const imageMatch =
+        body.match(/!\[[^\]]*\]\((https?:\/\/[^)]+)\)/i) ||
+        body.match(/[-*]?\s*(?:\*\*)?Ảnh|Image(?:\*\*)?:\s*(https?:\/\/[^\s\n\r]+)/i);
 
       const rawPrice = priceMatch ? priceMatch[1].trim() : undefined;
       const rawBrand = brandMatch ? brandMatch[1].trim() : undefined;
       const rawCategory = categoryMatch ? categoryMatch[1].trim() : undefined;
       const rawStatus = statusMatch ? statusMatch[1].trim() : undefined;
       const rawSize = sizeMatch ? sizeMatch[1].trim() : undefined;
+      const rawColor = colorMatch ? colorMatch[1].trim() : undefined;
+      const imageUrl = imageMatch ? imageMatch[1].trim() : undefined;
 
       const productId = extractProductIdFromUrl(checkoutUrl);
 
@@ -92,13 +112,29 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
       let discountPercent: number | undefined;
 
       if (rawPrice) {
-        const discountMatch = rawPrice.match(/(\d+[\d.,]*\s*đ)\s*(?:\(gốc\s*([^,)]+),\s*giảm\s*(\d+)%\))?/i);
+        const discountMatch = rawPrice.match(
+          /(\d+[\d.,]*\s*đ)\s*(?:\(gốc\s*([^,)]+),\s*giảm\s*(\d+)%\))?/i,
+        );
         if (discountMatch) {
           price = discountMatch[1];
           originalPrice = discountMatch[2];
           discountPercent = discountMatch[3] ? parseInt(discountMatch[3], 10) : undefined;
         }
       }
+
+      const sizes = rawSize
+        ? rawSize
+            .split(/[,/|]+/)
+            .map((s) => s.trim())
+            .filter((s) => s && s.toLowerCase() !== 'n/a')
+        : undefined;
+
+      const colors = rawColor
+        ? rawColor
+            .split(/[,/|]+/)
+            .map((c) => c.trim())
+            .filter((c) => c && c.toLowerCase() !== 'n/a')
+        : undefined;
 
       products.push({
         id: productId || `prod-${products.length}-${Math.random().toString(36).slice(2, 6)}`,
@@ -109,6 +145,9 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
         brand: rawBrand && rawBrand !== 'N/A' ? rawBrand : undefined,
         category: rawCategory && rawCategory !== 'N/A' ? rawCategory : undefined,
         size: rawSize && rawSize !== 'N/A' ? rawSize : undefined,
+        sizes: sizes && sizes.length > 0 ? sizes : undefined,
+        colors: colors && colors.length > 0 ? colors : undefined,
+        image: imageUrl,
         inStock: rawStatus ? !rawStatus.toLowerCase().includes('hết') : true,
         productUrl,
         checkoutUrl: checkoutUrl || undefined,
@@ -117,12 +156,22 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
     }
   }
 
+  const isComparison =
+    products.length >= 2 &&
+    (lowerContent.includes('so sánh') ||
+      lowerContent.includes('khác nhau') ||
+      lowerContent.includes('ưu điểm') ||
+      lowerContent.includes('nhược điểm') ||
+      lowerContent.includes('nên mua'));
+
   if (products.length === 0) {
     return {
       introText: content.trim(),
       products: [],
       outroText: '',
       hasProducts: false,
+      isComparison: false,
+      isSizeAdvice,
     };
   }
 
@@ -139,5 +188,7 @@ export function parseProductsFromContent(content: string): ParsedMessageContent 
     products,
     outroText,
     hasProducts: true,
+    isComparison,
+    isSizeAdvice,
   };
 }

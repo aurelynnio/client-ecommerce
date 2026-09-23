@@ -1,5 +1,5 @@
 'use client';
-import { useProfile } from '@/hooks/queries/useProfile';
+import { useProfile, useUserStats } from '@/hooks/queries/useProfile';
 import { useAppSelector } from '@/hooks/redux';
 import { useState } from 'react';
 import { useLogout } from '@/hooks/queries';
@@ -50,6 +50,7 @@ export default function ProfilePage() {
   const searchParams = useSearchParams();
   const { loading: authLoading, isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: currentUser, isLoading } = useProfile();
+  const { data: userStats } = useUserStats({ enabled: isAuthenticated });
   const { data: ordersData } = useUserOrders({ page: 1, limit: 50 }, { enabled: isAuthenticated });
   const { data: wishlistCount = 0 } = useWishlistCount({
     enabled: isAuthenticated,
@@ -67,9 +68,10 @@ export default function ProfilePage() {
       : 'profile';
 
   const [open, setOpen] = useState(false);
-  const totalOrders = ordersData?.pagination?.totalItems || ordersData?.orders?.length || 0;
+  const totalOrders =
+    userStats?.orders?.total ?? (ordersData?.pagination?.totalItems || ordersData?.orders?.length || 0);
   const pendingOrders =
-    ordersData?.orders?.filter((order) => order.status === 'pending').length || 0;
+    userStats?.orders?.pending ?? (ordersData?.orders?.filter((order) => order.status === 'pending').length || 0);
   const accountRoleLabel =
     currentUser?.roles === 'admin'
       ? 'Quản trị viên'
@@ -136,13 +138,15 @@ export default function ProfilePage() {
     },
   ];
 
-  const activeVoucherCount = savedVouchers.filter((v) => v.status === 'valid').length;
+  const activeVoucherCount =
+    userStats?.vouchers?.saved ?? savedVouchers.filter((v) => v.status === 'valid').length;
+  const totalWishlist = userStats?.wishlist?.total ?? wishlistCount;
 
   // Quick stats for user card
   const quickStats = [
     { label: 'Đơn hàng', value: totalOrders.toString(), icon: Package },
     { label: 'Ví voucher', value: activeVoucherCount.toString(), icon: Ticket },
-    { label: 'Yêu thích', value: wishlistCount.toString(), icon: Heart },
+    { label: 'Yêu thích', value: totalWishlist.toString(), icon: Heart },
   ];
 
   if (!isAuthenticated && !authLoading) {
@@ -329,7 +333,9 @@ export default function ProfilePage() {
             <div className="min-h-[500px] rounded-lg border border-border bg-card">
               <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
                 <TabsContent value="profile" className="mt-0 p-4 focus-visible:ring-0">
-                  {currentUser && <ProfileTab user={currentUser} />}
+                  {currentUser && (
+                    <ProfileTab user={currentUser} onEditProfile={() => setOpen(true)} />
+                  )}
                 </TabsContent>
                 <TabsContent value="orders" className="mt-0 p-4 focus-visible:ring-0">
                   <OrdersTab />

@@ -207,8 +207,12 @@ export const ENDPOINT_STATISTICS = {
 export const ENDPOINT_USER = {
   ROOT: '/users',
   PROFILE: '/users/profile',
+  ME: '/users/me',
+  STATS: '/users/profile/stats',
   ADDRESSES: '/users/addresses',
   UPLOAD_AVATAR: '/users/upload-avatar',
+  DELETE_AVATAR: '/users/avatar',
+  DELETE_PROFILE: '/users/profile',
   CHANGE_PASSWORD: '/users/change-password',
   byId: (userId: string) => `/users/${userId}`,
   updateRole: (userId: string) => `/users/${userId}/role`,

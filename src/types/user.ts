@@ -7,9 +7,12 @@ export type AuthProvider = 'local' | 'google';
 export interface User extends BaseEntity {
   username: string;
   email: string;
+  fullName?: string;
+  phone?: string;
+  gender?: 'male' | 'female' | 'other' | null;
+  dateOfBirth?: string | null;
   roles: UserRole;
   permissions: string[];
-  phone?: string;
   avatar: string | null;
 
   // Relations
@@ -72,4 +75,23 @@ export interface UserFilters {
   role: string;
   isVerifiedEmail: boolean | null;
   [key: string]: string | number | boolean | null;
+}
+
+export interface UserProfileStats {
+  orders: {
+    total: number;
+    pending: number;
+  };
+  wishlist: {
+    total: number;
+  };
+  vouchers: {
+    saved: number;
+  };
+  notifications: {
+    unread: number;
+  };
+  addresses: {
+    total: number;
+  };
 }

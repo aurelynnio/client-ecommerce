@@ -9,7 +9,7 @@ import { extractApiData } from '@/api';
 import { errorHandler } from '@/lib/error-handler';
 import { STALE_TIME } from '@/constants/cache';
 import { userKeys } from '@/lib/queryKeys';
-import { User } from '@/types/user';
+import { User, UserProfileStats } from '@/types/user';
 import { Address } from '@/types/address';
 import { PaginationData } from '@/types/common';
 
@@ -26,6 +26,10 @@ export interface UpdateProfileData {
   username?: string;
   email?: string;
   avatar?: string;
+  fullName?: string;
+  phone?: string;
+  gender?: 'male' | 'female' | 'other' | null;
+  dateOfBirth?: string | null;
 }
 
 export type TwoFactorAction = 'enable' | 'disable';
@@ -82,9 +86,14 @@ function invalidateUsers(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: userKeys.all });
 }
 
+function invalidateStats(queryClient: QueryClient) {
+  return queryClient.invalidateQueries({ queryKey: userKeys.stats() });
+}
+
 function invalidateAddressAndProfile(queryClient: QueryClient) {
   invalidateAddresses(queryClient);
   invalidateProfile(queryClient);
+  invalidateStats(queryClient);
 }
 
 // ============ API Functions ============
@@ -94,8 +103,18 @@ const userApi = {
     return extractApiData(response);
   },
 
+  getStats: async (): Promise<UserProfileStats> => {
+    const response = await instance.get(ENDPOINT_USER.STATS);
+    return extractApiData(response);
+  },
+
   getAddresses: async (): Promise<Address[]> => {
     const response = await instance.get(ENDPOINT_USER.ADDRESSES);
+    return extractApiData(response);
+  },
+
+  getAddressById: async (addressId: string): Promise<Address> => {
+    const response = await instance.get(ENDPOINT_USER.address(addressId));
     return extractApiData(response);
   },
 
@@ -134,6 +153,15 @@ const userApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return extractApiData(response);
+  },
+
+  deleteAvatar: async (): Promise<User> => {
+    const response = await instance.delete(ENDPOINT_USER.DELETE_AVATAR);
+    return extractApiData(response);
+  },
+
+  deleteAccount: async (password?: string): Promise<void> => {
+    await instance.delete(ENDPOINT_USER.DELETE_PROFILE, { data: { password } });
   },
 
   changePassword: async (data: { oldPassword: string; newPassword: string }): Promise<void> => {
@@ -210,6 +238,30 @@ export function useProfile(options?: { enabled?: boolean }) {
 }
 
 /**
+ * Get current user profile statistics (orders, wishlist, vouchers, notifications)
+ */
+export function useUserStats(options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: userKeys.stats(),
+    queryFn: userApi.getStats,
+    enabled: options?.enabled,
+    staleTime: STALE_TIME.MEDIUM,
+  });
+}
+
+/**
+ * Get address by ID
+ */
+export function useAddressById(addressId: string, options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: userKeys.address(addressId),
+    queryFn: () => userApi.getAddressById(addressId),
+    enabled: !!addressId && (options?.enabled ?? true),
+    staleTime: STALE_TIME.STATIC,
+  });
+}
+
+/**
  * Get user addresses
  */
 export function useAddresses(options?: { enabled?: boolean }) {
@@ -264,6 +316,40 @@ export function useUploadAvatar() {
     },
     onError: (error) => {
       errorHandler.log(error, { context: 'Upload avatar failed' });
+    },
+  });
+}
+
+/**
+ * Delete avatar mutation
+ */
+export function useDeleteAvatar() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: userApi.deleteAvatar,
+    onSuccess: () => {
+      invalidateProfile(queryClient);
+    },
+    onError: (error) => {
+      errorHandler.log(error, { context: 'Delete avatar failed' });
+    },
+  });
+}
+
+/**
+ * Delete own account mutation
+ */
+export function useDeleteAccount() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: userApi.deleteAccount,
+    onSuccess: () => {
+      queryClient.clear();
+    },
+    onError: (error) => {
+      errorHandler.log(error, { context: 'Delete account failed' });
     },
   });
 }

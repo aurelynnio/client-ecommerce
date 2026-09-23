@@ -5,9 +5,10 @@ import {
   useChangePassword,
   useConfirmTwoFactor,
   useSendTwoFactorCode,
+  useDeleteAccount,
 } from '@/hooks/queries/useProfile';
 import { useSendVerificationCode } from '@/hooks/queries/useAuth';
-import { Shield, Key, Eye, EyeOff, Mail } from 'lucide-react';
+import { Shield, Key, Eye, EyeOff, Mail, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,6 +45,23 @@ export default function SettingsTab({ user }: SettingsTabProps) {
   );
   const [twoFactorCode, setTwoFactorCode] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  const deleteAccountMutation = useDeleteAccount();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteAccountMutation.mutateAsync(
+        user?.provider === 'local' ? deletePassword : undefined,
+      );
+      toast.success('Tài khoản đã được xóa thành công');
+      setShowDeleteDialog(false);
+      router.push('/login');
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể xóa tài khoản'));
+    }
+  };
 
   useEffect(() => {
     setTwoFactorEnabled(user?.isTwoFactorEnabled || false);
@@ -485,7 +503,102 @@ export default function SettingsTab({ user }: SettingsTabProps) {
             </div>
           </div>
         </div>
+
+        {/* Danger Zone */}
+        <div className="pt-4 border-t border-border">
+          <SectionHeader
+            title="Khu vực nguy hiểm"
+            description="Các thao tác nhạy cảm và không thể hoàn tác"
+          />
+
+          <div className="bg-destructive/5 p-5 rounded-md border border-destructive/20">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-destructive/15 flex items-center justify-center text-destructive shrink-0">
+                  <AlertTriangle className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-base text-destructive">Xóa tài khoản</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Xóa vĩnh viễn tài khoản của bạn. Thao tác này không thể hoàn tác.
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="rounded-sm whitespace-nowrap shrink-0"
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                Xóa tài khoản
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {showDeleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-destructive/15 flex items-center justify-center text-destructive shrink-0">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">Xác nhận xóa tài khoản</h3>
+                <p className="text-xs text-muted-foreground">
+                  Hành động này không thể hoàn tác.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-muted-foreground">
+              Toàn bộ dữ liệu tài khoản bao gồm thông tin cá nhân và lịch sử sẽ bị xóa vĩnh viễn.
+            </p>
+
+            {user?.provider === 'local' && (
+              <div className="space-y-2">
+                <Label htmlFor="deleteAccountPassword" className="text-sm font-medium">
+                  Nhập mật khẩu của bạn để xác nhận
+                </Label>
+                <Input
+                  id="deleteAccountPassword"
+                  type="password"
+                  placeholder="Mật khẩu hiện tại"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  className="rounded-sm"
+                />
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowDeleteDialog(false);
+                  setDeletePassword('');
+                }}
+                disabled={deleteAccountMutation.isPending}
+              >
+                Hủy
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  void handleDeleteAccount();
+                }}
+                disabled={
+                  deleteAccountMutation.isPending ||
+                  (user?.provider === 'local' && !deletePassword.trim())
+                }
+              >
+                {deleteAccountMutation.isPending ? 'Đang xóa...' : 'Xác nhận xóa'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

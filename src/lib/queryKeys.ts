@@ -104,6 +104,7 @@ export const orderKeys = {
 export const userKeys = {
   all: ['user'] as const,
   profile: () => [...userKeys.all, 'profile'] as const,
+  stats: () => [...userKeys.all, 'stats'] as const,
   addresses: () => [...userKeys.all, 'addresses'] as const,
   address: (addressId: string) => [...userKeys.all, 'address', addressId] as const,
   list: (params?: unknown) => [...userKeys.all, 'list', params] as const,

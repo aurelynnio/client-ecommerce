@@ -42,4 +42,5 @@ export interface AddressTabProps {
 
 export interface ProfileTabProps {
   user?: User | null;
+  onEditProfile?: () => void;
 }

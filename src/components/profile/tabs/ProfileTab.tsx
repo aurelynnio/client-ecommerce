@@ -1,8 +1,8 @@
 'use client';
-import { useUploadAvatar } from '@/hooks/queries/useProfile';
+import { useUploadAvatar, useDeleteAvatar } from '@/hooks/queries/useProfile';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Plus, User, Mail, MapPin, Check } from 'lucide-react';
+import { Plus, User, Mail, MapPin, Check, Trash2, Phone, Calendar, Edit3 } from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { Address, ProfileTabProps } from '@/types/address';
 import { getSafeErrorMessage } from '@/api';
 
-export default function ProfileTab({ user }: ProfileTabProps) {
+export default function ProfileTab({ user, onEditProfile }: ProfileTabProps) {
   const uploadAvatarMutation = useUploadAvatar();
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
@@ -36,6 +36,16 @@ export default function ProfileTab({ user }: ProfileTabProps) {
       }
     };
     file.click();
+  };
+
+  const deleteAvatarMutation = useDeleteAvatar();
+  const handleDeleteAvatar = async () => {
+    try {
+      await deleteAvatarMutation.mutateAsync();
+      toast.success('Đã gỡ ảnh đại diện');
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể gỡ ảnh đại diện'));
+    }
   };
 
   if (!user) return null;
@@ -66,23 +76,86 @@ export default function ProfileTab({ user }: ProfileTabProps) {
               <Plus className="h-4 w-4" />
             )}
           </Button>
+          {user.avatar && (
+            <Button
+              size="icon"
+              variant="destructive"
+              className="absolute bottom-0 left-0 h-8 w-8 rounded-full border-2 border-card"
+              onClick={handleDeleteAvatar}
+              disabled={deleteAvatarMutation.isPending}
+              aria-label="Xóa ảnh đại diện"
+            >
+              {deleteAvatarMutation.isPending ? (
+                <SpinnerLoading noWrapper size={14} />
+              ) : (
+                <Trash2 className="h-3.5 w-3.5" />
+              )}
+            </Button>
+          )}
         </div>
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">{user.username}</h2>
           <p className="text-muted-foreground text-sm">
             Thành viên từ năm {new Date(user.createdAt).getFullYear()}
           </p>
+          {onEditProfile && (
+            <div className="pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onEditProfile}
+                className="gap-1.5 rounded-lg text-xs"
+              >
+                <Edit3 className="h-3.5 w-3.5" />
+                Chỉnh sửa thông tin
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Info Grid */}
       <div className="space-y-3">
+        {user.fullName && (
+          <InfoRow
+            icon={User}
+            label="Họ và tên"
+            value={user.fullName}
+            sublabel="Họ và tên của bạn"
+          />
+        )}
+
         <InfoRow
           icon={User}
           label="Tên người dùng"
           value={user.username}
           sublabel="Tên hiển thị của bạn với người dùng khác"
         />
+
+        {user.phone && (
+          <InfoRow
+            icon={Phone}
+            label="Số điện thoại"
+            value={user.phone}
+            sublabel="Số điện thoại liên hệ"
+          />
+        )}
+
+        {user.gender && (
+          <InfoRow
+            icon={User}
+            label="Giới tính"
+            value={user.gender === 'male' ? 'Nam' : user.gender === 'female' ? 'Nữ' : 'Khác'}
+          />
+        )}
+
+        {user.dateOfBirth && (
+          <InfoRow
+            icon={Calendar}
+            label="Ngày sinh"
+            value={new Date(user.dateOfBirth).toLocaleDateString('vi-VN')}
+          />
+        )}
 
         <InfoRow
           icon={Mail}

@@ -60,7 +60,7 @@ export default function FeedbackDialog({
             </DialogTitle>
           </div>
           <DialogDescription className="text-xs text-muted-foreground pt-1">
-            Ý kiến của bạn giúp trợ lý AI cải thiện câu trả lời chính xác và hữu ích hơn.
+            Ý kiến của bạn giúp chúng tôi cải thiện chất lượng tư vấn và phục vụ tốt hơn.
           </DialogDescription>
         </DialogHeader>
 

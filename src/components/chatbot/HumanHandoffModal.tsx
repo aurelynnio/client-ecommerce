@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Headphones, PhoneCall, Mail, MessageSquare, Bot, ExternalLink } from 'lucide-react';
+import { Headphones, PhoneCall, Mail, MessageSquare, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 interface HumanHandoffModalProps {
@@ -114,8 +114,8 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
             onClick={onClose}
             className="text-xs text-muted-foreground hover:text-primary gap-1.5"
           >
-            <Bot className="h-3.5 w-3.5" />
-            <span>Tiếp tục trò chuyện cùng Trợ lý AI Mia</span>
+            <MessageSquare className="h-3.5 w-3.5" />
+            <span>Tiếp tục trò chuyện cùng Trợ lý Mia</span>
           </Button>
         </div>
       </DialogContent>

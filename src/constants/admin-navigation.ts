@@ -12,7 +12,7 @@ import {
   Tag,
   Shield,
   Star,
-  Bot,
+  Headphones,
 } from 'lucide-react';
 
 import type { LucideIcon } from 'lucide-react';
@@ -100,9 +100,9 @@ export const ADMIN_NAVIGATION: NavigationItem[] = [
     permission: PERMISSIONS.NOTIFICATION_READ,
   },
   {
-    name: 'Trợ lý AI',
+    name: 'Trợ lý Mua Sắm',
     href: '/admin/chatbot',
-    icon: Bot,
+    icon: Headphones,
     permission: PERMISSIONS.ADMIN_ACCESS,
   },
   {

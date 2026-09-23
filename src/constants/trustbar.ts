@@ -21,4 +21,4 @@ export const trustItems = [
     title: 'Cam kết chính hãng',
     description: '100% nguồn gốc xuất xứ rõ ràng',
   },
-];
+];

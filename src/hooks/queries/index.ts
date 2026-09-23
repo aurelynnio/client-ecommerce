@@ -294,6 +294,10 @@ export {
   useUpdateVoucher,
   useDeleteVoucher,
   useApplyVoucher,
+  useSavedVouchers,
+  useSavedVoucherIds,
+  useSaveVoucher,
+  useUnsaveVoucher,
   type VoucherListResponse,
 } from './useVoucher';
 

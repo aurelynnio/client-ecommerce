@@ -122,3 +122,13 @@ export interface VoucherStatistics {
   platformVouchers: number;
   totalUsage: number;
 }
+
+// User saved voucher in wallet
+export interface SavedVoucher {
+  _id: string;
+  voucher: Voucher;
+  savedAt: string;
+  status: 'valid' | 'used' | 'expired';
+  usedCount: number;
+  remainingUsage: number;
+}

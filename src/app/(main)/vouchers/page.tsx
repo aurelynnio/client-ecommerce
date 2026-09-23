@@ -2,12 +2,15 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Gift, Home, Search, Ticket } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { VoucherCard } from '@/components/vouchers/VoucherCard';
-import { usePlatformVouchers } from '@/hooks/queries';
+import { usePlatformVouchers, useSavedVoucherIds, useSaveVoucher } from '@/hooks/queries';
+import { useAppSelector } from '@/hooks/redux';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,10 +21,17 @@ import {
 } from '@/components/ui/breadcrumb';
 
 export default function VouchersPage() {
-  const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
+  const router = useRouter();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'percentage' | 'fixed_amount'>('all');
+
   const { data: vouchers = [], isLoading, error } = usePlatformVouchers();
+  const { data: savedIds = [] } = useSavedVoucherIds({ enabled: isAuthenticated });
+  const saveVoucherMutation = useSaveVoucher();
+
+  const savedIdSet = useMemo(() => new Set(savedIds), [savedIds]);
+
   const filtered = useMemo(
     () =>
       vouchers.filter(
@@ -33,9 +43,19 @@ export default function VouchersPage() {
       ),
     [filterType, searchQuery, vouchers],
   );
-  const collect = (voucherId: string) => {
-    setCollectedIds((prev) => new Set(prev).add(voucherId));
-    toast.success('Đã lưu voucher vào ví của bạn.');
+
+  const collect = async (voucherId: string) => {
+    if (!isAuthenticated) {
+      toast.info('Vui lòng đăng nhập để lưu voucher vào ví cá nhân');
+      router.push('/login');
+      return;
+    }
+    try {
+      await saveVoucherMutation.mutateAsync(voucherId);
+      toast.success('Đã lưu voucher vào ví của bạn.');
+    } catch {
+      toast.error('Không thể lưu voucher vào ví');
+    }
   };
   return (
     <main className="min-h-screen bg-background py-4">
@@ -57,7 +77,7 @@ export default function VouchersPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <header className="border-b border-border pb-3">
+        <header className="border-b border-border pb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Gift className="h-5 w-5" />
@@ -69,6 +89,13 @@ export default function VouchersPage() {
               </p>
             </div>
           </div>
+
+          <Button asChild variant="outline" size="sm" className="gap-2 self-start sm:self-auto border-border/80">
+            <Link href="/profile?tab=vouchers">
+              <Ticket className="h-4 w-4 text-primary" />
+              <span>Ví voucher của tôi ({savedIds.length})</span>
+            </Link>
+          </Button>
         </header>
         <section className="flex flex-col gap-3 border-b border-border py-3 sm:flex-row">
           <div className="relative flex-1">
@@ -104,7 +131,7 @@ export default function VouchersPage() {
               <VoucherCard
                 key={voucher._id}
                 voucher={voucher}
-                isCollected={collectedIds.has(voucher._id)}
+                isCollected={savedIdSet.has(voucher._id)}
                 onCollect={collect}
               />
             ))}

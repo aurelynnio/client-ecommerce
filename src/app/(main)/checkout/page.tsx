@@ -36,6 +36,7 @@ import {
   ChevronLeft,
   MapPin,
   Tag,
+  Ticket,
   Store,
   ChevronRight,
   Shield,
@@ -48,6 +49,7 @@ import Link from 'next/link';
 import { groupCartItemsByShop } from '@/types/cart';
 import { getSafeErrorMessage } from '@/api';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
+import VoucherSelectModal from '@/components/checkout/VoucherSelectModal';
 
 const FREE_SHIPPING_THRESHOLD = 500000;
 
@@ -200,6 +202,18 @@ export default function CheckoutPage() {
   const [shippingSelections, setShippingSelections] = useState<
     Record<string, ShipmondoQuote | null>
   >({});
+  const [voucherModalState, setVoucherModalState] = useState<{
+    isOpen: boolean;
+    scope: 'shop' | 'platform';
+    shopId?: string;
+    shopName?: string;
+    orderTotal: number;
+    selectedCode?: string;
+  }>({
+    isOpen: false,
+    scope: 'platform',
+    orderTotal: 0,
+  });
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { checkoutTotal, selectedItems } = useAppSelector((state) => state.cart);
@@ -379,6 +393,26 @@ export default function CheckoutPage() {
     setAppliedPlatformVoucher(null);
     setPromoCode('');
     toast.success('Đã xóa mã giảm giá');
+  };
+
+  const handleSelectFromModal = async (code: string) => {
+    setPromoCode(code);
+    const orderTotal = checkoutTotal || 0;
+    try {
+      const result = await applyVoucherMutation.mutateAsync({
+        code,
+        orderTotal,
+        shopId: voucherModalState.scope === 'shop' ? voucherModalState.shopId : undefined,
+      });
+      if (result.scope === 'shop') {
+        setAppliedShopVoucher(result);
+      } else {
+        setAppliedPlatformVoucher(result);
+      }
+      toast.success(`Áp dụng mã ${code} thành công!`);
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'Không thể áp dụng mã giảm giá'));
+    }
   };
 
   // Helper to get item image
@@ -676,15 +710,34 @@ export default function CheckoutPage() {
 
                   {/* Shop Voucher */}
                   <div className="flex flex-col gap-2 border-t border-border bg-muted/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Tag className="h-4 w-4 text-primary" />
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+                      <Tag className="h-4 w-4 text-primary shrink-0" />
                       <span>Voucher của Shop</span>
+                      {appliedShopVoucher && (
+                        <span className="font-mono text-xs font-bold text-success bg-success/10 px-2 py-0.5 rounded border border-success/30">
+                          {appliedShopVoucher.code} (-{formatCurrency(appliedShopVoucher.discountAmount)})
+                        </span>
+                      )}
                     </div>
                     <button
                       type="button"
-                      className="flex items-center gap-1 self-start text-sm text-primary sm:self-auto"
+                      onClick={() => {
+                        const shopItemTotal = shopGroup.items.reduce(
+                          (sum, item) => sum + getEffectivePrice(item) * item.quantity,
+                          0,
+                        );
+                        setVoucherModalState({
+                          isOpen: true,
+                          scope: 'shop',
+                          shopId: shopGroup.shop._id,
+                          shopName: shopGroup.shop.name,
+                          orderTotal: shopItemTotal,
+                          selectedCode: appliedShopVoucher?.code,
+                        });
+                      }}
+                      className="flex items-center gap-1 self-start text-sm font-semibold text-primary hover:text-primary-hover transition-colors sm:self-auto cursor-pointer"
                     >
-                      <span>Chọn voucher</span>
+                      <span>{appliedShopVoucher ? 'Đổi voucher' : 'Chọn voucher'}</span>
                       <ChevronRight className="h-4 w-4" />
                     </button>
                   </div>
@@ -693,9 +746,28 @@ export default function CheckoutPage() {
 
               {/* Platform Voucher */}
               <div className="overflow-hidden rounded-lg border border-border bg-card">
-                <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
-                  <Tag className="h-4 w-4 text-primary" />
-                  <h2 className="text-sm font-semibold text-foreground">Voucher nền tảng</h2>
+                <div className="flex items-center justify-between border-b border-border bg-muted/30 px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-4 w-4 text-primary" />
+                    <h2 className="text-sm font-semibold text-foreground">Voucher nền tảng</h2>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setVoucherModalState({
+                        isOpen: true,
+                        scope: 'platform',
+                        orderTotal: checkoutTotal || 0,
+                        selectedCode: appliedPlatformVoucher?.code,
+                      });
+                    }}
+                    className="h-8 text-xs text-primary hover:text-primary-hover font-semibold gap-1.5"
+                  >
+                    <Ticket className="h-3.5 w-3.5" />
+                    <span>Chọn từ ví voucher</span>
+                  </Button>
                 </div>
                 <div className="p-4">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -954,6 +1026,17 @@ export default function CheckoutPage() {
           </Button>
         </div>
       </div>
+
+      <VoucherSelectModal
+        isOpen={voucherModalState.isOpen}
+        onClose={() => setVoucherModalState((prev) => ({ ...prev, isOpen: false }))}
+        onSelect={handleSelectFromModal}
+        scope={voucherModalState.scope}
+        shopId={voucherModalState.shopId}
+        shopName={voucherModalState.shopName}
+        orderTotal={voucherModalState.orderTotal}
+        selectedCode={voucherModalState.selectedCode}
+      />
     </div>
   );
 }

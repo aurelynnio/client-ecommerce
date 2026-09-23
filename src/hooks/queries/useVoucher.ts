@@ -18,6 +18,7 @@ import {
   AvailableVouchersResponse,
   ApplyVoucherResult,
   VoucherStatistics,
+  SavedVoucher,
 } from '@/types/voucher';
 
 // ============ Types ============
@@ -126,6 +127,26 @@ const voucherApi = {
       orderValue: params.orderTotal,
       shopId: params.shopId,
     });
+    return extractApiData(response);
+  },
+
+  getSaved: async (): Promise<SavedVoucher[]> => {
+    const response = await instance.get(ENDPOINT_VOUCHER.SAVED);
+    return extractApiData(response);
+  },
+
+  getSavedIds: async (): Promise<string[]> => {
+    const response = await instance.get(ENDPOINT_VOUCHER.SAVED_IDS);
+    return extractApiData(response);
+  },
+
+  save: async (voucherId: string): Promise<SavedVoucher> => {
+    const response = await instance.post(ENDPOINT_VOUCHER.save(voucherId));
+    return extractApiData(response);
+  },
+
+  unsave: async (voucherId: string): Promise<{ message: string }> => {
+    const response = await instance.delete(ENDPOINT_VOUCHER.unsave(voucherId));
     return extractApiData(response);
   },
 };
@@ -273,3 +294,64 @@ export function useApplyVoucher() {
     },
   });
 }
+
+/**
+ * Get user's saved vouchers (wallet)
+ */
+export function useSavedVouchers(options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: voucherKeys.saved(),
+    queryFn: voucherApi.getSaved,
+    enabled: options?.enabled,
+    staleTime: STALE_TIME.MEDIUM,
+  });
+}
+
+/**
+ * Get IDs of vouchers saved by user
+ */
+export function useSavedVoucherIds(options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: voucherKeys.savedIds(),
+    queryFn: voucherApi.getSavedIds,
+    enabled: options?.enabled,
+    staleTime: STALE_TIME.MEDIUM,
+  });
+}
+
+/**
+ * Save voucher to wallet mutation
+ */
+export function useSaveVoucher() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: voucherApi.save,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: voucherKeys.saved() });
+      queryClient.invalidateQueries({ queryKey: voucherKeys.savedIds() });
+    },
+    onError: (error) => {
+      errorHandler.log(error, { context: 'Save voucher failed' });
+    },
+  });
+}
+
+/**
+ * Unsave voucher from wallet mutation
+ */
+export function useUnsaveVoucher() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: voucherApi.unsave,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: voucherKeys.saved() });
+      queryClient.invalidateQueries({ queryKey: voucherKeys.savedIds() });
+    },
+    onError: (error) => {
+      errorHandler.log(error, { context: 'Unsave voucher failed' });
+    },
+  });
+}
+

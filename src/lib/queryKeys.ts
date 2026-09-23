@@ -181,6 +181,8 @@ export const voucherKeys = {
   available: (params?: unknown) => [...voucherKeys.all, 'available', params] as const,
   validate: (code: string) => [...voucherKeys.all, 'validate', code] as const,
   statistics: () => [...voucherKeys.all, 'statistics'] as const,
+  saved: () => [...voucherKeys.all, 'saved'] as const,
+  savedIds: () => [...voucherKeys.all, 'saved-ids'] as const,
 };
 
 // Banner query keys

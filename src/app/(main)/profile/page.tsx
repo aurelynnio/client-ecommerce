@@ -15,6 +15,7 @@ import OrdersTab from '@/components/profile/tabs/OrdersTab';
 import AddressTab from '@/components/profile/tabs/AddressTab';
 import SettingsTab from '@/components/profile/tabs/SettingsTab';
 import ShopTab from '@/components/profile/tabs/ShopTab';
+import VouchersTab from '@/components/profile/tabs/VouchersTab';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -32,7 +33,7 @@ import {
   ChevronRight,
   Heart,
   Wallet,
-  Gift,
+  Ticket,
   Store,
   ShieldCheck,
   UserRound,
@@ -42,6 +43,7 @@ import { cn } from '@/utils/cn';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUserOrders } from '@/hooks/queries/useOrders';
 import { useWishlistCount } from '@/hooks/queries/useWishlist';
+import { useSavedVouchers } from '@/hooks/queries/useVoucher';
 import { getSafeErrorMessage } from '@/api';
 
 export default function ProfilePage() {
@@ -52,12 +54,15 @@ export default function ProfilePage() {
   const { data: wishlistCount = 0 } = useWishlistCount({
     enabled: isAuthenticated,
   });
+  const { data: savedVouchers = [] } = useSavedVouchers({
+    enabled: isAuthenticated,
+  });
   const logoutMutation = useLogout();
 
   const router = useRouter();
   const tabParam = searchParams.get('tab');
   const activeTab =
-    tabParam && ['profile', 'orders', 'address', 'settings', 'shop'].includes(tabParam)
+    tabParam && ['profile', 'orders', 'address', 'vouchers', 'settings', 'shop'].includes(tabParam)
       ? tabParam
       : 'profile';
 
@@ -65,7 +70,6 @@ export default function ProfilePage() {
   const totalOrders = ordersData?.pagination?.totalItems || ordersData?.orders?.length || 0;
   const pendingOrders =
     ordersData?.orders?.filter((order) => order.status === 'pending').length || 0;
-  const followingCount = currentUser?.followingShops?.length || 0;
   const accountRoleLabel =
     currentUser?.roles === 'admin'
       ? 'Quản trị viên'
@@ -113,6 +117,12 @@ export default function ProfilePage() {
       description: 'Địa chỉ giao hàng',
     },
     {
+      value: 'vouchers',
+      label: 'Ví voucher',
+      icon: Ticket,
+      description: 'Mã giảm giá đã lưu',
+    },
+    {
       value: 'shop',
       label: 'Shop của tôi',
       icon: Store,
@@ -126,11 +136,13 @@ export default function ProfilePage() {
     },
   ];
 
+  const activeVoucherCount = savedVouchers.filter((v) => v.status === 'valid').length;
+
   // Quick stats for user card
   const quickStats = [
     { label: 'Đơn hàng', value: totalOrders.toString(), icon: Package },
+    { label: 'Ví voucher', value: activeVoucherCount.toString(), icon: Ticket },
     { label: 'Yêu thích', value: wishlistCount.toString(), icon: Heart },
-    { label: 'Đang theo dõi', value: followingCount.toString(), icon: Gift },
   ];
 
   if (!isAuthenticated && !authLoading) {
@@ -324,6 +336,9 @@ export default function ProfilePage() {
                 </TabsContent>
                 <TabsContent value="address" className="mt-0 p-4 focus-visible:ring-0">
                   {currentUser && <AddressTab user={currentUser} />}
+                </TabsContent>
+                <TabsContent value="vouchers" className="mt-0 p-4 focus-visible:ring-0">
+                  <VouchersTab />
                 </TabsContent>
                 <TabsContent value="shop" className="mt-0 p-4 focus-visible:ring-0">
                   <ShopTab />

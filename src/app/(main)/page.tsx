@@ -10,7 +10,6 @@ import DailyVouchersSection from '@/components/home/DailyVouchersSection';
 import TopShopsSection from '@/components/home/TopShopsSection';
 import ProductRail from '@/components/home/ProductRail';
 import HomeProductList from '@/components/home/HomeProductList';
-import PromoGrid from '@/components/home/PromoGrid';
 import { useNewArrivals } from '@/hooks/queries';
 import { productKeys, flashSaleKeys, bannerKeys, voucherKeys, categoryKeys } from '@/lib/queryKeys';
 import { Shop } from '@/types/shop';
@@ -99,13 +98,6 @@ export default function Home() {
           </p>
         </div>
         <HomeProductList selectedCategorySlug={selectedCategorySlug} />
-      </section>
-
-      {/* Service row */}
-      <section className="border-t border-border bg-card">
-        <div className="aura-container py-7">
-          <PromoGrid />
-        </div>
       </section>
     </main>
   );

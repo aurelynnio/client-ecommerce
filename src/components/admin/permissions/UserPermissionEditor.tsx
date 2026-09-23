@@ -11,7 +11,6 @@ import {
   Save,
   CheckCircle2,
   XCircle,
-  Sparkles,
   AlertCircle,
   Sliders,
   UserCheck,
@@ -482,7 +481,7 @@ export default function UserPermissionEditor({
           <div className={cn(adminSurfaceClass, 'p-5 space-y-3')}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
+                <Sliders className="h-4 w-4 text-primary" />
                 <h4 className="font-semibold text-sm">Cấu hình mẫu 1-chạm (Staff Presets)</h4>
               </div>
               <span className="text-xs text-muted-foreground">

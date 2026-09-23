@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search, Shield, Check, Minus, Info, Sparkles } from 'lucide-react';
+import { Search, Shield, Check, Minus, Info, Store, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -105,7 +105,7 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
                 {(selectedRole === 'all' || selectedRole === 'seller') && (
                   <TableHead className="text-center w-[160px]">
                     <div className="flex items-center justify-center gap-1.5 font-semibold text-primary">
-                      <Sparkles className="h-3.5 w-3.5" />
+                      <Store className="h-3.5 w-3.5" />
                       Seller (Người bán)
                     </div>
                   </TableHead>
@@ -113,6 +113,7 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
                 {(selectedRole === 'all' || selectedRole === 'buyer') && (
                   <TableHead className="text-center w-[160px]">
                     <div className="flex items-center justify-center gap-1.5 font-semibold text-muted-foreground">
+                      <User className="h-3.5 w-3.5" />
                       Buyer (Người mua)
                     </div>
                   </TableHead>

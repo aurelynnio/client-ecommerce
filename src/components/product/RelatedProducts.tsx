@@ -3,7 +3,6 @@
 import { useRelatedProducts } from '@/hooks/queries/useProducts';
 import { ProductCard } from './ProductCard';
 import SpinnerLoading from '../common/SpinnerLoading';
-import { Sparkles } from 'lucide-react';
 
 interface RelatedProductsProps {
   productId: string;
@@ -18,9 +17,11 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
 
   return (
     <div className="space-y-8 mt-16 pt-8 border-t border-border/50">
-      <div className="flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-primary" />
-        <h2 className="text-2xl font-bold tracking-tight">Sản phẩm liên quan</h2>
+      <div className="flex items-center gap-2.5">
+        <div className="h-6 w-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
+        <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+          Sản phẩm tương tự
+        </h2>
       </div>
 
       <div className="relative min-h-[200px]">

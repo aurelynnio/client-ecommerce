@@ -15,10 +15,6 @@ import {
   Trash2,
   User,
   X,
-  Zap,
-  Ticket,
-  Sparkles,
-  Store,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -516,33 +512,29 @@ export default function HeaderLayout() {
               />
             </button>
 
-            <nav className="flex items-center gap-0.5" aria-label="Khám phá">
+            <nav className="flex items-center gap-1" aria-label="Khám phá">
               <Link
                 href="/flash-sale"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="inline-flex h-8 items-center rounded-lg px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary-light"
               >
-                <Zap className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Flash Sale
               </Link>
               <Link
                 href="/vouchers"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="inline-flex h-8 items-center rounded-lg px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
-                <Ticket className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                Vouchers
+                Mã giảm giá
               </Link>
               <Link
                 href="/new-arrivals"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="inline-flex h-8 items-center rounded-lg px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
-                <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Hàng mới về
               </Link>
               <Link
                 href="/seller"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="inline-flex h-8 items-center rounded-lg px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
-                <Store className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Kênh người bán
               </Link>
             </nav>

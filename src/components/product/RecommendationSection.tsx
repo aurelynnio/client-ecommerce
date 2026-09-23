@@ -1,6 +1,6 @@
 'use client';
 import { memo, useEffect } from 'react';
-import { Sparkles, TrendingUp, Clock, Star } from 'lucide-react';
+import { TrendingUp, Clock, Star } from 'lucide-react';
 import { useRecommendation } from '@/hooks/queries/useRecommendations';
 import { ProductCard } from '@/components/product/ProductCard';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
@@ -11,20 +11,21 @@ interface RecommendationSectionProps {
   className?: string;
 }
 
-// Section Header Component
+// Section Header Component with authentic marketplace accent bar
 const SectionHeader = memo(function SectionHeader({
   icon: Icon,
   title,
   iconColor = 'text-primary',
 }: {
-  icon: React.ElementType;
+  icon?: React.ElementType;
   title: string;
   iconColor?: string;
 }) {
   return (
-    <div className="flex items-center gap-2 mb-4">
-      <Icon className={cn('h-5 w-5', iconColor)} />
-      <h2 className="font-bold text-lg text-foreground">{title}</h2>
+    <div className="flex items-center gap-2.5 mb-4">
+      <div className="h-5 w-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
+      <h2 className="font-bold text-lg text-foreground tracking-tight">{title}</h2>
+      {Icon && <Icon className={cn('h-4 w-4', iconColor)} aria-hidden="true" />}
     </div>
   );
 });
@@ -61,7 +62,7 @@ export const ForYouSection = memo(function ForYouSection({
   if (isLoading && forYou.length === 0) {
     return (
       <section className={cn('py-6', className)}>
-        <SectionHeader icon={Sparkles} title="Gợi ý cho bạn" />
+        <SectionHeader title="Gợi ý cho bạn" />
         <div className="flex items-center justify-center py-12">
           <SpinnerLoading size={24} />
         </div>
@@ -73,7 +74,7 @@ export const ForYouSection = memo(function ForYouSection({
 
   return (
     <section className={cn('py-6', className)}>
-      <SectionHeader icon={Sparkles} title="Gợi ý cho bạn" />
+      <SectionHeader title="Gợi ý cho bạn" />
       <ProductGrid products={forYou} />
     </section>
   );
@@ -138,7 +139,7 @@ export const HomepageRecommendations = memo(function HomepageRecommendations({
       {/* For You */}
       {homepage.forYou && homepage.forYou.length > 0 && (
         <section>
-          <SectionHeader icon={Sparkles} title="Dành cho bạn" />
+          <SectionHeader title="Dành cho bạn" />
           <ProductGrid products={homepage.forYou} />
         </section>
       )}

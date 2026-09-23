@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Laptop,
   Smartphone,
@@ -12,7 +13,9 @@ import {
   Car,
   Utensils,
   Dumbbell,
-  Sparkles,
+  ShoppingBag,
+  Heart,
+  Gem,
   Package,
   ArrowRight,
 } from 'lucide-react';
@@ -20,25 +23,25 @@ import { useCategoryTree } from '@/hooks/queries/useCategories';
 import { cn } from '@/utils/cn';
 
 const categoryIcons: Record<string, React.ReactNode> = {
-  electronics: <Laptop className="h-6 w-6" />,
-  phones: <Smartphone className="h-6 w-6" />,
-  home: <Home className="h-6 w-6" />,
-  fashion: <Shirt className="h-6 w-6" />,
-  men: <Shirt className="h-6 w-6" />,
-  women: <Sparkles className="h-6 w-6" />,
-  watches: <Watch className="h-6 w-6" />,
-  jewelry: <Watch className="h-6 w-6" />,
-  baby: <Baby className="h-6 w-6" />,
-  kids: <Baby className="h-6 w-6" />,
-  automotive: <Car className="h-6 w-6" />,
-  food: <Utensils className="h-6 w-6" />,
-  sports: <Dumbbell className="h-6 w-6" />,
-  beauty: <Sparkles className="h-6 w-6" />,
+  electronics: <Laptop className="h-5 w-5" />,
+  phones: <Smartphone className="h-5 w-5" />,
+  home: <Home className="h-5 w-5" />,
+  fashion: <Shirt className="h-5 w-5" />,
+  men: <Shirt className="h-5 w-5" />,
+  women: <ShoppingBag className="h-5 w-5" />,
+  watches: <Watch className="h-5 w-5" />,
+  jewelry: <Gem className="h-5 w-5" />,
+  baby: <Baby className="h-5 w-5" />,
+  kids: <Baby className="h-5 w-5" />,
+  automotive: <Car className="h-5 w-5" />,
+  food: <Utensils className="h-5 w-5" />,
+  sports: <Dumbbell className="h-5 w-5" />,
+  beauty: <Heart className="h-5 w-5" />,
 };
 
 const getIcon = (slug: string) =>
   Object.entries(categoryIcons).find(([key]) => slug.toLowerCase().includes(key))?.[1] ?? (
-    <Package className="h-6 w-6" />
+    <Package className="h-5 w-5" />
   );
 
 interface CategoryGridProps {
@@ -83,13 +86,23 @@ export default function CategoryGrid({ onSelectCategory, selectedSlug }: Categor
               >
                 <span
                   className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-full transition-colors',
+                    'relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors',
                     active
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted text-muted-foreground group-hover:bg-primary-light group-hover:text-primary',
                   )}
                 >
-                  {getIcon(category.slug ?? '')}
+                  {category.images?.[0] ? (
+                    <Image
+                      src={category.images[0]}
+                      alt={category.name}
+                      fill
+                      sizes="40px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    getIcon(category.slug ?? '')
+                  )}
                 </span>
                 <span className="line-clamp-2 text-[11px] font-medium leading-tight text-foreground">
                   {category.name}

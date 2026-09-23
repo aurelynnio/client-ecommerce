@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Ticket, Store, Copy, Check, Trash2, ArrowRight, Sparkles } from 'lucide-react';
+import { Ticket, Store, Copy, Check, Trash2, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -107,7 +107,7 @@ export default function VouchersTab() {
 
         <Button asChild size="sm" className="gap-1.5 self-start sm:self-auto">
           <Link href="/vouchers">
-            <Sparkles className="h-3.5 w-3.5" />
+            <Ticket className="h-3.5 w-3.5" />
             <span>Săn thêm voucher</span>
           </Link>
         </Button>
@@ -337,3 +337,4 @@ export default function VouchersTab() {
     </div>
   );
 }
+

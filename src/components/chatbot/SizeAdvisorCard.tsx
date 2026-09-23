@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Ruler, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Ruler, Search, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface SizeAdvisorCardProps {
@@ -86,7 +86,7 @@ export default function SizeAdvisorCard({ className, onSelectSizeQuery }: SizeAd
           onClick={() => onSelectSizeQuery(`Tìm các sản phẩm size ${activeTier.size} còn hàng`)}
           className="mt-2 w-full text-center text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center justify-center gap-1"
         >
-          <Sparkles className="h-3 w-3" />
+          <Search className="h-3 w-3" />
           <span>Tìm sản phẩm còn Size {activeTier.size} cho tôi</span>
         </button>
       )}

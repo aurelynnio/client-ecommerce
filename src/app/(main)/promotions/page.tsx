@@ -6,7 +6,6 @@ import {
   Zap,
   Ticket,
   Truck,
-  Sparkles,
   ArrowRight,
   Gift,
   Flame,
@@ -54,7 +53,7 @@ const PROMO_CAMPAIGNS = [
   {
     title: 'Hàng Mới Cực Hot',
     subtitle: 'Cập nhật xu hướng thời trang, công nghệ và phụ kiện mới nhất',
-    icon: Sparkles,
+    icon: Flame,
     href: '/new-arrivals',
     cta: 'Xem bộ sưu tập',
     badge: 'Mới về',

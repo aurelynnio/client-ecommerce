@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import {
-  Sparkles,
+  TrendingUp,
   ArrowRight,
   Ruler,
   Tag,
@@ -52,25 +52,25 @@ export default function ContextualChips({
       return [
         {
           id: 'zero-bestseller',
-          label: 'Xem hàng bán chạy nhất 🔥',
+          label: 'Sản phẩm bán chạy',
           query: 'Gợi ý cho tôi các sản phẩm bán chạy nhất hiện tại',
           icon: <Flame className="h-3 w-3 text-orange-500" />,
         },
         {
           id: 'zero-new',
-          label: 'Xem hàng mới về ✨',
+          label: 'Hàng mới về',
           query: 'Có những mẫu sản phẩm mới về nào hot nhất?',
-          icon: <Sparkles className="h-3 w-3 text-primary" />,
+          icon: <TrendingUp className="h-3 w-3 text-primary" />,
         },
         {
           id: 'zero-budget',
-          label: 'Mở rộng mức giá 💰',
+          label: 'Mức giá phổ biến',
           query: 'Tìm các sản phẩm thời trang phổ biến dưới 500.000đ',
           icon: <Tag className="h-3 w-3 text-emerald-500" />,
         },
         {
           id: 'zero-categories',
-          label: 'Xem danh mục shop 👕',
+          label: 'Danh mục sản phẩm',
           query: 'Cho tôi xem danh mục các loại sản phẩm của cửa hàng',
           icon: <HelpCircle className="h-3 w-3 text-blue-500" />,
         },
@@ -198,21 +198,21 @@ export default function ContextualChips({
     return [
       {
         id: 'top-bestseller',
-        label: 'Sản phẩm bán chạy nhất ⭐',
+        label: 'Sản phẩm bán chạy nhất',
         query: 'Cho tôi xem top sản phẩm bán chạy nhất hiện tại',
-        icon: <Flame className="h-3 w-3" />,
+        icon: <Flame className="h-3 w-3 text-orange-500" />,
       },
       {
         id: 'new-arrivals',
-        label: 'Hàng mới về ✨',
+        label: 'Hàng mới về',
         query: 'Có những mẫu sản phẩm mới về nào đẹp không?',
-        icon: <Sparkles className="h-3 w-3" />,
+        icon: <TrendingUp className="h-3 w-3 text-primary" />,
       },
       {
         id: 'promotions',
-        label: 'Ưu đãi hôm nay 🎁',
+        label: 'Ưu đãi hôm nay',
         query: 'Cửa hàng đang có những chương trình ưu đãi nào?',
-        icon: <Tag className="h-3 w-3" />,
+        icon: <Tag className="h-3 w-3 text-emerald-500" />,
       },
     ];
   }, [lastMessageContent]);
@@ -220,8 +220,8 @@ export default function ContextualChips({
   return (
     <div className={cn('flex flex-col gap-1.5 pt-2', className)}>
       <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground">
-          <Sparkles className="h-3 w-3 text-primary animate-pulse" />
+        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
           <span>Gợi ý tiếp theo:</span>
         </div>
         {onOpenHandoff && (

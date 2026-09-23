@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Home, Sparkles, SlidersHorizontal, Package } from 'lucide-react';
+import { Home, Flame, SlidersHorizontal, Package } from 'lucide-react';
 import ProductGrid from '@/components/product/ProductGrid';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { useNewArrivals } from '@/hooks/queries';
@@ -87,8 +87,8 @@ export default function NewArrivalsPage() {
         {/* Page Header */}
         <header className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-              <Sparkles className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+              <Flame className="h-3.5 w-3.5" />
               <span>Bộ sưu tập mới nhất</span>
             </div>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">

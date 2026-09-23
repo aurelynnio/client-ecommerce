@@ -9,7 +9,6 @@ import {
   ShoppingBag,
   ExternalLink,
   Tag,
-  Sparkles,
 } from 'lucide-react';
 import { ParsedProduct } from './productParser';
 import { Badge } from '@/components/ui/badge';
@@ -48,8 +47,8 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
                 className="object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-muted-foreground/60">
-                <Sparkles className="h-6 w-6 text-primary/40" />
+              <div className="flex h-full w-full items-center justify-center text-muted-foreground/40">
+                <ShoppingBag className="h-6 w-6" />
               </div>
             )}
             {item.discountPercent !== undefined && item.discountPercent > 0 && (
@@ -162,8 +161,8 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-muted-foreground/60 bg-muted">
-                    <Sparkles className="h-5 w-5 text-primary/40" />
+                  <div className="flex h-full w-full items-center justify-center text-muted-foreground/40 bg-muted">
+                    <ShoppingBag className="h-5 w-5" />
                   </div>
                 )}
                 {item.discountPercent !== undefined && item.discountPercent > 0 && (

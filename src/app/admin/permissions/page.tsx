@@ -9,7 +9,7 @@ import {
   History,
   Key,
   Layers,
-  Sparkles,
+  Terminal,
   Sliders,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -229,7 +229,7 @@ function AdminPermissionsContent() {
             Ma trận quyền (Role Matrix)
           </TabsTrigger>
           <TabsTrigger value="simulator" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" />
+            <Terminal className="h-4 w-4" />
             Giả lập kiểm tra quyền
           </TabsTrigger>
           <TabsTrigger value="audit" className="flex items-center gap-2">

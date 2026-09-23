@@ -8,8 +8,7 @@ import {
   Search,
   CheckCircle2,
   XCircle,
-  HelpCircle,
-  Sparkles,
+  Terminal,
   ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -214,7 +213,7 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
       <div className={cn(adminSurfaceClass, 'p-6 space-y-6')}>
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Terminal className="h-5 w-5 text-primary" />
             Trình giả lập & Kiểm tra quyền truy cập (Permission Simulator)
           </h3>
           <p className="text-sm text-muted-foreground mt-1">

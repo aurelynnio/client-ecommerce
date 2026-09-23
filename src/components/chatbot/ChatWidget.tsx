@@ -14,7 +14,7 @@ import {
   Flame,
   Headphones,
   ChevronDown,
-  Sparkles,
+  Loader2,
   Ruler,
   PackageCheck,
   ArrowRight,
@@ -704,8 +704,8 @@ export default function ChatWidget() {
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-border/70 bg-card/95 px-4 backdrop-blur-md shadow-2xs">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-primary-hover text-white shadow-sm ring-2 ring-primary/20">
-                <Sparkles className="h-5 w-5" aria-hidden="true" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm">
+                <Headphones className="h-5 w-5" aria-hidden="true" />
               </div>
               <span
                 className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-card ring-2 ring-card"
@@ -716,13 +716,13 @@ export default function ChatWidget() {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h2 className="text-sm font-bold text-foreground">Mia Assistant</h2>
-                <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[10px] font-bold text-primary tracking-wide">
-                  AI
+                <h2 className="text-sm font-bold text-foreground">Trợ lý Mua Sắm (Mia)</h2>
+                <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.2 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  Trực tuyến
                 </span>
               </div>
               <p className="text-[11px] text-muted-foreground font-medium">
-                Hỗ trợ mua sắm thông minh
+                Tư vấn sản phẩm & dịch vụ khách hàng
               </p>
             </div>
           </div>
@@ -778,10 +778,10 @@ export default function ChatWidget() {
               <div className="rounded-2xl border border-border/70 bg-card p-4 shadow-2xs">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Sparkles className="h-3.5 w-3.5" />
+                    <Headphones className="h-3.5 w-3.5" />
                   </span>
                   <span className="text-xs font-semibold text-primary uppercase tracking-wide">
-                    Trợ lý ảo mua sắm
+                    Trung tâm hỗ trợ mua sắm
                   </span>
                 </div>
                 <h3 className="text-base font-bold text-foreground mb-1">
@@ -866,10 +866,10 @@ export default function ChatWidget() {
                   >
                     {msg.role === 'assistant' && (
                       <div
-                        className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-primary-hover text-white shrink-0 mt-0.5 shadow-2xs ring-1 ring-primary/20"
+                        className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5 shadow-2xs"
                         aria-hidden="true"
                       >
-                        <Sparkles className="h-3.5 w-3.5" />
+                        <Headphones className="h-3.5 w-3.5" />
                       </div>
                     )}
                     <div
@@ -1043,7 +1043,7 @@ export default function ChatWidget() {
               {/* Active Tool Execution Indicator */}
               {activeTool && (
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold animate-pulse w-fit mx-auto my-2 border border-primary/20 shadow-2xs">
-                  <Sparkles className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   <span>{activeTool}</span>
                 </div>
               )}
@@ -1052,10 +1052,10 @@ export default function ChatWidget() {
               {streamingContent && (
                 <div className="flex items-start gap-2.5 justify-start">
                   <div
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-primary-hover text-white shrink-0 mt-0.5 shadow-2xs ring-1 ring-primary/20"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5 shadow-2xs"
                     aria-hidden="true"
                   >
-                    <Sparkles className="h-3.5 w-3.5 animate-pulse" />
+                    <Headphones className="h-3.5 w-3.5" />
                   </div>
                   <div className="max-w-[85%] rounded-2xl rounded-tl-xs px-3.5 py-2.5 text-sm bg-card text-foreground border border-border/70 shadow-2xs font-normal leading-relaxed">
                     <ReactMarkdown rehypePlugins={[rehypeSanitize]}>
@@ -1068,8 +1068,8 @@ export default function ChatWidget() {
               {/* Loading dots */}
               {isLoading && !streamingContent && (
                 <div className="flex items-start gap-2.5 justify-start" aria-hidden="true">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-primary-hover text-white shrink-0 mt-0.5 shadow-2xs ring-1 ring-primary/20">
-                    <Sparkles className="h-3.5 w-3.5 animate-pulse" />
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5 shadow-2xs">
+                    <Headphones className="h-3.5 w-3.5" />
                   </div>
                   <div className="bg-card rounded-2xl rounded-tl-xs px-3.5 py-2.5 border border-border/70 shadow-2xs">
                     <div className="flex items-center gap-1.5 py-1">

@@ -1,6 +1,6 @@
 // Checkout page
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -229,6 +229,11 @@ export default function CheckoutPage() {
   const applyVoucherMutation = useApplyVoucher();
   const voucherLoading = applyVoucherMutation.isPending;
   const isSubmitting = createOrderMutation.isPending || paymentMutation.isPending;
+  const idempotencyKeyRef = useRef<string>(
+    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : '',
+  );
 
   const hasSelectedItems = selectedItems.length > 0;
   const cartItems = useMemo(() => {
@@ -323,11 +328,15 @@ export default function CheckoutPage() {
           : [],
         note,
         shippingOptions,
+        idempotencyKey: idempotencyKeyRef.current,
       };
 
       const result = await createOrderMutation.mutateAsync(orderData);
 
       if (result) {
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+          idempotencyKeyRef.current = crypto.randomUUID();
+        }
         clearCartMutation.mutateAsync().catch(console.error);
 
         if (paymentMethod === 'vnpay') {

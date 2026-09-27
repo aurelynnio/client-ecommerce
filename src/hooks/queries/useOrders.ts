@@ -50,6 +50,24 @@ export interface CreateOrderData {
       countryCode?: string;
     };
   }>;
+  idempotencyKey?: string;
+}
+
+export interface BuyNowData {
+  productId: string;
+  variantId?: string;
+  quantity: number;
+  addressId: string;
+  paymentMethod?: 'cod' | 'vnpay' | 'momo';
+  voucherCode?: string;
+  note?: string;
+  shippingOption?: {
+    carrierCode?: string;
+    productCode?: string;
+    fee?: number;
+    shippingMethod?: string;
+  };
+  idempotencyKey?: string;
 }
 
 export interface OrderListResponse {
@@ -213,12 +231,51 @@ const orderApi = {
 
   // Mutations
   create: async (data: CreateOrderData): Promise<Order> => {
-    const { voucherPlatformCode, discountCode, platformVoucher, shopVouchers, ...orderData } = data;
-    const response = await instance.post(ENDPOINT_ORDER.ROOT, {
-      ...orderData,
-      platformVoucher: platformVoucher ?? voucherPlatformCode ?? discountCode,
-      shopVouchers: shopVouchers ?? [],
-    });
+    const {
+      voucherPlatformCode,
+      discountCode,
+      platformVoucher,
+      shopVouchers,
+      idempotencyKey,
+      ...orderData
+    } = data;
+    const key =
+      idempotencyKey ||
+      (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : undefined);
+
+    const headers: Record<string, string> = {};
+    if (key) {
+      headers['X-Idempotency-Key'] = key;
+    }
+
+    const response = await instance.post(
+      ENDPOINT_ORDER.ROOT,
+      {
+        ...orderData,
+        platformVoucher: platformVoucher ?? voucherPlatformCode ?? discountCode,
+        shopVouchers: shopVouchers ?? [],
+      },
+      { headers },
+    );
+    return extractApiData(response);
+  },
+
+  buyNow: async (data: BuyNowData): Promise<Order> => {
+    const { idempotencyKey, ...payload } = data;
+    const key =
+      idempotencyKey ||
+      (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : undefined);
+
+    const headers: Record<string, string> = {};
+    if (key) {
+      headers['X-Idempotency-Key'] = key;
+    }
+
+    const response = await instance.post(ENDPOINT_ORDER.BUY_NOW, payload, { headers });
     return extractApiData(response);
   },
 
@@ -311,6 +368,23 @@ export function useCreateOrder() {
     },
     onError: (error) => {
       errorHandler.log(error, { context: 'Create order failed' });
+    },
+  });
+}
+
+/**
+ * Buy now direct checkout mutation
+ */
+export function useBuyNow() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: orderApi.buyNow,
+    onSuccess: () => {
+      invalidateOrdersAndCart(queryClient);
+    },
+    onError: (error) => {
+      errorHandler.log(error, { context: 'Buy now failed' });
     },
   });
 }

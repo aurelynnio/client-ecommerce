@@ -81,6 +81,7 @@ export const ENDPOINT_NOTIFICATION = {
 
 export const ENDPOINT_ORDER = {
   ROOT: '/orders',
+  BUY_NOW: '/orders/buy-now',
   ALL: '/orders/all/list',
   SELLER: '/orders/seller/list',
   STATISTICS: '/orders/statistics/overview',

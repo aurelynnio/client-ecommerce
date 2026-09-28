@@ -36,9 +36,9 @@ export default function TopShopsSection({ shops }: TopShopsSectionProps) {
             <Link
               key={shop._id}
               href={`/shop/${shop.slug}`}
-              className="group flex flex-col items-center rounded-lg border border-border bg-card p-3 text-center transition-colors hover:border-primary/40"
+              className="group flex flex-col items-center rounded-lg bg-card p-3 text-center transition-colors"
             >
-              <div className="relative mb-2 h-14 w-14 overflow-hidden rounded-full border-2 border-border bg-muted">
+              <div className="relative mb-2 h-14 w-14 overflow-hidden rounded-full bg-muted">
                 {shop.logo ? (
                   <Image
                     src={shop.logo}

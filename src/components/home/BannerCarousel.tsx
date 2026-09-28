@@ -39,16 +39,16 @@ export default function BannerCarousel() {
     <section className="bg-card">
       <div className="aura-container grid gap-3 py-4 md:grid-cols-[1fr_280px] lg:grid-cols-[1fr_320px]">
         {/* Main carousel */}
-        <div className="h-[200px] overflow-hidden rounded-lg border border-border bg-muted sm:h-[280px] lg:h-[340px]">
+        <div className="h-[200px] overflow-hidden rounded-lg bg-muted sm:h-[280px] lg:h-[340px]">
           <Banner />
         </div>
 
         {/* Member & Fast Action Portal Card */}
-        <div className="flex flex-col justify-between rounded-lg border border-border bg-card p-3.5 shadow-2xs">
+        <div className="flex flex-col justify-between rounded-lg bg-card p-3.5">
           {/* User / Member Greeting */}
           <div>
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted border border-border text-foreground font-semibold">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted text-foreground font-semibold">
                 {isAuthenticated && user?.avatar ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -78,14 +78,14 @@ export default function BannerCarousel() {
                 <>
                   <Link
                     href="/profile?tab=orders"
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-muted/40 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-muted"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-muted py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
                   >
                     <Package className="h-3.5 w-3.5 text-primary" />
                     <span>Đơn mua</span>
                   </Link>
                   <Link
                     href="/profile?tab=vouchers"
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-muted/40 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-muted"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-muted py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
                   >
                     <Ticket className="h-3.5 w-3.5 text-amber-500" />
                     <span>Ví Voucher</span>
@@ -95,13 +95,13 @@ export default function BannerCarousel() {
                 <>
                   <Link
                     href="/login"
-                    className="flex-1 rounded-lg bg-primary py-1.5 text-center text-xs font-medium text-primary-foreground shadow-2xs transition-colors hover:bg-primary-hover"
+                    className="flex-1 rounded-lg bg-primary py-1.5 text-center text-xs font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
                   >
                     Đăng nhập
                   </Link>
                   <Link
                     href="/register"
-                    className="flex-1 rounded-lg border border-border bg-background py-1.5 text-center text-xs font-medium text-foreground transition-colors hover:bg-muted"
+                    className="flex-1 rounded-lg bg-muted py-1.5 text-center text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
                   >
                     Đăng ký
                   </Link>
@@ -123,7 +123,7 @@ export default function BannerCarousel() {
           </Link>
 
           {/* 4-item Fast Shortcut Bar */}
-          <div className="border-t border-border/70 pt-2.5">
+          <div className="pt-3">
             <div className="grid grid-cols-4 gap-1 text-center">
               {fastShortcuts.map(({ icon: Icon, title, href, color }) => (
                 <Link

@@ -45,7 +45,7 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
       : 'Đơn từ 0₫';
 
   return (
-    <div className="group/ticket relative flex w-[270px] shrink-0 overflow-hidden rounded-xl border border-border/80 bg-card shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-card">
+    <div className="group/ticket relative flex w-[270px] shrink-0 overflow-hidden rounded-xl bg-card transition-all duration-200 hover:-translate-y-0.5">
       {/* Left ticket stub */}
       <div className="relative flex w-[88px] shrink-0 flex-col items-center justify-center bg-gradient-to-b from-primary/10 via-primary-bg/30 to-primary/10 p-2 text-center border-r border-dashed border-primary/25 select-none">
         <span className="mb-0.5 text-[8px] font-extrabold tracking-widest text-primary/80 uppercase">
@@ -61,8 +61,8 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
 
       {/* Punch-out semicircles on the dashed divider line */}
       <div className="pointer-events-none absolute left-[88px] top-0 h-full w-0 -translate-x-1/2">
-        <div className="absolute -top-1.5 left-0 h-3 w-3 rounded-full bg-background border-b border-border/70" />
-        <div className="absolute -bottom-1.5 left-0 h-3 w-3 rounded-full bg-background border-t border-border/70" />
+        <div className="absolute -top-1.5 left-0 h-3 w-3 rounded-full bg-background" />
+        <div className="absolute -bottom-1.5 left-0 h-3 w-3 rounded-full bg-background" />
       </div>
 
       {/* Right voucher details & actions */}
@@ -77,7 +77,7 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
         </div>
 
         <div className="mt-2 flex items-center justify-between gap-1.5">
-          <span className="inline-flex items-center rounded border border-dashed border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-foreground/80">
+          <span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] font-semibold text-foreground/80">
             {voucher.code}
           </span>
 
@@ -134,7 +134,7 @@ export default function DailyVouchersSection() {
       <div className="aura-container">
         <div className="mb-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/15">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <Ticket className="h-4 w-4" aria-hidden="true" />
             </div>
             <div>
@@ -165,7 +165,7 @@ export default function DailyVouchersSection() {
             size="icon-sm"
             onClick={() => scroll('left')}
             aria-label="Cuộn trái"
-            className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all bg-card"
+            className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all bg-card"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -175,7 +175,7 @@ export default function DailyVouchersSection() {
             size="icon-sm"
             onClick={() => scroll('right')}
             aria-label="Cuộn phải"
-            className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all bg-card"
+            className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all bg-card"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>

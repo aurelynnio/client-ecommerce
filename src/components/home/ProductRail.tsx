@@ -67,7 +67,7 @@ export function ProductRail({
           size="icon-sm"
           onClick={() => scroll('left')}
           aria-label="Cuộn trái"
-          className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all"
+          className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 rounded-full md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -77,7 +77,7 @@ export function ProductRail({
           size="icon-sm"
           onClick={() => scroll('right')}
           aria-label="Cuộn phải"
-          className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full shadow-md md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all"
+          className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 rounded-full md:flex opacity-0 group-hover/rail:opacity-100 hover:-translate-y-1/2 hover:scale-105 active:scale-95 transition-all"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -91,7 +91,7 @@ export function ProductRail({
             ? Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="w-[160px] shrink-0 animate-pulse rounded-lg border border-border bg-card p-2 sm:w-[180px]"
+                  className="w-[160px] shrink-0 animate-pulse rounded-lg bg-card p-2 sm:w-[180px]"
                 >
                   <div className="aspect-square w-full rounded bg-muted" />
                   <div className="mt-2 h-3 w-full rounded bg-muted" />

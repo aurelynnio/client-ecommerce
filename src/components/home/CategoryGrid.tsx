@@ -78,10 +78,10 @@ export default function CategoryGrid({ onSelectCategory, selectedSlug }: Categor
                 type="button"
                 onClick={() => onSelectCategory?.(category.slug ?? null)}
                 className={cn(
-                  'group flex flex-col items-center gap-1.5 rounded-lg border px-1 py-2.5 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'group flex flex-col items-center gap-1.5 rounded-lg px-1 py-2.5 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   active
-                    ? 'border-primary bg-primary-light'
-                    : 'border-border bg-card hover:border-primary/30 hover:bg-muted/50',
+                    ? 'bg-primary/10 font-semibold text-primary'
+                    : 'bg-card hover:bg-muted/50',
                 )}
               >
                 <span

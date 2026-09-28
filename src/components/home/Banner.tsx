@@ -216,13 +216,13 @@ export default function Banner() {
       <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-3 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <button
           onClick={() => paginate(-1)}
-          className="pointer-events-auto rounded-full bg-card/90 p-1.5 text-foreground shadow-sm transition-colors hover:bg-card hover:text-primary"
+          className="pointer-events-auto rounded-full bg-card/90 p-1.5 text-foreground transition-colors hover:bg-card hover:text-primary"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <button
           onClick={() => paginate(1)}
-          className="pointer-events-auto rounded-full bg-card/90 p-1.5 text-foreground shadow-sm transition-colors hover:bg-card hover:text-primary"
+          className="pointer-events-auto rounded-full bg-card/90 p-1.5 text-foreground transition-colors hover:bg-card hover:text-primary"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -230,7 +230,7 @@ export default function Banner() {
 
       {/* Pagination controls */}
       <div className="absolute bottom-3 left-0 right-0 z-30 flex justify-center">
-        <div className="flex gap-1.5 rounded-full border border-border bg-card/90 px-2 py-1 shadow-sm">
+        <div className="flex gap-1.5 rounded-full bg-card/90 px-2 py-1">
           {banners.map((_, idx) => (
             <button
               key={idx}

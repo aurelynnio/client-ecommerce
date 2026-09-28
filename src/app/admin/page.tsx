@@ -11,7 +11,7 @@ export default function AdminPage() {
   }, [router]);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex min-h-dvh items-center justify-center">
       <div className="text-center">
         <SpinnerLoading />
         <p className="text-muted-foreground mt-4">Redirecting...</p>

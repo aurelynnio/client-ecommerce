@@ -6,9 +6,11 @@ import { cn } from '@/utils/cn';
 
 export const adminShellClass = 'bg-background text-foreground';
 
-export const adminSurfaceClass = 'rounded-lg border border-border bg-card';
+// Surfaces — flat: a white card on the deeper page background, no border.
+export const adminSurfaceClass = 'rounded-xl bg-card';
 
-export const adminSubtleSurfaceClass = 'rounded-lg border border-border bg-muted/30';
+// Inset surfaces — muted fill instead of a border.
+export const adminSubtleSurfaceClass = 'rounded-xl bg-muted/60';
 
 export const adminFilterBarClass = cn(
   adminSubtleSurfaceClass,
@@ -17,49 +19,45 @@ export const adminFilterBarClass = cn(
 
 export const adminTableShellClass = cn(adminSurfaceClass, 'overflow-hidden');
 
-export const adminTableHeaderClass = 'bg-muted/30';
+export const adminTableHeaderClass = 'bg-muted/60';
 
-export const adminRowHoverClass = 'transition-colors hover:bg-muted/30';
+export const adminRowHoverClass = 'transition-colors hover:bg-muted/50';
 
 export const adminSearchInputClass =
-  'rounded-lg border border-border bg-card focus:border-primary focus:ring-primary/20 focus-visible:ring-[3px]';
+  'rounded-lg bg-muted focus-visible:bg-card focus-visible:ring-ring/50 focus-visible:ring-[3px]';
 
 export const adminFieldSurfaceClass =
-  'rounded-lg border border-border bg-card focus:border-primary focus:ring-primary/20';
+  'rounded-lg bg-muted focus-visible:bg-card focus-visible:ring-ring/50';
 
-export const adminDialogContentClass = cn(
-  adminSurfaceClass,
-  'rounded-lg border-border bg-card',
-);
+export const adminDialogContentClass = 'rounded-lg bg-card';
 
 export const adminDialogFooterClass =
-  'flex-col-reverse gap-3 border-t border-border bg-transparent pt-5 sm:flex-row sm:justify-end sm:gap-3';
+  'flex-col-reverse gap-3 bg-transparent pt-5 sm:flex-row sm:justify-end sm:gap-3';
 
-export const adminInsetPanelClass = 'rounded-lg border border-border bg-muted/30';
+export const adminInsetPanelClass = 'rounded-lg bg-muted/60';
 
 export const adminNativeSelectClass =
-  'h-10 w-full rounded-lg border border-border bg-card px-3 text-sm focus:border-primary focus:ring-primary/20 focus:outline-none sm:w-auto';
+  'h-10 w-full rounded-lg bg-muted px-3 text-sm focus-visible:bg-card focus-visible:ring-ring/50 focus:outline-none sm:w-auto';
 
-export const adminIconButtonClass =
-  'h-10 w-10 rounded-lg border border-border bg-card hover:bg-muted/30';
+export const adminIconButtonClass = 'h-10 w-10 rounded-lg bg-muted hover:bg-muted/70';
 
-export const adminSmallIconButtonClass =
-  'h-8 w-8 rounded-lg border border-border bg-card hover:bg-muted/30';
+export const adminSmallIconButtonClass = 'h-8 w-8 rounded-lg bg-muted hover:bg-muted/70';
 
 export const adminMediaPlaceholderClass = 'bg-muted';
 
 export const adminPrimaryButtonClass =
-  'rounded-lg border border-primary bg-primary text-primary-foreground hover:bg-primary-hover';
+  'rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover';
 
 export const adminSecondaryButtonClass =
-  'rounded-lg border border-border bg-card text-foreground hover:bg-muted/30';
+  'rounded-lg bg-muted text-foreground hover:bg-muted/70';
 
-export const adminMenuContentClass = 'rounded-lg border border-border bg-popover p-1';
+// Overlays without a scrim keep a hairline so they do not merge with the page.
+export const adminMenuContentClass = 'rounded-lg bg-popover p-1 ring-1 ring-black/5';
 
 export const adminMenuLabelClass =
   'px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground';
 
-export const adminMenuSeparatorClass = 'my-1 bg-border';
+export const adminMenuSeparatorClass = '-mx-1 my-1.5 bg-transparent';
 
 export const adminCodePillClass =
   'relative rounded-md bg-muted px-[0.45rem] py-[0.24rem] font-mono text-xs text-muted-foreground';
@@ -161,7 +159,7 @@ export function AdminStatCard({
   meta,
 }: AdminStatCardProps) {
   return (
-    <Card className="gap-0 py-0 border-border shadow-xs">
+    <Card className="gap-0 py-0">
       <CardContent className="p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">

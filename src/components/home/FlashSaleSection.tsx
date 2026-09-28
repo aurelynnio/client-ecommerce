@@ -9,7 +9,7 @@ import { formatCurrency } from '@/utils/format';
 
 import { Button } from '@/components/ui/button';
 
-export default function FlashSaleSection() {
+export default function FlashSaleSection({ embedded = false }: { embedded?: boolean }) {
   const { products, formattedCountdown, isLoading } = useFlashSaleWithCountdown();
   const scrollRef = useRef<HTMLDivElement>(null);
   const displayProducts = products.slice(0, 8);
@@ -24,7 +24,7 @@ export default function FlashSaleSection() {
   };
 
   return (
-    <section className="aura-container py-5">
+    <section className={embedded ? 'py-3' : 'aura-container py-5'}>
       <div className="overflow-hidden rounded-lg bg-card">
         {/* Header bar — Tmall red gradient feel (flat red) */}
         <div className="flex items-center justify-between bg-primary px-4 py-3 text-primary-foreground">

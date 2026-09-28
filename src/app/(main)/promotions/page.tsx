@@ -152,12 +152,12 @@ export default function PromotionsPage() {
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-          <FlashSaleSection />
+          <FlashSaleSection embedded />
         </section>
 
         {/* Embedded Daily Vouchers Section */}
         <section className="rounded-xl bg-card p-4 sm:p-6">
-          <DailyVouchersSection />
+          <DailyVouchersSection embedded />
         </section>
       </div>
     </main>

@@ -111,7 +111,7 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
   );
 }
 
-export default function DailyVouchersSection() {
+export default function DailyVouchersSection({ embedded = false }: { embedded?: boolean }) {
   const { data: vouchers, isLoading } = usePlatformVouchers();
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -130,8 +130,8 @@ export default function DailyVouchersSection() {
   if (!isLoading && activeVouchers.length === 0) return null;
 
   return (
-    <section className="py-4 sm:py-5 bg-background">
-      <div className="aura-container">
+    <section className={embedded ? undefined : 'py-4 sm:py-5 bg-background'}>
+      <div className={embedded ? undefined : 'aura-container'}>
         <div className="mb-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">

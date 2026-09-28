@@ -115,9 +115,9 @@ export default function SellerChatPage() {
   if (!myShop) return null;
 
   return (
-    <section className="min-h-[70vh] overflow-hidden rounded-lg border border-border bg-card lg:h-[calc(100dvh-11rem)]">
+    <section className="min-h-[70vh] overflow-hidden rounded-lg bg-card lg:h-[calc(100dvh-11rem)]">
       <div className="flex h-full flex-col lg:flex-row">
-        <div className="flex w-full flex-col border-b border-border bg-card lg:w-80 lg:border-b-0 lg:border-r">
+        <div className="flex w-full flex-col bg-muted/40 lg:w-80">
           <div className="p-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -156,7 +156,7 @@ export default function SellerChatPage() {
                   key={conversation._id}
                   onClick={() => handleSelectConversation(conversation)}
                   className={cn(
-                    'flex w-full items-center gap-3 border-t border-border p-4 text-left transition-colors hover:bg-muted/60',
+                    'flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-muted/60',
                     currentConversation?._id === conversation._id && 'bg-primary/10',
                   )}
                 >
@@ -205,10 +205,10 @@ export default function SellerChatPage() {
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col bg-muted/30">
+        <div className="flex min-w-0 flex-1 flex-col bg-card">
           {currentConversation ? (
             <>
-              <div className="flex flex-col gap-3 border-b border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
                   <div className="size-10 overflow-hidden rounded-full bg-muted">
                     {currentConversation.user.avatar ? (
@@ -255,7 +255,7 @@ export default function SellerChatPage() {
                           'max-w-[70%] rounded-lg px-4 py-2.5',
                           message.sender === user?._id
                             ? 'rounded-br-md bg-primary text-primary-foreground'
-                            : 'rounded-bl-md border border-border bg-card text-foreground',
+                            : 'rounded-bl-md bg-muted text-foreground',
                         )}
                       >
                         <ChatAttachments
@@ -279,7 +279,7 @@ export default function SellerChatPage() {
                 )}
                 <div ref={messagesEndRef} />
               </div>
-              <div className="border-t border-border bg-card p-4">
+              <div className="bg-card p-4">
                 {selectedFiles.length > 0 && (
                   <div className="mb-3 flex flex-wrap gap-2">
                     {selectedFiles.map((file, index) => (

@@ -70,7 +70,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
   }, [pathname]);
 
   const renderNavigation = (onItemClick?: () => void) => (
-    <nav className="overflow-hidden rounded-lg border border-border bg-card">
+    <nav className="overflow-hidden rounded-lg bg-card">
       {menuItems.map((section) => (
         <div key={section.title}>
           <p className="px-4 pb-2 pt-4 text-[11px] font-semibold tracking-wider text-muted-foreground">
@@ -88,15 +88,12 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
                 href={item.href}
                 onClick={onItemClick}
                 className={cn(
-                  'relative flex items-center gap-3 px-4 py-2.5 text-sm transition-colors',
+                  'flex items-center gap-3 px-4 py-2.5 text-sm transition-colors',
                   isActive
-                    ? 'bg-primary/5 font-medium text-primary'
+                    ? 'bg-primary/10 font-semibold text-primary'
                     : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground',
                 )}
               >
-                {isActive && (
-                  <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-primary" />
-                )}
                 <Icon className={cn('h-[18px] w-[18px]', isActive && 'text-primary')} />
                 <span>{item.name}</span>
               </Link>
@@ -141,13 +138,13 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
     <RequireRole roles={['seller', 'admin']} redirectTo="/">
       <div className="-mx-4 -mt-4 min-h-screen bg-background">
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-          <SheetContent side="left" className="w-[280px] border-r border-border bg-card p-0">
+          <SheetContent side="left" className="w-[280px] bg-card p-0">
             <SheetTitle className="sr-only">Menu Điều hướng Người bán</SheetTitle>
             <div className="flex h-full flex-col">
               <div className="px-4 pt-4">
-                <div className="rounded-lg border border-border bg-card p-4">
+                <div className="rounded-lg bg-card p-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-14 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
+                    <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted">
                       {myShop?.logo ? (
                         <Image
                           src={myShop.logo}
@@ -187,7 +184,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
         </Sheet>
         <div className="max-w-[1400px] mx-auto w-full px-4 sm:px-6">
           {/* Mobile Header */}
-          <div className="sticky top-0 z-40 -mx-4 border-b border-border bg-card px-4 py-3 lg:hidden sm:-mx-6 sm:px-6">
+          <div className="sticky top-0 z-40 -mx-4 bg-card px-4 py-3 lg:hidden sm:-mx-6 sm:px-6">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <Button
@@ -223,9 +220,9 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
             {/* Sidebar */}
             <aside className="hidden lg:block w-[240px] shrink-0">
               {/* Shop Card */}
-              <div className="mb-4 rounded-lg border border-border bg-card p-4">
+              <div className="mb-4 rounded-lg bg-card p-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-14 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
+                  <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted">
                     {myShop?.logo ? (
                       <Image
                         src={myShop.logo}

@@ -122,7 +122,7 @@ export default function SellerStatisticsPage() {
             <p className="text-sm text-muted-foreground">Phân tích hiệu suất shop của bạn</p>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card p-1">
+        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-card p-1">
           {periods.map((p) => (
             <button
               key={p.key}
@@ -174,7 +174,7 @@ export default function SellerStatisticsPage() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Chart */}
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="rounded-xl bg-card p-5 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-semibold text-foreground">Doanh thu theo thời gian</h3>
             <Button variant="ghost" size="sm" className="text-primary">
@@ -222,7 +222,7 @@ export default function SellerStatisticsPage() {
         </div>
 
         {/* Orders Chart */}
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="rounded-xl bg-card p-5 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-semibold text-foreground">Đơn hàng theo trạng thái</h3>
             <Button variant="ghost" size="sm" className="text-primary">
@@ -257,7 +257,7 @@ export default function SellerStatisticsPage() {
       </div>
 
       {/* Top Products */}
-      <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+      <div className="rounded-xl bg-card p-5 sm:p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-semibold text-foreground">Sản phẩm bán chạy</h3>
           <Button variant="ghost" size="sm" className="text-primary">
@@ -320,7 +320,7 @@ const StatCard = ({ title, value, change, subtext, icon: Icon, color }: StatCard
   const isPositive = change !== undefined && change >= 0;
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="rounded-xl bg-card p-5">
       <div className="flex items-center justify-between mb-4">
         <div className={`flex size-10 items-center justify-center rounded-lg ${colors.icon}`}>
           <Icon className={`h-5 w-5 ${colors.text}`} />

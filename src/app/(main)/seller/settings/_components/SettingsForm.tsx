@@ -110,7 +110,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Banner & Logo */}
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
+        <div className="overflow-hidden rounded-lg bg-card">
           {/* Banner */}
           <div className="relative h-36 sm:h-48 bg-muted">
             <input
@@ -148,7 +148,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                   accept="image/*"
                   onChange={(e) => handleFileChange(e, 'logo')}
                 />
-                <div className="size-24 overflow-hidden rounded-lg border border-border bg-card">
+                <div className="size-24 overflow-hidden rounded-lg bg-card">
                   {isUploadingLogo ? (
                     <div className="w-full h-full flex items-center justify-center bg-muted">
                       <SpinnerLoading size={24} className="text-primary" />
@@ -184,7 +184,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
         </div>
 
         {/* Basic Info */}
-        <div className="rounded-lg border border-border bg-card p-6">
+        <div className="rounded-lg bg-card p-6">
           <h3 className="mb-4 font-semibold text-foreground">Thông tin cơ bản</h3>
           <div className="space-y-4">
             <div>
@@ -195,7 +195,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="mt-1.5 h-11 bg-card"
+                className="mt-1.5 h-11 bg-muted"
               />
             </div>
             <div>
@@ -207,7 +207,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="mt-1.5 resize-none bg-card"
+                className="mt-1.5 resize-none bg-muted"
                 placeholder="Giới thiệu về shop của bạn..."
               />
             </div>
@@ -215,7 +215,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
         </div>
 
         {/* Pickup Address */}
-        <div className="rounded-lg border border-border bg-card p-6">
+        <div className="rounded-lg bg-card p-6">
           <div className="flex items-center gap-2 mb-4">
             <MapPin className="h-5 w-5 text-muted-foreground" />
             <h3 className="font-semibold text-foreground">Địa chỉ lấy hàng</h3>
@@ -227,7 +227,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.fullName || ''}
                   onChange={(e) => updatePickupAddress('fullName', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
               <div>
@@ -235,7 +235,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.phone || ''}
                   onChange={(e) => updatePickupAddress('phone', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
               <Input
                 value={formData.pickupAddress?.address || ''}
                 onChange={(e) => updatePickupAddress('address', e.target.value)}
-                className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 placeholder="Số nhà, tên đường..."
               />
             </div>
@@ -254,7 +254,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.city || ''}
                   onChange={(e) => updatePickupAddress('city', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
               <div>
@@ -262,7 +262,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.district || ''}
                   onChange={(e) => updatePickupAddress('district', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
               <div>
@@ -270,7 +270,7 @@ export function SettingsForm({ myShop }: SettingsFormProps) {
                 <Input
                   value={formData.pickupAddress?.ward || ''}
                   onChange={(e) => updatePickupAddress('ward', e.target.value)}
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
             </div>

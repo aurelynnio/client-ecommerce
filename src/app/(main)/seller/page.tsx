@@ -108,7 +108,7 @@ export default function SellerDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-primary">Kênh người bán</p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
@@ -152,7 +152,7 @@ export default function SellerDashboardPage() {
       </div>
 
       {/* Order Status */}
-      <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+      <div className="rounded-xl bg-card p-5 sm:p-6">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="font-semibold text-foreground">Trạng thái đơn hàng</h2>
           <Link
@@ -168,7 +168,7 @@ export default function SellerDashboardPage() {
             return (
               <div
                 key={stat.label}
-                className="rounded-lg border border-border bg-card p-4 text-center"
+                className="rounded-lg bg-card p-4 text-center"
               >
                 <Icon className={`h-6 w-6 mx-auto mb-2 ${stat.color}`} />
                 <p className="text-2xl font-semibold text-foreground">{stat.value}</p>
@@ -181,7 +181,7 @@ export default function SellerDashboardPage() {
 
       {/* Shop Performance */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-xl bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="flex size-10 items-center justify-center rounded-lg bg-warning/15">
               <Star className="h-5 w-5 text-star" />
@@ -199,7 +199,7 @@ export default function SellerDashboardPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-xl bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="flex size-10 items-center justify-center rounded-lg bg-info/15">
               <Users className="h-5 w-5 text-info" />
@@ -212,7 +212,7 @@ export default function SellerDashboardPage() {
           <p className="text-xs text-muted-foreground">Tổng số người theo dõi shop</p>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-xl bg-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="flex size-10 items-center justify-center rounded-lg bg-success/15">
               <TrendingUp className="h-5 w-5 text-success" />
@@ -228,7 +228,7 @@ export default function SellerDashboardPage() {
 
       {/* Quick Actions & Top Products */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="rounded-xl bg-card p-5 sm:p-6">
           <h3 className="mb-4 font-semibold text-foreground">Thao tác nhanh</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <QuickAction href="/seller/products" icon={Package} label="Thêm sản phẩm" />
@@ -238,7 +238,7 @@ export default function SellerDashboardPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="rounded-xl bg-card p-5 sm:p-6">
           <h3 className="mb-4 font-semibold text-foreground">Sản phẩm bán chạy</h3>
           {statistics?.topProducts && statistics.topProducts.length > 0 ? (
             <div className="space-y-3">
@@ -308,7 +308,7 @@ const colorMap = {
 const StatCard = ({ title, value, icon: Icon, color, href }: StatCardProps) => {
   const colors = colorMap[color];
   const content = (
-    <div className="cursor-pointer rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted">
+    <div className="cursor-pointer rounded-xl bg-card p-5 transition-colors hover:bg-muted">
       <div className="flex items-center justify-between mb-3">
         <div className={`w-10 h-10 ${colors.icon} rounded-xl flex items-center justify-center`}>
           <Icon className={`h-5 w-5 ${colors.text}`} />
@@ -337,7 +337,7 @@ const QuickAction = ({
 }) => (
   <Link
     href={href}
-    className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-muted/60"
+    className="flex items-center gap-3 rounded-lg bg-card p-3 transition-colors hover:bg-muted/60"
   >
     <div className="flex size-9 items-center justify-center rounded-lg bg-muted">
       <Icon className="h-4 w-4 text-muted-foreground" />

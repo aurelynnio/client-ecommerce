@@ -205,7 +205,7 @@ export default function SellerProductsPage() {
       </div>
 
       {/* Filters */}
-      <div className="rounded-xl border border-border bg-card p-4">
+      <div className="rounded-xl bg-card p-4">
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -224,7 +224,7 @@ export default function SellerProductsPage() {
       </div>
 
       {/* Products */}
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden rounded-xl bg-card">
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <SpinnerLoading size={32} />
@@ -271,7 +271,7 @@ export default function SellerProductsPage() {
                   {products.map((product, idx) => (
                     <tr
                       key={product._id}
-                      className={`${idx % 2 === 0 ? 'bg-card' : 'bg-muted/20'} transition-colors hover:bg-muted/60`}
+                      className={`${idx % 2 === 0 ? 'bg-card' : 'bg-muted/40'} transition-colors hover:bg-muted/60`}
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
@@ -342,7 +342,7 @@ export default function SellerProductsPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             align="end"
-                            className="w-40 rounded-lg border-border"
+                            className="w-40 rounded-lg"
                           >
                             <DropdownMenuItem
                               onClick={() => handleOpenView(product)}
@@ -376,7 +376,7 @@ export default function SellerProductsPage() {
 
             {/* Pagination */}
             {(productPagination?.totalPages || 0) > 1 && (
-              <div className="flex flex-col gap-3 border-t border-border bg-muted/30 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 bg-muted/30 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Hiển thị {products.length} / {productPagination?.total || 0} sản phẩm
                 </p>

@@ -122,7 +122,7 @@ export default function SellerCategoriesPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="rounded-xl bg-card p-5 sm:p-6">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-semibold text-foreground">
               {editingId ? 'Chỉnh sửa danh mục' : 'Thêm danh mục mới'}
@@ -145,7 +145,7 @@ export default function SellerCategoriesPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="VD: Điện thoại"
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
               <div>
@@ -159,7 +159,7 @@ export default function SellerCategoriesPage() {
                       sortOrder: Number(e.target.value),
                     })
                   }
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function SellerCategoriesPage() {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Mô tả ngắn về danh mục"
                 rows={2}
-                className="mt-1.5 rounded-xl resize-none border-0 bg-card"
+                className="mt-1.5 rounded-xl resize-none border-0 bg-muted"
               />
             </div>
             <div>
@@ -179,10 +179,10 @@ export default function SellerCategoriesPage() {
                 value={formData.image}
                 onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                 placeholder="https://..."
-                className="mt-1.5 h-11 rounded-xl border-0 bg-card"
+                className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
               />
               {formData.image ? (
-                <div className="relative mt-3 w-16 h-16 rounded-lg overflow-hidden border border-border bg-card">
+                <div className="relative mt-3 w-16 h-16 rounded-lg overflow-hidden bg-card">
                   <Image
                     src={formData.image}
                     alt="Category preview"
@@ -210,7 +210,7 @@ export default function SellerCategoriesPage() {
                 type="button"
                 variant="outline"
                 onClick={resetForm}
-                className="rounded-xl h-11 border-0 bg-card"
+                className="rounded-xl h-11 border-0 bg-muted"
               >
                 Hủy
               </Button>
@@ -220,14 +220,14 @@ export default function SellerCategoriesPage() {
       )}
 
       {/* Categories List */}
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden rounded-xl bg-card">
         {isLoading ? (
           <div className="flex justify-center py-20">
             <SpinnerLoading size={32} />
           </div>
         ) : categories.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-20 h-20 bg-card rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <Tag className="h-10 w-10 text-muted-foreground" />
             </div>
             <h3 className="mb-2 font-semibold text-foreground">Chưa có danh mục nào</h3>
@@ -246,12 +246,12 @@ export default function SellerCategoriesPage() {
               <div
                 key={category._id}
                 className={`p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${
-                  idx % 2 === 0 ? 'bg-card' : 'bg-card/50'
+                  idx % 2 === 0 ? 'bg-card' : 'bg-muted/50'
                 } ${!category.isActive && 'opacity-60'}`}
               >
                 <div className="flex items-center gap-4 flex-wrap">
                   <GripVertical className="h-4 w-4 cursor-grab text-muted-foreground" />
-                  <div className="flex size-10 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted">
+                  <div className="flex size-10 items-center justify-center overflow-hidden rounded-lg bg-muted">
                     {category.image ? (
                       <Image
                         src={category.image}

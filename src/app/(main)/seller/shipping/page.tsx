@@ -152,7 +152,7 @@ export default function SellerShippingPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="rounded-xl bg-card p-5 sm:p-6">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-semibold text-foreground">
               {editingId ? 'Chỉnh sửa template' : 'Thêm template mới'}
@@ -175,7 +175,7 @@ export default function SellerShippingPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="VD: Giao hàng tiêu chuẩn"
-                  className="mt-1.5 h-11 rounded-xl border-0 bg-white"
+                  className="mt-1.5 h-11 rounded-xl border-0 bg-muted"
                 />
               </div>
               <div className="flex items-end pb-1">
@@ -184,7 +184,7 @@ export default function SellerShippingPage() {
                     type="checkbox"
                     checked={formData.isDefault}
                     onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
-                    className="rounded border-border w-4 h-4"
+                    className="rounded bg-muted w-4 h-4"
                   />
                   <span className="text-sm text-muted-foreground">Đặt làm mặc định</span>
                 </label>
@@ -199,7 +199,7 @@ export default function SellerShippingPage() {
                   variant="outline"
                   size="sm"
                   onClick={handleAddRule}
-                  className="rounded-lg h-9 border-0 bg-white"
+                  className="rounded-lg h-9 border-0 bg-muted"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Thêm quy tắc
@@ -209,7 +209,7 @@ export default function SellerShippingPage() {
                 {formData.rules.map((rule, index) => (
                   <div
                     key={index}
-                    className="flex flex-col md:flex-row md:items-center gap-3 p-3 bg-white rounded-xl"
+                    className="flex flex-col md:flex-row md:items-center gap-3 p-3 bg-muted/50 rounded-xl"
                   >
                     <Input
                       className="h-10 w-full bg-muted/50 md:flex-1"
@@ -272,7 +272,7 @@ export default function SellerShippingPage() {
                 type="button"
                 variant="outline"
                 onClick={resetForm}
-                className="rounded-xl h-11 border-0 bg-white"
+                className="rounded-xl h-11 border-0 bg-muted"
               >
                 Hủy
               </Button>
@@ -282,14 +282,14 @@ export default function SellerShippingPage() {
       )}
 
       {/* Templates List */}
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden rounded-xl bg-card">
         {isLoading ? (
           <div className="flex justify-center py-20">
             <SpinnerLoading size={32} />
           </div>
         ) : templates.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <Truck className="h-10 w-10 text-muted-foreground" />
             </div>
             <h3 className="mb-2 font-semibold text-foreground">Chưa có template nào</h3>
@@ -309,7 +309,7 @@ export default function SellerShippingPage() {
             {templates.map((template, idx) => (
               <div
                 key={template._id}
-                className={`p-5 ${idx % 2 === 0 ? 'bg-white' : 'bg-white/50'}`}
+                className={`p-5 ${idx % 2 === 0 ? 'bg-card' : 'bg-muted/50'}`}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
                   <div className="flex items-center gap-3">

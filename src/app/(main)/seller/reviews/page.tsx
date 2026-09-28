@@ -86,7 +86,7 @@ export default function SellerReviewsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-4 rounded-xl bg-card p-4 sm:flex-row sm:items-center">
         <Select value={String(filters.rating)} onValueChange={(val) => updateFilter('rating', val)}>
           <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Số sao" />
@@ -122,7 +122,7 @@ export default function SellerReviewsPage() {
             const product = typeof review.product === 'string' ? undefined : review.product;
 
             return (
-              <div key={review._id} className="rounded-lg border border-border bg-card p-6">
+              <div key={review._id} className="rounded-lg bg-card p-6">
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Product Image */}
                   <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -181,7 +181,7 @@ export default function SellerReviewsPage() {
 
                     {/* Shop Reply */}
                     {review.reply && (
-                      <div className="mt-3 border-l-2 border-primary pl-4">
+                      <div className="mt-3 rounded-lg bg-primary/5 p-3">
                         <p className="mb-1 text-xs font-bold text-primary">
                           Phản hồi của Shop
                           {review.replyAt

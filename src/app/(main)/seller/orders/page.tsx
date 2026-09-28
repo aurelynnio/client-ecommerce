@@ -246,7 +246,7 @@ export default function SellerOrdersPage() {
       </div>
 
       {/* Status Tabs */}
-      <div className="overflow-x-auto rounded-lg border border-border bg-muted/50 p-1">
+      <div className="overflow-x-auto rounded-lg bg-muted/50 p-1">
         <div className="flex min-w-max gap-1">
           {statusTabs.map((tab) => (
             <button
@@ -268,7 +268,7 @@ export default function SellerOrdersPage() {
       </div>
 
       {/* Filters */}
-      <div className="rounded-lg border border-border bg-muted/40 p-4">
+      <div className="rounded-lg bg-muted/40 p-4">
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -288,7 +288,7 @@ export default function SellerOrdersPage() {
       </div>
 
       {/* Orders List */}
-      <div className="overflow-hidden rounded-lg border border-border bg-card">
+      <div className="overflow-hidden rounded-lg bg-card">
         {isLoadingShopOrders ? (
           <div className="flex justify-center py-20">
             <SpinnerLoading size={32} />
@@ -312,7 +312,7 @@ export default function SellerOrdersPage() {
                 return (
                   <div
                     key={order._id}
-                    className={`p-5 ${idx % 2 === 0 ? 'bg-card' : 'bg-card/50'}`}
+                    className={`p-5 ${idx % 2 === 0 ? 'bg-card' : 'bg-muted/40'}`}
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
                       <div>
@@ -440,7 +440,7 @@ export default function SellerOrdersPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-6 py-4 bg-card/50">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-6 py-4 bg-muted/40">
                 <p className="text-sm text-muted-foreground">
                   Hiển thị {orders.length} / {total} đơn hàng
                 </p>
@@ -495,7 +495,7 @@ export default function SellerOrdersPage() {
 
               {/* Shipmondo shipment info */}
               {selectedOrder.shipmondoShipmentId && (
-                <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                <div className="rounded-lg bg-primary/5 p-4">
                   <h4 className="mb-2 flex items-center gap-2 font-medium text-foreground">
                     <Truck className="h-4 w-4 text-primary" />
                     Vận đơn Shipmondo
@@ -599,7 +599,7 @@ export default function SellerOrdersPage() {
               </div>
 
               {/* Total */}
-              <div className="border-t pt-4">
+              <div className="pt-4">
                 <div className="flex justify-between text-sm">
                   <span>Tạm tính:</span>
                   <span>{formatCurrency(selectedOrder.subtotal)}</span>

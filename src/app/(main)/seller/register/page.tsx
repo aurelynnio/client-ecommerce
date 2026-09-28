@@ -23,7 +23,7 @@ import { getSafeErrorMessage } from '@/api';
 const sectionTitleClass = 'text-sm font-semibold text-foreground';
 const fieldLabelClass = 'mb-2 block text-sm font-medium text-foreground';
 const fieldSurfaceClass =
-  'rounded-lg border-input bg-card placeholder:text-muted-foreground focus-visible:ring-ring';
+  'rounded-lg bg-muted placeholder:text-muted-foreground focus-visible:ring-ring';
 const helperTextClass = 'mt-2 text-xs leading-5 text-muted-foreground';
 const requiredMark = <span className="ml-1 text-destructive">*</span>;
 
@@ -174,12 +174,12 @@ export default function SellerRegisterPage() {
       <div className="max-w-[600px] mx-auto">
         {/* Loading state while checking shop (only for sellers/admins) */}
         {canHaveShop && isLoading ? (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-border bg-card p-12">
+          <div className="flex flex-col items-center justify-center rounded-lg bg-card p-12">
             <SpinnerLoading size={32} className="mb-4" />
             <p className="text-muted-foreground">Đang kiểm tra thông tin…</p>
           </div>
         ) : (
-          <div className="rounded-lg border border-border bg-card p-6">
+          <div className="rounded-lg bg-card p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="flex size-12 items-center justify-center rounded-full bg-primary/10">
                 <Store className="h-6 w-6 text-primary" />
@@ -204,7 +204,7 @@ export default function SellerRegisterPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Nhập tên shop"
-                    className={`${fieldSurfaceClass} ${errors.name ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
+                    className={`${fieldSurfaceClass} ${errors.name ? 'ring-1 ring-destructive/30' : ''}`}
                   />
                   {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                 </div>
@@ -236,7 +236,7 @@ export default function SellerRegisterPage() {
                       onChange={(e) => handleFileChange(e, 'logo')}
                     />
                     <div
-                      className="relative mt-2 size-20 cursor-pointer overflow-hidden rounded-full border-2 border-dashed border-border transition-colors hover:border-primary"
+                      className="relative mt-2 size-20 cursor-pointer overflow-hidden rounded-full border-2 border-dashed border-border transition-colors hover:bg-primary/5"
                       onClick={() => logoInputRef.current?.click()}
                     >
                       {isUploadingLogo ? (
@@ -263,7 +263,7 @@ export default function SellerRegisterPage() {
                       onChange={(e) => handleFileChange(e, 'banner')}
                     />
                     <div
-                      className="relative mt-2 h-20 w-full cursor-pointer overflow-hidden rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary"
+                      className="relative mt-2 h-20 w-full cursor-pointer overflow-hidden rounded-lg border-2 border-dashed border-border transition-colors hover:bg-primary/5"
                       onClick={() => bannerInputRef.current?.click()}
                     >
                       {isUploadingBanner ? (
@@ -302,7 +302,7 @@ export default function SellerRegisterPage() {
                       value={formData.pickupAddress?.fullName}
                       onChange={(e) => updatePickupAddress('fullName', e.target.value)}
                       placeholder="Họ tên người gửi"
-                      className={`${fieldSurfaceClass} ${errors.fullName ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
+                      className={`${fieldSurfaceClass} ${errors.fullName ? 'ring-1 ring-destructive/30' : ''}`}
                     />
                     {errors.fullName && (
                       <p className="text-xs text-destructive mt-1">{errors.fullName}</p>
@@ -318,7 +318,7 @@ export default function SellerRegisterPage() {
                       value={formData.pickupAddress?.phone}
                       onChange={(e) => updatePickupAddress('phone', e.target.value)}
                       placeholder="0912345678"
-                      className={`${fieldSurfaceClass} ${errors.phone ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
+                      className={`${fieldSurfaceClass} ${errors.phone ? 'ring-1 ring-destructive/30' : ''}`}
                     />
                     {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
                   </div>
@@ -333,7 +333,7 @@ export default function SellerRegisterPage() {
                     value={formData.pickupAddress?.address}
                     onChange={(e) => updatePickupAddress('address', e.target.value)}
                     placeholder="Số nhà, tên đường"
-                    className={`${fieldSurfaceClass} ${errors.address ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
+                    className={`${fieldSurfaceClass} ${errors.address ? 'ring-1 ring-destructive/30' : ''}`}
                   />
                   {errors.address && <p className="text-xs text-destructive mt-1">{errors.address}</p>}
                   <p className={helperTextClass}>
@@ -351,7 +351,7 @@ export default function SellerRegisterPage() {
                       value={formData.pickupAddress?.city}
                       onChange={(e) => updatePickupAddress('city', e.target.value)}
                       placeholder="TP. Hồ Chí Minh"
-                      className={`${fieldSurfaceClass} ${errors.city ? 'border-destructive ring-1 ring-destructive/30' : ''}`}
+                      className={`${fieldSurfaceClass} ${errors.city ? 'ring-1 ring-destructive/30' : ''}`}
                     />
                     {errors.city && <p className="text-xs text-destructive mt-1">{errors.city}</p>}
                   </div>

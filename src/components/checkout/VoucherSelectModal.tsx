@@ -116,10 +116,10 @@ export default function VoucherSelectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl bg-card border-border shadow-xl">
-        <DialogHeader className="p-5 pb-4 border-b border-border/70 bg-muted/20">
+      <DialogContent className="max-w-md sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl bg-card">
+        <DialogHeader className="p-5 pb-4 bg-muted/20">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
               {scope === 'shop' ? (
                 <Store className="h-5 w-5" strokeWidth={1.8} />
               ) : (
@@ -183,12 +183,12 @@ export default function VoucherSelectModal({
                 <div
                   key={voucher._id}
                   className={cn(
-                    'relative flex overflow-hidden rounded-xl border transition-all duration-200',
+                    'relative flex overflow-hidden rounded-xl transition-all duration-200',
                     isSelected
-                      ? 'border-primary bg-primary/5 shadow-xs'
+                      ? 'bg-primary/10'
                       : meetsCondition
-                        ? 'border-border/80 bg-card hover:border-primary/40'
-                        : 'border-border/50 bg-muted/20 opacity-65',
+                        ? 'bg-card hover:bg-muted/40'
+                        : 'bg-muted opacity-65',
                   )}
                 >
                   {/* Left Value Stub */}
@@ -219,8 +219,8 @@ export default function VoucherSelectModal({
                     </span>
 
                     {/* Cutout punch holes */}
-                    <div className="absolute -right-1.5 top-0 h-3 w-3 rounded-full bg-card border-l border-border" />
-                    <div className="absolute -right-1.5 bottom-0 h-3 w-3 rounded-full bg-card border-l border-border" />
+                    <div className="absolute -right-1.5 top-0 h-3 w-3 rounded-full bg-card" />
+                    <div className="absolute -right-1.5 bottom-0 h-3 w-3 rounded-full bg-card" />
                   </div>
 
                   {/* Right Details */}
@@ -257,7 +257,7 @@ export default function VoucherSelectModal({
                       )}
                     </div>
 
-                    <div className="mt-2.5 flex items-center justify-between pt-2 border-t border-border/50">
+                    <div className="mt-2.5 flex items-center justify-between pt-2">
                       <span className="text-[10px] text-muted-foreground">
                         HSD: {new Date(voucher.endDate).toLocaleDateString('vi-VN')}
                       </span>
@@ -281,7 +281,7 @@ export default function VoucherSelectModal({
         </div>
 
         {/* Footer */}
-        <div className="p-3 px-5 border-t border-border/70 bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
+        <div className="p-3 px-5 bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
           <span>Đơn hiện tại: {formatCurrency(orderTotal)}</span>
           <Button type="button" variant="ghost" size="sm" onClick={onClose} className="h-8 text-xs">
             Đóng

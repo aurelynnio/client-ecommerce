@@ -32,7 +32,7 @@ export default function PaymentResultPage() {
       icon: CheckCircle2,
       iconWrapperClass: 'bg-success/15',
       iconClass: 'text-success',
-      noteClass: 'border-success/30 bg-success/10 text-foreground',
+      noteClass: 'bg-success/10 text-foreground',
       note: 'Bạn có thể theo dõi đơn hàng bất cứ lúc nào trong mục Đơn mua.',
       primaryActionLabel: 'Xem đơn hàng',
       primaryActionIcon: ShoppingBag,
@@ -60,7 +60,7 @@ export default function PaymentResultPage() {
       icon: XCircle,
       iconWrapperClass: 'bg-destructive/15',
       iconClass: 'text-destructive',
-      noteClass: 'border-destructive/30 bg-destructive/10 text-foreground',
+      noteClass: 'bg-destructive/10 text-foreground',
       note: 'Nếu đã bị trừ tiền, vui lòng liên hệ hỗ trợ để kiểm tra giao dịch.',
       primaryActionLabel: 'Quay lại giỏ hàng',
       primaryActionIcon: RefreshCcw,
@@ -88,7 +88,7 @@ export default function PaymentResultPage() {
       icon: AlertCircle,
       iconWrapperClass: 'bg-warning/15',
       iconClass: 'text-warning',
-      noteClass: 'border-warning/30 bg-warning/10 text-foreground',
+      noteClass: 'bg-warning/10 text-foreground',
       note: 'Chúng tôi đang xử lý sự cố để khôi phục dịch vụ sớm nhất.',
       primaryActionLabel: 'Về trang chủ',
       primaryActionIcon: Home,
@@ -119,7 +119,7 @@ export default function PaymentResultPage() {
   return (
     <main className="min-h-[70vh] bg-background py-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="mb-6 border-b border-border pb-4">
+        <div className="mb-6 pb-4">
           <h1 className="text-xl font-semibold text-foreground">Kết quả thanh toán</h1>
         </div>
 
@@ -139,7 +139,7 @@ export default function PaymentResultPage() {
             </p>
 
             {orderId && (
-              <div className="mt-5 rounded-lg border border-border bg-muted/40 p-4 text-left">
+              <div className="mt-5 rounded-lg bg-muted/40 p-4 text-left">
                 <p className="mb-1 text-xs font-medium text-muted-foreground">Mã đơn hàng</p>
                 <p className="font-mono text-lg font-semibold text-foreground">
                   #{orderId.slice(-8).toUpperCase()}
@@ -153,7 +153,7 @@ export default function PaymentResultPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 text-left">
               {config.quickItems.map((item) => (
-                <div key={item.title} className="rounded-lg border border-border p-4">
+                <div key={item.title} className="rounded-lg bg-muted p-4">
                   <item.icon className="mb-2 h-5 w-5 text-primary" />
                   <p className="text-sm font-medium text-foreground">{item.title}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{item.text}</p>

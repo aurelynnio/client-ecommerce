@@ -77,7 +77,7 @@ export default function VouchersPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <header className="border-b border-border pb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <header className="pb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Gift className="h-5 w-5" />
@@ -90,27 +90,27 @@ export default function VouchersPage() {
             </div>
           </div>
 
-          <Button asChild variant="outline" size="sm" className="gap-2 self-start sm:self-auto border-border/80">
+          <Button asChild variant="outline" size="sm" className="gap-2 self-start sm:self-auto">
             <Link href="/profile?tab=vouchers">
               <Ticket className="h-4 w-4 text-primary" />
               <span>Ví voucher của tôi ({savedIds.length})</span>
             </Link>
           </Button>
         </header>
-        <section className="flex flex-col gap-3 border-b border-border py-3 sm:flex-row">
+        <section className="flex flex-col gap-3 py-3 sm:flex-row">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Tìm theo tên hoặc mã voucher"
-              className="h-10 rounded-lg border-border pl-9 focus:border-primary focus:ring-primary/20"
+              className="h-10 rounded-lg pl-9 focus:ring-primary/20"
             />
           </div>
           <select
             value={filterType}
             onChange={(event) => setFilterType(event.target.value as typeof filterType)}
-            className="h-10 rounded-lg border border-border bg-card px-3 text-sm focus:border-primary focus:ring-primary/20 focus:outline-none"
+            className="h-10 rounded-lg bg-muted px-3 text-sm focus:ring-primary/20 focus:outline-none"
           >
             <option value="all">Tất cả loại</option>
             <option value="percentage">Giảm phần trăm</option>
@@ -138,7 +138,7 @@ export default function VouchersPage() {
           </section>
         ) : (
           <div className="flex min-h-80 flex-col items-center justify-center text-center">
-            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Ticket className="h-8 w-8 text-muted-foreground/60" />
             </div>
             <p className="text-sm text-muted-foreground">Không tìm thấy voucher phù hợp.</p>

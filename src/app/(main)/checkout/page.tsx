@@ -104,7 +104,7 @@ function ShopShippingOptions({
   const options = quotes || [];
 
   return (
-    <div className="border-t border-border bg-muted/30 px-4 py-3">
+    <div className="bg-muted/30 px-4 py-3">
       <p className="mb-2 text-sm font-medium text-foreground">Phương thức vận chuyển</p>
 
       {isLoading && <p className="text-xs text-muted-foreground">Đang tải phí vận chuyển...</p>}
@@ -120,10 +120,10 @@ function ShopShippingOptions({
             return (
               <label
                 key={quote.productCode}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
+                className={`flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors ${
                   active
-                    ? 'border-primary bg-primary/5'
-                    : 'border-border bg-card hover:border-muted-foreground/30'
+                    ? 'bg-primary/10'
+                    : 'bg-card hover:bg-muted/40'
                 }`}
               >
                 <input
@@ -535,7 +535,7 @@ export default function CheckoutPage() {
         </Breadcrumb>
 
         {/* Header with title + checkout steps */}
-        <div className="mb-4 flex items-end justify-between border-b border-border pb-3">
+        <div className="mb-4 flex items-end justify-between pb-3">
           <div className="flex items-center gap-3">
             <Link
               href="/cart"
@@ -562,8 +562,8 @@ export default function CheckoutPage() {
             {/* Main Content */}
             <div className="min-w-0 space-y-4 lg:col-span-8">
               {/* Shipping Address */}
-              <div className="overflow-hidden rounded-lg border border-border bg-card">
-                <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
+              <div className="overflow-hidden rounded-lg bg-card">
+                <div className="flex items-center gap-2 bg-muted/30 px-4 py-3">
                   <MapPin className="h-4 w-4 text-primary" />
                   <h2 className="text-sm font-semibold text-foreground">Địa chỉ nhận hàng</h2>
                 </div>
@@ -595,13 +595,13 @@ export default function CheckoutPage() {
                           type="button"
                           variant="outline"
                           onClick={() => router.push('/profile?tab=address')}
-                          className="shrink-0 rounded-lg border-border text-primary hover:bg-primary-light hover:text-primary"
+                          className="shrink-0 rounded-lg text-primary hover:bg-primary-light hover:text-primary"
                         >
                           Thay đổi
                         </Button>
                       </div>
 
-                      <div className="space-y-1.5 border-t border-border pt-3">
+                      <div className="space-y-1.5 pt-3">
                         <Label htmlFor="note" className="text-sm text-muted-foreground">
                           Ghi chú cho shop
                         </Label>
@@ -610,7 +610,7 @@ export default function CheckoutPage() {
                           placeholder="Ghi chú cho người giao hàng..."
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
-                          className="h-10 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+                          className="h-10 rounded-lg focus:ring-primary/20"
                         />
                       </div>
                     </div>
@@ -638,10 +638,10 @@ export default function CheckoutPage() {
               {itemsByShop.map((shopGroup) => (
                 <div
                   key={shopGroup.shop._id}
-                  className="overflow-hidden rounded-lg border border-border bg-card"
+                  className="overflow-hidden rounded-lg bg-card"
                 >
                   {/* Shop Header */}
-                  <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
+                  <div className="flex items-center gap-2 bg-muted/30 px-4 py-3">
                     <Store className="h-4 w-4 text-primary" />
                     <Link
                       href={`/shop/${shopGroup.shop.slug}`}
@@ -649,7 +649,7 @@ export default function CheckoutPage() {
                     >
                       {shopGroup.shop.name}
                     </Link>
-                    <span className="rounded-sm border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                    <span className="rounded-sm bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                       Chính hãng
                     </span>
                   </div>
@@ -658,9 +658,9 @@ export default function CheckoutPage() {
                   {shopGroup.items.map((item) => (
                     <div
                       key={item._id}
-                      className="flex flex-col gap-3 border-b border-border p-4 last:border-0 sm:flex-row sm:items-center"
+                      className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center"
                     >
-                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded border border-border bg-muted">
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded bg-muted">
                         {getItemImage(item) ? (
                           <Image
                             src={getItemImage(item)!}
@@ -718,12 +718,12 @@ export default function CheckoutPage() {
                   )}
 
                   {/* Shop Voucher */}
-                  <div className="flex flex-col gap-2 border-t border-border bg-muted/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col gap-2 bg-muted/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
                       <Tag className="h-4 w-4 text-primary shrink-0" />
                       <span>Voucher của Shop</span>
                       {appliedShopVoucher && (
-                        <span className="font-mono text-xs font-bold text-success bg-success/10 px-2 py-0.5 rounded border border-success/30">
+                        <span className="font-mono text-xs font-bold text-success bg-success/10 px-2 py-0.5 rounded">
                           {appliedShopVoucher.code} (-{formatCurrency(appliedShopVoucher.discountAmount)})
                         </span>
                       )}
@@ -754,8 +754,8 @@ export default function CheckoutPage() {
               ))}
 
               {/* Platform Voucher */}
-              <div className="overflow-hidden rounded-lg border border-border bg-card">
-                <div className="flex items-center justify-between border-b border-border bg-muted/30 px-4 py-3">
+              <div className="overflow-hidden rounded-lg bg-card">
+                <div className="flex items-center justify-between bg-muted/30 px-4 py-3">
                   <div className="flex items-center gap-2">
                     <Tag className="h-4 w-4 text-primary" />
                     <h2 className="text-sm font-semibold text-foreground">Voucher nền tảng</h2>
@@ -785,7 +785,7 @@ export default function CheckoutPage() {
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
                       disabled={!!appliedPlatformVoucher}
-                      className="h-9 w-full rounded-lg border-border text-sm focus:border-primary focus:ring-primary/20 sm:w-48"
+                      className="h-9 w-full rounded-lg text-sm focus:ring-primary/20 sm:w-48"
                     />
                     {appliedPlatformVoucher ? (
                       <Button
@@ -793,7 +793,7 @@ export default function CheckoutPage() {
                         size="sm"
                         variant="outline"
                         onClick={handleRemoveVoucher}
-                        className="h-9 w-full shrink-0 rounded-lg border-destructive/30 text-destructive hover:bg-destructive/15 sm:w-auto"
+                        className="h-9 w-full shrink-0 rounded-lg text-destructive hover:bg-destructive/15 sm:w-auto"
                       >
                         Xóa voucher
                       </Button>
@@ -820,18 +820,18 @@ export default function CheckoutPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="overflow-hidden rounded-lg border border-border bg-card">
-                <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-3">
+              <div className="overflow-hidden rounded-lg bg-card">
+                <div className="flex items-center gap-2 bg-muted/30 px-4 py-3">
                   <Wallet className="h-4 w-4 text-primary" />
                   <h2 className="text-sm font-semibold text-foreground">Phương thức thanh toán</h2>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2">
                   <label
-                    className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
+                    className={`flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors ${
                       paymentMethod === 'cod'
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border bg-card text-foreground hover:border-muted-foreground/30'
+                        ? 'bg-primary/10'
+                        : 'bg-card text-foreground hover:bg-muted/40'
                     }`}
                   >
                     <input
@@ -860,10 +860,10 @@ export default function CheckoutPage() {
                   </label>
 
                   <label
-                    className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
+                    className={`flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors ${
                       paymentMethod === 'vnpay'
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border bg-card text-foreground hover:border-muted-foreground/30'
+                        ? 'bg-primary/10'
+                        : 'bg-card text-foreground hover:bg-muted/40'
                     }`}
                   >
                     <input
@@ -898,8 +898,8 @@ export default function CheckoutPage() {
 
             {/* Order Summary Sidebar */}
             <div className="min-w-0 lg:col-span-4">
-              <div className="rounded-lg border border-border bg-card p-4 lg:sticky lg:top-[124px]">
-                <h2 className="mb-3 border-b border-border pb-3 text-base font-bold text-foreground">
+              <div className="rounded-lg bg-card p-4 lg:sticky lg:top-[124px]">
+                <h2 className="mb-3 text-base font-bold text-foreground">
                   Chi tiết thanh toán
                 </h2>
 
@@ -917,8 +917,8 @@ export default function CheckoutPage() {
                       <div
                         className={
                           reached
-                            ? 'mb-3 rounded border border-success/30 bg-success/10 p-2.5 text-xs'
-                            : 'mb-3 rounded border border-warning/30 bg-warning/10 p-2.5 text-xs'
+                            ? 'mb-3 rounded bg-success/10 p-2.5 text-xs'
+                            : 'mb-3 rounded bg-warning/10 p-2.5 text-xs'
                         }
                       >
                         <div className="flex items-center gap-1.5">
@@ -988,7 +988,7 @@ export default function CheckoutPage() {
                     )}
                   </div>
 
-                  <div className="border-t border-border pt-3">
+                  <div className="pt-3">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-foreground">Tổng thanh toán</span>
                       <span className="text-xl font-bold text-primary">
@@ -1018,7 +1018,7 @@ export default function CheckoutPage() {
         </form>
 
         {/* Sticky Mobile Place Order Bar (Tmall/JD style) */}
-        <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-border bg-card px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] lg:hidden">
+        <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 bg-card px-4 py-3 lg:hidden">
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground">Tổng thanh toán</p>
             <p className="text-lg font-bold text-primary">

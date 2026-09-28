@@ -402,7 +402,7 @@ export default function CartPage() {
         </Breadcrumb>
 
         {/* Header with title + checkout steps */}
-        <div className="mb-4 flex items-end justify-between border-b border-border pb-3">
+        <div className="mb-4 flex items-end justify-between pb-3">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
               Giỏ hàng
@@ -424,11 +424,11 @@ export default function CartPage() {
 
             {/* Table Header (desktop only, Tmall/JD style) */}
             {hasCartItems && (
-              <div className="hidden border border-border bg-muted/40 rounded-t-lg px-4 py-3 text-xs font-medium text-muted-foreground lg:grid lg:grid-cols-[3rem_1fr_8rem_8rem_8rem_5rem] lg:items-center lg:gap-2">
+              <div className="hidden bg-muted/60 rounded-t-lg px-4 py-3 text-xs font-medium text-muted-foreground lg:grid lg:grid-cols-[3rem_1fr_8rem_8rem_8rem_5rem] lg:items-center lg:gap-2">
                 <Checkbox
                   checked={isAllSelected}
                   onCheckedChange={() => (isAllSelected ? handleUnselectAll() : handleSelectAll())}
-                  className="h-4 w-4 rounded border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  className="h-4 w-4 rounded bg-muted data-[state=checked]:bg-primary"
                   aria-label="Chọn tất cả"
                 />
                 <span>Sản phẩm</span>
@@ -441,11 +441,11 @@ export default function CartPage() {
 
             {/* Mobile Select All bar */}
             {hasCartItems && (
-              <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 text-sm lg:hidden">
+              <div className="flex items-center gap-3 rounded-lg bg-card p-3 text-sm lg:hidden">
                 <Checkbox
                   checked={isAllSelected}
                   onCheckedChange={() => (isAllSelected ? handleUnselectAll() : handleSelectAll())}
-                  className="h-4 w-4 rounded border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  className="h-4 w-4 rounded bg-muted data-[state=checked]:bg-primary"
                   aria-label="Chọn tất cả"
                 />
                 <span className="text-muted-foreground">
@@ -465,7 +465,7 @@ export default function CartPage() {
 
             {/* Warning for deleted products */}
             {deletedItems.length > 0 && (
-              <div className="bg-warning/15 border border-warning/30 rounded-sm p-4">
+              <div className="bg-warning/15 rounded-sm p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-2 text-warning">
                     <span className="text-sm">
@@ -496,10 +496,10 @@ export default function CartPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="overflow-hidden rounded-lg border border-border bg-card"
+                  className="overflow-hidden rounded-lg bg-card"
                 >
                   {/* Shop Header */}
-                  <div className="flex items-center gap-3 border-b border-border bg-muted/30 p-3">
+                  <div className="flex items-center gap-3 bg-muted/30 p-3">
                     <Checkbox
                       checked={shopGroup.items.every((item) => item.selected)}
                       onCheckedChange={() => {
@@ -510,7 +510,7 @@ export default function CartPage() {
                           }
                         });
                       }}
-                      className="h-4 w-4 rounded border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                      className="h-4 w-4 rounded bg-muted data-[state=checked]:bg-primary"
                       aria-label={`Chọn tất cả từ ${shopGroup.shop.name}`}
                     />
                     <Store className="h-4 w-4 text-primary" />
@@ -520,7 +520,7 @@ export default function CartPage() {
                     >
                       {shopGroup.shop.name}
                     </Link>
-                    <span className="rounded-sm border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                    <span className="rounded-sm bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                       Chính hãng
                     </span>
                   </div>
@@ -529,13 +529,13 @@ export default function CartPage() {
                   {shopGroup.items.map((item) => (
                     <div
                       key={item._id}
-                      className="flex flex-wrap items-center gap-3 border-b border-border p-3 transition-colors last:border-0 hover:bg-muted/20 sm:flex-nowrap sm:p-4"
+                      className="flex flex-wrap items-center gap-3 p-3 transition-colors even:bg-muted/40 hover:bg-muted/60 sm:flex-nowrap sm:p-4"
                     >
                       {/* Checkbox */}
                       <Checkbox
                         checked={item.selected || false}
                         onCheckedChange={() => handleToggleSelect(item._id)}
-                        className="h-4 w-4 shrink-0 rounded border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        className="h-4 w-4 shrink-0 rounded bg-muted data-[state=checked]:bg-primary"
                         aria-label={`Chọn ${typeof item.productId === 'object' && item.productId ? item.productId.name : 'sản phẩm'}`}
                       />
 
@@ -548,7 +548,7 @@ export default function CartPage() {
                         }`}
                         className="shrink-0"
                       >
-                        <div className="relative h-16 w-16 overflow-hidden rounded border border-border bg-muted sm:h-20 sm:w-20">
+                        <div className="relative h-16 w-16 overflow-hidden rounded bg-muted sm:h-20 sm:w-20">
                           {getItemImage(item) ? (
                             <Image
                               src={getItemImage(item)!}
@@ -623,7 +623,7 @@ export default function CartPage() {
                           <button
                             onClick={() => void updateQuantity(item._id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
-                            className="flex h-7 w-7 items-center justify-center rounded-l border border-border text-muted-foreground hover:bg-muted/40 disabled:opacity-50"
+                            className="flex h-7 w-7 items-center justify-center rounded-l bg-muted text-muted-foreground hover:bg-muted/60 disabled:opacity-50"
                             aria-label="Giảm số lượng"
                           >
                             <Minus className="h-3 w-3" />
@@ -632,12 +632,12 @@ export default function CartPage() {
                             type="text"
                             value={item.quantity}
                             readOnly
-                            className="h-7 w-10 border border-x border-border bg-background text-center text-sm text-foreground focus:outline-none"
+                            className="h-7 w-10 bg-muted text-center text-sm text-foreground focus:outline-none"
                             aria-label="Số lượng"
                           />
                           <button
                             onClick={() => void updateQuantity(item._id, item.quantity + 1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-r border border-border text-muted-foreground hover:bg-muted/40"
+                            className="flex h-7 w-7 items-center justify-center rounded-r bg-muted text-muted-foreground hover:bg-muted/60"
                             aria-label="Tăng số lượng"
                           >
                             <Plus className="h-3 w-3" />
@@ -671,8 +671,8 @@ export default function CartPage() {
 
           {/* Order Summary Sidebar */}
           <div className="min-w-0 lg:col-span-4">
-            <div className="rounded-lg border border-border bg-card p-4 lg:sticky lg:top-[124px]">
-              <h2 className="mb-3 border-b border-border pb-3 text-base font-bold text-foreground">
+            <div className="rounded-lg bg-card p-4 lg:sticky lg:top-[124px]">
+              <h2 className="mb-3 text-base font-bold text-foreground">
                 Thông tin đơn hàng
               </h2>
 
@@ -689,8 +689,8 @@ export default function CartPage() {
                   <div
                     className={
                       reached
-                        ? 'mb-3 rounded border border-success/30 bg-success/10 p-2.5 text-xs'
-                        : 'mb-3 rounded border border-warning/30 bg-warning/10 p-2.5 text-xs'
+                        ? 'mb-3 rounded bg-success/10 p-2.5 text-xs'
+                        : 'mb-3 rounded bg-warning/10 p-2.5 text-xs'
                     }
                   >
                     <div className="flex items-center gap-1.5">
@@ -735,14 +735,14 @@ export default function CartPage() {
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value)}
                     disabled={!!appliedPlatformVoucher}
-                    className="h-9 rounded-lg border-border text-sm focus:border-primary focus:ring-primary/20"
+                    className="h-9 rounded-lg text-sm focus:ring-primary/20"
                   />
                   {appliedPlatformVoucher ? (
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={handleRemoveVoucher}
-                      className="h-9 border-destructive/30 px-3 text-destructive hover:bg-destructive/15"
+                      className="h-9 px-3 text-destructive hover:bg-destructive/15"
                     >
                       Xóa
                     </Button>
@@ -766,7 +766,7 @@ export default function CartPage() {
               </div>
 
               {/* Summary */}
-              <div className="space-y-2.5 border-t border-border py-3">
+              <div className="space-y-2.5 py-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
                     Tạm tính ({selectedItemsCount} sản phẩm)
@@ -790,7 +790,7 @@ export default function CartPage() {
               </div>
 
               {/* Total */}
-              <div className="flex items-center justify-between border-t border-border py-3">
+              <div className="flex items-center justify-between py-3">
                 <span className="font-medium text-foreground">Tổng cộng</span>
                 <span className="text-xl font-bold text-primary">
                   {formatCurrency(
@@ -821,7 +821,7 @@ export default function CartPage() {
 
         {/* Recommendations Section */}
         <div className="mt-12">
-          <div className="mb-4 flex items-center gap-2 border-b border-border pb-2">
+          <div className="mb-4 flex items-center gap-2 pb-2">
             <span className="inline-block h-5 w-1 rounded-full bg-primary" />
             <h2 className="text-lg font-semibold text-foreground">Có thể bạn cũng thích</h2>
           </div>
@@ -831,7 +831,7 @@ export default function CartPage() {
 
       {/* Sticky Mobile Checkout Bar (Tmall/JD style) */}
       {hasSelectedItems && (
-        <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-border bg-card px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] lg:hidden">
+        <div className="sticky bottom-0 z-30 flex items-center justify-between gap-3 bg-card px-4 py-3 lg:hidden">
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground">Tổng cộng</p>
             <p className="text-lg font-bold text-primary">

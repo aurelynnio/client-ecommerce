@@ -48,7 +48,7 @@ export function VoucherCard({
     return (
       <div
         className={cn(
-          'relative overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30',
+          'relative overflow-hidden rounded-lg bg-card transition-colors hover:bg-muted/40',
           className,
         )}
       >
@@ -105,7 +105,7 @@ export function VoucherCard({
     return (
       <div
         className={cn(
-          'flex overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30',
+          'flex overflow-hidden rounded-lg bg-card transition-colors hover:bg-muted/40',
           className,
         )}
       >
@@ -158,7 +158,7 @@ export function VoucherCard({
             </div>
 
             {isCollected ? (
-              <Badge variant="outline" className="text-[10px] font-medium text-success border-success/30">
+              <Badge variant="outline" className="text-[10px] font-medium text-success bg-success/15">
                 Đã Lưu
               </Badge>
             ) : (
@@ -180,7 +180,7 @@ export function VoucherCard({
   return (
     <div
       className={cn(
-        'flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30',
+        'flex h-full flex-col overflow-hidden rounded-lg bg-card transition-colors hover:bg-muted/40',
         className,
       )}
     >

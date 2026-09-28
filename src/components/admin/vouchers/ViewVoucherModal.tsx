@@ -78,9 +78,12 @@ export function ViewModelDiscount({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn(adminDialogContentClass, 'sm:max-w-[550px] p-0 overflow-hidden')}
+        className={cn(
+          adminDialogContentClass,
+          'sm:max-w-[550px] max-h-[85dvh] flex flex-col overflow-hidden p-0',
+        )}
       >
-        <DialogHeader className="p-6 pb-2 border-b border-border/50">
+        <DialogHeader className="shrink-0 p-6 pb-2">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <DialogTitle className="text-xl font-semibold tracking-tight">
@@ -92,7 +95,7 @@ export function ViewModelDiscount({
             </div>
             <div
               className={cn(
-                'px-3 py-1 rounded-full text-xs font-medium border border-transparent',
+                'px-3 py-1 rounded-full text-xs font-medium',
                 status.bg,
                 status.text,
               )}
@@ -102,7 +105,7 @@ export function ViewModelDiscount({
           </div>
         </DialogHeader>
 
-        <div className="p-6 space-y-6">
+        <div className="min-h-0 flex-1 overflow-y-auto p-6 space-y-6">
           {/* Main Stats */}
           <div className="grid grid-cols-2 gap-4">
             <div className={cn(adminInsetPanelClass, 'p-4 space-y-2')}>
@@ -135,7 +138,7 @@ export function ViewModelDiscount({
               Sử dụng & Giới hạn
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className={cn(adminInsetPanelClass, 'flex items-center gap-3 p-3 shadow-none')}>
+              <div className={cn(adminInsetPanelClass, 'flex items-center gap-3 p-3')}>
                 <div className="h-10 w-10 rounded-full bg-info/15 flex items-center justify-center">
                   <BarChart3 className="h-5 w-5 text-info" />
                 </div>
@@ -147,7 +150,7 @@ export function ViewModelDiscount({
                 </div>
               </div>
 
-              <div className={cn(adminInsetPanelClass, 'flex items-center gap-3 p-3 shadow-none')}>
+              <div className={cn(adminInsetPanelClass, 'flex items-center gap-3 p-3')}>
                 <div className="h-10 w-10 rounded-full bg-info/15 flex items-center justify-center">
                   <DollarSign className="h-5 w-5 text-info" />
                 </div>
@@ -175,7 +178,6 @@ export function ViewModelDiscount({
                   {formatDate(discount.startDate, DATE_TIME_OPTIONS)}
                 </span>
               </div>
-              <div className="h-px bg-border/50" />
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
@@ -202,7 +204,7 @@ export function ViewModelDiscount({
           {/* Products Info */}
         </div>
 
-        <DialogFooter className={cn(adminDialogFooterClass, 'border-t-0 px-6 pt-0 pb-6')}>
+        <DialogFooter className={cn(adminDialogFooterClass, 'shrink-0 px-6 pt-0 pb-6')}>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}

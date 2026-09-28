@@ -139,7 +139,7 @@ export function CreateNotificationModal({
             />
           </div>
 
-          <div className={cn(adminSubtleSurfaceClass, 'grid grid-cols-2 gap-4 rounded-2xl p-4')}>
+          <div className={cn(adminSubtleSurfaceClass, 'grid grid-cols-2 gap-4 rounded-xl p-4')}>
             <div className="space-y-2">
               <Label htmlFor="recipient" className="text-sm font-medium">
                 ID Người dùng (Tùy chọn)

@@ -145,7 +145,7 @@ export function CreateModelDiscount({
                   >
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="rounded-lg border-border">
+                  <SelectContent className="rounded-lg">
                     <SelectItem value="percent">Phần trăm (%)</SelectItem>
                     <SelectItem value="fixed">Số tiền cố định</SelectItem>
                   </SelectContent>

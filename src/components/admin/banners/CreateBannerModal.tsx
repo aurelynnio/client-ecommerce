@@ -113,10 +113,10 @@ export function CreateBannerModal({
       <DialogContent
         className={cn(
           adminDialogContentClass,
-          'sm:max-w-[550px] max-h-[90vh] flex flex-col no-scrollbar p-6',
+          'sm:max-w-[550px] max-h-[85dvh] flex flex-col no-scrollbar p-6',
         )}
       >
-        <DialogHeader className="shrink-0 pb-6 border-b border-border/50">
+        <DialogHeader className="shrink-0 pb-6">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold tracking-tight">
             Tạo Banner
           </DialogTitle>
@@ -198,7 +198,7 @@ export function CreateBannerModal({
                             <SelectValue placeholder="Chọn chủ đề" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-lg border-border">
+                        <SelectContent className="rounded-lg">
                           <SelectItem value="dark">Tối (Chữ trắng)</SelectItem>
                           <SelectItem value="light">Sáng (Chữ đen)</SelectItem>
                         </SelectContent>
@@ -229,7 +229,7 @@ export function CreateBannerModal({
                             className="hidden"
                           />
                           {field.value ? (
-                            <div className="relative aspect-[21/9] w-full rounded-lg overflow-hidden border border-border/50 group">
+                            <div className="relative aspect-[21/9] w-full rounded-lg overflow-hidden group">
                               <Image
                                 src={field.value}
                                 alt="Xem trước"
@@ -283,7 +283,7 @@ export function CreateBannerModal({
                           type="number"
                           {...field}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-                          className="rounded-xl border-border bg-muted/30 transition-[border-color,background-color,box-shadow] focus:bg-card"
+                          className={cn(adminFieldSurfaceClass, 'transition-colors focus:bg-card')}
                         />
                       </FormControl>
                       <FormMessage />

@@ -103,27 +103,27 @@ export function DiscountsTable({
   const getStatusBadge = (discount: Voucher) => {
     if (!discount.isActive) {
       return (
-        <Badge className="bg-muted text-muted-foreground hover:bg-muted border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-muted text-muted-foreground hover:bg-muted rounded-lg px-2.5 py-0.5 font-medium">
           Ngừng hoạt động
         </Badge>
       );
     }
     if (isExpired(discount.endDate)) {
       return (
-        <Badge className="bg-destructive/15 text-destructive hover:bg-destructive/15 border-destructive/30 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-destructive/15 text-destructive hover:bg-destructive/15 rounded-lg px-2.5 py-0.5 font-medium">
           Hết hạn
         </Badge>
       );
     }
     if ((discount.usageCount ?? 0) >= discount.usageLimit) {
       return (
-        <Badge className="bg-warning/15 text-warning hover:bg-warning/15 border-warning/30 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-warning/15 text-warning hover:bg-warning/15 rounded-lg px-2.5 py-0.5 font-medium">
           Hết lượt dùng
         </Badge>
       );
     }
     return (
-      <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+      <Badge className="bg-success/15 text-success hover:bg-success/15 rounded-lg px-2.5 py-0.5 font-medium">
         Đang hoạt động
       </Badge>
     );
@@ -147,7 +147,7 @@ export function DiscountsTable({
   const getScopeDisplay = (discount: Voucher) => {
     if (discount.scope === 'platform' || !discount.shopId) {
       return (
-        <Badge className="bg-info/15 text-info hover:bg-info/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none font-medium">
+        <Badge className="bg-info/15 text-info hover:bg-info/15 rounded-lg px-2.5 py-0.5 font-medium">
           <Globe className="h-3 w-3 mr-1" />
           Hệ thống
         </Badge>
@@ -155,7 +155,7 @@ export function DiscountsTable({
     }
     const shopInfo = getShopInfo(discount.shopId);
     return (
-      <div className="flex items-center gap-2 max-w-[140px]">
+      <div className="flex min-w-0 items-center gap-2 max-w-[140px]">
         {shopInfo.logo ? (
           <div
             className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}
@@ -175,7 +175,7 @@ export function DiscountsTable({
             <Store className="h-3 w-3 text-muted-foreground" />
           </div>
         )}
-        <span className="text-sm text-muted-foreground truncate" title={shopInfo.name}>
+        <span className="min-w-0 text-sm text-muted-foreground truncate" title={shopInfo.name}>
           {shopInfo.name}
         </span>
       </div>
@@ -263,7 +263,7 @@ export function DiscountsTable({
         <div className="overflow-x-auto no-scrollbar">
           <Table>
             <TableHeader className={adminTableHeaderClass}>
-              <TableRow className="border-0 hover:bg-transparent">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Mã
                 </TableHead>
@@ -319,7 +319,7 @@ export function DiscountsTable({
                   <TableRow
                     key={discount._id}
                     className={cn(
-                      `${adminRowHoverClass} border-0`,
+                      adminRowHoverClass,
                       isLoading && 'opacity-50 pointer-events-none',
                     )}
                   >

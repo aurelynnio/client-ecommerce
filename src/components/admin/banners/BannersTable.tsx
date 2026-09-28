@@ -60,14 +60,14 @@ interface BannersTableProps {
 
 export const getStatusBadge = (status: boolean) => {
   return status ? (
-    <Badge variant="success" className="border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge variant="success" className="rounded-lg px-2.5 py-0.5">
       <CheckCircle className="h-3 w-3 mr-1" />
       Đang hoạt động
     </Badge>
   ) : (
     <Badge
       variant="outline"
-      className="border-0 rounded-lg bg-muted text-muted-foreground px-2.5 py-0.5 shadow-none"
+      className="rounded-lg bg-muted text-muted-foreground px-2.5 py-0.5"
     >
       <XCircle className="h-3 w-3 mr-1" />
       Ngừng hoạt động
@@ -163,7 +163,7 @@ export function BannersTable({
         <div className="overflow-x-auto no-scrollbar">
           <Table>
             <TableHeader className={adminTableHeaderClass}>
-              <TableRow className="border-0 hover:bg-transparent">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="w-[350px] uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Nội dung Banner
                 </TableHead>
@@ -200,7 +200,7 @@ export function BannersTable({
               )}
               {!isLoading &&
                 banners.map((banner) => (
-                  <TableRow key={banner._id} className={`${adminRowHoverClass} border-0`}>
+                  <TableRow key={banner._id} className={adminRowHoverClass}>
                     <TableCell className="font-medium p-4 pl-6">
                       <div className="flex items-center gap-4">
                         <div
@@ -226,7 +226,7 @@ export function BannersTable({
                     <TableCell>
                       <Badge
                         variant="outline"
-                        className="rounded-lg border-0 bg-muted font-medium capitalize"
+                        className="rounded-lg bg-muted font-medium capitalize"
                       >
                         {banner.theme || 'light'}
                       </Badge>

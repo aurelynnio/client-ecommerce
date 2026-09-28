@@ -155,9 +155,9 @@ export const ProductCard = memo(function ProductCard({
       className="group block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       aria-label={product.name}
     >
-      <Card className="flex h-full w-full flex-col gap-0 py-0 overflow-hidden border-border transition-colors duration-200 group-hover:border-primary/50">
+      <Card className="flex h-full w-full flex-col gap-0 py-0 overflow-hidden transition-colors duration-200">
         {/* Image Container - Tmall/JD square aspect */}
-        <div className="relative aspect-square w-full overflow-hidden bg-muted/10">
+        <div className="relative aspect-square w-full overflow-hidden bg-muted">
           {productImage && !imageError ? (
             <Image
               src={productImage}
@@ -170,7 +170,7 @@ export const ProductCard = memo(function ProductCard({
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-muted/20 p-4 text-muted-foreground/40">
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-muted p-4 text-muted-foreground/40">
               <Store className="h-8 w-8 opacity-30" />
               <span className="line-clamp-1 px-2 text-center text-[10px] opacity-60">
                 {product.name}
@@ -236,7 +236,7 @@ export const ProductCard = memo(function ProductCard({
           </div>
 
           {/* Shop Name */}
-          <p className="truncate border-t border-border/50 pt-1.5 text-[11px] text-muted-foreground/80">
+          <p className="truncate pt-2 text-[11px] text-muted-foreground/80">
             {shopName}
           </p>
         </div>

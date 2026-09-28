@@ -85,7 +85,7 @@ export default function NewArrivalsPage() {
         </Breadcrumb>
 
         {/* Page Header */}
-        <header className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between">
+        <header className="flex flex-col gap-3 pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
               <Flame className="h-3.5 w-3.5" />
@@ -104,7 +104,7 @@ export default function NewArrivalsPage() {
         </header>
 
         {/* Category Pills & Sort Bar */}
-        <section className="flex flex-col gap-3 border-b border-border py-3 sm:flex-row sm:items-center sm:justify-between">
+        <section className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
           {/* Category Filter Pills */}
           <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto">
             <button
@@ -113,7 +113,7 @@ export default function NewArrivalsPage() {
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                 selectedCategory === 'all'
                   ? 'bg-primary text-primary-foreground'
-                  : 'border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
+                  : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
               }`}
             >
               Tất cả ({newArrivals.length})
@@ -126,7 +126,7 @@ export default function NewArrivalsPage() {
                 className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                   selectedCategory === cat.id
                     ? 'bg-primary text-primary-foreground'
-                    : 'border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
+                    : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
                 }`}
               >
                 {cat.name}
@@ -141,7 +141,7 @@ export default function NewArrivalsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="h-9 rounded-lg border border-border bg-card px-3 text-xs font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="h-9 rounded-lg bg-muted px-3 text-xs font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="newest">Mới nhất</option>
               <option value="price-asc">Giá: Thấp đến Cao</option>
@@ -166,7 +166,7 @@ export default function NewArrivalsPage() {
           </section>
         ) : (
           <div className="flex min-h-72 flex-col items-center justify-center py-16 text-center">
-            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Package className="h-8 w-8 text-muted-foreground/60" />
             </div>
             <p className="text-base font-medium text-foreground">Không có sản phẩm nào</p>

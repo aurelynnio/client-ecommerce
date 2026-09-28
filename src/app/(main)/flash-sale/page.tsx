@@ -37,7 +37,7 @@ export default function FlashSalePage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <header className="flex flex-col gap-3 border-b border-border pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <header className="flex flex-col gap-3 pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-medium text-primary">Ưu đãi có thời hạn</p>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight lg:text-3xl">
@@ -47,7 +47,7 @@ export default function FlashSalePage() {
               Sản phẩm giảm giá trong khoảng thời gian hiện tại
             </p>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-sm">
+          <div className="inline-flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-sm">
             <Zap className="h-4 w-4 text-primary" />
             <span className="font-medium text-primary">
               Kết thúc sau {formattedCountdown.hours}:{formattedCountdown.minutes}:
@@ -58,7 +58,7 @@ export default function FlashSalePage() {
         <section className="py-4">
           <FlashSaleSection />
         </section>
-        <section className="border-t border-border pt-4">
+        <section className="pt-6">
           <h2 className="text-xl font-semibold">Tất cả sản phẩm ưu đãi</h2>
           {isLoading ? (
             <div className="flex min-h-72 items-center justify-center">

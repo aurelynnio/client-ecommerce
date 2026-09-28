@@ -144,7 +144,7 @@ export default function ProductFilter({
   const filterContent = (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border pb-3">
+      <div className="flex items-center justify-between pb-4">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="h-4 w-4 text-primary" />
           <h2 className="text-base font-semibold text-foreground">Bộ lọc tìm kiếm</h2>
@@ -174,13 +174,13 @@ export default function ProductFilter({
             placeholder="Tìm trong danh mục..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="h-9 rounded-lg border-border bg-card pl-8 text-sm"
+            className="h-9 rounded-lg bg-muted pl-8 text-sm"
           />
         </div>
       </div>
 
       {/* Price Range */}
-      <div className="border-t border-border pt-3">
+      <div className="pt-3">
         <button
           onClick={() => toggleSection('price')}
           className="flex items-center justify-between w-full text-left"
@@ -214,7 +214,7 @@ export default function ProductFilter({
                   type="text"
                   value={priceRange[0].toLocaleString('vi-VN')}
                   readOnly
-                  className="h-8 rounded-lg border-border bg-card pl-5 text-xs"
+                  className="h-8 rounded-lg bg-muted pl-5 text-xs"
                 />
               </div>
               <span className="text-xs text-muted-foreground">-</span>
@@ -226,7 +226,7 @@ export default function ProductFilter({
                   type="text"
                   value={priceRange[1].toLocaleString('vi-VN')}
                   readOnly
-                  className="h-8 rounded-lg border-border bg-card pl-5 text-xs"
+                  className="h-8 rounded-lg bg-muted pl-5 text-xs"
                 />
               </div>
             </div>
@@ -234,7 +234,7 @@ export default function ProductFilter({
               variant="outline"
               size="sm"
               onClick={handlePriceCommit}
-              className="h-8 w-full rounded-lg border-primary/20 bg-primary/5 text-xs text-primary hover:bg-primary/10"
+              className="h-8 w-full rounded-lg bg-primary/5 text-xs text-primary hover:bg-primary/10"
             >
               Áp dụng
             </Button>
@@ -243,7 +243,7 @@ export default function ProductFilter({
       </div>
 
       {/* Rating */}
-      <div className="border-t border-border pt-3">
+      <div className="pt-3">
         <button
           onClick={() => toggleSection('rating')}
           className="flex items-center justify-between w-full text-left"
@@ -288,7 +288,7 @@ export default function ProductFilter({
       </div>
 
       {/* Colors */}
-      <div className="border-t border-border pt-3">
+      <div className="pt-3">
         <button
           onClick={() => toggleSection('color')}
           className="flex items-center justify-between w-full text-left"
@@ -309,7 +309,7 @@ export default function ProductFilter({
                   type="button"
                   onClick={() => handleColorChange(colorValue)}
                   className={`
-                  relative flex h-7 w-7 items-center justify-center rounded transition-[border-color,background-color,box-shadow] duration-200
+                  relative flex h-7 w-7 items-center justify-center rounded transition-colors duration-200
                   ${
                     filters.colors.includes(colorValue)
                       ? 'ring-2 ring-primary ring-offset-1 ring-offset-card'
@@ -340,7 +340,7 @@ export default function ProductFilter({
       </div>
 
       {/* Sizes */}
-      <div className="border-t border-border pt-3">
+      <div className="pt-3">
         <button
           onClick={() => toggleSection('size')}
           className="flex items-center justify-between w-full text-left"
@@ -363,11 +363,11 @@ export default function ProductFilter({
                   size="sm"
                   onClick={() => handleSizeChange(size)}
                   className={`
-                  h-7 rounded px-3 text-xs transition-[border-color,background-color,color,box-shadow]
+                  h-7 rounded px-3 text-xs transition-colors
                   ${
                     filters.sizes.includes(size)
-                      ? 'border-primary bg-primary text-primary-foreground hover:bg-primary-hover'
-                      : 'border-border bg-card text-muted-foreground hover:bg-muted'
+                      ? 'bg-primary text-primary-foreground hover:bg-primary-hover'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/70'
                   }
                 `}
                 >
@@ -385,7 +385,7 @@ export default function ProductFilter({
       {activeFiltersCount > 0 && (
         <Button
           variant="outline"
-          className="mt-2 h-9 w-full rounded-lg border-border bg-card text-sm font-medium text-muted-foreground hover:bg-muted"
+          className="mt-2 h-9 w-full rounded-lg bg-muted text-sm font-medium text-muted-foreground hover:bg-muted/70"
           onClick={onClearFilters}
         >
           <X className="h-3.5 w-3.5 mr-1.5" />

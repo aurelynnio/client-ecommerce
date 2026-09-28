@@ -40,7 +40,7 @@ export default function CategoriesPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <header className="max-w-2xl border-b border-border pb-3">
+        <header className="max-w-2xl pb-4">
           <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">Danh mục sản phẩm</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Chọn một nhóm sản phẩm để bắt đầu, sau đó lọc và sắp xếp trong danh mục đó
@@ -51,7 +51,7 @@ export default function CategoriesPage() {
             <SpinnerLoading />
           </div>
         ) : categories?.length ? (
-          <div className="divide-y divide-border">
+          <div className="space-y-1">
             {categories.map((category) => (
               <section
                 key={category._id}
@@ -79,7 +79,7 @@ export default function CategoriesPage() {
                     <Link
                       key={sub._id}
                       href={`/categories/${sub.slug}`}
-                      className="rounded-lg border border-transparent px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-border hover:bg-muted/30 hover:text-primary"
+                      className="rounded-lg border border-transparent px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/30 hover:text-primary"
                     >
                       {sub.name}
                     </Link>
@@ -98,7 +98,7 @@ export default function CategoriesPage() {
           </div>
         ) : (
           <div className="flex min-h-72 flex-col items-center justify-center text-center">
-            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Package className="h-8 w-8 text-muted-foreground/60" />
             </div>
             <p className="text-sm text-muted-foreground">Chưa có danh mục để hiển thị.</p>

@@ -110,7 +110,7 @@ export default function WishlistPage() {
         <div className="aura-container">
           <WishlistBreadcrumb />
           <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-            <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full bg-muted">
               <Heart className="h-9 w-9 text-muted-foreground/60" />
             </div>
             <div className="max-w-md space-y-2">
@@ -139,7 +139,7 @@ export default function WishlistPage() {
         <WishlistBreadcrumb />
 
         {/* Page Header */}
-        <div className="mb-4 border-b border-border pb-3">
+        <div className="mb-4 pb-3">
           <div className="flex items-center gap-2">
             <Heart className="h-5 w-5 text-primary" />
             <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
@@ -171,7 +171,7 @@ export default function WishlistPage() {
             return (
               <article
                 key={item._id}
-                className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/50"
+                className="group overflow-hidden rounded-lg bg-card transition-colors"
               >
                 {/* Image */}
                 <Link href={`/products/${item.slug || item._id}`}>
@@ -183,14 +183,14 @@ export default function WishlistPage() {
                       className="object-cover transition-transform duration-200 group-hover:scale-[1.02] motion-reduce:transform-none"
                       sizes="(max-width: 640px) 50vw, 25vw"
                     />
-                    {/* Remove Button (border-over-shadow rule) */}
+                    {/* Remove Button — tinted circular control */}
                     <button
                       aria-label={`Xóa ${item.name} khỏi danh sách yêu thích`}
                       onClick={(e) => {
                         e.preventDefault();
                         handleRemoveItem(item._id);
                       }}
-                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive hover:text-destructive-foreground"
+                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-card text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -238,7 +238,7 @@ export default function WishlistPage() {
                     onClick={() => handleAddToCart(item)}
                     variant="outline"
                     size="sm"
-                    className="mt-3 h-9 w-full rounded-lg border-primary/30 text-xs text-primary hover:bg-primary/10 hover:text-primary"
+                    className="mt-3 h-9 w-full rounded-lg text-xs text-primary hover:bg-primary/10 hover:text-primary"
                   >
                     <ShoppingCart className="mr-1 h-3.5 w-3.5" />
                     Thêm vào giỏ

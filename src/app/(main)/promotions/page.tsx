@@ -83,7 +83,7 @@ export default function PromotionsPage() {
         </Breadcrumb>
 
         {/* Page Header */}
-        <header className="border-b border-border pb-4">
+        <header className="pb-4">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
             <Gift className="h-4 w-4" />
             <span>Trung tâm ưu đãi 南天 NANTIAN.COM</span>
@@ -103,14 +103,14 @@ export default function PromotionsPage() {
             return (
               <div
                 key={item.title}
-                className="group flex flex-col justify-between rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/40 hover:shadow-card"
+                className="group flex flex-col justify-between rounded-xl bg-card p-5 transition-all"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.accentBg}`}>
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                    <span className="rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground">
                       {item.badge}
                     </span>
                   </div>
@@ -126,7 +126,7 @@ export default function PromotionsPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full justify-between rounded-lg border-border group-hover:border-primary group-hover:text-primary"
+                    className="w-full justify-between rounded-lg group-hover:text-primary"
                   >
                     <span>{item.cta}</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -138,7 +138,7 @@ export default function PromotionsPage() {
         </section>
 
         {/* Embedded Flash Sale Section */}
-        <section className="rounded-xl border border-border bg-card p-4 sm:p-6">
+        <section className="rounded-xl bg-card p-4 sm:p-6">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Flame className="h-5 w-5 text-primary" />
@@ -156,7 +156,7 @@ export default function PromotionsPage() {
         </section>
 
         {/* Embedded Daily Vouchers Section */}
-        <section className="rounded-xl border border-border bg-card p-4 sm:p-6">
+        <section className="rounded-xl bg-card p-4 sm:p-6">
           <DailyVouchersSection />
         </section>
       </div>

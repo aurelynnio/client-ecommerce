@@ -103,7 +103,7 @@ export default function FreeShippingPage() {
         </Breadcrumb>
 
         {/* Page Header */}
-        <header className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between">
+        <header className="flex flex-col gap-3 pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
               <Truck className="h-3.5 w-3.5" />
@@ -117,7 +117,7 @@ export default function FreeShippingPage() {
             </p>
           </div>
           <Link href="/vouchers">
-            <Button variant="outline" size="sm" className="rounded-lg border-primary/30 text-primary hover:bg-primary/10">
+            <Button variant="outline" size="sm" className="rounded-lg text-primary hover:bg-primary/10">
               <Ticket className="mr-1.5 h-3.5 w-3.5" />
               Ví Voucher của bạn
               <ArrowRight className="ml-1 h-3.5 w-3.5" />
@@ -130,7 +130,7 @@ export default function FreeShippingPage() {
           {FREE_SHIPPING_BENEFITS.map(({ icon: Icon, title, description }) => (
             <div
               key={title}
-              className="flex items-start gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/30"
+              className="flex items-start gap-3 rounded-lg bg-card p-4 transition-colors"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Icon className="h-5 w-5" />
@@ -145,7 +145,7 @@ export default function FreeShippingPage() {
 
         {/* Shipping Vouchers section if available */}
         {shippingVouchers.length > 0 && (
-          <section className="mb-6 rounded-xl border border-primary/20 bg-primary-light/40 p-4 sm:p-5">
+          <section className="mb-6 rounded-xl bg-primary-light/40 p-4 sm:p-5">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Ticket className="h-4 w-4 text-primary" />
@@ -159,7 +159,7 @@ export default function FreeShippingPage() {
               {shippingVouchers.slice(0, 3).map((v) => (
                 <div
                   key={v._id}
-                  className="flex items-center justify-between rounded-lg border border-border bg-card p-3"
+                  className="flex items-center justify-between rounded-lg bg-card p-3"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-semibold text-foreground">{v.name}</p>
@@ -177,7 +177,7 @@ export default function FreeShippingPage() {
         )}
 
         {/* Catalog Section Header & Sorting */}
-        <section className="flex flex-col gap-3 border-y border-border py-3 sm:flex-row sm:items-center sm:justify-between">
+        <section className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-base font-semibold text-foreground">Sản phẩm áp dụng Freeship</h2>
           <div className="flex items-center gap-2 text-sm">
             <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
@@ -185,7 +185,7 @@ export default function FreeShippingPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="h-9 rounded-lg border border-border bg-card px-3 text-xs font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="h-9 rounded-lg bg-muted px-3 text-xs font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="popular">Bán chạy nhất</option>
               <option value="newest">Mới nhất</option>

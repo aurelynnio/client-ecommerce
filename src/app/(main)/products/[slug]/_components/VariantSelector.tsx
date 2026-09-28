@@ -46,16 +46,16 @@ export function VariantSelector({
                     onClick={() => !isOutOfStock && onSelect(index)}
                     disabled={isOutOfStock}
                     className={cn(
-                      'flex items-center gap-2 p-1.5 border rounded-lg transition-[border-color,background-color,box-shadow] overflow-hidden bg-card text-left',
+                      'flex items-center gap-2 p-1.5 rounded-lg transition-colors overflow-hidden bg-card text-left',
                       isSelected
-                        ? 'border-primary ring-1 ring-primary bg-primary-light'
-                        : 'border-border hover:border-muted-foreground/30',
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'hover:bg-muted',
                       isOutOfStock && 'opacity-50 cursor-not-allowed bg-muted',
                     )}
                   >
                     {/* Variant Image */}
                     {variant.images?.[0] && (
-                      <div className="w-10 h-10 relative bg-muted/40 shrink-0 rounded overflow-hidden">
+                      <div className="w-10 h-10 relative bg-muted shrink-0 rounded overflow-hidden">
                         <Image
                           src={variant.images[0]}
                           alt={variant.name}
@@ -97,10 +97,10 @@ export function VariantSelector({
                     key={size}
                     onClick={() => onSizeSelect?.(size)}
                     className={cn(
-                      'min-w-[48px] h-10 px-4 border rounded-lg text-sm font-medium transition-[border-color,background-color,color,box-shadow]',
+                      'min-w-[48px] h-10 px-4 rounded-lg text-sm font-medium transition-colors',
                       isSelected
-                        ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-border bg-card text-foreground hover:border-muted-foreground/30 hover:bg-muted/40',
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'bg-card text-foreground hover:bg-muted',
                     )}
                   >
                     {size}
@@ -117,7 +117,7 @@ export function VariantSelector({
 
       {/* Selected Info Summary */}
       {(selectedVariant || selectedSize) && (
-        <div className="flex items-center gap-3 text-sm text-muted-foreground bg-muted/30 border border-border p-3 rounded-lg">
+        <div className="flex items-center gap-3 text-sm text-muted-foreground bg-muted p-3 rounded-lg">
           <span className="text-muted-foreground/60">Đã chọn:</span>
           {selectedVariant && (
             <span className="font-medium text-foreground">

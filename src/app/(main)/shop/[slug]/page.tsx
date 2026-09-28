@@ -181,7 +181,7 @@ export default function ShopPage() {
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Store className="h-8 w-8 text-muted-foreground/60" />
             </div>
             <p className="text-sm text-muted-foreground">
@@ -218,7 +218,7 @@ export default function ShopPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <section className="overflow-hidden rounded-lg border border-border bg-card">
+        <section className="overflow-hidden rounded-lg bg-card">
           <div className="relative h-32 md:h-48">
             <Image
               src={currentShop.banner || '/images/default-banner.svg'}
@@ -231,7 +231,7 @@ export default function ShopPage() {
           <div className="p-4 md:p-6">
             <div className="flex flex-col gap-4 md:flex-row md:gap-6">
               {/* Logo */}
-              <div className="relative mx-auto size-20 shrink-0 overflow-hidden rounded-full border-2 border-card md:mx-0 md:size-24">
+              <div className="relative mx-auto size-20 shrink-0 overflow-hidden rounded-full md:mx-0 md:size-24">
                 <Image
                   src={currentShop.logo || '/images/placeholder-shop.svg'}
                   alt={currentShop.name}
@@ -244,7 +244,7 @@ export default function ShopPage() {
               <div className="flex-1 text-center md:text-left">
                 <div className="flex flex-col items-center gap-2 md:flex-row md:items-center md:gap-3">
                   <h1 className="text-xl font-semibold text-foreground">{currentShop.name}</h1>
-                  <span className="inline-flex w-fit items-center justify-center gap-1 rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                  <span className="inline-flex w-fit items-center justify-center gap-1 rounded-sm bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
                     <Store className="h-3 w-3" />
                     Official Store
                   </span>
@@ -297,22 +297,22 @@ export default function ShopPage() {
             </div>
 
             {/* Metrics (Tmall/JD card style) */}
-            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 sm:gap-3">
-              <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+            <div className="mt-4 grid grid-cols-3 gap-2 pt-4 sm:gap-3">
+              <div className="rounded-lg bg-muted p-3 text-center">
                 <div className="flex items-center justify-center gap-1 text-success">
                   <MessageCircle className="h-4 w-4" />
                   <span className="font-bold">{currentShop.metrics?.responseRate || 0}%</span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">Tỉ lệ phản hồi</p>
               </div>
-              <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+              <div className="rounded-lg bg-muted p-3 text-center">
                 <div className="flex items-center justify-center gap-1 text-info">
                   <Clock className="h-4 w-4" />
                   <span className="font-bold">Trong vài phút</span>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">Thời gian phản hồi</p>
               </div>
-              <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+              <div className="rounded-lg bg-muted p-3 text-center">
                 <div className="flex items-center justify-center gap-1 text-warning">
                   <Truck className="h-4 w-4" />
                   <span className="font-bold">{currentShop.metrics?.shippingOnTime || 0}%</span>
@@ -325,7 +325,7 @@ export default function ShopPage() {
 
         {/* Products Section */}
         <section className="space-y-4">
-          <div className="border-b border-border pb-3">
+          <div className="pb-3">
             <h2 className="mb-3 text-lg font-semibold text-foreground">
               Sản phẩm từ {currentShop.name}
             </h2>
@@ -384,10 +384,10 @@ export default function ShopPage() {
                 placeholder="Tìm trong shop..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 rounded-lg border-border pl-9 focus:border-primary focus:ring-primary/20"
+                className="h-10 rounded-lg bg-muted pl-9 focus:ring-2 focus:ring-primary/20"
               />
             </div>
-            <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 sm:ml-auto">
+            <div className="flex items-center gap-1 rounded-lg bg-card p-1 sm:ml-auto">
               <button
                 onClick={() => setViewMode('grid')}
                 aria-label="Hiển thị dạng lưới"

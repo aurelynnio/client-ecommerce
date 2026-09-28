@@ -311,7 +311,7 @@ export default function ProductsPage() {
         </Breadcrumb>
 
         {/* Page Header */}
-        <div className="flex items-end justify-between border-b border-border pb-4 pt-3">
+        <div className="flex items-end justify-between pb-4 pt-3">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
               {activeCategory ? activeCategoryName : 'Tất cả sản phẩm'}
@@ -324,7 +324,7 @@ export default function ProductsPage() {
         </div>
 
         {/* Category Tabs (Tmall/JD underline style) */}
-        <div className="flex items-center gap-1 overflow-x-auto border-b border-border no-scrollbar">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
           <button
             onClick={() => handleCategoryClick(null)}
             className={`relative shrink-0 px-4 py-3 text-sm font-medium transition-colors ${
@@ -384,7 +384,7 @@ export default function ProductsPage() {
                     className="fixed inset-0 z-40"
                   />
                   <div
-                    className="absolute left-0 top-full z-50 mt-1 w-56 max-h-80 overflow-y-auto rounded-lg border border-border bg-card p-1 animate-in fade-in-50 zoom-in-95 duration-100"
+                    className="absolute left-0 top-full z-50 mt-1 w-56 max-h-80 overflow-y-auto rounded-lg bg-card p-1 ring-1 ring-black/5 animate-in fade-in-50 zoom-in-95 duration-100"
                     role="menu"
                   >
                     {dropdownCategories.map((category) => (
@@ -412,7 +412,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur-md md:top-[108px]">
+      <div className="sticky top-16 z-30 bg-background/95 backdrop-blur-md md:top-[108px]">
         <div className="aura-container py-3">
           <div className="w-full py-1">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -436,7 +436,7 @@ export default function ProductsPage() {
                     {appliedFilterLabels.map((label) => (
                       <span
                         key={label}
-                        className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground"
+                        className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground"
                       >
                         {label}
                       </span>
@@ -461,11 +461,11 @@ export default function ProductsPage() {
                     <button
                       key={tab.value}
                       onClick={() => handleSortTabClick(tab.value)}
-                      className={`flex shrink-0 items-center gap-1 rounded-full border px-4 py-1.5 text-xs font-medium transition-colors ${
+                      className={`flex shrink-0 items-center gap-1 rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
                         filters.sortBy === tab.value ||
                         (tab.value === 'price' && filters.sortBy?.startsWith('price'))
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
                       }`}
                     >
                       {tab.label}
@@ -485,7 +485,7 @@ export default function ProductsPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="rounded-lg border-border bg-card text-foreground hover:bg-muted lg:hidden"
+                      className="rounded-lg bg-card text-foreground hover:bg-muted lg:hidden"
                     >
                       <SlidersHorizontal className="mr-1.5 h-4 w-4" />
                       Bộ lọc
@@ -493,9 +493,9 @@ export default function ProductsPage() {
                   </SheetTrigger>
                   <SheetContent
                     side="left"
-                    className="w-[300px] overflow-y-auto border-r border-border bg-card p-0"
+                    className="w-[300px] overflow-y-auto bg-card p-0"
                   >
-                    <SheetHeader className="border-b border-border px-5 py-4">
+                    <SheetHeader className="px-5 py-4">
                       <SheetTitle>Bộ lọc sản phẩm</SheetTitle>
                     </SheetHeader>
                     <div className="p-4">
@@ -555,7 +555,7 @@ export default function ProductsPage() {
                 ) : hasNextPage ? (
                   <Button
                     variant="outline"
-                    className="h-11 rounded-lg border-primary/25 bg-card px-8 text-primary hover:bg-primary/10"
+                    className="h-11 rounded-lg bg-card px-8 text-primary hover:bg-primary/10"
                     onClick={() => fetchNextPage()}
                   >
                     Xem thêm sản phẩm

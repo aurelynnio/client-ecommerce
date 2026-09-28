@@ -56,10 +56,10 @@ const FlashSaleCard = memo(function FlashSaleCard({ product }: { product: FlashS
   return (
     <Link
       href={`/products/${product.slug || product._id}`}
-      className="group w-[140px] shrink-0 overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/30 sm:w-40"
+      className="group w-[140px] shrink-0 overflow-hidden rounded-lg bg-card sm:w-40"
     >
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-muted/50">
+      <div className="relative aspect-square overflow-hidden bg-muted">
         <Image
           src={productImage}
           alt={product.name}
@@ -111,7 +111,7 @@ export const FlashSaleSection = memo(function FlashSaleSection() {
   }
 
   return (
-    <section className="mb-6 rounded-lg border border-border bg-muted/40 p-4">
+    <section className="mb-6 rounded-lg bg-muted p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">

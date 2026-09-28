@@ -59,7 +59,7 @@ export function ProductGallery({
     return (
       <>
         {/* Desktop - Fixed size */}
-        <div className="hidden w-full max-w-[480px] items-center justify-center rounded-lg border border-border bg-muted lg:flex">
+        <div className="hidden w-full max-w-[480px] items-center justify-center rounded-lg bg-muted lg:flex">
           <div className="flex aspect-square w-full flex-col items-center justify-center text-muted-foreground/60">
             <Store className="mb-2 h-16 w-16 opacity-20" />
             <span className="text-sm">Không có ảnh</span>
@@ -88,8 +88,8 @@ export function ProductGallery({
               onMouseEnter={() => onIndexChange(idx)}
               onClick={() => onIndexChange(idx)}
               className={cn(
-                'relative h-[60px] w-[60px] overflow-hidden rounded-md border transition-colors',
-                selectedIndex === idx ? 'border-primary' : 'border-border hover:border-muted-foreground',
+                'relative h-[60px] w-[60px] overflow-hidden rounded-md transition-colors',
+                selectedIndex === idx ? 'bg-primary/10' : 'hover:bg-primary/5',
               )}
               aria-label={`Xem ảnh ${idx + 1}`}
               aria-current={selectedIndex === idx}
@@ -106,7 +106,7 @@ export function ProductGallery({
         </div>
 
         {/* Main Image */}
-        <div className="group relative aspect-square shrink-0 flex-1 overflow-hidden rounded-lg border border-border bg-card">
+        <div className="group relative aspect-square shrink-0 flex-1 overflow-hidden rounded-lg bg-card">
           {images[selectedIndex] && !imageError ? (
             <Image
               src={images[selectedIndex]}
@@ -158,7 +158,7 @@ export function ProductGallery({
                 onClick={handlePrev}
                 disabled={selectedIndex === 0}
                 className={cn(
-                  'absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur-xs shadow-xs transition-opacity',
+                  'absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur-xs transition-opacity',
                   selectedIndex === 0 ? 'opacity-30' : 'opacity-80 hover:opacity-100',
                 )}
                 aria-label="Ảnh trước"
@@ -170,7 +170,7 @@ export function ProductGallery({
                 onClick={handleNext}
                 disabled={selectedIndex === images.length - 1}
                 className={cn(
-                  'absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur-xs shadow-xs transition-opacity',
+                  'absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur-xs transition-opacity',
                   selectedIndex === images.length - 1
                     ? 'opacity-30'
                     : 'opacity-80 hover:opacity-100',
@@ -183,7 +183,7 @@ export function ProductGallery({
           )}
 
           {/* Image Counter */}
-          <div className="absolute bottom-3 right-3 rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur-xs shadow-xs">
+          <div className="absolute bottom-3 right-3 rounded-full bg-background/80 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur-xs">
             {selectedIndex + 1} / {images.length}
           </div>
         </div>

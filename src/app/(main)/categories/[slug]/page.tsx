@@ -73,7 +73,7 @@ export default function CategoryDetailPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <header className="border-b border-border pb-3">
+        <header className="pb-4">
           <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">
             {category?.name || 'Danh mục sản phẩm'}
           </h1>
@@ -87,7 +87,7 @@ export default function CategoryDetailPage() {
               <li key={sub._id} className="shrink-0">
                 <Link
                   href={`/categories/${sub.slug}`}
-                  className="whitespace-nowrap rounded-md border border-border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                  className="whitespace-nowrap rounded-md bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
                 >
                   {sub.name}
                 </Link>
@@ -95,14 +95,14 @@ export default function CategoryDetailPage() {
             ))}
           </ul>
         ) : null}
-        <div className="flex flex-col gap-3 border-y border-border py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
             <span className="text-muted-foreground">Sắp xếp:</span>
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value as SortType)}
-              className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:border-primary focus:ring-primary/20 focus:outline-none"
+              className="h-9 rounded-lg bg-muted px-3 text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none"
             >
               <option value="default">Mặc định</option>
               <option value="newest">Mới nhất</option>
@@ -126,7 +126,7 @@ export default function CategoryDetailPage() {
           </div>
         ) : (
           <div className="flex min-h-80 flex-col items-center justify-center text-center">
-            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Package className="h-8 w-8 text-muted-foreground/60" />
             </div>
             <p className="text-sm text-muted-foreground">Danh mục này chưa có sản phẩm.</p>

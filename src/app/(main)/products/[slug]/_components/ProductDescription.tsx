@@ -60,7 +60,7 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
 
           {/* Fade overlay for collapsed state on mobile */}
           {!isExpanded && (
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-card border-t border-border lg:hidden" />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-card lg:hidden" />
           )}
         </div>
       )}
@@ -69,7 +69,7 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
       {hasImages && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg border border-border py-3 text-sm font-medium text-primary transition-colors hover:bg-muted lg:hidden"
+          className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg bg-muted py-3 text-sm font-medium text-primary transition-colors hover:bg-muted/70 lg:hidden"
         >
           {isExpanded ? (
             <>
@@ -84,7 +84,7 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
       )}
 
       {/* Price Explanation Block */}
-      <div className="mt-8 space-y-6 border-t border-border bg-muted/30 p-6 text-xs leading-relaxed text-muted-foreground lg:p-10">
+      <div className="mt-8 space-y-6 bg-muted p-6 text-xs leading-relaxed text-muted-foreground lg:p-10">
         <h3 className="font-bold text-foreground text-sm tracking-wide uppercase">Giải thích giá:</h3>
         <div className="space-y-4">
           <div>

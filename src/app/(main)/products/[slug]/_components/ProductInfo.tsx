@@ -65,7 +65,7 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
   return (
     <div className="space-y-4">
       {/* Shop Header Bar - Desktop (Tmall/JD style) */}
-      <div className="hidden border-b border-border pb-3 lg:block">
+      <div className="hidden pb-4 lg:block">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {shop?.logo ? (
@@ -74,7 +74,7 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
                 alt={shop.name}
                 width={32}
                 height={32}
-                className="size-8 rounded border border-border object-cover"
+                className="size-8 rounded object-cover"
               />
             ) : null}
             <Link
@@ -104,7 +104,7 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
           </div>
           <div className="flex items-center gap-2">
             <WishlistButton productId={product._id} productName={product.name} size="sm" />
-            <Button variant="outline" size="sm" className="h-7 rounded-lg border-border text-xs">
+            <Button variant="outline" size="sm" className="h-7 rounded-lg text-xs">
               <Share2 className="mr-1 h-3.5 w-3.5" /> Chia sẻ
             </Button>
             {shop?.slug && (
@@ -112,7 +112,7 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-7 rounded-lg border-border text-xs"
+                  className="h-7 rounded-lg text-xs"
                 >
                   Xem shop
                   <ChevronRight className="ml-0.5 h-3 w-3" />
@@ -164,15 +164,15 @@ export function ProductInfo({ product, activePrice, shop }: ProductInfoProps) {
         </div>
 
         {/* Ưu đãi section (Tmall/JD style) */}
-        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-primary/10 pt-3 text-xs">
+        <div className="mt-3 flex flex-wrap items-center gap-2 pt-3 text-xs">
           <span className="flex items-center gap-1 text-muted-foreground">
             <Tag className="h-3.5 w-3.5 text-primary" />
             Ưu đãi:
           </span>
-          <span className="rounded border border-success/30 bg-success/10 px-1.5 py-0.5 font-medium text-success">
+          <span className="rounded bg-success/10 px-1.5 py-0.5 font-medium text-success">
             Freeship
           </span>
-          <span className="rounded border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-medium text-primary">
+          <span className="rounded bg-primary/10 px-1.5 py-0.5 font-medium text-primary">
             Giảm giá
           </span>
         </div>

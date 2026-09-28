@@ -16,7 +16,7 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
   }
 
   return (
-    <div className="space-y-8 mt-16 pt-8 border-t border-border/50">
+    <div className="space-y-8 mt-16 pt-8">
       <div className="flex items-center gap-2.5">
         <div className="h-6 w-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
         <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
 import { Home } from 'lucide-react';
 import {
   Breadcrumb,
@@ -211,12 +210,8 @@ export default function ProductDetailPage() {
             reviewCount={product.reviewCount}
           />
 
-          <Separator className="bg-border" />
-
           {/* Specs Section */}
           <ProductSpecs product={product} />
-
-          <Separator className="bg-border" />
 
           {/* Description Section */}
           <ProductDescription product={product} />
@@ -228,7 +223,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Recently Viewed */}
-        <RecentlyViewedSection className="mt-12 pt-8 border-t border-border/50" />
+        <RecentlyViewedSection className="mt-12 pt-8" />
       </div>
     </div>
   );

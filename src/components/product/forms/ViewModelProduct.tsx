@@ -44,19 +44,19 @@ interface ViewModelProductProps {
 const statusMap: Record<string, { label: string; className: string }> = {
   published: {
     label: 'Đang bán',
-    className: 'border-success/30 bg-success/15 text-success',
+    className: 'bg-success/15 text-success',
   },
   draft: {
     label: 'Bản nháp',
-    className: 'border-warning/30 bg-warning/15 text-warning',
+    className: 'bg-warning/15 text-warning',
   },
   suspended: {
     label: 'Tạm ngưng',
-    className: 'border-discount/30 bg-discount/15 text-discount',
+    className: 'bg-discount/15 text-discount',
   },
   deleted: {
     label: 'Đã xóa',
-    className: 'border-border bg-muted text-muted-foreground',
+    className: 'bg-muted text-muted-foreground',
   },
 };
 
@@ -105,7 +105,7 @@ function InfoCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="rounded-lg bg-card p-4">
       <div className="mb-3 flex items-center gap-2 text-muted-foreground/60">
         <Icon className="h-4 w-4" />
         <span className="text-[11px] font-semibold uppercase tracking-[0.16em]">{label}</span>
@@ -154,7 +154,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
   const statusConfig = statusMap[product.status] || {
     label: 'Không xác định',
-    className: 'border-border bg-muted text-muted-foreground',
+    className: 'bg-muted text-muted-foreground',
   };
   const mainImage = getMainImage();
   const allImages = getAllImages();
@@ -164,9 +164,9 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-5xl gap-0 overflow-hidden rounded-xl border border-border bg-card p-0"
+        className="max-w-5xl gap-0 overflow-hidden rounded-xl bg-card p-0"
       >
-        <DialogHeader className="border-b border-border bg-card px-6 py-5">
+        <DialogHeader className="bg-card px-6 py-5">
           <div className="flex items-start justify-between gap-4">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -214,7 +214,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
         <div className="max-h-[calc(92vh-152px)] overflow-y-auto px-6 py-6 pb-8 no-scrollbar">
           <div className="space-y-5">
-            <section className="grid gap-6 rounded-lg border border-border bg-card p-6 xl:grid-cols-[180px_minmax(0,1fr)_220px]">
+            <section className="grid gap-6 rounded-lg bg-card p-6 xl:grid-cols-[180px_minmax(0,1fr)_220px]">
               <div className="flex justify-center xl:justify-start">
                 {mainImage ? (
                   <div className="relative h-40 w-40 overflow-hidden rounded-lg bg-muted">
@@ -237,17 +237,17 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
 
                 <div className="flex flex-wrap gap-2">
                   {product.isNewArrival ? (
-                    <Badge className="rounded-full border border-info/30 bg-info/15 px-3 py-1 text-info">
+                    <Badge className="rounded-full bg-info/15 px-3 py-1 text-info">
                       Mới
                     </Badge>
                   ) : null}
                   {product.isFeatured ? (
-                    <Badge className="rounded-full border border-warning/30 bg-warning/15 px-3 py-1 text-warning">
+                    <Badge className="rounded-full bg-warning/15 px-3 py-1 text-warning">
                       Nổi bật
                     </Badge>
                   ) : null}
                   {product.onSale ? (
-                    <Badge className="rounded-full border border-discount/30 bg-discount/15 px-3 py-1 text-discount">
+                    <Badge className="rounded-full bg-discount/15 px-3 py-1 text-discount">
                       Giảm giá
                     </Badge>
                   ) : null}
@@ -348,7 +348,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             </section>
 
             {product.sizes?.length ? (
-              <section className="rounded-lg border border-border bg-card p-5">
+              <section className="rounded-lg bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Ruler className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -359,7 +359,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                   {product.sizes.map((size) => (
                     <span
                       key={size}
-                      className="rounded-lg border border-border bg-muted px-4 py-2 text-sm font-medium text-foreground"
+                      className="rounded-lg bg-muted px-4 py-2 text-sm font-medium text-foreground"
                     >
                       {size}
                     </span>
@@ -369,8 +369,8 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.variants?.length ? (
-              <section className="overflow-hidden rounded-lg border border-border bg-card">
-                <div className="border-b border-border px-5 py-4">
+              <section className="overflow-hidden rounded-lg bg-card">
+                <div className="px-5 py-4">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Palette className="h-4 w-4" />
                     <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -378,11 +378,11 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                     </h3>
                   </div>
                 </div>
-                <div className="divide-y divide-slate-100">
+                <div>
                   {product.variants.map((variant, index) => (
                     <div
                       key={variant._id || index}
-                      className="grid items-center gap-4 px-5 py-4 md:grid-cols-[84px_minmax(0,1fr)_auto]"
+                      className="grid items-center gap-4 px-5 py-4 even:bg-muted/40 md:grid-cols-[84px_minmax(0,1fr)_auto]"
                     >
                       <div className="shrink-0">
                         {variant.images?.[0] ? (
@@ -405,7 +405,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                         <div className="flex flex-wrap items-center gap-2">
                           {variant.color ? (
                             <span
-                              className="h-4 w-4 rounded-full border border-card"
+                              className="h-4 w-4 rounded-full ring-1 ring-black/5"
                               style={{ backgroundColor: getColorCode(variant.color) }}
                             />
                           ) : null}
@@ -445,7 +445,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.description ? (
-              <section className="rounded-lg border border-border bg-card p-5">
+              <section className="rounded-lg bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Tag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -459,7 +459,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.weight || product.dimensions ? (
-              <section className="rounded-lg border border-border bg-card p-5">
+              <section className="rounded-lg bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ShoppingBag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -496,7 +496,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.attributes?.length ? (
-              <section className="rounded-lg border border-border bg-card p-5">
+              <section className="rounded-lg bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Box className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -518,7 +518,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {product.tags?.length ? (
-              <section className="rounded-lg border border-border bg-card p-5">
+              <section className="rounded-lg bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <Tag className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">Tags</h3>
@@ -528,7 +528,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
                     <Badge
                       key={tag}
                       variant="outline"
-                      className="rounded-full border-border bg-muted px-3 py-1 text-muted-foreground"
+                      className="rounded-full bg-muted px-3 py-1 text-muted-foreground"
                     >
                       {tag}
                     </Badge>
@@ -538,7 +538,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
             ) : null}
 
             {allImages.length ? (
-              <section className="rounded-lg border border-border bg-card p-5">
+              <section className="rounded-lg bg-card p-5">
                 <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ImageIcon className="h-4 w-4" />
                   <h3 className="text-sm font-semibold uppercase tracking-[0.14em]">
@@ -570,9 +570,9 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-border bg-card px-6 py-4">
+        <div className="flex justify-end gap-3 bg-card px-6 py-4">
           <DialogClose asChild>
-            <Button variant="outline" className="rounded-lg border-border px-5">
+            <Button variant="outline" className="rounded-lg px-5">
               Đóng
             </Button>
           </DialogClose>

@@ -62,7 +62,7 @@ export default function SiteMapPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <header className="border-b border-border pb-3">
+        <header className="pb-4">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
             Sơ đồ trang web
           </h1>
@@ -73,7 +73,7 @@ export default function SiteMapPage() {
 
         <div className="grid gap-6 py-4 md:grid-cols-3">
           {groups.map((group) => (
-            <section key={group.title} className="rounded-lg border border-border bg-card p-4">
+            <section key={group.title} className="rounded-lg bg-card p-4">
               <h2 className="text-lg font-semibold text-foreground">{group.title}</h2>
               <ul className="mt-3 space-y-2 text-sm">
                 {group.links.map((link) => (

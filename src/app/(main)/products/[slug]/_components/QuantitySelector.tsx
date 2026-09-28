@@ -34,7 +34,7 @@ export function QuantitySelector({
     <div className="flex items-center gap-4">
       <span className="text-sm text-muted-foreground/60 w-16 shrink-0">Số lượng</span>
 
-      <div className="flex items-center h-9 border border-border rounded-lg overflow-hidden bg-card">
+      <div className="flex items-center h-9 rounded-lg overflow-hidden bg-muted">
         <Button
           type="button"
           variant="ghost"
@@ -53,7 +53,7 @@ export function QuantitySelector({
           pattern="[0-9]*"
           value={value}
           onChange={handleInputChange}
-          className="w-12 h-full text-center text-sm font-bold border-0 border-x border-border rounded-none shadow-none focus-visible:ring-0 bg-transparent p-0"
+          className="w-12 h-full text-center text-sm font-bold border-0 rounded-none shadow-none focus-visible:ring-0 bg-transparent p-0"
         />
 
         <Button

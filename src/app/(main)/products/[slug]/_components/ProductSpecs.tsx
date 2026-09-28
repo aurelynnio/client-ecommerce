@@ -93,11 +93,11 @@ export function ProductSpecs({ product }: ProductSpecsProps) {
     <section id="section-specs" className="py-8">
       <h2 className="text-lg font-bold mb-6">Thông số sản phẩm</h2>
 
-      <div className="grid grid-cols-1 overflow-hidden rounded-lg border border-border bg-card md:grid-cols-2">
+      <div className="grid grid-cols-1 overflow-hidden rounded-lg bg-card md:grid-cols-2">
         {allSpecs.map((spec, index) => (
           <div
             key={index}
-            className="flex border-b border-r border-border/50 last:border-b-0 even:border-r-0 md:even:border-r md:nth-last-[-n+2]:border-b-0"
+            className="flex even:bg-muted/40"
           >
             <div className="flex w-2/5 items-center gap-2 bg-muted px-4 py-3.5 text-xs font-medium text-muted-foreground">
               {spec.icon && <span className="text-muted-foreground">{spec.icon}</span>}
@@ -118,7 +118,7 @@ export function ProductSpecs({ product }: ProductSpecsProps) {
             {product.sizes.map((size, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1.5 bg-muted text-foreground/80 text-xs font-medium rounded-full border border-border"
+                className="px-3 py-1.5 bg-muted text-foreground/80 text-xs font-medium rounded-full"
               >
                 {size}
               </span>
@@ -137,11 +137,11 @@ export function ProductSpecs({ product }: ProductSpecsProps) {
             {product.variants.map((variant, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1.5 bg-card text-muted-foreground text-xs font-medium rounded-full border border-border flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-card text-muted-foreground text-xs font-medium rounded-full flex items-center gap-1.5"
               >
                 {variant.color && (
                   <span
-                    className="w-3 h-3 rounded-full border border-border"
+                    className="w-3 h-3 rounded-full ring-1 ring-black/5"
                     style={{
                       backgroundColor: getColorCode(variant.color),
                     }}

@@ -489,7 +489,7 @@ export default function SellerOrdersPage() {
 
       {/* View Order Modal */}
       <Dialog open={viewModalOpen} onOpenChange={setViewModalOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Chi tiết đơn hàng</DialogTitle>
             <DialogDescription>

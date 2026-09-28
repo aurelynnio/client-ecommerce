@@ -58,7 +58,9 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn(adminSurfaceClass, 'max-h-[85dvh] max-w-2xl overflow-y-auto p-6')}>
+      <DialogContent
+        className={cn(adminSurfaceClass, 'max-h-[85dvh] sm:max-w-2xl overflow-y-auto p-6')}
+      >
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Chi tiết cửa hàng</DialogTitle>
         </DialogHeader>

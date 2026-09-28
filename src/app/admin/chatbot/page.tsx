@@ -120,7 +120,7 @@ export default function AdminChatbotPage() {
 
       {/* Chat History Modal */}
       <Dialog open={!!selectedSession} onOpenChange={(open) => !open && setSelectedSession(null)}>
-        <DialogContent className="flex h-[80dvh] max-w-2xl flex-col gap-0 overflow-hidden p-0">
+        <DialogContent className="flex h-[80dvh] sm:max-w-2xl flex-col gap-0 overflow-hidden p-0">
           <DialogHeader className="p-4">
             <DialogTitle>Lịch sử hội thoại</DialogTitle>
           </DialogHeader>

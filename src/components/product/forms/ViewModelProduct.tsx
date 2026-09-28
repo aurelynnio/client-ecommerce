@@ -164,7 +164,7 @@ export function ViewModelProduct({ open, onOpenChange, product, onEdit }: ViewMo
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-5xl gap-0 overflow-hidden rounded-xl bg-card p-0"
+        className="sm:max-w-5xl gap-0 overflow-hidden rounded-xl bg-card p-0"
       >
         <DialogHeader className="bg-card px-6 py-5">
           <div className="flex items-start justify-between gap-4">

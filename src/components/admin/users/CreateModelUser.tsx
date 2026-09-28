@@ -133,7 +133,7 @@ export function CreateModelUser({
       <DialogContent
         className={cn(
           adminDialogContentClass,
-          'max-w-lg max-h-[85dvh] overflow-y-auto no-scrollbar p-6',
+          'sm:max-w-lg max-h-[85dvh] overflow-y-auto no-scrollbar p-6',
         )}
       >
         <DialogHeader className="pb-6">

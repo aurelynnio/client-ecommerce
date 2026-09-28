@@ -52,6 +52,10 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
+          // NOTE: the base sets `sm:max-w-lg`. A caller that needs a wider dialog
+          // MUST override it with a `sm:max-w-*` utility: an unprefixed `max-w-*`
+          // loses to `sm:max-w-lg` at >=640px, so the dialog stays stuck at 512px
+          // and its inner grid/table overflows or collapses.
           'bg-card text-card-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg p-6 duration-200 sm:max-w-lg',
           className,
         )}

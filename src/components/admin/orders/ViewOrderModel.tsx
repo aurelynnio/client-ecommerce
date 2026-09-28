@@ -44,6 +44,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
       shipped: { label: 'Đang giao', variant: 'default' },
       delivered: { label: 'Đã giao', variant: 'outline' },
       cancelled: { label: 'Đã hủy', variant: 'destructive' },
+      returned: { label: 'Đã trả hàng', variant: 'secondary' },
     };
 
     const config = statusConfig[status] || {
@@ -97,15 +98,18 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
       <DialogContent
         className={cn(
           adminDialogContentClass,
-          'max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar p-6',
+          'sm:max-w-4xl max-h-[90dvh] overflow-y-auto no-scrollbar p-6',
         )}
       >
         <DialogHeader className="pb-4">
-          <DialogTitle className="flex justify-between items-center">
+          <DialogTitle className="flex items-center justify-between gap-4 pr-8">
             <span className="text-xl font-semibold tracking-tight">
               Chi tiết đơn hàng #{order._id.slice(-8).toUpperCase()}
             </span>
-            <Button onClick={() => onEdit(order)} className={cn('gap-2', adminPrimaryButtonClass)}>
+            <Button
+              onClick={() => onEdit(order)}
+              className={cn('shrink-0 gap-2', adminPrimaryButtonClass)}
+            >
               <Edit className="w-4 h-4" />
               Cập nhật
             </Button>
@@ -158,10 +162,10 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
                     <Store className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
-                <div>
-                  <p className="font-medium text-foreground">{shopInfo.name}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="break-words font-medium text-foreground">{shopInfo.name}</p>
                   {shopInfo.slug && (
-                    <p className="text-xs text-muted-foreground">@{shopInfo.slug}</p>
+                    <p className="break-all text-xs text-muted-foreground">@{shopInfo.slug}</p>
                   )}
                 </div>
               </div>

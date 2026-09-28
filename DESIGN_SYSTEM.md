@@ -1,6 +1,6 @@
 # Aura Commerce Design System
 
-> Phiên bản 2.0 — JD Red palette · Inter font · Border-over-shadow
+> Phiên bản 3.0 — JD Red palette · Inter font · Flat / không đường kẻ
 
 ## 1. Hướng thiết kế
 
@@ -9,7 +9,9 @@ và đáng tin cậy. Thiết kế ưu tiên:
 
 - **Đường dẫn mua hàng rõ ràng** — mỗi trang có một nhiệm vụ chính.
 - **Bề mặt tĩnh, lưới sản phẩm ổn định** — tránh noise quảng cáo.
-- **Border-over-shadow** — card dùng viền trước, shadow chỉ cho element nổi.
+- **Flat, không đường kẻ** — không shadow, không viền, không đường phân cách.
+- **Phân cấp bằng không gian & màu** — khoảng cách, cỡ/độ đậm chữ và tương
+  phản nền thay cho viền/shadow.
 - **Không gradient** — màu nền phẳng, tinh tế.
 - **Đồng nhất** — tất cả component tuân thủ token đã định nghĩa.
 
@@ -66,13 +68,13 @@ sidebar active, hover backgrounds.
 
 | Token | Giá trị | Mô tả |
 | :---- | :------ | :---- |
-| `--background` | `#fafaf9` | Nền trang — warm off-white |
+| `--background` | `#f4f4f5` | Nền trang — xám nhạt, tạo lớp cho card trắng |
 | `--foreground` | `#1f2937` | Text chính — dark graphite |
-| `--card` | `#ffffff` | Nền card |
-| `--muted` | `#f4f4f5` | Nền muted |
+| `--card` | `#ffffff` | Nền card (bề mặt nổi) |
+| `--muted` | `#ececef` | Nền inset — field, hàng zebra, khung ảnh |
 | `--muted-foreground` | `#71717a` | Text phụ |
-| `--border` | `#e4e4e7` | Viền |
-| `--input` | `#e4e4e7` | Viền input |
+| `--border` | `#e4e4e7` | Chỉ còn dùng cho các dashed exception |
+| `--input` | `#e4e4e7` | Không còn dùng cho field |
 
 ### 2.5 E-commerce Specialized
 
@@ -167,24 +169,19 @@ Hệ 4px base unit:
 | `--radius-full` | 9999px | Pill, avatar, icon button |
 | `--radius` | 8px | Base (mặc định) |
 
-## 6. Shadows — Border-over-shadow
+## 6. Elevation — không shadow
 
-Triết lý: **card dùng border trước, shadow chỉ cho element nổi** (popover,
-dropdown, modal, hover lift).
+Toàn bộ shadow token đã bị vô hiệu hoá (`none`). Không dùng `shadow-*` cho
+bất kỳ bề mặt nào. Phân lớp bằng:
 
-| Token | Mô tả |
-| :---- | :---- |
-| `--shadow-sm` | Subtlest — gần như không thấy |
-| `--shadow-md` | Card floating nhẹ |
-| `--shadow-lg` | Popover, dropdown |
-| `--shadow-card` | Card mặc định (rất nhẹ) |
-| `--shadow-hover` | Hover lift — có coral tint |
-| `--shadow-popover` | Popover/modal floating |
+1. **Tương phản nền** — card trắng `#ffffff` trên nền trang `#f4f4f5`;
+   field/inset dùng `--muted` `#ececef`.
+2. **Không gian** — nhịp `space-4/6/8` thay cho đường phân cách.
+3. **Typography** — cỡ và độ đậm chữ thay cho đường kẻ tiêu đề.
 
-```css
-/* shadow-hover có JD red tint để tạo brand feel */
---shadow-hover: 0 4px 12px -4px rgba(225, 37, 27, 0.12);
-```
+**Ngoại lệ duy nhất:** overlay mở **không có scrim** (dropdown, select,
+popover, toast) dùng hairline `ring-1 ring-black/5` để giữ rõ ranh giới
+panel. Dialog/sheet/alert-dialog dựa vào scrim `bg-black/40`, không cần hairline.
 
 ## 7. Z-Index Scale
 
@@ -244,15 +241,14 @@ dropdown, modal, hover lift).
 
 ### Card
 
-- Nền: `bg-card` (trắng)
-- Viền: `border border-border`
-- Radius: `rounded-lg` (12px)
+- Nền: `bg-card` (trắng) — nổi trên nền trang `#f4f4f5`, **không viền**
+- Radius: `rounded-xl` (16px)
 - **Không nest card trong card** chỉ để tạo spacing — dùng `space-*` thay.
-- Hover effect: dùng class `.card-hover` (border đổi sang primary + shadow-hover)
+- Hover effect: dùng class `.card-hover` (nền pha primary 4%, không viền/shadow)
 
 ### Product Card
 
-- Dùng class `.card-product` cho hover effect (border coral + lift)
+- Dùng class `.card-product` cho hover effect (nền pha primary + lift nhẹ)
 - Tỷ lệ ảnh ổn định (aspect-ratio)
 - Hierarchy: ảnh → tên (2 dòng clamp) → giá → rating/wishlist
 - Một wishlist action keyboard-accessible
@@ -260,9 +256,9 @@ dropdown, modal, hover lift).
 ### Input
 
 - Height: `h-10` (40px)
-- Border: `border border-input`
-- Focus: `ring-2 ring-ring`
-- Error: `border-destructive`
+- Nền: `bg-muted` (inset, **không viền**)
+- Focus: `focus-visible:bg-card` + `ring-2 ring-ring`
+- Error: `bg-destructive/5` + ring
 
 ### Badge / Tag
 
@@ -295,7 +291,10 @@ dropdown, modal, hover lift).
 ## 12. Anti-patterns (KHÔNG làm)
 
 - **Không dùng gradient** — nền phẳng, tinh tế.
-- **Không dùng shadow cho card mặc định** — chỉ border. Shadow chỉ khi float.
+- **Không dùng shadow** — mọi token `--shadow-*` đã bị vô hiệu hoá (`none`).
+- **Không dùng viền/đường phân cách** — chỉ 3 ngoại lệ chức năng: drop-zone
+  upload, đường răng cưa coupon, empty-state placeholder; cộng thêm hairline
+  `ring-1 ring-black/5` cho overlay không có scrim.
 - **Không hardcode hex color** — luôn dùng CSS variable.
 - **Không dùng dark mode variants** (`dark:`, `@custom-variant dark`).
 - **Không nest card trong card** cho spacing.

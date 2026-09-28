@@ -2,7 +2,7 @@
  * Review React Query Hooks
  * Replaces reviewAction.ts async thunks with React Query
  */
-import { QueryClient, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import instance from '@/api/api';
 import { ENDPOINT_REVIEW } from '@/constants/endpoint';
 import { extractApiData } from '@/api';
@@ -202,6 +202,20 @@ export function useProductReviews(productId: string, params?: ReviewListParams) 
   return useQuery({
     queryKey: reviewKeys.product(productId, params),
     queryFn: () => reviewApi.getByProduct(productId, params),
+    enabled: !!productId,
+    staleTime: STALE_TIME.VERY_LONG,
+  });
+}
+
+/**
+ * Get reviews for a product (paginated) with a "load more" cursor
+ */
+export function useInfiniteProductReviews(productId: string, limit = 5) {
+  return useInfiniteQuery({
+    queryKey: reviewKeys.product(productId, { limit, infinite: true }),
+    queryFn: ({ pageParam }) => reviewApi.getByProduct(productId, { page: pageParam, limit }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.pagination?.nextPage ?? undefined,
     enabled: !!productId,
     staleTime: STALE_TIME.VERY_LONG,
   });

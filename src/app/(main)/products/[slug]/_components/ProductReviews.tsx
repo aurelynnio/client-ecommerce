@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Star, ChevronRight, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/common/EmptyState';
 import ReviewItem from '@/components/review/ReviewItem';
-import { useProductReviews } from '@/hooks/queries/useReviews';
+import { useInfiniteProductReviews } from '@/hooks/queries/useReviews';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Review, RatingBreakdown } from '@/types/review';
 import { formatDate } from '@/utils/format';
@@ -59,26 +59,39 @@ export function ProductReviews({
   ratingAverage = 0,
   reviewCount = 0,
 }: ProductReviewsProps) {
-  const [page, setPage] = useState(1);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteProductReviews(productId, 5);
 
-  const { data, isLoading } = useProductReviews(productId, { page, limit: 5 });
-
-  const rawReviews = data?.reviews;
+  // Pages accumulate in the query cache, so "Xem thêm đánh giá" appends instead
+  // of replacing the list, and changing product resets it automatically.
   const reviews = useMemo(() => {
-    const list = rawReviews ?? [];
-    return list.map((review) => ({
-      ...review,
-      user: {
-        ...review.user,
-        name: review.user.username,
-      },
-    }));
-  }, [rawReviews]);
+    return (data?.pages ?? [])
+      .flatMap((page) => page.reviews)
+      .map((review) => ({
+        ...review,
+        user: {
+          ...review.user,
+          name: review.user.username,
+        },
+      }));
+  }, [data]);
 
-  const totalPages = data?.pagination?.totalPages || 1;
+  const firstPage = data?.pages?.[0];
+  const totalReviews = firstPage?.totalReviews ?? reviewCount;
+  const totalPages = firstPage?.pagination?.totalPages ?? 1;
+
+  // Prefer the server-provided distribution; only fall back to counting the
+  // loaded reviews when the API does not send one (a partial count would
+  // otherwise be divided by the full review total).
   const ratingBreakdown: RatingBreakdown = useMemo(() => {
-    // Compute rating breakdown from reviews
     const breakdown: RatingBreakdown = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    const distribution = firstPage?.ratingDistribution;
+    if (distribution) {
+      ([5, 4, 3, 2, 1] as const).forEach((rating) => {
+        breakdown[rating] = distribution[rating] ?? 0;
+      });
+      return breakdown;
+    }
     reviews.forEach((r) => {
       if (r.rating >= 1 && r.rating <= 5) {
         breakdown[r.rating as keyof RatingBreakdown] =
@@ -86,7 +99,7 @@ export function ProductReviews({
       }
     });
     return breakdown;
-  }, [reviews]);
+  }, [firstPage?.ratingDistribution, reviews]);
 
   const getInitial = (name: string) => {
     return name?.charAt(0)?.toUpperCase() || 'U';
@@ -126,7 +139,7 @@ export function ProductReviews({
 
         {/* Rating Breakdown */}
         <div className="flex-1">
-          <RatingBreakdownComponent breakdown={ratingBreakdown} total={reviewCount} />
+          <RatingBreakdownComponent breakdown={ratingBreakdown} total={totalReviews} />
         </div>
       </div>
 
@@ -167,16 +180,18 @@ export function ProductReviews({
         </div>
       )}
 
-      {/* Load More / Pagination */}
+      {/* Load More */}
       {totalPages > 1 && (
         <div className="text-center pt-6">
-          {page < totalPages ? (
+          {hasNextPage ? (
             <Button
               variant="ghost"
-              onClick={() => setPage((p) => p + 1)}
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
               className="text-xs text-muted-foreground/60 hover:text-primary"
             >
-              Xem thêm đánh giá <ChevronRight className="w-3 h-3 ml-1" />
+              {isFetchingNextPage ? 'Đang tải...' : 'Xem thêm đánh giá'}
+              <ChevronRight className="w-3 h-3 ml-1" />
             </Button>
           ) : (
             <span className="text-xs text-muted-foreground/60">Đã hiển thị tất cả đánh giá</span>

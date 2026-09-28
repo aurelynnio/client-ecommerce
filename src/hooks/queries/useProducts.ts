@@ -581,6 +581,7 @@ export interface UseProductDetailReturn {
   quantity: number;
   selectedImageIndex: number;
   isLoading: boolean;
+  isAddingToCart: boolean;
   error: string | null;
 
   // Computed
@@ -604,6 +605,14 @@ export interface UseProductDetailReturn {
   handleBuyNow: () => Promise<void>;
 }
 
+interface ProductSelection {
+  slug: string;
+  variantIndex: number;
+  size: string | null;
+  imageIndex: number;
+  quantity: number;
+}
+
 /**
  * Composite hook for product detail page
  * Handles product data fetching, variant selection, and cart operations
@@ -620,16 +629,46 @@ export function useProductDetail({ slug }: UseProductDetailOptions): UseProductD
     ? getSafeErrorMessage(queryError, 'Không thể tải thông tin sản phẩm')
     : null;
 
-  // Local state
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [selectedSizeInternal, setSelectedSizeInternal] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  // Selections for the current product, kept in one object so they can all be
+  // reset in a single render-phase update when the slug changes (the page
+  // component instance is reused across /products/[slug] navigations).
+  const [selection, setSelection] = useState<ProductSelection>({
+    slug,
+    variantIndex: 0,
+    size: null,
+    imageIndex: 0,
+    quantity: 1,
+  });
 
-  // Derived selected size: use internal state or default to first available size
-  const selectedSize = useMemo(() => {
-    return selectedSizeInternal || currentProduct?.sizes?.[0] || null;
-  }, [selectedSizeInternal, currentProduct]);
+  if (selection.slug !== slug) {
+    setSelection({ slug, variantIndex: 0, size: null, imageIndex: 0, quantity: 1 });
+  }
+
+  const selectedVariantIndex = selection.variantIndex;
+  const selectedSizeInternal = selection.size;
+  const quantity = selection.quantity;
+  const selectedImageIndex = selection.imageIndex;
+
+  const setSelectedVariantIndex = useCallback(
+    (index: number) => setSelection((prev) => ({ ...prev, variantIndex: index })),
+    [],
+  );
+  const setSelectedSizeInternal = useCallback(
+    (size: string | null) => setSelection((prev) => ({ ...prev, size })),
+    [],
+  );
+  const setSelectedImageIndex = useCallback(
+    (index: number) => setSelection((prev) => ({ ...prev, imageIndex: index })),
+    [],
+  );
+  const setQuantity = useCallback(
+    (qty: number) => setSelection((prev) => ({ ...prev, quantity: qty })),
+    [],
+  );
+
+  // Selected size is explicit: a product that has sizes requires the user to
+  // pick one, so no size is pre-selected.
+  const selectedSize = selectedSizeInternal;
 
   // Show error toast
   useEffect(() => {
@@ -689,6 +728,9 @@ export function useProductDetail({ slug }: UseProductDetailOptions): UseProductD
     if (currentProduct.variants?.[0]?.images?.length) {
       return currentProduct.variants[0].images;
     }
+    if (currentProduct.descriptionImages?.length) {
+      return currentProduct.descriptionImages;
+    }
     return [];
   }, [currentProduct, selectedVariant]);
 
@@ -697,16 +739,16 @@ export function useProductDetail({ slug }: UseProductDetailOptions): UseProductD
     if (selectedVariant) {
       return selectedVariant.stock;
     }
-    return currentProduct?.stock || 99;
+    return currentProduct?.stock ?? 99;
   }, [selectedVariant, currentProduct]);
 
   // Handle quantity change
   const handleQuantityChange = useCallback(
     (change: number) => {
-      setQuantity((prev) => {
-        const newQuantity = prev + change;
+      setSelection((prev) => {
+        const newQuantity = prev.quantity + change;
         if (newQuantity >= 1 && newQuantity <= Math.min(maxStock, 99)) {
-          return newQuantity;
+          return { ...prev, quantity: newQuantity };
         }
         return prev;
       });
@@ -716,15 +758,12 @@ export function useProductDetail({ slug }: UseProductDetailOptions): UseProductD
 
   // Handle variant selection
   const handleVariantSelect = useCallback((index: number) => {
-    setSelectedVariantIndex(index);
-    setSelectedImageIndex(0);
-    setQuantity(1);
+    setSelection((prev) => ({ ...prev, variantIndex: index, imageIndex: 0, quantity: 1 }));
   }, []);
 
   // Handle size selection
   const handleSizeSelect = useCallback((size: string) => {
-    setSelectedSizeInternal(size);
-    setQuantity(1);
+    setSelection((prev) => ({ ...prev, size, quantity: 1 }));
   }, []);
 
   // Handle add to cart
@@ -784,6 +823,7 @@ export function useProductDetail({ slug }: UseProductDetailOptions): UseProductD
     quantity,
     selectedImageIndex,
     isLoading,
+    isAddingToCart: addToCartMutation.isPending,
     error: safeErrorMessage,
     displayImages,
     activePrice,

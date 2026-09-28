@@ -7,7 +7,7 @@ import { FeedbackPop } from '@/components/motion/primitives';
 import { cn } from '@/utils/cn';
 
 interface ProductActionsProps {
-  onAddToCart: () => void;
+  onAddToCart: () => Promise<boolean> | void;
   onBuyNow: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -21,8 +21,10 @@ export function ProductActions({
 }: ProductActionsProps) {
   const [justAdded, setJustAdded] = useState(false);
 
-  const handleAddClick = () => {
-    onAddToCart();
+  const handleAddClick = async () => {
+    // Only confirm success once the mutation actually resolved successfully.
+    const result = await onAddToCart();
+    if (result === false) return;
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1500);
   };

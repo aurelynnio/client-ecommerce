@@ -40,7 +40,7 @@ export default function ProductDetailPage() {
 
   const {
     product,
-    // ... other destructures
+    isAddingToCart,
     selectedVariantIndex,
     selectedSize,
     quantity,
@@ -94,8 +94,12 @@ export default function ProductDetailPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (isLoading || !product) {
+  if (isLoading) {
     return <ProductDetailSkeleton />;
+  }
+
+  if (!product) {
+    return <ProductNotFound />;
   }
 
   return (
@@ -188,6 +192,7 @@ export default function ProductDetailPage() {
               onAddToCart={handleAddToCart}
               onBuyNow={handleBuyNow}
               disabled={maxStock <= 0}
+              loading={isAddingToCart}
             />
           </div>
         </div>
@@ -224,6 +229,26 @@ export default function ProductDetailPage() {
 
         {/* Recently Viewed */}
         <RecentlyViewedSection className="mt-12 pt-8" />
+      </div>
+    </div>
+  );
+}
+
+// Shown when the product is missing (deleted, invalid slug, or request failed)
+function ProductNotFound() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md space-y-4 text-center">
+        <h1 className="text-xl font-bold text-foreground">Không tìm thấy sản phẩm</h1>
+        <p className="text-sm text-muted-foreground">
+          Sản phẩm này có thể đã bị xoá hoặc không còn tồn tại.
+        </p>
+        <Link
+          href="/products"
+          className="inline-flex h-10 items-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+        >
+          Xem sản phẩm khác
+        </Link>
       </div>
     </div>
   );

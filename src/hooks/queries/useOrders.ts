@@ -103,40 +103,61 @@ function normalizeOrderStatistics(
 
   const countsByStatus = new Map(ordersByStatus.map((item) => [item._id, item.count]));
 
+  // Prefer an explicit value, then the summary alias, then the status-count
+  // fallback. A `?? 0` placeholder here previously made every later fallback
+  // unreachable, so summary-only responses reported 0 for several statuses.
+  const firstNumber = (...values: Array<number | undefined>): number =>
+    values.find((value): value is number => typeof value === 'number') ?? 0;
+
+  const statusCount = (status: string) => countsByStatus.get(status);
+  const countedTotal = ordersByStatus.reduce((sum, item) => sum + item.count, 0);
+
   return {
-    totalOrders: summary?.totalOrders ?? ('totalOrders' in data ? data.totalOrders : 0) ?? 0,
-    pendingOrders:
-      summary?.pendingOrders ??
-      ('pendingOrders' in data ? data.pendingOrders : 0) ??
-      countsByStatus.get('pending') ??
-      0,
-    confirmedOrders:
-      ('confirmedOrders' in data ? data.confirmedOrders : 0) ??
-      countsByStatus.get('confirmed') ??
-      0,
-    processingOrders:
-      ('processingOrders' in data ? data.processingOrders : 0) ??
-      countsByStatus.get('processing') ??
-      0,
-    shippedOrders:
-      ('shippedOrders' in data ? data.shippedOrders : 0) ?? countsByStatus.get('shipped') ?? 0,
-    deliveredOrders:
-      ('deliveredOrders' in data ? data.deliveredOrders : 0) ??
-      summary?.completedOrders ??
-      countsByStatus.get('delivered') ??
-      0,
-    cancelledOrders:
-      summary?.cancelledOrders ??
-      ('cancelledOrders' in data ? data.cancelledOrders : 0) ??
-      countsByStatus.get('cancelled') ??
-      0,
-    totalRevenue: summary?.totalRevenue ?? ('totalRevenue' in data ? data.totalRevenue : 0) ?? 0,
+    totalOrders: firstNumber(
+      summary?.totalOrders,
+      'totalOrders' in data ? data.totalOrders : undefined,
+      countedTotal,
+    ),
+    pendingOrders: firstNumber(
+      summary?.pendingOrders,
+      'pendingOrders' in data ? data.pendingOrders : undefined,
+      statusCount('pending'),
+    ),
+    confirmedOrders: firstNumber(
+      'confirmedOrders' in data ? data.confirmedOrders : undefined,
+      statusCount('confirmed'),
+    ),
+    processingOrders: firstNumber(
+      'processingOrders' in data ? data.processingOrders : undefined,
+      statusCount('processing'),
+    ),
+    shippedOrders: firstNumber(
+      'shippedOrders' in data ? data.shippedOrders : undefined,
+      statusCount('shipped'),
+    ),
+    deliveredOrders: firstNumber(
+      'deliveredOrders' in data ? data.deliveredOrders : undefined,
+      summary?.completedOrders,
+      statusCount('delivered'),
+    ),
+    cancelledOrders: firstNumber(
+      summary?.cancelledOrders,
+      'cancelledOrders' in data ? data.cancelledOrders : undefined,
+      statusCount('cancelled'),
+    ),
+    totalRevenue: firstNumber(
+      summary?.totalRevenue,
+      'totalRevenue' in data ? data.totalRevenue : undefined,
+    ),
     ordersByStatus,
   };
 }
 
 function invalidateOrderLists(queryClient: QueryClient) {
-  return queryClient.invalidateQueries({ queryKey: orderKeys.lists() });
+  // The customer, admin and seller lists live under different key branches
+  // (`orders/list`, `orders/admin`, `orders/shop`), so invalidate the shared
+  // root to make sure a status change refreshes every affected list.
+  return queryClient.invalidateQueries({ queryKey: orderKeys.all });
 }
 
 function invalidateOrdersAndCart(queryClient: QueryClient) {
@@ -174,7 +195,18 @@ const orderApi = {
 
   // Admin: Get all orders
   getAllOrders: async (params: OrderListParams = {}): Promise<OrderListResponse> => {
-    const { page = 1, limit = 10, status, paymentStatus, paymentMethod, userId, shop } = params;
+    const {
+      page = 1,
+      limit = 10,
+      status,
+      paymentStatus,
+      paymentMethod,
+      userId,
+      shop,
+      search,
+      startDate,
+      endDate,
+    } = params;
 
     const response = await instance.get(ENDPOINT_ORDER.ALL, {
       params: {
@@ -185,6 +217,9 @@ const orderApi = {
         ...(paymentMethod && { paymentMethod }),
         ...(userId && { userId }),
         ...(shop && { shop }),
+        ...(search && { search }),
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
       },
     });
     const data = extractApiData<{
@@ -203,13 +238,14 @@ const orderApi = {
     _shopId: string,
     params: OrderListParams = {},
   ): Promise<OrderListResponse> => {
-    const { page = 1, limit = 10, status, paymentStatus } = params;
+    const { page = 1, limit = 10, status, paymentStatus, search } = params;
     const response = await instance.get(ENDPOINT_ORDER.SELLER, {
       params: {
         page,
         limit,
         ...(status && { status }),
         ...(paymentStatus && { paymentStatus }),
+        ...(search && { search }),
       },
     });
     const data = extractApiData<{

@@ -94,6 +94,12 @@ const statusConfig: Record<
     bg: 'bg-destructive/15',
     icon: XCircle,
   },
+  returned: {
+    label: 'Đã trả hàng',
+    color: 'text-muted-foreground',
+    bg: 'bg-muted',
+    icon: RefreshCw,
+  },
 };
 
 // Allowed status transitions for seller
@@ -104,12 +110,14 @@ const allowedTransitions: Record<string, string[]> = {
   shipped: ['delivered'],
   delivered: [],
   cancelled: [],
+  returned: [],
 };
 
 export default function SellerOrdersPage() {
   const { data: myShop } = useMyShop();
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [appliedSearch, setAppliedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -117,10 +125,17 @@ export default function SellerOrdersPage() {
   const { data: ordersData, isLoading: isLoadingShopOrders } = useShopOrders(myShop?._id || '', {
     page,
     limit,
+    search: appliedSearch || undefined,
     status:
       statusFilter !== 'all'
         ? (statusFilter as
-            'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled')
+            | 'pending'
+            | 'confirmed'
+            | 'processing'
+            | 'shipped'
+            | 'delivered'
+            | 'cancelled'
+            | 'returned')
         : undefined,
   });
   const updateStatusMutation = useUpdateOrderStatus();
@@ -145,6 +160,7 @@ export default function SellerOrdersPage() {
   });
 
   const handleSearch = () => {
+    setAppliedSearch(searchTerm.trim());
     setPage(1);
   };
 
@@ -213,6 +229,7 @@ export default function SellerOrdersPage() {
     { key: 'shipped', label: 'Đang giao' },
     { key: 'delivered', label: 'Hoàn thành' },
     { key: 'cancelled', label: 'Đã hủy' },
+    { key: 'returned', label: 'Đã trả hàng' },
   ];
 
   const total = shopOrdersPagination?.totalItems || 0;

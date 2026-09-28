@@ -15,7 +15,7 @@ const InputOTP = React.forwardRef<
       ref={ref}
       data-slot="input-otp"
       containerClassName={cn(
-        'group flex cursor-text items-center gap-2 has-[:disabled]:opacity-50',
+        'group flex w-full cursor-text items-center justify-center gap-1.5 has-[:disabled]:opacity-50 sm:gap-2',
         containerClassName,
       )}
       className={cn('disabled:cursor-not-allowed', className)}
@@ -28,7 +28,11 @@ InputOTP.displayName = 'InputOTP';
 
 function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="input-otp-group" className={cn('flex items-center gap-2', className)} {...props} />
+    <div
+      data-slot="input-otp-group"
+      className={cn('flex w-full min-w-0 items-center justify-center gap-1.5 sm:gap-2', className)}
+      {...props}
+    />
   );
 }
 
@@ -47,7 +51,7 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        'data-[active=true]:bg-card data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 aria-invalid:bg-destructive/5 relative flex h-9 w-9 items-center justify-center rounded-md bg-muted text-sm transition-[background-color,box-shadow] outline-none data-[active=true]:z-10 data-[active=true]:ring-[3px]',
+        'data-[active=true]:bg-card data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 aria-invalid:bg-destructive/5 relative flex h-11 max-w-12 min-w-0 flex-1 basis-0 items-center justify-center rounded-md bg-muted text-base transition-[background-color,box-shadow] outline-none data-[active=true]:z-10 data-[active=true]:ring-[3px] sm:h-12 sm:text-lg',
         className,
       )}
       {...props}
@@ -62,9 +66,14 @@ function InputOTPSlot({
   );
 }
 
-function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
+function InputOTPSeparator({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
+    <div
+      data-slot="input-otp-separator"
+      role="separator"
+      className={cn('flex shrink-0 items-center [&_svg]:size-4', className)}
+      {...props}
+    >
       <MinusIcon />
     </div>
   );

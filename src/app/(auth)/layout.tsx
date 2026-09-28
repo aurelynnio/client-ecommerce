@@ -105,7 +105,7 @@ export default function AuthLayout({
         </div>
 
         {/* Form card — flat white surface on the page background */}
-        <div className="w-full max-w-[400px] rounded-xl bg-card p-6 text-card-foreground lg:p-8">
+        <div className="w-full min-w-0 max-w-[400px] rounded-xl bg-card p-6 text-card-foreground lg:p-8">
           {children}
         </div>
       </div>

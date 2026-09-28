@@ -22,7 +22,9 @@ type VerifyCodeClientProps = {
 };
 
 const OTP_LENGTH = 6;
-const OTP_SLOT_CLASS = 'h-12 w-12 rounded-lg text-lg';
+// Width/height come from the InputOTPSlot primitive so the row stays fluid and
+// can never force the auth card wider than the viewport on small screens.
+const OTP_SLOT_CLASS = 'rounded-lg font-medium';
 
 function isValidOtp(value: string | null | undefined): value is string {
   return typeof value === 'string' && /^\d{6}$/.test(value);

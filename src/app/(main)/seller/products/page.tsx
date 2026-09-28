@@ -119,15 +119,11 @@ export default function SellerProductsPage() {
     setCreateModalOpen(open);
   };
 
-  const handleCloseUpdateModal = (open: boolean) => {
-    setUpdateModalOpen(open);
-    if (!open) setSelectedProduct(null);
-  };
+  // Keep `selectedProduct` set while closing so the dialog can run its exit
+  // transition without being unmounted mid-flight.
+  const handleCloseUpdateModal = (open: boolean) => setUpdateModalOpen(open);
 
-  const handleCloseViewModal = (open: boolean) => {
-    setViewModalOpen(open);
-    if (!open) setSelectedProduct(null);
-  };
+  const handleCloseViewModal = (open: boolean) => setViewModalOpen(open);
 
   // Get main image from product
   const getMainImage = (product: Product): string | null => {
@@ -415,7 +411,6 @@ export default function SellerProductsPage() {
       />
 
       <UpdateModelProduct
-        key={selectedProduct?._id}
         open={updateModalOpen}
         onOpenChange={handleCloseUpdateModal}
         product={selectedProduct}
@@ -424,7 +419,6 @@ export default function SellerProductsPage() {
       />
 
       <ViewModelProduct
-        key={selectedProduct?._id}
         open={viewModalOpen}
         onOpenChange={handleCloseViewModal}
         product={selectedProduct}

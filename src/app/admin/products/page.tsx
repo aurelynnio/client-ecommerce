@@ -143,15 +143,11 @@ export default function AdminProductsPage() {
     setUpdateModalOpen(true);
   };
 
-  const handleCloseUpdateModal = (open: boolean) => {
-    setUpdateModalOpen(open);
-    if (!open) setSelectedProduct(null);
-  };
+  // Keep `selectedProduct` set while closing so the dialog can run its exit
+  // transition without being unmounted mid-flight.
+  const handleCloseUpdateModal = (open: boolean) => setUpdateModalOpen(open);
 
-  const handleCloseViewModal = (open: boolean) => {
-    setViewModalOpen(open);
-    if (!open) setSelectedProduct(null);
-  };
+  const handleCloseViewModal = (open: boolean) => setViewModalOpen(open);
 
   const totalProducts = pagination?.totalItems || 0;
   // Calculate stats based on current loaded products (or better, fetch from stats API if available)
@@ -232,7 +228,6 @@ export default function AdminProductsPage() {
       </div>
 
       <UpdateModelProduct
-        key={selectedProduct?._id}
         open={updateModalOpen}
         onOpenChange={handleCloseUpdateModal}
         product={selectedProduct}
@@ -243,7 +238,6 @@ export default function AdminProductsPage() {
       />
 
       <ViewModelProduct
-        key={selectedProduct?._id}
         open={viewModalOpen}
         onOpenChange={handleCloseViewModal}
         product={selectedProduct}

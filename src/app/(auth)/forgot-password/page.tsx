@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
             autoComplete="email"
             autoCapitalize="none"
             autoCorrect="off"
-            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+            className="h-11 rounded-lg focus:ring-primary/20"
             disabled={isLoading}
           />
           {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}

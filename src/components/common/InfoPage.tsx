@@ -71,7 +71,7 @@ export default function InfoPage({ title, description, sections, updatedAt }: In
           </nav>
         </aside>
         <article className="min-w-0">
-          <header className="border-b border-border pb-3">
+          <header className="pb-4">
             <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
               {title}
             </h1>
@@ -80,9 +80,9 @@ export default function InfoPage({ title, description, sections, updatedAt }: In
               <p className="mt-2 text-xs text-muted-foreground">Cập nhật lần cuối: {updatedAt}</p>
             ) : null}
           </header>
-          <div className="divide-y divide-border">
+          <div className="mt-2">
             {sections.map((section) => (
-              <section key={section.title} className="py-4">
+              <section key={section.title} className="py-6">
                 <h2 className="text-lg font-semibold text-foreground">{section.title}</h2>
                 <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                   {section.items.map((item) => (
@@ -111,7 +111,7 @@ export default function InfoPage({ title, description, sections, updatedAt }: In
               </section>
             ))}
           </div>
-          <footer className="border-t border-border pt-4 text-sm text-muted-foreground">
+          <footer className="pt-8 text-sm text-muted-foreground">
             Cần hỗ trợ thêm?{' '}
             <Link href="/support" className="font-medium text-primary hover:text-primary-hover">
               Liên hệ trung tâm hỗ trợ

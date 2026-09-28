@@ -207,7 +207,7 @@ export default function HeaderLayout() {
       >
         <form
           onSubmit={submitSearch}
-          className="flex h-10 items-center rounded-lg border border-input bg-card overflow-hidden transition-shadow focus-within:ring-2 focus-within:ring-ring"
+          className="flex h-10 items-center rounded-lg bg-muted overflow-hidden transition-shadow focus-within:ring-2 focus-within:ring-ring"
         >
           <div className="flex items-center pl-3 pr-2 text-muted-foreground">
             {isSearching ? (
@@ -255,7 +255,7 @@ export default function HeaderLayout() {
               id={panelId}
               role="listbox"
               aria-label="Gợi ý tìm kiếm"
-              className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded-lg border border-border bg-popover p-2 shadow-lg"
+              className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded-lg bg-popover p-2 ring-1 ring-black/5"
             >
               {searchQuery.trim().length >= 2 ? (
                 isSearching ? (
@@ -323,7 +323,7 @@ export default function HeaderLayout() {
                           type="button"
                           key={term}
                           onClick={() => submitSearch(undefined, term)}
-                          className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground hover:border-primary hover:text-primary"
+                          className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary"
                         >
                           {term}
                         </button>
@@ -373,7 +373,7 @@ export default function HeaderLayout() {
   return (
     <>
       <TopUtilityBar />
-      <header className="sticky top-0 z-40 border-b border-border bg-card">
+      <header className="sticky top-0 z-40 bg-card">
         {/* Main row: logo + mega search + actions */}
         <div className="aura-container flex h-16 items-center gap-4">
           <Sheet>
@@ -482,7 +482,7 @@ export default function HeaderLayout() {
         </div>
 
         {/* Category nav row — Tmall-style horizontal bar with mega menu */}
-        <div className="hidden border-t border-border bg-card md:block">
+        <div className="hidden bg-card md:block">
           <div
             className="aura-container relative flex h-11 items-center gap-1"
             ref={categoryRef}
@@ -502,7 +502,7 @@ export default function HeaderLayout() {
                 }
               }}
               onMouseEnter={handleOpenCategories}
-              className="inline-flex h-8 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground shadow-xs transition-all hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
+              className="inline-flex h-8 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground transition-all hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
             >
               <Menu className="h-3.5 w-3.5" aria-hidden="true" />
               Tất cả danh mục
@@ -547,9 +547,9 @@ export default function HeaderLayout() {
                   aria-label="Danh mục sản phẩm"
                   className="absolute left-0 top-full z-50 pt-2 w-[min(56rem,calc(100vw-2rem))]"
                 >
-                  <div className="flex overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+                  <div className="flex overflow-hidden rounded-xl bg-card ring-1 ring-black/5">
                     {/* Left rail — category list */}
-                    <ul className="w-56 shrink-0 overflow-y-auto border-r border-border bg-muted/20 p-1.5 space-y-0.5">
+                    <ul className="w-56 shrink-0 overflow-y-auto bg-muted/50 p-1.5 space-y-0.5">
                       {categories.map((category) => (
                         <li key={category._id}>
                           <button

@@ -122,7 +122,7 @@ export default function ResetPasswordPage() {
             autoComplete="email"
             autoCapitalize="none"
             autoCorrect="off"
-            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+            className="h-11 rounded-lg focus:ring-primary/20"
             disabled={isLoading}
           />
           {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
@@ -139,7 +139,7 @@ export default function ResetPasswordPage() {
             maxLength={6}
             inputMode="numeric"
             autoComplete="one-time-code"
-            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+            className="h-11 rounded-lg focus:ring-primary/20"
             disabled={isLoading}
           />
           {errors.code ? <p className="text-sm text-destructive">{errors.code.message}</p> : null}
@@ -156,7 +156,7 @@ export default function ResetPasswordPage() {
               type={showNewPassword ? 'text' : 'password'}
               autoComplete="new-password"
               placeholder="••••••••"
-              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
+              className="h-11 rounded-lg focus:ring-primary/20 pr-11"
               disabled={isLoading}
             />
             <button
@@ -193,7 +193,7 @@ export default function ResetPasswordPage() {
               type={showConfirmPassword ? 'text' : 'password'}
               autoComplete="new-password"
               placeholder="••••••••"
-              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
+              className="h-11 rounded-lg focus:ring-primary/20 pr-11"
               disabled={isLoading}
             />
             <button

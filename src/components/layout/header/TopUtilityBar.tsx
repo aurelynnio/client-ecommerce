@@ -11,8 +11,6 @@ export default function TopUtilityBar() {
   const linkClass =
     'inline-flex items-center gap-1 text-[11px] text-primary-foreground/80 transition-colors hover:text-primary-foreground';
 
-  const divider = <span className="text-primary-foreground/40" aria-hidden>|</span>;
-
   return (
     <div className="hidden bg-primary text-primary-foreground md:block">
       <div className="aura-container flex h-8 items-center justify-between">
@@ -22,7 +20,7 @@ export default function TopUtilityBar() {
         </div>
 
         {/* Right — quick links */}
-        <nav className="flex items-center gap-3" aria-label="Tiện ích">
+        <nav className="flex items-center gap-4" aria-label="Tiện ích">
           {isAuthenticated ? (
             <Link href="/profile" className={linkClass}>
               <User className="h-3 w-3" aria-hidden />
@@ -35,28 +33,23 @@ export default function TopUtilityBar() {
               <Link href="/login" className={linkClass}>
                 Đăng nhập
               </Link>
-              {divider}
               <Link href="/register" className={linkClass}>
                 Đăng ký
               </Link>
             </>
           )}
-          {divider}
           <Link href="/profile?tab=orders" className={linkClass}>
             <Truck className="h-3 w-3" aria-hidden />
             Đơn hàng
           </Link>
-          {divider}
           <Link href="/seller" className={linkClass}>
             <Store className="h-3 w-3" aria-hidden />
             Kênh người bán
           </Link>
-          {divider}
           <Link href="/support" className={linkClass}>
             <Headphones className="h-3 w-3" aria-hidden />
             CSKH
           </Link>
-          {divider}
           <Link href="/download" className={linkClass}>
             <Smartphone className="h-3 w-3" aria-hidden />
             Tải app

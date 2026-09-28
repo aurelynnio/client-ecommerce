@@ -79,14 +79,14 @@ export function QuantityStepper({
   };
 
   return (
-    <div className={cn('inline-flex items-center rounded-lg border border-border bg-card p-0.5', className)}>
+    <div className={cn('inline-flex items-center rounded-lg bg-muted p-0.5', className)}>
       <Button
         type="button"
         variant="ghost"
         size={currentSize.buttonSize}
         disabled={disabled || value <= min}
         onClick={handleDecrease}
-        className="rounded-md hover:bg-muted text-foreground"
+        className="rounded-md hover:bg-card text-foreground"
         aria-label="Giảm số lượng"
       >
         <Minus className={currentSize.iconSize} />
@@ -100,7 +100,7 @@ export function QuantityStepper({
         disabled={disabled}
         onChange={handleInputChange}
         className={cn(
-          'border-0 bg-transparent text-center font-semibold shadow-none focus-visible:ring-0 p-0',
+          'bg-transparent text-center font-semibold shadow-none focus-visible:ring-0 p-0',
           currentSize.inputHeight,
           currentSize.inputWidth,
           currentSize.fontSize,
@@ -113,7 +113,7 @@ export function QuantityStepper({
         size={currentSize.buttonSize}
         disabled={disabled || value >= max}
         onClick={handleIncrease}
-        className="rounded-md hover:bg-muted text-foreground"
+        className="rounded-md hover:bg-card text-foreground"
         aria-label="Tăng số lượng"
       >
         <Plus className={currentSize.iconSize} />

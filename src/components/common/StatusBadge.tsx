@@ -47,84 +47,84 @@ const statusMap: Record<string, StatusConfig> = {
   // Orders
   pending: {
     label: 'Chờ xử lý',
-    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
     icon: Clock,
   },
   processing: {
     label: 'Đang xử lý',
-    className: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    className: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
     icon: Clock,
   },
   confirmed: {
     label: 'Đã xác nhận',
-    className: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+    className: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
     icon: CheckCircle2,
   },
   shipping: {
     label: 'Đang giao hàng',
-    className: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20',
+    className: 'bg-sky-500/10 text-sky-600 dark:text-sky-400',
     icon: Truck,
   },
   delivered: {
     label: 'Đã giao hàng',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
     icon: PackageCheck,
   },
   completed: {
     label: 'Hoàn thành',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
     icon: CheckCircle2,
   },
   cancelled: {
     label: 'Đã hủy',
-    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
     icon: XCircle,
   },
   refunded: {
     label: 'Đã hoàn tiền',
-    className: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    className: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
     icon: RotateCcw,
   },
 
   // Payment
   paid: {
     label: 'Đã thanh toán',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
     icon: CheckCircle2,
   },
   unpaid: {
     label: 'Chưa thanh toán',
-    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
     icon: AlertCircle,
   },
   payment_failed: {
     label: 'Thanh toán thất bại',
-    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
     icon: XCircle,
   },
 
   // Stock
   in_stock: {
     label: 'Còn hàng',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
   },
   low_stock: {
     label: 'Sắp hết hàng',
-    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
   },
   out_of_stock: {
     label: 'Hết hàng',
-    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
   },
 
   // Status
   active: {
     label: 'Hoạt động',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
   },
   inactive: {
     label: 'Tạm ẩn',
-    className: 'bg-muted text-muted-foreground border-border',
+    className: 'bg-muted text-muted-foreground',
   },
 };
 
@@ -144,7 +144,7 @@ export function StatusBadge({
   const normalizedKey = status?.toLowerCase()?.replace(/\s+/g, '_');
   const config = statusMap[normalizedKey] || {
     label: label || status,
-    className: 'bg-muted text-muted-foreground border-border',
+    className: 'bg-muted text-muted-foreground',
   };
 
   const Icon = config.icon;

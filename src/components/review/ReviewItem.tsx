@@ -19,9 +19,9 @@ export default function ReviewItem({
   comment: string;
 }) {
   return (
-    <div className="py-6 border-b border-border/50 last:border-0 last:pb-0">
+    <div className="py-6 last:pb-0">
       <div className="flex gap-4">
-        <Avatar className="h-10 w-10 border">
+        <Avatar className="h-10 w-10">
           <AvatarFallback className="bg-muted text-muted-foreground font-medium text-sm">
             {initial}
           </AvatarFallback>

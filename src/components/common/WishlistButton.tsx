@@ -60,7 +60,7 @@ export const WishlistButton = memo(function WishlistButton({
         className={cn(
           'gap-2 transition-colors',
           isWishlisted
-            ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'
+            ? 'bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'
             : 'text-muted-foreground hover:text-primary',
           className,
         )}

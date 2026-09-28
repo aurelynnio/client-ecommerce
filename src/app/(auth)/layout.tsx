@@ -54,25 +54,25 @@ export default function AuthLayout({
           {/* Benefits */}
           <ul className="grid grid-cols-2 gap-4 text-sm">
             <li className="flex items-center gap-2 text-primary-foreground/90">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary-foreground/20 bg-primary-foreground/10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10">
                 <ShieldCheck className="h-4 w-4" />
               </span>
               <span>Bảo vệ người mua</span>
             </li>
             <li className="flex items-center gap-2 text-primary-foreground/90">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary-foreground/20 bg-primary-foreground/10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10">
                 <Truck className="h-4 w-4" />
               </span>
               <span>Giao hàng nhanh chóng</span>
             </li>
             <li className="flex items-center gap-2 text-primary-foreground/90">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary-foreground/20 bg-primary-foreground/10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10">
                 <RotateCcw className="h-4 w-4" />
               </span>
               <span>Đổi trả 7 ngày</span>
             </li>
             <li className="flex items-center gap-2 text-primary-foreground/90">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary-foreground/20 bg-primary-foreground/10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10">
                 <Headphones className="h-4 w-4" />
               </span>
               <span>Hỗ trợ 24/7</span>
@@ -104,8 +104,8 @@ export default function AuthLayout({
           </Link>
         </div>
 
-        {/* Form card (border-over-shadow rule) */}
-        <div className="w-full max-w-[400px] rounded-lg border border-border bg-card p-6 text-card-foreground lg:p-8">
+        {/* Form card — flat white surface on the page background */}
+        <div className="w-full max-w-[400px] rounded-xl bg-card p-6 text-card-foreground lg:p-8">
           {children}
         </div>
       </div>

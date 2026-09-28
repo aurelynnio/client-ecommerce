@@ -67,7 +67,7 @@ export function DataTable<T extends Record<string, unknown>>({
         </div>
       )}
 
-      <div className="rounded-lg border border-border bg-card overflow-hidden">
+      <div className="rounded-lg bg-card overflow-hidden">
         <Table>
           <TableHeader className="bg-muted/40">
             <TableRow>

@@ -64,7 +64,7 @@ export default function SendCodePage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+            className="h-11 rounded-lg focus:ring-primary/20"
             disabled={isLoading}
           />
         </div>

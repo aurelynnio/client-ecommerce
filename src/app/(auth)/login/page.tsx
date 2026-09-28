@@ -131,7 +131,7 @@ export default function LoginPage() {
               disabled={loading}
               value={twoFactorCode}
               onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, ''))}
-              className="h-11 rounded-lg border-border text-center tracking-[0.4em] focus:border-primary focus:ring-primary/20"
+              className="h-11 rounded-lg text-center tracking-[0.4em] focus:ring-primary/20"
             />
           </div>
           <Button
@@ -180,7 +180,7 @@ export default function LoginPage() {
               autoCorrect="off"
               disabled={loading}
               {...form.register('email')}
-              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+              className="h-11 rounded-lg focus:ring-primary/20"
             />
             {form.formState.errors.email ? (
               <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
@@ -207,7 +207,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 disabled={loading}
                 {...form.register('password')}
-                className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
+                className="h-11 rounded-lg focus:ring-primary/20 pr-11"
               />
               <button
                 type="button"

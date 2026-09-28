@@ -99,7 +99,7 @@ export default function RegisterPage() {
             autoCorrect="off"
             disabled={loading}
             {...form.register('username')}
-            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+            className="h-11 rounded-lg focus:ring-primary/20"
           />
           {form.formState.errors.username ? (
             <p className="text-sm text-destructive">{form.formState.errors.username.message}</p>
@@ -119,7 +119,7 @@ export default function RegisterPage() {
             autoCorrect="off"
             disabled={loading}
             {...form.register('email')}
-            className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+            className="h-11 rounded-lg focus:ring-primary/20"
           />
           {form.formState.errors.email ? (
             <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
@@ -138,7 +138,7 @@ export default function RegisterPage() {
               autoComplete="new-password"
               disabled={loading}
               {...form.register('password')}
-              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
+              className="h-11 rounded-lg focus:ring-primary/20 pr-11"
             />
             <button
               type="button"
@@ -172,7 +172,7 @@ export default function RegisterPage() {
               autoComplete="new-password"
               disabled={loading}
               {...form.register('confirmPassword')}
-              className="h-11 rounded-lg border-border focus:border-primary focus:ring-primary/20 pr-11"
+              className="h-11 rounded-lg focus:ring-primary/20 pr-11"
             />
             <button
               type="button"

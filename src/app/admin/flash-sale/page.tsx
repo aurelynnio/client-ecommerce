@@ -288,7 +288,7 @@ export default function AdminFlashSalePage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute right-2 top-2 h-8 w-8 rounded-lg bg-card/90 opacity-0 transition-opacity hover:bg-card group-hover:opacity-100"
+                      className="absolute right-2 top-2 h-8 w-8 rounded-lg bg-card/90 opacity-100 transition-opacity hover:bg-card lg:opacity-0 lg:group-hover:opacity-100"
                       onClick={() => handleRemoveFromFlashSale(product._id)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />

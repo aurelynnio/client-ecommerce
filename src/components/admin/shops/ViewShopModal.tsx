@@ -37,19 +37,19 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
     switch (status) {
       case 'active':
         return (
-          <Badge className="bg-success/15 text-success hover:bg-success/15 border-0">
+          <Badge className="bg-success/15 text-success hover:bg-success/15">
             Đang hoạt động
           </Badge>
         );
       case 'pending':
         return (
-          <Badge className="bg-warning/15 text-warning hover:bg-warning/15 border-0">
+          <Badge className="bg-warning/15 text-warning hover:bg-warning/15">
             Đang chờ
           </Badge>
         );
       case 'suspended':
         return (
-          <Badge className="bg-destructive/15 text-destructive hover:bg-destructive/15 border-0">Tạm ngưng</Badge>
+          <Badge className="bg-destructive/15 text-destructive hover:bg-destructive/15">Tạm ngưng</Badge>
         );
       default:
         return <Badge variant="outline">{status}</Badge>;
@@ -58,7 +58,7 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn(adminSurfaceClass, 'max-w-2xl p-6')}>
+      <DialogContent className={cn(adminSurfaceClass, 'max-h-[85dvh] max-w-2xl overflow-y-auto p-6')}>
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Chi tiết cửa hàng</DialogTitle>
         </DialogHeader>
@@ -68,7 +68,7 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
           <div className="flex items-start gap-4">
             <div
               className={cn(
-                'relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl',
+                'relative h-20 w-20 shrink-0 overflow-hidden rounded-xl',
                 adminMediaPlaceholderClass,
               )}
             >
@@ -98,7 +98,7 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
           </div>
 
           {/* Owner Information */}
-          <div className={cn(adminSubtleSurfaceClass, 'space-y-3 rounded-2xl p-4')}>
+          <div className={cn(adminSubtleSurfaceClass, 'space-y-3 rounded-xl p-4')}>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
               Thông tin chủ sở hữu
             </h4>
@@ -115,18 +115,18 @@ export function ViewShopModal({ isOpen, onClose, shop }: ViewShopModalProps) {
           </div>
 
           {/* Statistics */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-2xl bg-info/15 p-4 text-center">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-xl bg-info/15 p-4 text-center">
               <Package className="h-5 w-5 mx-auto mb-2 text-info" />
               <p className="text-2xl font-bold text-info">{shop.totalProducts || 0}</p>
               <p className="text-xs text-info/80">Sản phẩm</p>
             </div>
-            <div className="rounded-2xl bg-success/15 p-4 text-center">
+            <div className="rounded-xl bg-success/15 p-4 text-center">
               <ShoppingCart className="h-5 w-5 mx-auto mb-2 text-success" />
               <p className="text-2xl font-bold text-success">{shop.totalOrders || 0}</p>
               <p className="text-xs text-success/80">Đơn hàng</p>
             </div>
-            <div className="rounded-2xl bg-warning/15 p-4 text-center">
+            <div className="rounded-xl bg-warning/15 p-4 text-center">
               <Star className="h-5 w-5 mx-auto mb-2 text-star" />
               <p className="text-2xl font-bold text-warning">
                 {shop.rating?.toFixed(1) || '0.0'}

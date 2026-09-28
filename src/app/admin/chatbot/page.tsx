@@ -121,7 +121,7 @@ export default function AdminChatbotPage() {
       {/* Chat History Modal */}
       <Dialog open={!!selectedSession} onOpenChange={(open) => !open && setSelectedSession(null)}>
         <DialogContent className="flex h-[80dvh] max-w-2xl flex-col gap-0 overflow-hidden p-0">
-          <DialogHeader className="border-b border-border p-4">
+          <DialogHeader className="p-4">
             <DialogTitle>Lịch sử hội thoại</DialogTitle>
           </DialogHeader>
 
@@ -144,7 +144,7 @@ export default function AdminChatbotPage() {
                       'max-w-[80%] rounded-lg px-4 py-2 text-sm',
                       msg.role === 'user'
                         ? 'rounded-br-none bg-primary text-primary-foreground'
-                        : 'rounded-bl-none border border-border bg-card text-card-foreground',
+                        : 'rounded-bl-none bg-card text-card-foreground',
                     )}
                   >
                     <p>{msg.content?.trim() || '[Tin nhắn trống]'}</p>

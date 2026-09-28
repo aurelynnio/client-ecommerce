@@ -132,7 +132,7 @@ export default function AdminReviewsPage() {
                     return (
                       <tr key={review._id} className={adminRowHoverClass}>
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-3 max-w-[250px]">
+                          <div className="flex min-w-0 items-center gap-3 max-w-[250px]">
                             <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0">
                               <Image
                                 src={product?.images?.[0] || '/images/placeholder-product.svg'}
@@ -142,7 +142,7 @@ export default function AdminReviewsPage() {
                                 sizes="40px"
                               />
                             </div>
-                            <span className="truncate font-medium">{product?.name}</span>
+                            <span className="min-w-0 truncate font-medium">{product?.name}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">

@@ -158,7 +158,7 @@ export default function AdminShopsPage() {
       </AdminStatsGrid>
 
       <div className={adminTableShellClass}>
-        <div className={cn(adminFilterBarClass, 'rounded-none border-x-0 border-t-0')}>
+        <div className={adminFilterBarClass}>
           <div className="relative w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -215,7 +215,7 @@ export default function AdminShopsPage() {
                 </TableRow>
               ) : (
                 filteredShops.map((shop) => (
-                  <TableRow key={shop._id} className={cn(adminRowHoverClass, 'border-0')}>
+                  <TableRow key={shop._id} className={adminRowHoverClass}>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div

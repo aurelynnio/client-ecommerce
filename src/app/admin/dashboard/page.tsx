@@ -258,9 +258,8 @@ export default function AdminDashboard() {
                   <Tooltip
                     contentStyle={{
                       backgroundColor: 'var(--card)',
-                      border: '1px solid var(--border)',
                       borderRadius: '12px',
-                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                      boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.05)',
                     }}
                     itemStyle={{ color: 'var(--foreground)', fontSize: '13px' }}
                     labelStyle={{
@@ -323,9 +322,8 @@ export default function AdminDashboard() {
                     cursor={{ fill: 'rgba(0,0,0,0.02)' }}
                     contentStyle={{
                       backgroundColor: 'var(--card)',
-                      border: '1px solid var(--border)',
                       borderRadius: '12px',
-                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                      boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.05)',
                     }}
                     itemStyle={{ color: 'var(--foreground)', fontSize: '13px' }}
                     labelStyle={{

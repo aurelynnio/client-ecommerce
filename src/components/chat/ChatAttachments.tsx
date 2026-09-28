@@ -58,10 +58,10 @@ export default function ChatAttachments({
             target="_blank"
             rel="noreferrer"
             className={cn(
-              'flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors',
+              'flex items-center gap-3 rounded-lg px-3 py-2 transition-colors',
               isOwnMessage
-                ? 'border-white/20 bg-white/10 hover:bg-white/15'
-                : 'border-black/10 bg-black/5 hover:bg-black/8',
+                ? 'bg-white/10 hover:bg-white/15'
+                : 'bg-black/5 hover:bg-black/8',
             )}
           >
             <FileText className="h-4 w-4 shrink-0" />

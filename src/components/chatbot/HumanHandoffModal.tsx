@@ -22,7 +22,7 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
       <DialogContent className="sm:max-w-[440px] p-5">
         <DialogHeader>
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Headphones className="h-5 w-5" />
             </div>
             <div>
@@ -41,7 +41,7 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
           <Link
             href="/seller/chat"
             onClick={onClose}
-            className="group flex items-center justify-between rounded-xl border border-border bg-card p-3 transition-all hover:border-primary/50 hover:bg-primary-light"
+            className="group flex items-center justify-between rounded-xl bg-muted p-3 transition-all hover:bg-primary-light"
           >
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info/10 text-info">
@@ -62,7 +62,7 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
           {/* Option 2: Hotline */}
           <a
             href="tel:19006868"
-            className="group flex items-center justify-between rounded-xl border border-border bg-card p-3 transition-all hover:border-success/50 hover:bg-success/5"
+            className="group flex items-center justify-between rounded-xl bg-muted p-3 transition-all hover:bg-success/5"
           >
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10 text-success">
@@ -85,7 +85,7 @@ export default function HumanHandoffModal({ isOpen, onClose }: HumanHandoffModal
           {/* Option 3: Email Support */}
           <a
             href="mailto:cyhincdr@gmail.com?subject=Yêu%20cầu%20hỗ%20trợ%20từ%20khách%20hàng"
-            className="group flex items-center justify-between rounded-xl border border-border bg-card p-3 transition-all hover:border-warning/50 hover:bg-warning/5"
+            className="group flex items-center justify-between rounded-xl bg-muted p-3 transition-all hover:bg-warning/5"
           >
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10 text-warning">

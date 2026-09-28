@@ -76,10 +76,10 @@ export default function FeedbackDialog({
                   type="button"
                   onClick={() => setSelectedReason(item.id)}
                   className={cn(
-                    'flex items-center justify-between rounded-lg border px-3 py-2 text-xs font-medium text-left transition-all',
+                    'flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium text-left transition-all',
                     selectedReason === item.id
-                      ? 'border-primary bg-primary-light text-primary font-semibold'
-                      : 'border-border bg-card text-foreground hover:bg-muted/50',
+                      ? 'bg-primary/10 text-primary font-semibold'
+                      : 'bg-muted text-foreground hover:bg-muted/70',
                   )}
                 >
                   <span>{item.label}</span>

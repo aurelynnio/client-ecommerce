@@ -151,7 +151,7 @@ export default function UpdateUserProfile({ open, setOpen, user }: UpdateUserPro
                     <FormLabel>Giới tính</FormLabel>
                     <FormControl>
                       <select
-                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                        className="flex h-9 w-full rounded-md bg-muted px-3 py-1 text-sm transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
                         value={field.value || ''}
                         onChange={(e) => field.onChange(e.target.value || undefined)}
                       >

@@ -297,7 +297,7 @@ export default function AddressDialog({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden rounded-2xl">
-        <DialogHeader className="p-6 border-b bg-muted/20">
+        <DialogHeader className="p-6 bg-muted">
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <MapPin className="h-5 w-5" />
             {editingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới'}
@@ -400,9 +400,9 @@ export default function AddressDialog({
           </div>
 
           {/* Settings */}
-          <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+          <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-background border flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-background flex items-center justify-center">
                 <Home className="h-4 w-4 text-primary" />
               </div>
               <div>

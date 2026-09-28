@@ -243,7 +243,7 @@ export default function ContextualChips({
             type="button"
             disabled={disabled}
             onClick={() => onSelectChip(chip.query)}
-            className="group inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/80 px-2.5 py-1 text-xs font-medium text-foreground transition-all duration-150 hover:border-primary/50 hover:bg-primary-light hover:text-primary disabled:opacity-50 disabled:pointer-events-none shadow-2xs active:scale-95"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-background/80 px-2.5 py-1 text-xs font-medium text-foreground transition-all duration-150 hover:bg-primary-light hover:text-primary disabled:opacity-50 disabled:pointer-events-none active:scale-95"
           >
             {chip.icon && (
               <span className="text-muted-foreground group-hover:text-primary">{chip.icon}</span>

@@ -123,28 +123,28 @@ export default function ChatWidget() {
     () => [
       {
         icon: <Flame className="h-4 w-4 text-orange-600 dark:text-orange-400" />,
-        bg: 'bg-orange-50 dark:bg-orange-950/40 border-orange-200/60 dark:border-orange-800/40',
+        bg: 'bg-orange-50 dark:bg-orange-950/40',
         label: t.quickSale,
         desc: 'Sản phẩm ưu đãi sâu nhất hôm nay',
         query: t.querySale,
       },
       {
         icon: <Search className="h-4 w-4 text-blue-600 dark:text-blue-400" />,
-        bg: 'bg-blue-50 dark:bg-blue-950/40 border-blue-200/60 dark:border-blue-800/40',
+        bg: 'bg-blue-50 dark:bg-blue-950/40',
         label: t.quickFind,
         desc: 'Theo danh mục, kích cỡ & giá',
         query: t.queryFind,
       },
       {
         icon: <Ruler className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />,
-        bg: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200/60 dark:border-emerald-800/40',
+        bg: 'bg-emerald-50 dark:bg-emerald-950/40',
         label: 'Tư vấn chọn size',
         desc: 'Chuẩn theo chiều cao & cân nặng',
         query: 'Tư vấn chọn size theo chiều cao cân nặng',
       },
       {
         icon: <PackageCheck className="h-4 w-4 text-purple-600 dark:text-purple-400" />,
-        bg: 'bg-purple-50 dark:bg-purple-950/40 border-purple-200/60 dark:border-purple-800/40',
+        bg: 'bg-purple-50 dark:bg-purple-950/40',
         label: 'Chính sách & Vận chuyển',
         desc: 'Đổi trả, freeship, bảo hành',
         query: 'Chính sách đổi trả hàng và phí vận chuyển như thế nào?',
@@ -695,20 +695,20 @@ export default function ChatWidget() {
         aria-label={t.dialogLabel}
         aria-hidden={!isOpen}
         className={cn(
-          'fixed inset-y-0 right-0 z-50 flex h-[100dvh] w-full flex-col border-l border-border bg-card shadow-2xl outline-none transition-transform duration-250 ease-out md:w-[420px]',
+          'fixed inset-y-0 right-0 z-50 flex h-[100dvh] w-full flex-col bg-card outline-none ring-1 ring-black/5 transition-transform duration-250 ease-out md:w-[420px]',
           isOpen ? 'translate-x-0' : 'translate-x-full',
           !isOpen && 'pointer-events-none',
         )}
       >
         {/* Unified Glass Header */}
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-border/70 bg-card/95 px-4 backdrop-blur-md shadow-2xs">
+        <div className="flex h-16 shrink-0 items-center justify-between bg-card/95 px-4 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Headphones className="h-5 w-5" aria-hidden="true" />
               </div>
               <span
-                className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-card ring-2 ring-card"
+                className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-card"
                 title="Mia đang trực tuyến"
               >
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -731,7 +731,7 @@ export default function ChatWidget() {
             <button
               type="button"
               onClick={() => setIsHandoffOpen(true)}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border/80 bg-muted/30 px-3 text-xs font-medium text-foreground transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-primary active:scale-95"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-muted px-3 text-xs font-medium text-foreground transition-all hover:bg-primary/5 hover:text-primary active:scale-95"
               title="Kết nối nhân viên CSKH"
             >
               <Headphones className="h-3.5 w-3.5 text-primary" />
@@ -775,7 +775,7 @@ export default function ChatWidget() {
           {messages.length === 0 && !streamingContent ? (
             <div className="flex flex-col gap-4 py-2">
               {/* Welcome Card */}
-              <div className="rounded-2xl border border-border/70 bg-card p-4 shadow-2xs">
+              <div className="rounded-2xl bg-card p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <Headphones className="h-3.5 w-3.5" />
@@ -803,11 +803,11 @@ export default function ChatWidget() {
                       key={i}
                       type="button"
                       onClick={() => sendMessage(action.query)}
-                      className="group flex flex-col justify-between p-3 bg-card border border-border/80 rounded-xl hover:border-primary/50 hover:shadow-xs transition-all text-left active:scale-98"
+                      className="group flex flex-col justify-between p-3 bg-card rounded-xl hover:bg-muted/40 transition-colors text-left active:scale-98"
                       aria-label={action.label}
                     >
                       <div className="flex items-center justify-between w-full mb-2">
-                        <span className={cn('flex h-7 w-7 items-center justify-center rounded-lg border', action.bg)}>
+                        <span className={cn('flex h-7 w-7 items-center justify-center rounded-lg', action.bg)}>
                           {action.icon}
                         </span>
                         <ArrowRight className="h-3 w-3 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
@@ -836,7 +836,7 @@ export default function ChatWidget() {
                       key={i}
                       type="button"
                       onClick={() => sendMessage(chip.query)}
-                      className="inline-flex items-center rounded-full border border-border/80 bg-card px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-primary active:scale-95 shadow-2xs"
+                      className="inline-flex items-center rounded-full bg-card px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-primary/5 hover:text-primary active:scale-95"
                     >
                       <span>{chip.label}</span>
                     </button>
@@ -866,7 +866,7 @@ export default function ChatWidget() {
                   >
                     {msg.role === 'assistant' && (
                       <div
-                        className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5 shadow-2xs"
+                        className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5"
                         aria-hidden="true"
                       >
                         <Headphones className="h-3.5 w-3.5" />
@@ -874,10 +874,10 @@ export default function ChatWidget() {
                     )}
                     <div
                       className={cn(
-                        'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-2xs',
+                        'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed',
                         msg.role === 'user'
                           ? 'bg-primary text-primary-foreground rounded-tr-xs font-medium'
-                          : 'bg-card text-foreground border border-border/70 rounded-tl-xs font-normal',
+                          : 'bg-card text-foreground rounded-tl-xs font-normal',
                       )}
                     >
                       {msg.role === 'assistant' ? (
@@ -964,7 +964,7 @@ export default function ChatWidget() {
 
                           {/* Message actions: copy + feedback + regenerate */}
                           <div
-                            className="mt-2.5 flex items-center gap-1 text-muted-foreground/60 border-t border-border/40 pt-1.5"
+                            className="mt-2.5 flex items-center gap-1 text-muted-foreground/60 pt-2"
                             role="group"
                             aria-label="Message actions"
                           >
@@ -1042,7 +1042,7 @@ export default function ChatWidget() {
 
               {/* Active Tool Execution Indicator */}
               {activeTool && (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold animate-pulse w-fit mx-auto my-2 border border-primary/20 shadow-2xs">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold animate-pulse w-fit mx-auto my-2">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   <span>{activeTool}</span>
                 </div>
@@ -1052,12 +1052,12 @@ export default function ChatWidget() {
               {streamingContent && (
                 <div className="flex items-start gap-2.5 justify-start">
                   <div
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5 shadow-2xs"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5"
                     aria-hidden="true"
                   >
                     <Headphones className="h-3.5 w-3.5" />
                   </div>
-                  <div className="max-w-[85%] rounded-2xl rounded-tl-xs px-3.5 py-2.5 text-sm bg-card text-foreground border border-border/70 shadow-2xs font-normal leading-relaxed">
+                  <div className="max-w-[85%] rounded-2xl rounded-tl-xs px-3.5 py-2.5 text-sm bg-card text-foreground font-normal leading-relaxed">
                     <ReactMarkdown rehypePlugins={[rehypeSanitize]}>
                       {streamingContent}
                     </ReactMarkdown>
@@ -1068,10 +1068,10 @@ export default function ChatWidget() {
               {/* Loading dots */}
               {isLoading && !streamingContent && (
                 <div className="flex items-start gap-2.5 justify-start" aria-hidden="true">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5 shadow-2xs">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0 mt-0.5">
                     <Headphones className="h-3.5 w-3.5" />
                   </div>
-                  <div className="bg-card rounded-2xl rounded-tl-xs px-3.5 py-2.5 border border-border/70 shadow-2xs">
+                  <div className="bg-card rounded-2xl rounded-tl-xs px-3.5 py-2.5">
                     <div className="flex items-center gap-1.5 py-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
@@ -1100,7 +1100,7 @@ export default function ChatWidget() {
             <button
               type="button"
               onClick={() => scrollToBottom(true)}
-              className="flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground shadow-lg hover:bg-primary-hover transition-all active:scale-95"
+              className="flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground hover:bg-primary-hover transition-all active:scale-95"
             >
               <ChevronDown className="h-3.5 w-3.5" />
               <span>{t.scrollToBottom}</span>
@@ -1109,10 +1109,10 @@ export default function ChatWidget() {
         )}
 
         {/* Input Area - Integrated Modern Capsule Composer */}
-        <div className="sticky bottom-0 mt-auto border-t border-border/70 bg-card/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xs">
+        <div className="sticky bottom-0 mt-auto bg-card/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xs">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col rounded-2xl border border-border/80 bg-muted/30 p-2.5 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-card focus-within:ring-2 focus-within:ring-primary/10 shadow-2xs"
+            className="flex flex-col rounded-2xl bg-muted p-2.5 transition-all duration-200 focus-within:bg-card focus-within:ring-2 focus-within:ring-primary/10"
           >
             <textarea
               ref={inputRef}
@@ -1127,7 +1127,7 @@ export default function ChatWidget() {
             />
             <div className="flex items-center justify-between pt-1">
               <span className="text-[10px] text-muted-foreground/60 flex items-center gap-1">
-                <kbd className="rounded border border-border/60 bg-muted/60 px-1 text-[9px] font-mono">Enter</kbd>
+                <kbd className="rounded bg-muted px-1 text-[9px] font-mono">Enter</kbd>
                 để gửi
               </span>
               {isLoading ? (
@@ -1148,7 +1148,7 @@ export default function ChatWidget() {
                   className={cn(
                     'flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200',
                     input.trim()
-                      ? 'bg-primary text-primary-foreground hover:bg-primary-hover shadow-xs active:scale-95'
+                      ? 'bg-primary text-primary-foreground hover:bg-primary-hover active:scale-95'
                       : 'bg-muted text-muted-foreground/40 cursor-not-allowed',
                   )}
                   aria-label="Gửi tin nhắn"

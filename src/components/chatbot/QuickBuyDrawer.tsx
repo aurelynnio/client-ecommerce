@@ -93,10 +93,10 @@ export default function QuickBuyDrawer({ product, isOpen, onClose }: QuickBuyDra
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[420px] p-5">
-        <DialogHeader className="text-left pb-2 border-b border-border/80">
+        <DialogHeader className="text-left pb-2">
           <div className="flex gap-3 items-start">
             {product.image && (
-              <div className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
+              <div className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden bg-muted">
                 <Image
                   src={product.image}
                   alt={product.name}
@@ -151,10 +151,10 @@ export default function QuickBuyDrawer({ product, isOpen, onClose }: QuickBuyDra
                   key={sz}
                   type="button"
                   onClick={() => setSelectedSize(sz)}
-                  className={`min-w-[42px] h-8 px-2 rounded-lg border text-xs font-bold transition-all ${
+                  className={`min-w-[42px] h-8 px-2 rounded-lg text-xs font-bold transition-colors ${
                     activeSize === sz
-                      ? 'border-primary bg-primary text-primary-foreground shadow-2xs'
-                      : 'border-border bg-card text-foreground hover:border-primary/50'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-foreground hover:bg-muted/70'
                   }`}
                 >
                   {sz}
@@ -175,10 +175,10 @@ export default function QuickBuyDrawer({ product, isOpen, onClose }: QuickBuyDra
                   key={color}
                   type="button"
                   onClick={() => setSelectedColor(color)}
-                  className={`px-3 h-8 rounded-lg border text-xs font-medium transition-all ${
+                  className={`px-3 h-8 rounded-lg text-xs font-medium transition-colors ${
                     activeColor === color
-                      ? 'border-primary bg-primary-light text-primary font-bold shadow-2xs'
-                      : 'border-border bg-card text-foreground hover:border-primary/50'
+                      ? 'bg-primary-light text-primary font-bold'
+                      : 'bg-muted text-foreground hover:bg-muted/70'
                   }`}
                 >
                   {color}
@@ -190,7 +190,7 @@ export default function QuickBuyDrawer({ product, isOpen, onClose }: QuickBuyDra
           {/* Quantity Selector */}
           <div className="flex items-center justify-between pt-1">
             <label className="text-xs font-bold text-foreground">Số lượng:</label>
-            <div className="flex items-center border border-border rounded-lg bg-card overflow-hidden">
+            <div className="flex items-center rounded-lg bg-muted overflow-hidden">
               <button
                 type="button"
                 disabled={quantity <= 1}
@@ -214,7 +214,7 @@ export default function QuickBuyDrawer({ product, isOpen, onClose }: QuickBuyDra
         </div>
 
         {/* Action buttons */}
-        <div className="flex gap-2 pt-2 border-t border-border/80">
+        <div className="flex gap-2 pt-3">
           <Button
             type="button"
             variant="outline"
@@ -230,7 +230,7 @@ export default function QuickBuyDrawer({ product, isOpen, onClose }: QuickBuyDra
             size="sm"
             disabled={addToCartMutation.isPending || isSuccess}
             onClick={handleAddToCart}
-            className="flex-2 h-9 text-xs font-bold gap-1.5 shadow-2xs"
+            className="flex-2 h-9 text-xs font-bold gap-1.5"
           >
             {isSuccess ? (
               <>

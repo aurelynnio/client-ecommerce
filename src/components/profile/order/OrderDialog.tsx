@@ -24,7 +24,6 @@ import { Button } from '@/components/ui/button';
 import { useCreatePaymentUrl } from '@/hooks/queries';
 import { toast } from 'sonner';
 import { cn } from '@/utils/cn';
-import { Separator } from '@/components/ui/separator';
 import { formatCurrency, formatDate } from '@/utils/format';
 import { getSafeErrorMessage } from '@/api';
 
@@ -120,7 +119,7 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] sm:max-w-7xl w-full overflow-hidden p-0 gap-0 rounded-2xl">
-        <DialogHeader className="p-6 border-b border-border/50 bg-muted/20">
+        <DialogHeader className="p-6 bg-muted">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <DialogTitle className="text-xl font-bold tracking-tight flex items-center gap-2">
@@ -157,7 +156,7 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
                     key={product.productId + index}
                     className="flex gap-4 sm:gap-6 items-center group"
                   >
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:h-24 sm:w-24">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-muted sm:h-24 sm:w-24">
                       <Image
                         src={product.image || '/images/placeholder-product.svg'}
                         alt={product.name}
@@ -193,21 +192,20 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
           </div>
 
           {/* Sidebar: Summary & Details */}
-          <div className="bg-muted/30 border-t lg:border-t-0 lg:border-l border-border/50 p-6 lg:p-8 space-y-8 overflow-y-auto">
+          <div className="bg-muted/30 p-6 lg:p-8 space-y-8 overflow-y-auto">
             {/* Payment & Actions */}
             <div>
               <h3 className="text-sm font-semibold mb-4 flex items-center gap-2 text-foreground">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
                 Thanh toán
               </h3>
-              <div className="space-y-4 rounded-lg border border-border bg-muted/50 p-4">
+              <div className="space-y-4 rounded-lg bg-muted/50 p-4">
                 <div className="flex justify-between text-sm items-center">
                   <span className="text-muted-foreground">Phương thức</span>
                   <span className="font-medium">
                     {order.paymentMethod === 'cod' ? 'Thanh toán khi nhận hàng' : 'Ví VNPay'}
                   </span>
                 </div>
-                <Separator className="bg-border/50" />
                 <div className="flex justify-between text-sm items-center">
                   <span className="text-muted-foreground">Trạng thái</span>
                   <Badge
@@ -241,7 +239,7 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
                 <MapPin className="h-4 w-4 text-muted-foreground" />
                 Giao hàng
               </h3>
-              <div className="text-sm space-y-1.5 text-muted-foreground bg-background/50 p-4 rounded-2xl border border-border/40">
+              <div className="text-sm space-y-1.5 text-muted-foreground bg-background/50 p-4 rounded-2xl">
                 <p className="font-semibold text-foreground text-base">
                   {order.shippingAddress.fullName}
                 </p>
@@ -261,10 +259,8 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
               </div>
             </div>
 
-            <Separator className="bg-border/60" />
-
             {/* Order Calculation */}
-            <div className="space-y-3">
+            <div className="space-y-3 pt-6">
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Tạm tính</span>
                 <span>{formatCurrency(order.subtotal)}</span>
@@ -281,8 +277,7 @@ export default function OrderDialog({ order, open, onClose }: OrderDialogProps) 
                 <span>Phí vận chuyển</span>
                 <span>Miễn phí</span>
               </div>
-              <Separator className="my-2 bg-border/60" />
-              <div className="flex justify-between text-lg font-bold tracking-tight text-foreground">
+              <div className="flex justify-between text-lg font-bold tracking-tight text-foreground pt-2">
                 <span>Tổng cộng</span>
                 <span>{formatCurrency(order.totalAmount)}</span>
               </div>

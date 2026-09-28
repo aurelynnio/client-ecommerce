@@ -140,7 +140,7 @@ export default function OrdersTab() {
               variant="outline"
               size="sm"
               onClick={() => refetch()}
-              className="border-destructive/30 text-destructive hover:bg-destructive/10"
+              className="text-destructive hover:bg-destructive/10"
             >
               Thử lại
             </Button>
@@ -171,7 +171,7 @@ export default function OrdersTab() {
                       key={tab.value}
                       value={tab.value}
                       className={cn(
-                        'rounded-sm px-4 py-2 text-xs font-medium transition-[background-color,color,box-shadow] duration-200 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+                        'rounded-sm px-4 py-2 text-xs font-medium transition-colors duration-200 data-[state=active]:bg-background data-[state=active]:text-foreground',
                         tab.count === 0 && 'text-muted-foreground/60',
                       )}
                     >

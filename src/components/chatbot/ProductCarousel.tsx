@@ -35,9 +35,9 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
   if (products.length === 1) {
     const item = products[0];
     return (
-      <div className="my-2 rounded-xl border border-border/80 bg-card p-3 shadow-2xs hover:border-primary/40 transition-all">
+      <div className="my-2 rounded-xl bg-card p-3 hover:bg-muted/30 transition-colors">
         <div className="flex gap-3">
-          <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted border border-border/60">
+          <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
             {item.image ? (
               <Image
                 src={item.image}
@@ -62,7 +62,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
             <div>
               <div className="flex items-center gap-1.5 mb-1">
                 {item.brand && (
-                  <Badge variant="outline" className="h-4.5 px-1.5 text-[10px] font-semibold text-primary border-primary/30">
+                  <Badge variant="outline" className="h-4.5 px-1.5 text-[10px] font-semibold text-primary">
                     <Tag className="mr-0.5 h-2.5 w-2.5" />
                     {item.brand}
                   </Badge>
@@ -93,10 +93,10 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
           </div>
         </div>
 
-        <div className="flex gap-2 mt-3 pt-2 border-t border-border/60">
+        <div className="flex gap-2 mt-3 pt-3">
           <Link
             href={item.productUrl}
-            className="flex-1 inline-flex h-7.5 items-center justify-center gap-1 rounded-lg border border-border bg-background px-2 text-xs font-medium text-foreground hover:bg-muted hover:text-primary transition-colors"
+            className="flex-1 inline-flex h-7.5 items-center justify-center gap-1 rounded-lg bg-muted px-2 text-xs font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors"
           >
             <ExternalLink className="h-3 w-3" />
             <span>Chi tiết</span>
@@ -104,7 +104,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
           <Button
             size="sm"
             onClick={() => onQuickBuy(item)}
-            className="flex-1 h-7.5 text-xs font-semibold gap-1 rounded-lg shadow-2xs"
+            className="flex-1 h-7.5 text-xs font-semibold gap-1 rounded-lg"
           >
             <ShoppingBag className="h-3 w-3" />
             <span>Mua nhanh</span>
@@ -122,7 +122,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
           <button
             type="button"
             onClick={() => scroll('left')}
-            className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 h-7 w-7 rounded-full bg-background/95 border border-border shadow-md flex items-center justify-center text-foreground hover:text-primary transition-all active:scale-95"
+            className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 h-7 w-7 rounded-full bg-background/95 ring-1 ring-black/5 flex items-center justify-center text-foreground hover:text-primary transition-all active:scale-95"
             aria-label="Previous product"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -130,7 +130,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
           <button
             type="button"
             onClick={() => scroll('right')}
-            className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 h-7 w-7 rounded-full bg-background/95 border border-border shadow-md flex items-center justify-center text-foreground hover:text-primary transition-all active:scale-95"
+            className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 h-7 w-7 rounded-full bg-background/95 ring-1 ring-black/5 flex items-center justify-center text-foreground hover:text-primary transition-all active:scale-95"
             aria-label="Next product"
           >
             <ChevronRight className="h-4 w-4" />
@@ -147,11 +147,11 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
         {products.map((item) => (
           <div
             key={item.id}
-            className="snap-start shrink-0 w-[205px] flex flex-col justify-between rounded-xl border border-border/80 bg-card p-2.5 shadow-2xs hover:border-primary/50 hover:shadow-xs transition-all"
+            className="snap-start shrink-0 w-[205px] flex flex-col justify-between rounded-xl bg-card p-2.5 hover:bg-muted/30 transition-colors"
           >
             <div>
               {/* Product Thumbnail */}
-              <div className="relative h-28 w-full rounded-lg overflow-hidden bg-muted/50 border border-border/40 mb-2">
+              <div className="relative h-28 w-full rounded-lg overflow-hidden bg-muted mb-2">
                 {item.image ? (
                   <Image
                     src={item.image}
@@ -166,7 +166,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
                   </div>
                 )}
                 {item.discountPercent !== undefined && item.discountPercent > 0 && (
-                  <Badge className="absolute top-1.5 left-1.5 bg-destructive text-white border-0 text-[10px] font-bold px-1.5 py-0 h-4 shadow-2xs">
+                  <Badge className="absolute top-1.5 left-1.5 bg-destructive text-white border-0 text-[10px] font-bold px-1.5 py-0 h-4">
                     -{item.discountPercent}%
                   </Badge>
                 )}
@@ -194,7 +194,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
             </div>
 
             {/* Price & Action */}
-            <div className="mt-2.5 pt-2 border-t border-border/60">
+            <div className="mt-2.5 pt-2.5">
               <div className="flex items-baseline gap-1.5 mb-2">
                 <span className="text-xs font-bold text-primary">{item.price}</span>
                 {item.originalPrice && (
@@ -207,7 +207,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
               <div className="flex gap-1.5">
                 <Link
                   href={item.productUrl}
-                  className="inline-flex h-7 items-center justify-center px-2 rounded-lg border border-border bg-background text-[11px] font-medium text-foreground hover:bg-muted hover:text-primary transition-colors"
+                  className="inline-flex h-7 items-center justify-center px-2 rounded-lg bg-muted text-[11px] font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors"
                   title="Xem chi tiết"
                 >
                   <ExternalLink className="h-3 w-3" />
@@ -216,7 +216,7 @@ export default function ProductCarousel({ products, onQuickBuy }: ProductCarouse
                   size="sm"
                   variant="default"
                   onClick={() => onQuickBuy(item)}
-                  className="flex-1 h-7 text-[11px] font-semibold gap-1 rounded-lg shadow-2xs"
+                  className="flex-1 h-7 text-[11px] font-semibold gap-1 rounded-lg"
                 >
                   <ShoppingBag className="h-3 w-3" />
                   <span>Mua nhanh</span>

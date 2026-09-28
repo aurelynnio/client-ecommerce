@@ -59,7 +59,7 @@ export default function OrderCard({
     : `#${order._id?.slice(-8).toUpperCase()}`;
 
   return (
-    <Card className="group relative gap-0 py-0 transition-[border-color,box-shadow] duration-200 hover:border-border">
+    <Card className="group relative gap-0 py-0">
       <CardContent className="p-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between md:items-start gap-4 mb-5">
@@ -90,7 +90,7 @@ export default function OrderCard({
           {order.products?.slice(0, 3).map((product, i) => (
             <div
               key={i}
-              className="relative h-12 w-12 rounded-sm overflow-hidden border border-border bg-background"
+              className="relative h-12 w-12 rounded-sm overflow-hidden bg-background"
             >
               <Image
                 src={getProductImage(product)}
@@ -107,7 +107,7 @@ export default function OrderCard({
             </div>
           ))}
           {(order.products?.length || 0) > 3 && (
-            <div className="h-12 w-12 rounded-sm bg-muted flex items-center justify-center border border-border text-xs font-medium text-muted-foreground">
+            <div className="h-12 w-12 rounded-sm bg-muted flex items-center justify-center text-xs font-medium text-muted-foreground">
               +{order.products!.length - 3}
             </div>
           )}
@@ -132,7 +132,7 @@ export default function OrderCard({
         </div>
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-3 pt-4 border-t border-border/50">
+        <div className="flex flex-wrap gap-3 pt-4">
           <Button
             onClick={() => onViewOrder(order._id!)}
             className="rounded-lg flex-1 md:flex-none"

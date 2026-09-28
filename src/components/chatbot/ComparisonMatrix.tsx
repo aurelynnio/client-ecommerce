@@ -18,8 +18,8 @@ export default function ComparisonMatrix({ products, onQuickBuy }: ComparisonMat
   const colCount = compareItems.length;
 
   return (
-    <div className="w-full my-3 rounded-xl border border-border/80 bg-card overflow-hidden text-xs shadow-2xs">
-      <div className="bg-primary/5 p-2.5 border-b border-border/80 font-bold text-foreground flex items-center justify-between">
+    <div className="w-full my-3 rounded-xl bg-card overflow-hidden text-xs">
+      <div className="bg-primary/5 p-2.5 font-bold text-foreground flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <Scale className="h-3.5 w-3.5 text-primary" />
           <span className="text-xs">Bảng So Sánh Sản Phẩm</span>
@@ -30,17 +30,17 @@ export default function ComparisonMatrix({ products, onQuickBuy }: ComparisonMat
       </div>
 
       <div
-        className="grid divide-x divide-border"
+        className="grid gap-x-2 gap-y-1"
         style={{ gridTemplateColumns: `90px repeat(${colCount}, minmax(0, 1fr))` }}
       >
         {/* Row 1: Header / Name + Image */}
-        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 flex items-center">
+        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 rounded-md flex items-center">
           Sản phẩm
         </div>
         {compareItems.map((p) => (
           <div key={p.id} className="p-2 flex flex-col items-center text-center">
             {p.image && (
-              <div className="relative h-14 w-14 rounded-md overflow-hidden bg-muted mb-1.5 border border-border/60">
+              <div className="relative h-14 w-14 rounded-md overflow-hidden bg-muted mb-1.5">
                 <Image src={p.image} alt={p.name} fill sizes="56px" className="object-cover" />
               </div>
             )}
@@ -54,11 +54,11 @@ export default function ComparisonMatrix({ products, onQuickBuy }: ComparisonMat
         ))}
 
         {/* Row 2: Price */}
-        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 border-t border-border flex items-center">
+        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 rounded-md flex items-center">
           Giá bán
         </div>
         {compareItems.map((p) => (
-          <div key={p.id} className="p-2 text-center border-t border-border">
+          <div key={p.id} className="p-2 text-center">
             <span className="font-bold text-primary text-xs">{p.price || 'Liên hệ'}</span>
             {p.originalPrice && (
               <p className="text-[10px] text-muted-foreground line-through">{p.originalPrice}</p>
@@ -67,21 +67,21 @@ export default function ComparisonMatrix({ products, onQuickBuy }: ComparisonMat
         ))}
 
         {/* Row 3: Brand */}
-        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 border-t border-border flex items-center">
+        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 rounded-md flex items-center">
           Thương hiệu
         </div>
         {compareItems.map((p) => (
-          <div key={p.id} className="p-2 text-center text-foreground border-t border-border text-[11px]">
+          <div key={p.id} className="p-2 text-center text-foreground text-[11px]">
             {p.brand || 'Chính hãng'}
           </div>
         ))}
 
         {/* Row 4: Stock */}
-        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 border-t border-border flex items-center">
+        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 rounded-md flex items-center">
           Tình trạng
         </div>
         {compareItems.map((p) => (
-          <div key={p.id} className="p-2 text-center border-t border-border">
+          <div key={p.id} className="p-2 text-center">
             {p.inStock ? (
               <span className="inline-flex items-center text-emerald-600 font-semibold gap-0.5 text-[11px]">
                 <Check className="h-3 w-3" /> Còn hàng
@@ -95,11 +95,11 @@ export default function ComparisonMatrix({ products, onQuickBuy }: ComparisonMat
         ))}
 
         {/* Row 5: Action */}
-        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 border-t border-border flex items-center">
+        <div className="p-2 font-semibold text-muted-foreground bg-muted/20 rounded-md flex items-center">
           Hành động
         </div>
         {compareItems.map((p) => (
-          <div key={p.id} className="p-2 text-center border-t border-border">
+          <div key={p.id} className="p-2 text-center">
             {onQuickBuy ? (
               <Button
                 size="sm"

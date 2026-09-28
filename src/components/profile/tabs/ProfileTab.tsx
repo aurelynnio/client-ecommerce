@@ -55,7 +55,7 @@ export default function ProfileTab({ user, onEditProfile }: ProfileTabProps) {
       {/* Avatar Section */}
       <div className="flex flex-col items-center gap-4 text-center">
         <div className="relative group">
-          <div className="w-28 h-28 rounded-full ring-2 ring-border overflow-hidden transition-transform duration-200 group-hover:scale-105 relative">
+          <div className="w-28 h-28 rounded-full overflow-hidden transition-transform duration-200 group-hover:scale-105 relative">
             <Image
               src={user.avatar || '/images/placeholder-avatar.svg'}
               alt={user.username}
@@ -65,7 +65,7 @@ export default function ProfileTab({ user, onEditProfile }: ProfileTabProps) {
           </div>
           <Button
             size="icon"
-            className="absolute bottom-0 right-0 h-8 w-8 rounded-full border-2 border-card bg-primary text-primary-foreground hover:bg-primary-hover transition-colors duration-200"
+            className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover transition-colors duration-200"
             onClick={handleUploadAvatar}
             disabled={isUploadingAvatar}
             aria-label="Đổi ảnh đại diện"
@@ -80,7 +80,7 @@ export default function ProfileTab({ user, onEditProfile }: ProfileTabProps) {
             <Button
               size="icon"
               variant="destructive"
-              className="absolute bottom-0 left-0 h-8 w-8 rounded-full border-2 border-card"
+              className="absolute bottom-0 left-0 h-8 w-8 rounded-full"
               onClick={handleDeleteAvatar}
               disabled={deleteAvatarMutation.isPending}
               aria-label="Xóa ảnh đại diện"
@@ -213,7 +213,7 @@ interface InfoRowProps {
 }
 
 const InfoRow = ({ icon: Icon, label, value, sublabel, action }: InfoRowProps) => (
-  <div className="flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors duration-200 hover:bg-muted/30">
+  <div className="flex items-center justify-between rounded-lg bg-muted p-4 transition-colors duration-200 hover:bg-muted/70">
     <div className="flex items-center gap-4">
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
         <Icon className="h-5 w-5" />

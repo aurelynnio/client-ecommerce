@@ -131,14 +131,14 @@ export default function MessagesPage() {
   return (
     <main className="min-h-screen bg-background py-4">
       <div className="aura-container">
-        <section className="grid h-[calc(100dvh-7rem)] overflow-hidden rounded-lg border border-border bg-card md:grid-cols-[18rem_minmax(0,1fr)]">
+        <section className="grid h-[calc(100dvh-7rem)] overflow-hidden rounded-lg bg-card md:grid-cols-[18rem_minmax(0,1fr)]">
           <div
             className={cn(
-              'flex min-h-0 w-full flex-col border-r border-border md:w-auto',
+              'flex min-h-0 w-full flex-col bg-muted/40 md:w-auto',
               showMobileChat && 'hidden md:flex',
             )}
           >
-            <div className="border-b border-border p-4">
+            <div className="p-4">
               <div className="mb-3 flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-primary" />
                 <h1 className="text-lg font-semibold text-foreground">Tin nhắn</h1>
@@ -149,7 +149,7 @@ export default function MessagesPage() {
                   placeholder="Tìm kiếm..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-10 rounded-lg border-border pl-9 focus:border-primary focus:ring-primary/20"
+                  className="h-10 rounded-lg bg-muted pl-9 focus:ring-primary/20"
                 />
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function MessagesPage() {
                     key={conversation._id}
                     onClick={() => handleSelectConversation(conversation)}
                     className={cn(
-                      'flex cursor-pointer items-start gap-3 border-b border-border p-3 transition-colors',
+                      'flex cursor-pointer items-start gap-3 p-3 transition-colors',
                       currentConversation?._id === conversation._id
                         ? 'bg-primary/10'
                         : 'hover:bg-muted/30',
@@ -214,7 +214,7 @@ export default function MessagesPage() {
           <div className={cn('min-h-0 flex-1 flex-col bg-card', !showMobileChat && 'hidden md:flex')}>
             {currentConversation ? (
               <>
-                <div className="flex items-center gap-3 border-b border-border p-3">
+                <div className="flex items-center gap-3 p-3">
                   <button
                     onClick={() => setShowMobileChat(false)}
                     className="rounded-md p-1 transition-colors hover:bg-muted md:hidden"
@@ -293,13 +293,13 @@ export default function MessagesPage() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                <div className="border-t border-border p-3">
+                <div className="p-3">
                   {selectedFiles.length > 0 && (
                     <div className="mb-2 flex flex-wrap gap-2">
                       {selectedFiles.map((file, index) => (
                         <div
                           key={`${file.name}-${index}`}
-                          className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/30 px-3 py-1 text-xs text-foreground"
+                          className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-xs text-foreground"
                         >
                           <span className="max-w-[180px] truncate">{file.name}</span>
                           <button
@@ -352,7 +352,7 @@ export default function MessagesPage() {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && void handleSendMessage()}
-                      className="flex-1 rounded-lg border-border focus:border-primary focus:ring-primary/20"
+                      className="flex-1 rounded-lg bg-muted focus:ring-primary/20"
                       disabled={isSending}
                     />
                     <Button
@@ -372,7 +372,7 @@ export default function MessagesPage() {
             ) : (
               <div className="flex flex-1 items-center justify-center text-muted-foreground">
                 <div className="text-center">
-                  <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-muted/30">
+                  <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
                     <MessageCircle className="h-8 w-8 text-muted-foreground/60" />
                   </div>
                   <p className="text-sm">Chọn một cuộc trò chuyện để bắt đầu</p>

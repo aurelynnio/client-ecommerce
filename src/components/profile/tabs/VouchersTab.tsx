@@ -78,7 +78,7 @@ export default function VouchersTab() {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-8 text-center text-sm text-destructive">
+      <div className="rounded-xl bg-destructive/5 p-8 text-center text-sm text-destructive">
         Không thể tải danh sách voucher đã lưu. Vui lòng thử lại sau.
       </div>
     );
@@ -87,9 +87,9 @@ export default function VouchersTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-border/80 bg-card p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6 shadow-xs">
+      <div className="flex flex-col gap-3 rounded-2xl bg-card p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-center gap-3.5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <Ticket className="h-6 w-6" strokeWidth={1.8} />
           </div>
           <div>
@@ -179,16 +179,16 @@ export default function VouchersTab() {
               <div
                 key={item._id}
                 className={cn(
-                  'group relative flex flex-col justify-between overflow-hidden rounded-2xl border transition-all duration-200 bg-card',
+                  'group relative flex flex-col justify-between overflow-hidden rounded-2xl transition-all duration-200',
                   isUsable
-                    ? 'border-border/80 shadow-xs hover:border-primary/40 hover:shadow-sm'
-                    : 'border-border/50 opacity-70 bg-muted/20',
+                    ? 'bg-card hover:bg-muted/30'
+                    : 'opacity-70 bg-muted',
                 )}
               >
                 {/* Header / Value Section */}
                 <div
                   className={cn(
-                    'relative p-4 border-b border-border/60',
+                    'relative p-4',
                     isUsable ? 'bg-primary/5' : 'bg-muted/40',
                   )}
                 >
@@ -211,7 +211,7 @@ export default function VouchersTab() {
                     {status === 'valid' && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] font-semibold text-success border-success/30 bg-success/10"
+                        className="text-[10px] font-semibold text-success bg-success/10"
                       >
                         Khả dụng ({remainingUsage} lượt)
                       </Badge>
@@ -227,7 +227,7 @@ export default function VouchersTab() {
                     {status === 'expired' && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] font-medium text-destructive border-destructive/30 bg-destructive/10"
+                        className="text-[10px] font-medium text-destructive bg-destructive/10"
                       >
                         Hết hạn
                       </Badge>
@@ -256,8 +256,8 @@ export default function VouchersTab() {
 
                 {/* Perforated divider with cutouts */}
                 <div className="relative">
-                  <div className="absolute -left-2 -top-2 h-4 w-4 rounded-full bg-background border-r border-border/80" />
-                  <div className="absolute -right-2 -top-2 h-4 w-4 rounded-full bg-background border-l border-border/80" />
+                  <div className="absolute -left-2 -top-2 h-4 w-4 rounded-full bg-background" />
+                  <div className="absolute -right-2 -top-2 h-4 w-4 rounded-full bg-background" />
                   <div className="border-t border-dashed border-border/80" />
                 </div>
 
@@ -285,7 +285,7 @@ export default function VouchersTab() {
                   </div>
 
                   {/* Buttons */}
-                  <div className="flex items-center gap-2 pt-1 border-t border-border/40">
+                  <div className="flex items-center gap-2 pt-2">
                     <Button
                       type="button"
                       variant="outline"

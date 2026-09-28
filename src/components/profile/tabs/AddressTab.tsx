@@ -65,7 +65,7 @@ export default function AddressTab({ user }: AddressTabProps) {
   };
 
   const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-border rounded-md bg-muted/20">
+    <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-border rounded-md bg-muted">
       <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
         <MapPin className="h-6 w-6 text-muted-foreground/50" />
       </div>
@@ -84,10 +84,8 @@ export default function AddressTab({ user }: AddressTabProps) {
     <Card
       key={address._id}
       className={cn(
-        'group relative flex flex-col justify-between py-5 px-5 transition-[border-color,background-color,box-shadow] duration-200 md:flex-row',
-        address.isDefault
-          ? 'border-primary/30 bg-primary/5'
-          : 'border-border/50 bg-muted/30 hover:bg-muted/50',
+        'group relative flex flex-col justify-between py-5 px-5 transition-colors duration-200 md:flex-row',
+        address.isDefault ? 'bg-primary/10' : 'bg-muted hover:bg-muted/70',
       )}
     >
       <div className="flex-1 space-y-3">

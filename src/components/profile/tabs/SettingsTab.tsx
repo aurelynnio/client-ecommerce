@@ -210,7 +210,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
           />
 
           <div className="space-y-4">
-            <div className="bg-muted/20 p-5 rounded-md border border-border/30">
+            <div className="bg-muted p-5 rounded-md">
               <div className="flex items-start justify-between mb-5">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-info/15 flex items-center justify-center text-info">
@@ -330,7 +330,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
               </form>
             </div>
 
-            <div className="bg-muted/20 p-5 rounded-md border border-border/30">
+            <div className="bg-muted p-5 rounded-md">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
@@ -368,7 +368,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                     Đang bật
                   </Badge>
                 ) : (
-                  <Badge variant="outline" className="border-border bg-muted/50 text-muted-foreground">
+                  <Badge variant="outline" className="bg-muted/50 text-muted-foreground">
                     Chưa bật
                   </Badge>
                 )}
@@ -379,7 +379,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                 ) : null}
               </div>
               {pendingTwoFactorAction ? (
-                <div className="mt-4 rounded-md border border-border/40 bg-background p-4">
+                <div className="mt-4 rounded-md bg-background p-4">
                   <div className="space-y-1">
                     <p className="text-sm font-medium">Nhập mã xác thực đã gửi tới {user.email}</p>
                     <p className="text-xs text-muted-foreground">Mã có hiệu lực trong 10 phút.</p>
@@ -447,7 +447,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
               ) : null}
             </div>
 
-            <div className="bg-muted/20 p-5 rounded-md border border-border/30">
+            <div className="bg-muted p-5 rounded-md">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
@@ -473,7 +473,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
                       ) : (
                         <Badge
                           variant="outline"
-                          className="text-warning border-warning/30 bg-warning/15 h-5 px-1.5 text-[10px]"
+                          className="text-warning bg-warning/15 h-5 px-1.5 text-[10px]"
                         >
                           Chưa xác minh
                         </Badge>
@@ -505,13 +505,13 @@ export default function SettingsTab({ user }: SettingsTabProps) {
         </div>
 
         {/* Danger Zone */}
-        <div className="pt-4 border-t border-border">
+        <div className="pt-6">
           <SectionHeader
             title="Khu vực nguy hiểm"
             description="Các thao tác nhạy cảm và không thể hoàn tác"
           />
 
-          <div className="bg-destructive/5 p-5 rounded-md border border-destructive/20">
+          <div className="bg-destructive/5 p-5 rounded-md">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-destructive/15 flex items-center justify-center text-destructive shrink-0">
@@ -539,7 +539,7 @@ export default function SettingsTab({ user }: SettingsTabProps) {
 
       {showDeleteDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg space-y-4">
+          <div className="w-full max-w-md rounded-lg bg-card p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-destructive/15 flex items-center justify-center text-destructive shrink-0">
                 <AlertTriangle className="h-5 w-5" />

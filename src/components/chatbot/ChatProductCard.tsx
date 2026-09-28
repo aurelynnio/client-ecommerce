@@ -79,7 +79,7 @@ export default function ChatProductCard({
   return (
     <div
       className={cn(
-        'group relative flex flex-col rounded-xl border border-border/70 bg-card p-3 shadow-2xs transition-all duration-200 hover:border-primary/40 hover:shadow-xs',
+        'group relative flex flex-col rounded-xl bg-card p-3 transition-colors duration-200 hover:bg-muted/30',
         className,
       )}
     >
@@ -89,7 +89,7 @@ export default function ChatProductCard({
           {product.brand && (
             <Badge
               variant="outline"
-              className="h-5 px-1.5 text-[10px] font-semibold text-primary border-primary/30"
+              className="h-5 px-1.5 text-[10px] font-semibold text-primary"
             >
               <Tag className="mr-0.5 h-2.5 w-2.5" />
               {product.brand}
@@ -103,7 +103,7 @@ export default function ChatProductCard({
           {product.size && (
             <Badge
               variant="outline"
-              className="h-5 px-1.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40"
+              className="h-5 px-1.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40"
             >
               Size: {product.size}
             </Badge>
@@ -120,7 +120,7 @@ export default function ChatProductCard({
       {/* Main product row with optional thumbnail */}
       <div className="flex gap-2.5 items-start">
         {product.image && (
-          <div className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden bg-muted border border-border/60">
+          <div className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden bg-muted">
             <Image src={product.image} alt={product.name} fill sizes="64px" className="object-cover" />
           </div>
         )}
@@ -149,10 +149,10 @@ export default function ChatProductCard({
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-2.5 flex items-center gap-1.5 pt-2 border-t border-border/60">
+      <div className="mt-2.5 flex items-center gap-1.5 pt-2.5">
         <Link
           href={product.productUrl}
-          className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-lg border border-border bg-background px-2 text-[11px] font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
+          className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-lg bg-muted px-2 text-[11px] font-medium text-foreground transition-colors hover:bg-muted/70 hover:text-primary"
         >
           <ExternalLink className="h-3 w-3" />
           <span>Chi tiết</span>
@@ -163,7 +163,7 @@ export default function ChatProductCard({
             size="sm"
             variant="default"
             onClick={() => onQuickBuy(product)}
-            className="flex-1 h-7 text-[11px] px-2 font-semibold shadow-2xs rounded-lg gap-1"
+            className="flex-1 h-7 text-[11px] px-2 font-semibold rounded-lg gap-1"
           >
             <ShoppingBag className="h-3 w-3" />
             <span>Mua nhanh</span>
@@ -171,7 +171,7 @@ export default function ChatProductCard({
         ) : product.checkoutUrl ? (
           <Link
             href={product.checkoutUrl}
-            className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-lg bg-primary px-2 text-[11px] font-semibold text-primary-foreground transition-colors hover:bg-primary-hover shadow-2xs"
+            className="flex-1 inline-flex h-7 items-center justify-center gap-1 rounded-lg bg-primary px-2 text-[11px] font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
           >
             <ShoppingBag className="h-3 w-3" />
             <span>Mua ngay</span>
@@ -182,7 +182,7 @@ export default function ChatProductCard({
             variant="default"
             onClick={handleAction}
             disabled={addToCartMutation.isPending || isAdded}
-            className="flex-1 h-7 text-[11px] px-2 font-semibold shadow-2xs rounded-lg"
+            className="flex-1 h-7 text-[11px] px-2 font-semibold rounded-lg"
           >
             {isAdded ? (
               <>

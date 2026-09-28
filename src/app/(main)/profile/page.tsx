@@ -171,7 +171,7 @@ export default function ProfilePage() {
           </Breadcrumb>
 
           <div className="flex flex-col items-center justify-center space-y-6 py-20 text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border bg-muted/30">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
               <User className="h-10 w-10 text-muted-foreground/60" />
             </div>
             <div className="space-y-2">
@@ -223,7 +223,7 @@ export default function ProfilePage() {
         </Breadcrumb>
 
         {/* Page Header */}
-        <div className="mb-4 border-b border-border pb-3">
+        <div className="mb-5">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
             Tài khoản của tôi
           </h1>
@@ -236,9 +236,9 @@ export default function ProfilePage() {
           {/* Sidebar */}
           <div className="w-full shrink-0 space-y-4 md:w-[240px]">
             {/* User Card */}
-            <div className="rounded-lg border border-border bg-card p-4">
-              <div className="flex items-center gap-3 border-b border-border pb-4">
-                <Avatar className="h-14 w-14 ring-2 ring-primary/10">
+            <div className="rounded-lg bg-card p-4">
+              <div className="flex items-center gap-3 pb-4">
+                <Avatar className="h-14 w-14">
                   <AvatarImage src={currentUser?.avatar ?? undefined} className="object-cover" />
                   <AvatarFallback className="bg-primary/10 text-lg text-primary">
                     {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
@@ -271,7 +271,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="overflow-hidden rounded-lg border border-border bg-card">
+            <div className="overflow-hidden rounded-lg bg-card">
               <Tabs
                 value={activeTab}
                 onValueChange={handleTabChange}
@@ -286,11 +286,10 @@ export default function ProfilePage() {
                         key={tab.value}
                         value={tab.value}
                         className={cn(
-                          'w-auto shrink-0 justify-start rounded-lg border border-border/40 px-3 py-2.5 text-sm font-medium md:w-full md:rounded-none md:border-0 md:border-l-2 md:border-l-transparent',
+                          'w-auto shrink-0 justify-start rounded-lg px-3 py-2.5 text-sm font-medium md:w-full',
                           'transition-colors duration-200',
-                          'bg-background hover:bg-muted/50 text-muted-foreground hover:text-foreground md:bg-transparent',
-                          'data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary md:data-[state=active]:bg-primary/5 md:data-[state=active]:border-l-primary',
-                          'data-[state=inactive]:border-border/40 md:data-[state=inactive]:border-l-transparent',
+                          'bg-background text-muted-foreground hover:bg-muted/50 hover:text-foreground md:bg-transparent',
+                          'data-[state=active]:bg-primary/10 data-[state=active]:font-semibold data-[state=active]:text-primary',
                         )}
                       >
                         <Icon className="mr-3 h-4 w-4 shrink-0" />
@@ -303,7 +302,7 @@ export default function ProfilePage() {
               </Tabs>
 
               {/* Logout Button */}
-              <div className="border-t border-border">
+              <div className="pt-1">
                 <Button
                   onClick={() => {
                     void handleLogout();
@@ -330,7 +329,7 @@ export default function ProfilePage() {
 
           {/* Main Content Area */}
           <div className="min-w-0 flex-1">
-            <div className="min-h-[500px] rounded-lg border border-border bg-card">
+            <div className="min-h-[500px] rounded-lg bg-card">
               <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
                 <TabsContent value="profile" className="mt-0 p-4 focus-visible:ring-0">
                   {currentUser && (

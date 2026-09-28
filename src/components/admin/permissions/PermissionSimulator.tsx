@@ -28,7 +28,6 @@ import { User } from '@/types/user';
 import { cn } from '@/utils/cn';
 import {
   adminFieldSurfaceClass,
-  adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSurfaceClass,
 } from '@/components/admin/shared/AdminPrimitives';
@@ -236,7 +235,7 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
                 className={cn(
                   'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
                   targetType === 'role'
-                    ? 'bg-card text-foreground shadow-xs'
+                    ? 'bg-card text-foreground'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >
@@ -248,7 +247,7 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
                 className={cn(
                   'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
                   targetType === 'user'
-                    ? 'bg-card text-foreground shadow-xs'
+                    ? 'bg-card text-foreground'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >
@@ -289,7 +288,7 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
                 </div>
 
                 {userSearchOpen && (
-                  <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-lg border border-border bg-popover p-2 shadow-lg max-h-56 overflow-y-auto">
+                  <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-lg bg-popover p-2 ring-1 ring-black/5 max-h-56 overflow-y-auto">
                     <Input
                       placeholder="Tìm username/email..."
                       value={userSearchQuery}
@@ -379,22 +378,19 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
       {result && (
         <div
           className={cn(
-            adminSurfaceClass,
-            'p-6 space-y-6 border-l-4 transition-all animate-in fade-in-50',
-            result.allowed
-              ? 'border-l-emerald-500 bg-emerald-500/[0.02]'
-              : 'border-l-rose-500 bg-rose-500/[0.02]',
+            'rounded-xl p-6 space-y-6 transition-all animate-in fade-in-50',
+            result.allowed ? 'bg-success/10' : 'bg-destructive/10',
           )}
         >
           {/* Main Verdict Card */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {result.allowed ? (
-                <div className="h-12 w-12 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <div className="h-12 w-12 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0">
                   <ShieldCheck className="h-7 w-7" />
                 </div>
               ) : (
-                <div className="h-12 w-12 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <div className="h-12 w-12 rounded-full bg-destructive/15 text-destructive flex items-center justify-center shrink-0">
                   <ShieldAlert className="h-7 w-7" />
                 </div>
               )}
@@ -423,7 +419,7 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
           </div>
 
           {/* Trace Pipeline Steps */}
-          <div className="space-y-2 pt-2 border-t border-border">
+          <div className="space-y-2 pt-2">
             <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
               Các bước đánh giá quyền hạn (Evaluation Trace)
             </h4>
@@ -433,19 +429,19 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
                 <div
                   key={idx}
                   className={cn(
-                    adminInsetPanelClass,
-                    'p-3 flex items-start justify-between gap-3 text-xs',
-                    step.verdict === 'passed' && 'border-emerald-500/30 bg-emerald-500/5',
-                    step.verdict === 'failed' && 'border-rose-500/30 bg-rose-500/5',
+                    'rounded-lg p-3 flex items-start justify-between gap-3 text-xs',
+                    step.verdict === 'passed' && 'bg-success/10',
+                    step.verdict === 'failed' && 'bg-destructive/10',
+                    step.verdict === 'skipped' && 'bg-muted/60',
                   )}
                 >
                   <div className="space-y-1">
                     <div className="font-semibold text-foreground flex items-center gap-2">
                       {step.verdict === 'passed' && (
-                        <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
                       )}
                       {step.verdict === 'failed' && (
-                        <XCircle className="h-4 w-4 text-rose-500 shrink-0" />
+                        <XCircle className="h-4 w-4 text-destructive shrink-0" />
                       )}
                       {step.verdict === 'skipped' && (
                         <ArrowRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
@@ -459,8 +455,8 @@ export default function PermissionSimulator({ rolePermissions }: PermissionSimul
                     variant="outline"
                     className={cn(
                       'text-[10px] capitalize shrink-0',
-                      step.verdict === 'passed' && 'text-emerald-600 border-emerald-500/30',
-                      step.verdict === 'failed' && 'text-rose-600 border-rose-500/30',
+                      step.verdict === 'passed' && 'bg-success/15 text-success',
+                      step.verdict === 'failed' && 'bg-destructive/15 text-destructive',
                       step.verdict === 'skipped' && 'text-muted-foreground',
                     )}
                   >

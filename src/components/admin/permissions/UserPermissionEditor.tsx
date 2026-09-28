@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Search,
   User as UserIcon,
-  Shield,
   Key,
   Check,
   RotateCcw,
@@ -13,7 +12,6 @@ import {
   XCircle,
   AlertCircle,
   Sliders,
-  UserCheck,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
@@ -38,7 +36,6 @@ import {
   adminInsetPanelClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
-  adminSubtleSurfaceClass,
   adminSurfaceClass,
 } from '@/components/admin/shared/AdminPrimitives';
 
@@ -132,7 +129,6 @@ export default function UserPermissionEditor({
   // User's custom overrides: e.g. ['product:create', '-order:cancel']
   const [userOverrides, setUserOverrides] = useState<string[]>([]);
   const [originalOverrides, setOriginalOverrides] = useState<string[]>([]);
-  const [effectivePermissions, setEffectivePermissions] = useState<string[]>([]);
 
   // Resource Filter & Expand
   const [resourceFilter, setResourceFilter] = useState('');
@@ -179,7 +175,6 @@ export default function UserPermissionEditor({
       const overrides = res?.userPermissions || [];
       setUserOverrides(overrides);
       setOriginalOverrides(overrides);
-      setEffectivePermissions(res?.effectivePermissions || []);
     } catch (err) {
       toast.error(getSafeErrorMessage(err, 'Không thể tải quyền của người dùng'));
     } finally {
@@ -253,7 +248,6 @@ export default function UserPermissionEditor({
   // If none -> Grant (perm) -> Revoke (-perm) -> None
   const handleCyclePermission = (perm: string) => {
     const currentState = getPermissionState(perm);
-    const isRoleDefault = roleDefaultPerms.has(perm);
 
     setUserOverrides((prev) => {
       const cleanList = prev.filter((p) => p !== perm && p !== `-${perm}`);
@@ -374,7 +368,7 @@ export default function UserPermissionEditor({
 
             {/* Dropdown Results */}
             {searchDropdownOpen && searchQuery.trim().length > 0 && (
-              <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-lg border border-border bg-popover p-1 shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-lg bg-popover p-1 ring-1 ring-black/5 max-h-60 overflow-y-auto">
                 {searchingUsers ? (
                   <div className="p-4 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
                     <SpinnerLoading size={16} noWrapper /> Đang tìm kiếm...
@@ -426,10 +420,10 @@ export default function UserPermissionEditor({
                   <Badge
                     className={
                       selectedUser.roles === 'admin'
-                        ? 'bg-info/15 text-info border-0'
+                        ? 'bg-info/15 text-info'
                         : selectedUser.roles === 'seller'
-                          ? 'bg-primary/15 text-primary border-0'
-                          : 'bg-muted text-muted-foreground border-0'
+                          ? 'bg-primary/15 text-primary'
+                          : 'bg-muted text-muted-foreground'
                     }
                   >
                     {selectedUser.roles === 'admin'
@@ -495,7 +489,7 @@ export default function UserPermissionEditor({
                   key={preset.id}
                   type="button"
                   onClick={() => handleApplyPreset(preset.permissions, preset.name)}
-                  className="flex flex-col items-start p-3 rounded-lg border border-border bg-card hover:bg-muted/50 hover:border-primary/40 transition-all text-left group"
+                  className="flex flex-col items-start p-3 rounded-xl bg-muted/60 hover:bg-muted/70 transition-all text-left group"
                 >
                   <div className="flex items-center gap-2 w-full justify-between mb-1">
                     <span className="text-lg">{preset.icon}</span>
@@ -517,7 +511,7 @@ export default function UserPermissionEditor({
           {/* 3. Interactive Permissions Matrix */}
           <div className={cn(adminSurfaceClass, 'p-5 space-y-4')}>
             {/* Filter Bar & Legend */}
-            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between pb-3 border-b border-border">
+            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between pb-3">
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                 <Input
@@ -531,13 +525,13 @@ export default function UserPermissionEditor({
               {/* Status Legend */}
               <div className="flex flex-wrap items-center gap-2 text-xs">
                 <span className="text-muted-foreground mr-1">Chú giải:</span>
-                <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 bg-success/15 text-success px-2 py-0.5 rounded text-[11px] font-medium">
                   <CheckCircle2 className="h-3 w-3" /> Kế thừa Role
                 </span>
-                <span className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 bg-info/15 text-info px-2 py-0.5 rounded text-[11px] font-medium">
                   <Key className="h-3 w-3" /> Cấp riêng (+)
                 </span>
-                <span className="inline-flex items-center gap-1 text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 bg-destructive/15 text-destructive px-2 py-0.5 rounded text-[11px] font-medium">
                   <XCircle className="h-3 w-3" /> Bị cấm (-)
                 </span>
               </div>
@@ -551,9 +545,6 @@ export default function UserPermissionEditor({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {displayedResources.map((resource) => {
                   const isExpanded = expandedResources[resource] !== false; // default expanded
-                  const resourcePerms = Object.values(ACTIONS).map(
-                    (act) => `${resource}:${act}`,
-                  );
 
                   return (
                     <div
@@ -619,15 +610,15 @@ export default function UserPermissionEditor({
                                 type="button"
                                 onClick={() => handleCyclePermission(perm)}
                                 className={cn(
-                                  'inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-all select-none border',
+                                  'inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-all select-none',
                                   state === 'role_default' &&
-                                    'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20',
+                                    'bg-success/15 text-success hover:bg-success/25',
                                   state === 'granted' &&
-                                    'border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-300 font-semibold shadow-xs hover:bg-blue-500/25',
+                                    'bg-info/15 text-info font-semibold hover:bg-info/25',
                                   state === 'revoked' &&
-                                    'border-rose-500/30 bg-rose-500/15 text-rose-700 dark:text-rose-300 line-through hover:bg-rose-500/25',
+                                    'bg-destructive/15 text-destructive line-through hover:bg-destructive/25',
                                   state === 'none' &&
-                                    'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                                    'bg-card text-muted-foreground hover:text-foreground',
                                 )}
                                 title={`Click để chuyển đổi trạng thái quyền: ${perm}`}
                               >
@@ -647,16 +638,16 @@ export default function UserPermissionEditor({
             )}
 
             {/* Sticky/Bottom Action Save Bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-border mt-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-6">
               <div className="flex items-center gap-2 text-xs">
                 {hasUnsavedChanges ? (
-                  <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium animate-pulse">
+                  <span className="flex items-center gap-1.5 text-warning font-medium animate-pulse">
                     <AlertCircle className="h-4 w-4" />
                     Có thay đổi quyền hạn chưa lưu cho {selectedUser.username}
                   </span>
                 ) : (
                   <span className="text-muted-foreground flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                    <CheckCircle2 className="h-4 w-4 text-success" />
                     Quyền hạn đã đồng bộ với máy chủ
                   </span>
                 )}

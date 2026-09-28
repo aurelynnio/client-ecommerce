@@ -133,10 +133,10 @@ export function CreateModelUser({
       <DialogContent
         className={cn(
           adminDialogContentClass,
-          'max-w-lg max-h-[90vh] overflow-y-auto no-scrollbar p-6',
+          'max-w-lg max-h-[85dvh] overflow-y-auto no-scrollbar p-6',
         )}
       >
-        <DialogHeader className="border-b border-border/50 pb-6">
+        <DialogHeader className="pb-6">
           <DialogTitle className="text-2xl font-bold tracking-tight">
             Thêm người dùng mới
           </DialogTitle>
@@ -224,7 +224,7 @@ export function CreateModelUser({
                   <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-10')}>
                     <SelectValue placeholder="Chọn vai trò" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-lg border-border shadow-lg">
+                  <SelectContent>
                     <SelectItem value="user">Người dùng</SelectItem>
                     <SelectItem value="admin">Quản trị viên</SelectItem>
                   </SelectContent>
@@ -245,7 +245,7 @@ export function CreateModelUser({
                   <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-10')}>
                     <SelectValue placeholder="Trạng thái" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-lg border-border shadow-lg">
+                  <SelectContent>
                     <SelectItem value="true">Đã xác minh</SelectItem>
                     <SelectItem value="false">Chưa xác minh</SelectItem>
                   </SelectContent>
@@ -309,7 +309,7 @@ export function CreateModelUser({
                               variant={formData.permissions.includes(perm) ? 'default' : 'outline'}
                               className={cn(
                                 'cursor-pointer text-xs',
-                                isFromRole && 'border-primary/35 text-primary',
+                                isFromRole && 'text-primary',
                               )}
                               onClick={() => handleTogglePermission(perm)}
                             >

@@ -89,9 +89,9 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn(adminDialogContentClass, 'sm:max-w-[600px] p-0 overflow-hidden max-h-[90vh]')}
+        className={cn(adminDialogContentClass, 'sm:max-w-[600px] p-0 overflow-hidden max-h-[85dvh]')}
       >
-        <DialogHeader className="p-6 pb-4 border-b border-border/50">
+        <DialogHeader className="p-6 pb-4">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <DialogTitle className="text-xl font-semibold tracking-tight">
@@ -103,7 +103,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
             </div>
             <div
               className={cn(
-                'px-3 py-1 rounded-full text-xs font-medium border border-transparent',
+                'px-3 py-1 rounded-full text-xs font-medium',
                 status.bg,
                 status.text,
               )}
@@ -113,7 +113,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
           </div>
         </DialogHeader>
 
-        <div className="overflow-y-auto no-scrollbar max-h-[calc(90vh-180px)]">
+        <div className="overflow-y-auto no-scrollbar max-h-[calc(85dvh-180px)]">
           <Tabs defaultValue="profile" className="w-full">
             <div className="px-6 pt-4">
               <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
@@ -137,7 +137,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
             <TabsContent value="profile" className="p-6 pt-4 space-y-6">
               {/* User Avatar & Basic Info */}
               <div className="flex items-center gap-4">
-                <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-border/50 bg-muted flex-shrink-0">
+                <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                   {user.avatar ? (
                     <Image
                       src={user.avatar}
@@ -231,7 +231,7 @@ export function ViewModelUser({ open, onOpenChange, user, onEdit }: ViewModelUse
                     ))}
                   </div>
                 ) : (
-                  <div className="p-6 rounded-2xl border border-dashed border-border/50 text-center bg-muted/30">
+                  <div className="p-6 rounded-xl border border-dashed border-border/50 text-center bg-muted/60">
                     <MapPin className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">Chưa đăng ký địa chỉ</p>
                   </div>

@@ -5,11 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import {
   History,
   Search,
-  Filter,
   CheckCircle,
   XCircle,
   Clock,
-  User as UserIcon,
   ChevronLeft,
   ChevronRight,
   ShieldAlert,
@@ -47,7 +45,6 @@ export default function AuditLogViewer() {
     data: logsData,
     isLoading,
     isFetching,
-    refetch,
   } = useQuery({
     queryKey: ['admin-permissions-audit', page, selectedAction],
     queryFn: () =>
@@ -109,10 +106,10 @@ export default function AuditLogViewer() {
                 setPage(1);
               }}
               className={cn(
-                'px-3 py-1 text-xs font-medium rounded-lg border transition-colors',
+                'px-3 py-1 text-xs font-medium rounded-lg transition-colors',
                 selectedAction === item.id
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-card text-muted-foreground border-border hover:bg-muted',
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/70',
               )}
             >
               {item.label}
@@ -181,12 +178,9 @@ export default function AuditLogViewer() {
                           variant="outline"
                           className={cn(
                             'text-xs capitalize font-medium',
-                            log.action === 'grant' &&
-                              'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-                            log.action === 'revoke' &&
-                              'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400',
-                            log.action === 'bulk_update' &&
-                              'border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400',
+                            log.action === 'grant' && 'bg-success/15 text-success',
+                            log.action === 'revoke' && 'bg-destructive/15 text-destructive',
+                            log.action === 'bulk_update' && 'bg-info/15 text-info',
                           )}
                         >
                           {log.action === 'grant' && (
@@ -236,10 +230,10 @@ export default function AuditLogViewer() {
                       <TableCell>
                         <Badge
                           variant="outline"
-                          className="font-mono text-xs max-w-[280px] truncate"
+                          className="max-w-[200px] font-mono text-xs"
                           title={log.permission}
                         >
-                          {log.permission}
+                          <span className="truncate">{log.permission}</span>
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -252,7 +246,7 @@ export default function AuditLogViewer() {
 
         {/* Pagination Footer */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-muted/20 text-xs">
+          <div className="flex items-center justify-between px-4 py-3 bg-muted/40 text-xs">
             <span className="text-muted-foreground">
               Trang {page} / {totalPages} ({pagination?.total || 0} bản ghi)
             </span>

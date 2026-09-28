@@ -143,9 +143,9 @@ export function UpdateModelUser({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn(adminDialogContentClass, 'sm:max-w-[550px] p-0 overflow-hidden max-h-[90vh]')}
+        className={cn(adminDialogContentClass, 'sm:max-w-[550px] p-0 overflow-hidden max-h-[85dvh]')}
       >
-        <DialogHeader className="p-6 pb-4 border-b border-border/50">
+        <DialogHeader className="p-6 pb-4">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <DialogTitle className="text-xl font-semibold tracking-tight">
@@ -157,7 +157,7 @@ export function UpdateModelUser({
             </div>
             <Badge
               className={cn(
-                'px-3 py-1 rounded-full text-xs font-medium border-0',
+                'px-3 py-1 rounded-full text-xs font-medium',
                 formData.roles === 'admin'
                   ? 'bg-info/15 text-info'
                   : 'bg-info/15 text-info',
@@ -169,7 +169,7 @@ export function UpdateModelUser({
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
-          <div className="overflow-y-auto no-scrollbar max-h-[calc(90vh-200px)]">
+          <div className="overflow-y-auto no-scrollbar max-h-[calc(85dvh-200px)]">
             <Tabs defaultValue="info" className="w-full">
               <div className="px-6 pt-4">
                 <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
@@ -244,7 +244,7 @@ export function UpdateModelUser({
                       <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-11')}>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="rounded-lg border-border shadow-lg">
+                      <SelectContent>
                         <SelectItem value="user">Người dùng</SelectItem>
                         <SelectItem value="admin">Quản trị viên</SelectItem>
                       </SelectContent>
@@ -269,7 +269,7 @@ export function UpdateModelUser({
                       <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-11')}>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="rounded-lg border-border shadow-lg">
+                      <SelectContent>
                         <SelectItem value="true">Đã xác minh</SelectItem>
                         <SelectItem value="false">Chưa xác minh</SelectItem>
                       </SelectContent>
@@ -285,7 +285,7 @@ export function UpdateModelUser({
                   </div>
                 ) : (
                   <>
-                    <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3">
+                    <div className="rounded-lg bg-muted/60 p-3">
                       <p className="text-xs text-info">
                         Role <span className="font-semibold">{formData.roles}</span> có{' '}
                         {defaultRolePerms.length} quyền mặc định.
@@ -317,9 +317,9 @@ export function UpdateModelUser({
                                   variant={isSelected ? 'default' : 'outline'}
                                   className={cn(
                                     'cursor-pointer text-xs transition-[border-color,background-color,color,box-shadow]',
-                                    isFromRole && !isSelected && 'border-primary/35 text-primary',
+                                    isFromRole && !isSelected && 'text-primary',
                                     isSelected &&
-                                      'border-primary/15 bg-primary text-primary-foreground hover:bg-primary-hover',
+                                      'bg-primary text-primary-foreground hover:bg-primary-hover',
                                   )}
                                   onClick={() => handleTogglePermission(perm)}
                                 >

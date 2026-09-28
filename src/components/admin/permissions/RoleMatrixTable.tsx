@@ -17,6 +17,7 @@ import { cn } from '@/utils/cn';
 import {
   adminFieldSurfaceClass,
   adminFilterBarClass,
+  adminInsetPanelClass,
   adminRowHoverClass,
   adminTableHeaderClass,
   adminTableShellClass,
@@ -74,10 +75,10 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
               type="button"
               onClick={() => setSelectedRole(r)}
               className={cn(
-                'px-3 py-1 text-xs font-medium rounded-lg border transition-colors capitalize',
+                'px-3 py-1 text-xs font-medium rounded-lg transition-colors capitalize',
                 selectedRole === r
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-card text-muted-foreground border-border hover:bg-muted',
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/70',
               )}
             >
               {r === 'all' ? 'Tất cả vai trò' : r}
@@ -138,16 +139,13 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
                     const canBuyer = hasRolePermission(buyerPerms, perm);
 
                     return (
-                      <TableRow
-                        key={perm}
-                        className={cn(adminRowHoverClass, idx === 0 && 'border-t-2 border-border/80')}
-                      >
+                      <TableRow key={perm} className={adminRowHoverClass}>
                         {idx === 0 ? (
                           <TableCell
                             rowSpan={actionsList.length}
-                            className="align-top font-semibold text-foreground capitalize border-r border-border/50 bg-muted/10"
+                            className="bg-muted/40 align-top font-semibold text-foreground capitalize"
                           >
-                            <div className="sticky top-0 py-1">
+                            <div className="py-1">
                               <span className="text-sm font-semibold">{resource}</span>
                               <div className="text-[11px] text-muted-foreground font-normal mt-0.5">
                                 {actionsList.length} actions
@@ -164,7 +162,7 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
                         {(selectedRole === 'all' || selectedRole === 'admin') && (
                           <TableCell className="text-center">
                             {canAdmin ? (
-                              <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-0 h-6 px-2 text-xs">
+                              <Badge className="bg-success/15 text-success h-6 px-2 text-xs">
                                 <Check className="h-3 w-3 mr-1" /> Cho phép
                               </Badge>
                             ) : (
@@ -179,7 +177,7 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
                         {(selectedRole === 'all' || selectedRole === 'seller') && (
                           <TableCell className="text-center">
                             {canSeller ? (
-                              <Badge className="bg-primary/15 text-primary border-0 h-6 px-2 text-xs">
+                              <Badge className="bg-primary/15 text-primary h-6 px-2 text-xs">
                                 <Check className="h-3 w-3 mr-1" /> Cho phép
                               </Badge>
                             ) : (
@@ -194,7 +192,7 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
                         {(selectedRole === 'all' || selectedRole === 'buyer') && (
                           <TableCell className="text-center">
                             {canBuyer ? (
-                              <Badge className="bg-muted text-foreground/80 border-0 h-6 px-2 text-xs">
+                              <Badge className="bg-muted text-foreground/80 h-6 px-2 text-xs">
                                 <Check className="h-3 w-3 mr-1" /> Cho phép
                               </Badge>
                             ) : (
@@ -215,7 +213,7 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
       </div>
 
       {/* Matrix Footnote */}
-      <div className="flex items-center gap-2 p-3 text-xs text-muted-foreground bg-muted/20 border border-border rounded-lg">
+      <div className={cn(adminInsetPanelClass, 'flex items-center gap-2 p-3 text-xs text-muted-foreground')}>
         <Info className="h-4 w-4 shrink-0 text-primary" />
         <span>
           <strong>Lưu ý:</strong> Quản trị viên (Admin) sở hữu siêu quyền <code>*:*</code> bao phủ
@@ -226,4 +224,3 @@ export default function RoleMatrixTable({ rolePermissions }: RoleMatrixTableProp
     </div>
   );
 }
-

@@ -195,7 +195,7 @@ function AdminPermissionsContent() {
               </h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">Admin, Seller, Buyer</p>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-lg bg-success/10 text-success flex items-center justify-center">
               <Users className="h-5 w-5" />
             </div>
           </CardContent>
@@ -210,7 +210,7 @@ function AdminPermissionsContent() {
               <h3 className="text-2xl font-bold text-foreground mt-1">{totalAuditLogs}</h3>
               <p className="text-[11px] text-muted-foreground mt-0.5">Lần thay đổi quyền đã ghi nhận</p>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-lg bg-warning/10 text-warning flex items-center justify-center">
               <History className="h-5 w-5" />
             </div>
           </CardContent>
@@ -219,7 +219,7 @@ function AdminPermissionsContent() {
 
       {/* 3. Main Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="w-full justify-start rounded-lg border border-border bg-muted/50 p-1 flex-wrap sm:w-fit h-auto gap-1">
+        <TabsList className="w-full justify-start rounded-lg bg-muted p-1 flex-wrap sm:w-fit h-auto gap-1">
           <TabsTrigger value="user-delegation" className="flex items-center gap-2">
             <Key className="h-4 w-4" />
             Ủy quyền nhân sự & Tài khoản

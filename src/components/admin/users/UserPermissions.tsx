@@ -170,54 +170,55 @@ export default function UserPermissions({
       </div>
 
       {/* Permission Grid */}
-      <div className="border rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-muted/50">
-            <tr>
-              <th className="text-left p-3 font-medium">Tài nguyên</th>
-              {Object.values(ACTIONS).map((action) => (
-                <th key={action} className="text-center p-3 font-medium w-24">
-                  {action}
-                </th>
-              ))}
-              <th className="text-center p-3 font-medium w-24">Tất cả</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.values(RESOURCES).map((resource) => (
-              <tr key={resource} className="border-t">
-                <td className="p-3 font-medium capitalize">{resource}</td>
-                {Object.values(ACTIONS).map((action) => {
-                  const permission = `${resource}:${action}`;
-                  const isChecked = userPermissions.includes(permission);
-                  const isFromRole = isPermissionFromRole(permission);
-
-                  return (
-                    <td key={action} className="text-center p-3">
-                      <div className="flex items-center justify-center">
-                        <Checkbox
-                          checked={isChecked}
-                          onCheckedChange={() => handleTogglePermission(permission)}
-                          className={isFromRole ? 'border-primary' : ''}
-                        />
-                        {isFromRole && <span className="ml-1 text-xs text-primary">*</span>}
-                      </div>
-                    </td>
-                  );
-                })}
-                <td className="text-center p-3">
-                  <Checkbox
-                    checked={isAllResourceSelected(resource)}
-                    onCheckedChange={(checked) =>
-                      handleSelectAllResource(resource, checked as boolean)
-                    }
-                    className={isSomeResourceSelected(resource) ? 'opacity-50' : ''}
-                  />
-                </td>
+      <div className="rounded-xl bg-card overflow-hidden">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[720px]">
+            <thead className="bg-muted/60">
+              <tr>
+                <th className="text-left p-3 font-medium">Tài nguyên</th>
+                {Object.values(ACTIONS).map((action) => (
+                  <th key={action} className="text-center p-3 font-medium w-24">
+                    {action}
+                  </th>
+                ))}
+                <th className="text-center p-3 font-medium w-24">Tất cả</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {Object.values(RESOURCES).map((resource) => (
+                <tr key={resource} className="even:bg-muted/40">
+                  <td className="p-3 font-medium capitalize">{resource}</td>
+                  {Object.values(ACTIONS).map((action) => {
+                    const permission = `${resource}:${action}`;
+                    const isChecked = userPermissions.includes(permission);
+                    const isFromRole = isPermissionFromRole(permission);
+
+                    return (
+                      <td key={action} className="text-center p-3">
+                        <div className="flex items-center justify-center">
+                          <Checkbox
+                            checked={isChecked}
+                            onCheckedChange={() => handleTogglePermission(permission)}
+                          />
+                          {isFromRole && <span className="ml-1 text-xs text-primary">*</span>}
+                        </div>
+                      </td>
+                    );
+                  })}
+                  <td className="text-center p-3">
+                    <Checkbox
+                      checked={isAllResourceSelected(resource)}
+                      onCheckedChange={(checked) =>
+                        handleSelectAllResource(resource, checked as boolean)
+                      }
+                      className={isSomeResourceSelected(resource) ? 'opacity-50' : ''}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Legend */}

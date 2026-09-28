@@ -74,14 +74,14 @@ interface UsersTableProps {
 
 export const getVerifiedBadge = (isVerified: boolean) => {
   return isVerified ? (
-    <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge className="bg-success/15 text-success hover:bg-success/15 rounded-lg px-2.5 py-0.5">
       <CheckCircle className="h-3 w-3 mr-1" />
       Đã xác minh
     </Badge>
   ) : (
     <Badge
       variant="outline"
-      className="bg-muted text-muted-foreground border-0 rounded-lg px-2.5 py-0.5 shadow-none"
+      className="bg-muted text-muted-foreground rounded-lg px-2.5 py-0.5"
     >
       <XCircle className="h-3 w-3 mr-1" />
       Chưa xác minh
@@ -91,8 +91,8 @@ export const getVerifiedBadge = (isVerified: boolean) => {
 
 export const getRoleBadge = (roles: string) => {
   const colors: { [key: string]: string } = {
-    admin: 'bg-info/15 text-info hover:bg-info/15 border-0',
-    user: 'bg-muted text-foreground/80 hover:bg-muted border-0',
+    admin: 'bg-info/15 text-info hover:bg-info/15',
+    user: 'bg-muted text-foreground/80 hover:bg-muted',
   };
 
   const roleNames: { [key: string]: string } = {
@@ -103,7 +103,7 @@ export const getRoleBadge = (roles: string) => {
   return (
     <Badge
       variant="secondary"
-      className={`rounded-lg px-2.5 py-0.5 shadow-none ${colors[roles] || 'bg-muted text-foreground/80 border-0'}`}
+      className={`rounded-lg px-2.5 py-0.5 ${colors[roles] || 'bg-muted text-foreground/80'}`}
     >
       {roleNames[roles] || roles}
     </Badge>
@@ -181,7 +181,7 @@ export function UsersTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start rounded-2xl border border-border bg-card/90 hover:bg-card sm:w-auto sm:justify-center"
+                className="w-full justify-start rounded-lg bg-muted text-foreground hover:bg-muted/70 sm:w-auto sm:justify-center"
               >
                 <Shield className="h-4 w-4 mr-2 text-muted-foreground" />
                 {selectedRole === 'admin'
@@ -222,7 +222,7 @@ export function UsersTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start rounded-2xl border border-border bg-card/90 hover:bg-card sm:w-auto sm:justify-center"
+                className="w-full justify-start rounded-lg bg-muted text-foreground hover:bg-muted/70 sm:w-auto sm:justify-center"
               >
                 <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
                 {selectedVerified === true
@@ -290,7 +290,7 @@ export function UsersTable({
         <div className="overflow-x-auto no-scrollbar">
           <Table>
             <TableHeader className={adminTableHeaderClass}>
-              <TableRow className="border-0 hover:bg-transparent">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Người dùng
                 </TableHead>
@@ -332,7 +332,7 @@ export function UsersTable({
                 </TableRow>
               ) : (
                 users.map((user) => (
-                  <TableRow key={user._id} className={`${adminRowHoverClass} border-0`}>
+                  <TableRow key={user._id} className={adminRowHoverClass}>
                     <TableCell className="pl-6 font-medium">
                       <div className="flex items-center gap-3">
                         <div
@@ -362,7 +362,7 @@ export function UsersTable({
                     </TableCell>
                     <TableCell>{getRoleBadge(user.roles || 'user')}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <div className="flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
                         <MapPin className="h-3 w-3 shrink-0" />
                         <span className="line-clamp-1 max-w-[200px]">
                           {getPrimaryAddress(user.addresses)}

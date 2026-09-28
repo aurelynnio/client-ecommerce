@@ -38,6 +38,69 @@ interface UpdateModelProductProps {
   isLoading?: boolean;
 }
 
+/**
+ * Builds the editable form state from a product. Used both for the initial
+ * state and whenever the dialog is pointed at a different product.
+ */
+function buildFormState(product: Product | null) {
+  const price = product?.price || {
+    currentPrice: 0,
+    discountPrice: 0,
+    currency: 'VND',
+  };
+
+  return {
+    name: product?.name || '',
+    description: product?.description || '',
+    slug: product?.slug || '',
+    category:
+      typeof product?.category === 'string' ? product.category : product?.category?._id || '',
+    shopCategory:
+      typeof product?.shopCategory === 'string'
+        ? product.shopCategory
+        : product?.shopCategory?._id || '',
+    brand: product?.brand || '',
+    status: product?.status || ('published' as 'draft' | 'published' | 'suspended'),
+    isNewArrival: product?.isNewArrival || false,
+    isFeatured: product?.isFeatured || false,
+    price: {
+      currentPrice: price.currentPrice ?? 0,
+      discountPrice: price.discountPrice ?? 0,
+      currency: price.currency ?? 'VND',
+    },
+    stock: product?.stock || 0,
+    weight: product?.weight || 0,
+    dimensions: {
+      height: product?.dimensions?.height || 0,
+      width: product?.dimensions?.width || 0,
+      length: product?.dimensions?.length || 0,
+    },
+    sizes: product?.sizes || [],
+    variants: (product?.variants || []).map(
+      (v): VariantFormUpdate => ({
+        _id: v._id,
+        name: v.name,
+        color: v.color || '',
+        price: v.price,
+        stock: v.stock,
+        sold: v.sold || 0,
+        images: {
+          existing: v.images || [],
+          newFiles: [],
+          newPreviews: [],
+        },
+      }),
+    ),
+    attributes: product?.attributes || [],
+    tags: product?.tags || [],
+    descriptionImages: {
+      existing: product?.descriptionImages || [],
+      newFiles: [] as File[],
+      newPreviews: [] as string[],
+    },
+  };
+}
+
 export function UpdateModelProduct({
   open,
   onOpenChange,
@@ -53,62 +116,18 @@ export function UpdateModelProduct({
   const shopCategories = shopCategoriesData?.categories || [];
   const flatCategories = flattenCategories(categories);
 
-  const productPrice = product?.price || {
-    currentPrice: 0,
-    discountPrice: 0,
-    currency: 'VND',
-  };
+  const [formData, setFormData] = useState(() => buildFormState(product));
+  const [syncedProductId, setSyncedProductId] = useState(product?._id ?? null);
 
-  const variantsWithFiles: VariantFormUpdate[] = (product?.variants || []).map((v) => ({
-    _id: v._id,
-    name: v.name,
-    color: v.color || '',
-    price: v.price,
-    stock: v.stock,
-    sold: v.sold || 0,
-    images: {
-      existing: v.images || [],
-      newFiles: [],
-      newPreviews: [],
-    },
-  }));
-
-  const [formData, setFormData] = useState({
-    name: product?.name || '',
-    description: product?.description || '',
-    slug: product?.slug || '',
-    category:
-      typeof product?.category === 'string' ? product.category : product?.category?._id || '',
-    shopCategory:
-      typeof product?.shopCategory === 'string'
-        ? product.shopCategory
-        : product?.shopCategory?._id || '',
-    brand: product?.brand || '',
-    status: product?.status || ('published' as 'draft' | 'published' | 'suspended'),
-    isNewArrival: product?.isNewArrival || false,
-    isFeatured: product?.isFeatured || false,
-    price: {
-      currentPrice: productPrice.currentPrice ?? 0,
-      discountPrice: productPrice.discountPrice ?? 0,
-      currency: productPrice.currency ?? 'VND',
-    },
-    stock: product?.stock || 0,
-    weight: product?.weight || 0,
-    dimensions: {
-      height: product?.dimensions?.height || 0,
-      width: product?.dimensions?.width || 0,
-      length: product?.dimensions?.length || 0,
-    },
-    sizes: product?.sizes || [],
-    variants: variantsWithFiles,
-    attributes: product?.attributes || [],
-    tags: product?.tags || [],
-    descriptionImages: {
-      existing: product?.descriptionImages || [],
-      newFiles: [] as File[],
-      newPreviews: [] as string[],
-    },
-  });
+  // This dialog stays mounted for the whole page lifetime, so the form state has
+  // to follow the `product` prop. Sync during render (rather than relying on a
+  // remount via `key`) so every field reflects the selected product and the
+  // open/close lifecycle stays a plain controlled transition.
+  const currentProductId = product?._id ?? null;
+  if (currentProductId !== syncedProductId) {
+    setSyncedProductId(currentProductId);
+    setFormData(buildFormState(product));
+  }
 
   const [newTag, setNewTag] = useState('');
   const [newAttribute, setNewAttribute] = useState({ name: '', value: '' });

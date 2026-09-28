@@ -21,11 +21,14 @@ const Toaster = (props: React.ComponentProps<typeof Sonner>) => {
         error: <OctagonXIcon className="size-4" />,
         loading: <Loader2Icon className="size-4 animate-spin" />,
       }}
+      toastOptions={{
+        classNames: { toast: 'shadow-none ring-1 ring-black/5' },
+      }}
       style={
         {
           '--normal-bg': 'var(--popover)',
           '--normal-text': 'var(--popover-foreground)',
-          '--normal-border': 'var(--border)',
+          '--normal-border': 'transparent',
           '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }

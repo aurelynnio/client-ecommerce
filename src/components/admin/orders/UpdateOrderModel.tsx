@@ -56,7 +56,7 @@ export function EditOrderModal({ isOpen, onClose, onSave, order, isLoading }: Ed
               >
                 <SelectValue placeholder="Chọn trạng thái" />
               </SelectTrigger>
-              <SelectContent className="rounded-lg border-border">
+              <SelectContent className="rounded-lg">
                 <SelectItem value="pending">Chờ xử lý</SelectItem>
                 <SelectItem value="confirmed">Đã xác nhận</SelectItem>
                 <SelectItem value="processing">Đang xử lý</SelectItem>
@@ -67,7 +67,7 @@ export function EditOrderModal({ isOpen, onClose, onSave, order, isLoading }: Ed
             </Select>
           </div>
 
-          <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:justify-end">
+          <div className="flex flex-col-reverse gap-3 pt-5 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"

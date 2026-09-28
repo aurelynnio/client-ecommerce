@@ -100,7 +100,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
           'max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar p-6',
         )}
       >
-        <DialogHeader className="border-b border-border/50 pb-4">
+        <DialogHeader className="pb-4">
           <DialogTitle className="flex justify-between items-center">
             <span className="text-xl font-semibold tracking-tight">
               Chi tiết đơn hàng #{order._id.slice(-8).toUpperCase()}
@@ -150,11 +150,11 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
               </h3>
               <div className="flex items-center gap-3">
                 {shopInfo.logo ? (
-                  <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-muted border border-border/50">
+                  <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-muted">
                     <Image src={shopInfo.logo} alt={shopInfo.name} fill className="object-cover" />
                   </div>
                 ) : (
-                  <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center border border-border/50">
+                  <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center">
                     <Store className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
@@ -183,7 +183,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
                   <span className="text-muted-foreground">Điện thoại:</span>
                   <span>{order.shippingAddress.phone}</span>
                 </div>
-                <div className="border-t border-border/50 pt-2 mt-2">
+                <div className="pt-2 mt-2">
                   <div className="text-muted-foreground mb-1">Địa chỉ:</div>
                   <div className="font-medium">{order.shippingAddress.address}</div>
                   {order.shippingAddress.ward && (
@@ -194,7 +194,7 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
                   <div className="text-muted-foreground text-xs">{order.shippingAddress.city}</div>
                 </div>
                 {order.shippingAddress.note && (
-                  <div className="mt-2 text-xs bg-warning/15 text-warning p-2 rounded-lg border border-warning/30">
+                  <div className="mt-2 text-xs bg-warning/15 text-warning p-2 rounded-lg">
                     <span className="font-medium">Ghi chú: </span>
                     {order.shippingAddress.note}
                   </div>
@@ -209,68 +209,70 @@ export function ViewOrderModal({ isOpen, onClose, onEdit, order }: ViewOrderModa
           <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground px-1">
             Chi tiết sản phẩm
           </h3>
-          <div className="border border-border/50 rounded-lg overflow-hidden bg-card/40">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/80 border-b border-border/50 text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="text-left p-4 font-medium">Sản phẩm</th>
-                  <th className="text-left p-4 font-medium">Đơn giá</th>
-                  <th className="text-center p-4 font-medium">SL</th>
-                  <th className="text-right p-4 font-medium">Thành tiền</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/50">
-                {order.products?.map((item, index) => (
-                  <tr key={index} className="hover:bg-muted/50 transition-colors">
-                    <td className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center overflow-hidden border border-border/50">
-                          {item.image ? (
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              width={48}
-                              height={48}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Package className="h-5 w-5 text-muted-foreground" />
-                          )}
+          <div className="rounded-lg bg-card/40">
+            <div className="w-full overflow-x-auto">
+              <table className="w-full min-w-[560px] text-sm">
+                <thead className="bg-muted/80 text-xs uppercase tracking-wider text-muted-foreground">
+                  <tr>
+                    <th className="text-left p-4 font-medium">Sản phẩm</th>
+                    <th className="text-left p-4 font-medium">Đơn giá</th>
+                    <th className="text-center p-4 font-medium">SL</th>
+                    <th className="text-right p-4 font-medium">Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.products?.map((item, index) => (
+                    <tr key={index} className="hover:bg-muted/50 transition-colors">
+                      <td className="p-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                            {item.image ? (
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                width={48}
+                                height={48}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <Package className="h-5 w-5 text-muted-foreground" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-medium text-foreground">{item.name}</div>
+                            {item.variationInfo && (
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                {item.variationInfo}
+                              </div>
+                            )}
+                            {item.sku && (
+                              <div className="text-xs text-muted-foreground font-mono mt-0.5">
+                                SKU: {item.sku}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-medium text-foreground">{item.name}</div>
-                          {item.variationInfo && (
-                            <div className="text-xs text-muted-foreground mt-0.5">
-                              {item.variationInfo}
-                            </div>
-                          )}
-                          {item.sku && (
-                            <div className="text-xs text-muted-foreground font-mono mt-0.5">
-                              SKU: {item.sku}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      </td>
+                      <td className="p-4 text-muted-foreground">{formatCurrency(item.price)}</td>
+                      <td className="p-4 text-center">{item.quantity}</td>
+                      <td className="p-4 text-right font-medium">
+                        {formatCurrency(item.price * item.quantity)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="bg-muted/80 font-semibold">
+                  <tr>
+                    <td colSpan={3} className="p-4 text-right">
+                      Tổng cộng
                     </td>
-                    <td className="p-4 text-muted-foreground">{formatCurrency(item.price)}</td>
-                    <td className="p-4 text-center">{item.quantity}</td>
-                    <td className="p-4 text-right font-medium">
-                      {formatCurrency(item.price * item.quantity)}
+                    <td className="p-4 text-right text-base text-foreground">
+                      {formatCurrency(order.totalAmount)}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot className="bg-muted/80 border-t border-border/50 font-semibold">
-                <tr>
-                  <td colSpan={3} className="p-4 text-right">
-                    Tổng cộng
-                  </td>
-                  <td className="p-4 text-right text-base text-foreground">
-                    {formatCurrency(order.totalAmount)}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                </tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </DialogContent>

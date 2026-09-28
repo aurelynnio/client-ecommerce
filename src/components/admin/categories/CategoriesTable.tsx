@@ -68,14 +68,14 @@ interface CategoriesTableProps {
 
 export const getStatusBadge = (status: boolean) => {
   return status ? (
-    <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge className="bg-success/15 text-success hover:bg-success/15 rounded-lg px-2.5 py-0.5">
       <CheckCircle className="h-3 w-3 mr-1" />
       Đang hoạt động
     </Badge>
   ) : (
     <Badge
       variant="outline"
-      className="bg-muted text-muted-foreground border-0 rounded-lg px-2.5 py-0.5 shadow-none"
+      className="bg-muted text-muted-foreground rounded-lg px-2.5 py-0.5"
     >
       <XCircle className="h-3 w-3 mr-1" />
       Ngừng hoạt động
@@ -108,7 +108,7 @@ const CategoryRow = ({
   return (
     <>
       <TableRow
-        className={`${adminRowHoverClass} border-0 ${
+        className={`${adminRowHoverClass} ${
           isLoading ? 'opacity-50 pointer-events-none' : ''
         }`}
       >
@@ -306,7 +306,7 @@ export function CategoriesTable({
         <div className="overflow-x-auto no-scrollbar">
           <Table>
             <TableHeader className={adminTableHeaderClass}>
-              <TableRow className="border-0 hover:bg-transparent">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="w-[300px] uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Tên danh mục
                 </TableHead>

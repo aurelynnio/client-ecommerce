@@ -24,7 +24,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Folder, ChevronDown, Upload, Trash2 } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Plus, Folder, Upload, Trash2 } from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Category } from '@/types/category';
 import Image from 'next/image';
@@ -33,10 +40,14 @@ import {
   adminDialogFooterClass,
   adminFieldSurfaceClass,
   adminInsetPanelClass,
+  adminMenuContentClass,
   adminPrimaryButtonClass,
   adminSecondaryButtonClass,
 } from '@/components/admin/shared/AdminPrimitives';
 import { cn } from '@/utils/cn';
+
+// Radix Select forbids an empty-string item value; this sentinel maps to ''.
+const NO_PARENT_VALUE = '__none__';
 
 const createFormSchema = z.object({
   name: z.string().min(1, { message: 'Tên danh mục là bắt buộc' }),
@@ -70,9 +81,7 @@ export function CreateCategoryModal({
   isLoading = false,
 }: CreateCategoryModalProps) {
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<CreateFormData>({
@@ -88,21 +97,9 @@ export function CreateCategoryModal({
   });
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
     if (isOpen) {
       form.reset();
       setIsSlugManuallyEdited(false);
-      setIsDropdownOpen(false);
     }
   }, [isOpen, form]);
 
@@ -184,17 +181,11 @@ export function CreateCategoryModal({
   const handleClose = () => {
     form.reset();
     setIsSlugManuallyEdited(false);
-    setIsDropdownOpen(false);
     onClose();
   };
 
   // Get available parent categories
   const availableParentCategories = categories;
-
-  // Get selected category name for display
-  const selectedCategory = availableParentCategories.find(
-    (cat) => cat._id === form.watch('parentCategory'),
-  );
 
   const currentImages = form.watch('images') || [];
 
@@ -206,7 +197,7 @@ export function CreateCategoryModal({
           'sm:max-w-[500px] max-h-[90vh] flex flex-col no-scrollbar p-6',
         )}
       >
-        <DialogHeader className="shrink-0 pb-6 border-b border-border/50">
+        <DialogHeader className="shrink-0 pb-6">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold tracking-tight">
             Tạo danh mục
           </DialogTitle>
@@ -269,7 +260,7 @@ export function CreateCategoryModal({
                       {!isSlugManuallyEdited && (
                         <Badge
                           variant="outline"
-                          className="text-[10px] h-5 rounded-md border-border/50"
+                          className="text-[10px] h-5 rounded-md"
                         >
                           Tự động
                         </Badge>
@@ -287,70 +278,40 @@ export function CreateCategoryModal({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-medium">Danh mục cha</FormLabel>
-                    <FormControl>
-                      <div className="relative" ref={dropdownRef}>
-                        <button
-                          type="button"
-                          className={cn(
-                            adminFieldSurfaceClass,
-                            'flex h-10 w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors hover:bg-muted/30 focus:outline-none',
-                          )}
-                          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        >
-                          <span
-                            className={field.value ? 'text-foreground' : 'text-muted-foreground'}
-                          >
-                            {selectedCategory ? selectedCategory.name : 'Không có danh mục cha'}
+                    <Select
+                      value={field.value || NO_PARENT_VALUE}
+                      onValueChange={(value) =>
+                        field.onChange(value === NO_PARENT_VALUE ? '' : value)
+                      }
+                    >
+                      <FormControl>
+                        <SelectTrigger className={cn(adminFieldSurfaceClass, 'h-10 w-full')}>
+                          <SelectValue placeholder="Không có danh mục cha" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className={adminMenuContentClass}>
+                        <SelectItem value={NO_PARENT_VALUE}>
+                          <span className="flex items-center gap-2 text-muted-foreground">
+                            <Folder className="h-4 w-4" />
+                            <span>Không có danh mục cha</span>
                           </span>
-                          <ChevronDown
-                            className={`h-4 w-4 opacity-50 transition-transform ${
-                              isDropdownOpen ? 'rotate-180' : ''
-                            }`}
-                          />
-                        </button>
+                        </SelectItem>
 
-                        {isDropdownOpen && (
-                          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-border bg-popover py-1 shadow-lg no-scrollbar">
-                            <div
-                              className="cursor-pointer border-b border-border/50 px-3 py-2 hover:bg-muted/60"
-                              onClick={() => {
-                                field.onChange('');
-                                setIsDropdownOpen(false);
-                              }}
-                            >
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Folder className="h-4 w-4" />
-                                <span>Không có danh mục cha</span>
-                              </div>
-                            </div>
-
-                            {availableParentCategories.map((category) => (
-                              <div
-                                key={category._id}
-                                className="cursor-pointer border-b border-border/50 px-3 py-2 hover:bg-muted/60 last:border-b-0"
-                                onClick={() => {
-                                  field.onChange(category._id);
-                                  setIsDropdownOpen(false);
-                                }}
-                              >
-                                <div className="flex items-center gap-2 text-sm">
-                                  <Folder className="h-4 w-4 text-info" />
-                                  <span className="flex-1 font-medium">{category.name}</span>
-                                  {category.parentCategory && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-[10px] rounded-md h-5"
-                                    >
-                                      Con
-                                    </Badge>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
+                        {availableParentCategories.map((category) => (
+                          <SelectItem key={category._id} value={category._id}>
+                            <span className="flex items-center gap-2">
+                              <Folder className="h-4 w-4 text-info" />
+                              <span className="flex-1 font-medium">{category.name}</span>
+                              {category.parentCategory && (
+                                <Badge variant="secondary" className="text-[10px] rounded-md h-5">
+                                  Con
+                                </Badge>
+                              )}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -419,7 +380,7 @@ export function CreateCategoryModal({
                             {currentImages.map((image, index) => (
                               <div
                                 key={index}
-                                className="relative aspect-square group rounded-xl overflow-hidden border border-border/50"
+                                className="relative aspect-square group rounded-xl overflow-hidden"
                               >
                                 <Image
                                   src={image}
@@ -431,7 +392,7 @@ export function CreateCategoryModal({
                                 <button
                                   type="button"
                                   onClick={() => removeImage(index)}
-                                  className="absolute right-1.5 top-1.5 rounded-full bg-black/50 p-1 text-white opacity-0 backdrop-blur-sm transition-[opacity,background-color] hover:bg-black/70 group-hover:opacity-100"
+                                  className="absolute right-1.5 top-1.5 rounded-full bg-black/50 p-1 text-white opacity-100 backdrop-blur-sm transition-[opacity,background-color] hover:bg-black/70 lg:opacity-0 lg:group-hover:opacity-100"
                                 >
                                   <Trash2 className="h-3 w-3" />
                                 </button>

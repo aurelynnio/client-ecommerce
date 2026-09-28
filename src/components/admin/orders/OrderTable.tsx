@@ -117,7 +117,7 @@ export function OrdersTable({
       confirmed: {
         label: 'Đã xác nhận',
         variant: 'outline',
-        className: 'bg-info/15 text-info border-info/30',
+        className: 'bg-info/15 text-info',
       },
       processing: {
         label: 'Đang xử lý',
@@ -132,12 +132,12 @@ export function OrdersTable({
       delivered: {
         label: 'Đã giao',
         variant: 'outline',
-        className: 'bg-success/15 text-success border-success/30',
+        className: 'bg-success/15 text-success',
       },
       cancelled: {
         label: 'Đã hủy',
         variant: 'destructive',
-        className: 'bg-destructive/15 text-destructive border-destructive/30 hover:bg-destructive/15',
+        className: 'bg-destructive/15 text-destructive hover:bg-destructive/15',
       },
     };
 
@@ -150,7 +150,7 @@ export function OrdersTable({
     return (
       <Badge
         variant={config.variant}
-        className={`rounded-lg font-medium px-2.5 py-0.5 border-0 shadow-none ${config.className}`}
+        className={`rounded-lg font-medium px-2.5 py-0.5 ${config.className}`}
       >
         {config.label}
       </Badge>
@@ -168,12 +168,12 @@ export function OrdersTable({
       unpaid: {
         label: 'Chưa thanh toán',
         variant: 'secondary',
-        className: 'bg-warning/15 text-warning border border-warning/30',
+        className: 'bg-warning/15 text-warning',
       },
       paid: {
         label: 'Đã thanh toán',
         variant: 'outline',
-        className: 'bg-success/15 text-success border border-success/30',
+        className: 'bg-success/15 text-success',
       },
       refunded: { label: 'Hoàn tiền', variant: 'destructive' },
     };
@@ -186,7 +186,7 @@ export function OrdersTable({
     return (
       <Badge
         variant={config.variant}
-        className={`rounded-lg font-medium px-2.5 py-0.5 border-0 shadow-none ${config.className}`}
+        className={`rounded-lg font-medium px-2.5 py-0.5 ${config.className}`}
       >
         {config.label}
       </Badge>
@@ -287,7 +287,7 @@ export function OrdersTable({
         <div className="overflow-x-auto no-scrollbar">
           <Table>
             <TableHeader className={adminTableHeaderClass}>
-              <TableRow className="border-0 hover:bg-transparent">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Mã đơn hàng
                 </TableHead>
@@ -336,7 +336,7 @@ export function OrdersTable({
                   return (
                     <TableRow
                       key={order._id}
-                      className={`${adminRowHoverClass} border-0 ${
+                      className={`${adminRowHoverClass} ${
                         isLoading ? 'opacity-50 pointer-events-none' : ''
                       }`}
                     >
@@ -354,7 +354,7 @@ export function OrdersTable({
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2 max-w-[140px]">
+                        <div className="flex items-center gap-2 max-w-[140px] min-w-0">
                           {shopInfo.logo ? (
                             <div
                               className={`relative h-6 w-6 rounded-md overflow-hidden shrink-0 ${adminMediaPlaceholderClass}`}
@@ -375,7 +375,7 @@ export function OrdersTable({
                             </div>
                           )}
                           <span
-                            className="text-sm text-muted-foreground truncate"
+                            className="text-sm text-muted-foreground truncate min-w-0"
                             title={shopInfo.name}
                           >
                             {shopInfo.name}

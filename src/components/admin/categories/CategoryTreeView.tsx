@@ -4,13 +4,13 @@ import { Category } from '@/types/category';
 
 export const getStatusBadge = (status: boolean) => {
   return status ? (
-    <Badge className="bg-success/15 text-success hover:bg-success/15 border-0 rounded-lg px-2.5 py-0.5 shadow-none">
+    <Badge className="bg-success/15 text-success hover:bg-success/15 rounded-lg px-2.5 py-0.5">
       Hoạt động
     </Badge>
   ) : (
     <Badge
       variant="outline"
-      className="bg-muted text-muted-foreground border-0 rounded-lg px-2.5 py-0.5 shadow-none"
+      className="bg-muted text-muted-foreground rounded-lg px-2.5 py-0.5"
     >
       Ngừng hoạt động
     </Badge>
@@ -34,14 +34,14 @@ export function CategoryTreeView({
     <div className="space-y-4">
       <div className="space-y-3">
         {rootCategories.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground bg-muted/50 rounded-[1.5rem] border border-dashed border-border/50">
+          <div className="text-center py-12 text-muted-foreground bg-muted/50 rounded-xl border border-dashed border-border/50">
             Không tìm thấy danh mục
           </div>
         ) : (
           rootCategories.map((category) => (
             <div
               key={category._id}
-              className="border border-border/50 rounded-2xl p-5 bg-card/40 hover:bg-card/60 transition-colors"
+              className="rounded-xl p-5 bg-card/40 hover:bg-card/60 transition-colors"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -68,16 +68,15 @@ export function CategoryTreeView({
               </div>
 
               {getChildCategories(category._id as string).length > 0 && (
-                <div className="mt-4 ml-5 space-y-3 border-l-[1.5px] border-border/40 pl-6 py-1">
+                <div className="mt-4 ml-5 space-y-3 pl-6 py-1">
                   {getChildCategories(category._id as string).map((subCategory) => (
                     <div
                       key={subCategory._id}
                       className="flex items-center justify-between py-2 group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="relative h-8 w-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground border border-border/50 group-hover:border-info/30 group-hover:bg-info/15 group-hover:text-info transition-colors">
+                        <div className="relative h-8 w-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground group-hover:bg-info/15 group-hover:text-info transition-colors">
                           <Layers className="h-4 w-4" />
-                          <div className="absolute -left-[1.60rem] top-1/2 w-4 h-[1.5px] bg-border/40"></div>
                         </div>
 
                         <div>
@@ -92,7 +91,7 @@ export function CategoryTreeView({
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-md border border-border/50">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-md">
                           {getProductCount(subCategory)} sản phẩm
                         </div>
                         {getStatusBadge(subCategory.isActive)}

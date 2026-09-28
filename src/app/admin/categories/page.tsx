@@ -247,7 +247,7 @@ export default function CategoriesAdminPage() {
       </div>
 
       {/* Tree View Section */}
-      <div className="rounded-lg border border-border bg-muted/50 p-6">
+      <div className="rounded-xl bg-muted/60 p-6">
         <div className="mb-6">
           <h2 className="text-xl font-semibold tracking-tight text-foreground">Structure View</h2>
           <p className="text-sm text-muted-foreground mt-1">Hierarchical view of categories</p>

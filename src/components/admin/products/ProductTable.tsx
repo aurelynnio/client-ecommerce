@@ -220,13 +220,13 @@ export function ProductsTable({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="flex w-full items-center justify-start gap-2 rounded-2xl border border-border bg-card/90 hover:bg-card sm:w-auto sm:justify-center"
+                className={`flex w-full items-center justify-start gap-2 sm:w-auto sm:justify-center ${adminFieldSurfaceClass}`}
               >
                 <Filter className="h-4 w-4" />
                 Giá
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className={`w-80 p-4 ${adminMenuContentClass}`}>
+            <DropdownMenuContent className={`w-80 max-w-[calc(100vw-2rem)] p-4 ${adminMenuContentClass}`}>
               <DropdownMenuLabel className="uppercase text-xs font-bold tracking-wider text-muted-foreground">
                 Lọc theo giá
               </DropdownMenuLabel>
@@ -316,7 +316,7 @@ export function ProductsTable({
         <div className="overflow-x-auto no-scrollbar">
           <Table>
             <TableHeader className={adminTableHeaderClass}>
-              <TableRow className="border-0 hover:bg-transparent">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="w-[70px] uppercase text-xs font-bold tracking-wider text-muted-foreground pl-6">
                   Hình ảnh
                 </TableHead>
@@ -372,7 +372,7 @@ export function ProductsTable({
                 products.map((product) => (
                   <TableRow
                     key={product._id}
-                    className={`${adminRowHoverClass} border-0 ${
+                    className={`${adminRowHoverClass} ${
                       isLoading ? 'opacity-50 pointer-events-none' : ''
                     }`}
                   >
@@ -399,9 +399,9 @@ export function ProductsTable({
                     </TableCell>
                     <TableCell className="font-medium">
                       <div className="max-w-[250px]">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
                           <div
-                            className="text-foreground truncate font-medium text-sm"
+                            className="text-foreground truncate font-medium text-sm min-w-0"
                             title={product.name}
                           >
                             {product.name}
@@ -410,7 +410,7 @@ export function ProductsTable({
                             {product.isNewArrival && (
                               <Badge
                                 variant="secondary"
-                                className="h-5 px-1.5 text-[10px] rounded-md bg-info/15 text-info border-0"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-info/15 text-info"
                               >
                                 Mới
                               </Badge>
@@ -418,7 +418,7 @@ export function ProductsTable({
                             {product.isFeatured && (
                               <Badge
                                 variant="secondary"
-                                className="h-5 px-1.5 text-[10px] rounded-md bg-info/15 text-info border-0"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-info/15 text-info"
                               >
                                 Hot
                               </Badge>
@@ -426,7 +426,7 @@ export function ProductsTable({
                             {product.onSale && (
                               <Badge
                                 variant="secondary"
-                                className="h-5 px-1.5 text-[10px] rounded-md bg-destructive/15 text-destructive border-0"
+                                className="h-5 px-1.5 text-[10px] rounded-md bg-destructive/15 text-destructive"
                               >
                                 Giảm giá
                               </Badge>
@@ -485,7 +485,7 @@ export function ProductsTable({
                     </TableCell>
                     <TableCell>{getPriceDisplay(product.price)}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="border-0 bg-muted font-normal">
+                      <Badge variant="outline" className="bg-muted font-normal">
                         {getStockCount(product)}
                       </Badge>
                     </TableCell>
@@ -497,7 +497,7 @@ export function ProductsTable({
                     <TableCell>
                       <Badge
                         variant={product.isActive ? 'default' : 'secondary'}
-                        className={`rounded-lg font-medium px-2.5 py-0.5 shadow-none border-0 ${
+                        className={`rounded-lg font-medium px-2.5 py-0.5 ${
                           product.isActive
                             ? 'bg-success/15 text-success hover:bg-success/15'
                             : 'bg-muted text-muted-foreground hover:bg-muted'

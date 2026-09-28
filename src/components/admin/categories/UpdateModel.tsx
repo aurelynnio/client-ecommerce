@@ -135,7 +135,7 @@ export function EditCategoryModal({
                 Chỉnh sửa danh mục
                 <Badge
                   variant="outline"
-                  className="text-sm rounded-lg bg-card/50 border-border/50"
+                  className="text-sm rounded-lg bg-card/50"
                 >
                   ID: {category._id?.slice(-4)}
                 </Badge>
@@ -233,7 +233,7 @@ export function EditCategoryModal({
                       {field.value ? (
                         <Badge
                           variant="default"
-                          className="bg-success/15 text-success hover:bg-success/15 border-none"
+                          className="bg-success/15 text-success hover:bg-success/15"
                         >
                           Đang hoạt động
                         </Badge>
@@ -252,7 +252,7 @@ export function EditCategoryModal({
             />
 
             {/* Read-only Information */}
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border/50">
+            <div className="grid grid-cols-2 gap-4 pt-4">
               <div>
                 <FormLabel className="text-xs text-muted-foreground uppercase tracking-wider">
                   Ngày tạo

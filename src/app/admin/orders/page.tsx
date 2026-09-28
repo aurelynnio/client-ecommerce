@@ -209,7 +209,7 @@ export default function OrdersAdminPage() {
     return (
       <div className="space-y-6">
         <OrdersHeader />
-        <div className="flex h-64 items-center justify-center rounded-lg border border-border bg-muted/50">
+        <div className="flex h-64 items-center justify-center rounded-xl bg-muted/60">
           <SpinnerLoading />
         </div>
       </div>
@@ -220,7 +220,7 @@ export default function OrdersAdminPage() {
     return (
       <div className="space-y-6">
         <OrdersHeader />
-        <div className="flex h-64 items-center justify-center rounded-lg border border-border bg-muted/50">
+        <div className="flex h-64 items-center justify-center rounded-xl bg-muted/60">
           <div className="text-destructive text-center">
             <div className="text-lg font-semibold mb-2">Error loading orders</div>
             <div>{getSafeErrorMessage(error, 'Không thể tải danh sách đơn hàng')}</div>

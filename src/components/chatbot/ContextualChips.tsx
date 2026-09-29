@@ -54,7 +54,7 @@ export default function ContextualChips({
           id: 'zero-bestseller',
           label: 'Sản phẩm bán chạy',
           query: 'Gợi ý cho tôi các sản phẩm bán chạy nhất hiện tại',
-          icon: <Flame className="h-3 w-3 text-orange-500" />,
+          icon: <Flame className="h-3 w-3 text-primary" />,
         },
         {
           id: 'zero-new',
@@ -66,13 +66,13 @@ export default function ContextualChips({
           id: 'zero-budget',
           label: 'Mức giá phổ biến',
           query: 'Tìm các sản phẩm thời trang phổ biến dưới 500.000đ',
-          icon: <Tag className="h-3 w-3 text-emerald-500" />,
+          icon: <Tag className="h-3 w-3 text-success" />,
         },
         {
           id: 'zero-categories',
           label: 'Danh mục sản phẩm',
           query: 'Cho tôi xem danh mục các loại sản phẩm của cửa hàng',
-          icon: <HelpCircle className="h-3 w-3 text-blue-500" />,
+          icon: <HelpCircle className="h-3 w-3 text-info" />,
         },
       ];
     }
@@ -200,7 +200,7 @@ export default function ContextualChips({
         id: 'top-bestseller',
         label: 'Sản phẩm bán chạy nhất',
         query: 'Cho tôi xem top sản phẩm bán chạy nhất hiện tại',
-        icon: <Flame className="h-3 w-3 text-orange-500" />,
+        icon: <Flame className="h-3 w-3 text-primary" />,
       },
       {
         id: 'new-arrivals',
@@ -212,7 +212,7 @@ export default function ContextualChips({
         id: 'promotions',
         label: 'Ưu đãi hôm nay',
         query: 'Cửa hàng đang có những chương trình ưu đãi nào?',
-        icon: <Tag className="h-3 w-3 text-emerald-500" />,
+        icon: <Tag className="h-3 w-3 text-success" />,
       },
     ];
   }, [lastMessageContent]);

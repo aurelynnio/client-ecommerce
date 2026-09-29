@@ -40,17 +40,17 @@ export const STATUS_CONFIG: Record<
   },
   published: {
     label: 'Đang bán',
-    color: 'text-success-foreground',
+    color: 'text-success',
     bgColor: 'bg-success/15',
   },
   suspended: {
     label: 'Tạm ngưng',
-    color: 'text-warning-foreground',
+    color: 'text-warning',
     bgColor: 'bg-warning/15',
   },
   deleted: {
     label: 'Đã xóa',
-    color: 'text-destructive-foreground',
+    color: 'text-destructive',
     bgColor: 'bg-destructive/15',
   },
 };

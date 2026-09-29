@@ -75,7 +75,7 @@ export function PriceTag({
             {formatCurrency(originalPrice, currency)}
           </span>
           {showDiscountBadge && discountPercent > 0 && (
-            <Badge variant="destructive" className={cn('font-bold', currentSize.badge)}>
+            <Badge className={cn('font-bold bg-primary-bg text-primary border-0', currentSize.badge)}>
               -{discountPercent}%
             </Badge>
           )}

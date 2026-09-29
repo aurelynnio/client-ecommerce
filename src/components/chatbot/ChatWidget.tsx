@@ -122,29 +122,29 @@ export default function ChatWidget() {
   const quickActions = useMemo(
     () => [
       {
-        icon: <Flame className="h-4 w-4 text-orange-600 dark:text-orange-400" />,
-        bg: 'bg-orange-50 dark:bg-orange-950/40',
+        icon: <Flame className="h-4 w-4 text-primary" />,
+        bg: 'bg-primary-light',
         label: t.quickSale,
         desc: 'Sản phẩm ưu đãi sâu nhất hôm nay',
         query: t.querySale,
       },
       {
-        icon: <Search className="h-4 w-4 text-blue-600 dark:text-blue-400" />,
-        bg: 'bg-blue-50 dark:bg-blue-950/40',
+        icon: <Search className="h-4 w-4 text-info" />,
+        bg: 'bg-info/15',
         label: t.quickFind,
         desc: 'Theo danh mục, kích cỡ & giá',
         query: t.queryFind,
       },
       {
-        icon: <Ruler className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />,
-        bg: 'bg-emerald-50 dark:bg-emerald-950/40',
+        icon: <Ruler className="h-4 w-4 text-success" />,
+        bg: 'bg-success/15',
         label: 'Tư vấn chọn size',
         desc: 'Chuẩn theo chiều cao & cân nặng',
         query: 'Tư vấn chọn size theo chiều cao cân nặng',
       },
       {
-        icon: <PackageCheck className="h-4 w-4 text-purple-600 dark:text-purple-400" />,
-        bg: 'bg-purple-50 dark:bg-purple-950/40',
+        icon: <PackageCheck className="h-4 w-4 text-warning" />,
+        bg: 'bg-warning/15',
         label: 'Chính sách & Vận chuyển',
         desc: 'Đổi trả, freeship, bảo hành',
         query: 'Chính sách đổi trả hàng và phí vận chuyển như thế nào?',
@@ -711,13 +711,13 @@ export default function ChatWidget() {
                 className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-card"
                 title="Mia đang trực tuyến"
               >
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
               </span>
             </div>
             <div>
               <div className="flex items-center gap-1.5">
                 <h2 className="text-sm font-bold text-foreground">Trợ lý Mua Sắm (Mia)</h2>
-                <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.2 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <span className="rounded-full bg-success/15 px-1.5 py-0.2 text-[10px] font-semibold text-success">
                   Trực tuyến
                 </span>
               </div>
@@ -975,7 +975,7 @@ export default function ChatWidget() {
                               title={t.copy}
                             >
                               {copiedId === msg.id ? (
-                                <Check className="h-3 w-3 text-emerald-600" aria-hidden="true" />
+                                <Check className="h-3 w-3 text-success" aria-hidden="true" />
                               ) : (
                                 <Copy className="h-3 w-3" aria-hidden="true" />
                               )}
@@ -986,7 +986,7 @@ export default function ChatWidget() {
                               className={cn(
                                 'inline-flex h-6 w-6 items-center justify-center rounded-md hover:bg-muted transition-colors',
                                 feedback[msg.id] === 'up'
-                                  ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 font-bold'
+                                  ? 'text-success bg-success/15 font-bold'
                                   : 'hover:text-foreground',
                               )}
                               aria-label="Thích"

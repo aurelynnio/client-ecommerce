@@ -103,7 +103,7 @@ export default function ChatProductCard({
           {product.size && (
             <Badge
               variant="outline"
-              className="h-5 px-1.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40"
+              className="h-5 px-1.5 text-[10px] font-semibold text-success bg-success/15 border-0"
             >
               Size: {product.size}
             </Badge>
@@ -111,7 +111,7 @@ export default function ChatProductCard({
         </div>
 
         {product.discountPercent !== undefined && product.discountPercent > 0 && (
-          <Badge className="h-5 bg-destructive/10 text-destructive border-0 px-1.5 text-[10px] font-bold">
+          <Badge className="h-5 bg-primary-bg text-primary border-0 px-1.5 text-[10px] font-bold">
             -{product.discountPercent}%
           </Badge>
         )}

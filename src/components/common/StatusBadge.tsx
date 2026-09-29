@@ -47,80 +47,80 @@ const statusMap: Record<string, StatusConfig> = {
   // Orders
   pending: {
     label: 'Chờ xử lý',
-    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    className: 'bg-warning/15 text-warning',
     icon: Clock,
   },
   processing: {
     label: 'Đang xử lý',
-    className: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+    className: 'bg-info/15 text-info',
     icon: Clock,
   },
   confirmed: {
     label: 'Đã xác nhận',
-    className: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+    className: 'bg-info/15 text-info',
     icon: CheckCircle2,
   },
   shipping: {
     label: 'Đang giao hàng',
-    className: 'bg-sky-500/10 text-sky-600 dark:text-sky-400',
+    className: 'bg-info/15 text-info',
     icon: Truck,
   },
   delivered: {
     label: 'Đã giao hàng',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    className: 'bg-success/15 text-success',
     icon: PackageCheck,
   },
   completed: {
     label: 'Hoàn thành',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    className: 'bg-success/15 text-success',
     icon: CheckCircle2,
   },
   cancelled: {
     label: 'Đã hủy',
-    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+    className: 'bg-destructive/15 text-destructive',
     icon: XCircle,
   },
   refunded: {
     label: 'Đã hoàn tiền',
-    className: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
+    className: 'bg-muted text-muted-foreground',
     icon: RotateCcw,
   },
 
   // Payment
   paid: {
     label: 'Đã thanh toán',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    className: 'bg-success/15 text-success',
     icon: CheckCircle2,
   },
   unpaid: {
     label: 'Chưa thanh toán',
-    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    className: 'bg-warning/15 text-warning',
     icon: AlertCircle,
   },
   payment_failed: {
     label: 'Thanh toán thất bại',
-    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+    className: 'bg-destructive/15 text-destructive',
     icon: XCircle,
   },
 
   // Stock
   in_stock: {
     label: 'Còn hàng',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    className: 'bg-success/15 text-success',
   },
   low_stock: {
     label: 'Sắp hết hàng',
-    className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    className: 'bg-warning/15 text-warning',
   },
   out_of_stock: {
     label: 'Hết hàng',
-    className: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+    className: 'bg-destructive/15 text-destructive',
   },
 
   // Status
   active: {
     label: 'Hoạt động',
-    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    className: 'bg-success/15 text-success',
   },
   inactive: {
     label: 'Tạm ẩn',
@@ -153,7 +153,7 @@ export function StatusBadge({
   return (
     <Badge
       variant="outline"
-      className={cn('inline-flex items-center gap-1.5 font-medium', config.className, className)}
+      className={cn('inline-flex items-center gap-1.5 font-medium border-0', config.className, className)}
     >
       {showIcon && Icon && <Icon className="h-3 w-3 shrink-0" />}
       <span>{displayLabel}</span>

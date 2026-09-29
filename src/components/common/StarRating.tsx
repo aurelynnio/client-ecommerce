@@ -60,9 +60,9 @@ export function StarRating({
                 className={cn(
                   currentConfig.icon,
                   isFilled
-                    ? 'fill-amber-400 text-amber-400'
+                    ? 'fill-star text-star'
                     : isHalf
-                      ? 'fill-amber-400/50 text-amber-400'
+                      ? 'fill-star/50 text-star'
                       : 'fill-muted text-muted-foreground/40',
                 )}
               />

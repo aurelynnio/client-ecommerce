@@ -30,13 +30,13 @@ export default function SizeAdvisorCard({ className, onSelectSizeQuery }: SizeAd
   const activeTier = SIZE_TIERS.find((t) => t.size === selectedSize) || SIZE_TIERS[2];
 
   return (
-    <div className={`w-full my-2.5 rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 p-3 text-xs ${className || ''}`}>
+    <div className={`w-full my-2.5 rounded-xl bg-success/10 p-3 text-xs ${className || ''}`}>
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold">
+        <div className="flex items-center gap-1.5 text-success font-bold">
           <Ruler className="h-4 w-4" />
           <span>Bảng Quy Đổi Size Chuẩn</span>
         </div>
-        <Badge variant="outline" className="text-[10px] bg-emerald-100/60 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">
+        <Badge variant="outline" className="text-[10px] bg-success/15 text-success border-0">
           Form Regular Fit
         </Badge>
       </div>
@@ -50,8 +50,8 @@ export default function SizeAdvisorCard({ className, onSelectSizeQuery }: SizeAd
             onClick={() => setSelectedSize(tier.size)}
             className={`flex-1 py-1.5 rounded-lg text-center font-bold text-xs transition-all ${
               selectedSize === tier.size
-                ? 'bg-emerald-600 text-white scale-102'
-                : 'bg-card text-foreground hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30'
+                ? 'bg-success text-success-foreground scale-102'
+                : 'bg-card text-foreground hover:bg-success/10'
             }`}
           >
             {tier.size}
@@ -63,7 +63,7 @@ export default function SizeAdvisorCard({ className, onSelectSizeQuery }: SizeAd
       <div className="rounded-lg bg-card p-2.5 space-y-1">
         <div className="flex items-center justify-between text-[11px]">
           <span className="text-muted-foreground">Khuyến nghị cho Size {activeTier.size}:</span>
-          <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+          <span className="font-bold text-success flex items-center gap-1">
             <CheckCircle2 className="h-3 w-3" /> {activeTier.desc}
           </span>
         </div>
@@ -84,7 +84,7 @@ export default function SizeAdvisorCard({ className, onSelectSizeQuery }: SizeAd
         <button
           type="button"
           onClick={() => onSelectSizeQuery(`Tìm các sản phẩm size ${activeTier.size} còn hàng`)}
-          className="mt-2 w-full text-center text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center justify-center gap-1"
+          className="mt-2 w-full text-center text-[11px] font-semibold text-success hover:underline flex items-center justify-center gap-1"
         >
           <Search className="h-3 w-3" />
           <span>Tìm sản phẩm còn Size {activeTier.size} cho tôi</span>

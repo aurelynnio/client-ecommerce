@@ -83,7 +83,7 @@ export default function ComparisonMatrix({ products, onQuickBuy }: ComparisonMat
         {compareItems.map((p) => (
           <div key={p.id} className="p-2 text-center">
             {p.inStock ? (
-              <span className="inline-flex items-center text-emerald-600 font-semibold gap-0.5 text-[11px]">
+              <span className="inline-flex items-center text-success font-semibold gap-0.5 text-[11px]">
                 <Check className="h-3 w-3" /> Còn hàng
               </span>
             ) : (

@@ -85,28 +85,28 @@ const getDiscountPercent = (original: number, sale: number): number => {
 const renderBadge = (product: Product, discountPercent: number) => {
   if (product.stock === 0) {
     return (
-      <Badge variant="destructive" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase">
+      <Badge variant="destructive" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase border-0">
         Hết hàng
       </Badge>
     );
   }
   if (product.flashSale?.isActive) {
     return (
-      <Badge variant="destructive" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wide">
+      <Badge className="rounded-sm bg-primary text-primary-foreground px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wide border-0">
         Flash Sale
       </Badge>
     );
   }
   if (discountPercent > 0) {
     return (
-      <Badge variant="warning" className="rounded-sm px-1.5 py-0.5 text-[10px]">
+      <Badge className="rounded-sm bg-primary-bg text-primary font-semibold px-1.5 py-0.5 text-[10px] border-0">
         -{discountPercent}%
       </Badge>
     );
   }
   if (product.soldCount === 0) {
     return (
-      <Badge variant="success" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase">
+      <Badge variant="success" className="rounded-sm px-1.5 py-0.5 text-[10px] uppercase border-0">
         Mới
       </Badge>
     );

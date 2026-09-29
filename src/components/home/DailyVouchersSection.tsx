@@ -89,7 +89,7 @@ function VoucherTicket({ voucher }: { voucher: Voucher }) {
             className={cn(
               'h-6 rounded-full px-2.5 text-[10px] font-semibold transition-all shadow-none',
               copied
-                ? 'bg-emerald-600 text-white hover:bg-emerald-600'
+                ? 'bg-success text-success-foreground hover:bg-success'
                 : 'bg-primary text-primary-foreground hover:bg-primary-hover active:scale-95'
             )}
           >

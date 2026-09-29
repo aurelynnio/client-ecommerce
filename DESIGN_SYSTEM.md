@@ -22,13 +22,13 @@ và đáng tin cậy. Thiết kế ưu tiên:
 Màu chủ đạo của toàn bộ hệ thống. Dùng cho: CTA buttons, links, active states,
 brand highlights, price discount, focus ring.
 
-| Token | Giá trị | Mô tả |
-| :---- | :------ | :---- |
-| `--primary` | `#e1251b` | Màu thương hiệu chính |
-| `--primary-hover` | `#f53415` | Hover/active — sáng hơn |
-| `--primary-light` | `#fef2f2` | Nền nhạt nhất — subtle tint |
-| `--primary-bg` | `#fde8e8` | Badge, label background |
-| `--primary-foreground` | `#ffffff` | Text trên primary |
+| Token                  | Giá trị   | Mô tả                       |
+| :--------------------- | :-------- | :-------------------------- |
+| `--primary`            | `#e1251b` | Màu thương hiệu chính       |
+| `--primary-hover`      | `#f53415` | Hover/active — sáng hơn     |
+| `--primary-light`      | `#fef2f2` | Nền nhạt nhất — subtle tint |
+| `--primary-bg`         | `#fde8e8` | Badge, label background     |
+| `--primary-foreground` | `#ffffff` | Text trên primary           |
 
 ```css
 /* Sử dụng trong component */
@@ -42,23 +42,23 @@ color: var(--primary-foreground);
 <Badge className="bg-primary-bg text-primary" />
 ```
 
-### 2.2 Accent — Warm Amber
+### 2.2 Accent — Clean Neutral Hover
 
-Màu phụ trợ, ấm áp, bổ sung cho JD red. Dùng cho: secondary highlights,
-sidebar active, hover backgrounds.
+Màu tương tác phụ, tinh tế, đồng bộ với nền phẳng. Dùng cho: hover backgrounds,
+dropdown items, ghost buttons.
 
-| Token | Giá trị |
-| :---- | :------ |
-| `--accent` | `#fff7ed` (orange-50) |
-| `--accent-foreground` | `#c2410c` (orange-700) |
+| Token                 | Giá trị   | Mô tả                        |
+| :-------------------- | :-------- | :--------------------------- |
+| `--accent`            | `#f4f4f5` | Nền hover trung tính nhẹ     |
+| `--accent-foreground` | `#1f2937` | Text graphite trên nền hover |
 
 ### 2.3 Semantic Colors
 
-| Token | Giá trị | Mô tả |
-| :---- | :------ | :---- |
-| `--success` | `#10b981` | Thành công, confirmed |
-| `--warning` | `#f59e0b` | Cảnh báo, pending |
-| `--info` | `#3b82f6` | Thông tin |
+| Token           | Giá trị   | Mô tả                            |
+| :-------------- | :-------- | :------------------------------- |
+| `--success`     | `#10b981` | Thành công, confirmed            |
+| `--warning`     | `#f59e0b` | Cảnh báo, pending                |
+| `--info`        | `#3b82f6` | Thông tin                        |
 | `--destructive` | `#dc2626` | Lỗi, xóa — khác biệt với primary |
 
 > **Lưu ý:** `--destructive` dùng `#dc2626` (đỏ thuần) thay vì `#ef4444` để
@@ -66,25 +66,27 @@ sidebar active, hover backgrounds.
 
 ### 2.4 Neutral / Surface
 
-| Token | Giá trị | Mô tả |
-| :---- | :------ | :---- |
-| `--background` | `#f4f4f5` | Nền trang — xám nhạt, tạo lớp cho card trắng |
-| `--foreground` | `#1f2937` | Text chính — dark graphite |
-| `--card` | `#ffffff` | Nền card (bề mặt nổi) |
-| `--muted` | `#ececef` | Nền inset — field, hàng zebra, khung ảnh |
-| `--muted-foreground` | `#71717a` | Text phụ |
-| `--border` | `#e4e4e7` | Chỉ còn dùng cho các dashed exception |
-| `--input` | `#e4e4e7` | Không còn dùng cho field |
+| Token                    | Giá trị   | Mô tả                                              |
+| :----------------------- | :-------- | :------------------------------------------------- |
+| `--background`           | `#f4f4f5` | Nền trang — xám nhạt, tạo lớp cho card trắng       |
+| `--foreground`           | `#1f2937` | Text chính — dark graphite                         |
+| `--card`                 | `#ffffff` | Nền card (bề mặt nổi)                              |
+| `--muted`                | `#ececef` | Nền inset — field, hàng zebra, khung ảnh, skeleton |
+| `--muted-foreground`     | `#71717a` | Text phụ                                           |
+| `--secondary`            | `#ececef` | Bề mặt thứ cấp — slider track, progress            |
+| `--secondary-foreground` | `#1f2937` | Text trên bề mặt thứ cấp                           |
+| `--border`               | `#e4e4e7` | Chỉ còn dùng cho các dashed exception              |
+| `--input`                | `#e4e4e7` | Không còn dùng cho field                           |
 
 ### 2.5 E-commerce Specialized
 
-| Token | Giá trị | Mô tả |
-| :---- | :------ | :---- |
-| `--star` | `#f59e0b` | Sao đánh giá |
-| `--discount` | `#e1251b` | Giá khuyến mãi |
+| Token                   | Giá trị   | Mô tả              |
+| :---------------------- | :-------- | :----------------- |
+| `--star`                | `#f59e0b` | Sao đánh giá       |
+| `--discount`            | `#e1251b` | Giá khuyến mãi     |
 | `--price-strikethrough` | `#9ca3af` | Giá gốc gạch ngang |
-| `--link` | `#e1251b` | Link text |
-| `--link-hover` | `#f53415` | Link hover |
+| `--link`                | `#e1251b` | Link text          |
+| `--link-hover`          | `#f53415` | Link hover         |
 
 ```tsx
 // Ví dụ: hiển thị giá sản phẩm
@@ -97,12 +99,12 @@ sidebar active, hover backgrounds.
 
 ### 2.6 Chart Colors
 
-| Token | Giá trị |
-| :---- | :------ |
+| Token       | Giá trị            |
+| :---------- | :----------------- |
 | `--chart-1` | `#e1251b` (JD red) |
-| `--chart-2` | `#f59e0b` (amber) |
-| `--chart-3` | `#10b981` (green) |
-| `--chart-4` | `#3b82f6` (blue) |
+| `--chart-2` | `#f59e0b` (amber)  |
+| `--chart-3` | `#10b981` (green)  |
+| `--chart-4` | `#3b82f6` (blue)   |
 | `--chart-5` | `#8b5cf6` (purple) |
 
 ## 3. Typography
@@ -112,27 +114,27 @@ sidebar active, hover backgrounds.
 
 ### Type Scale
 
-| Token | Size | Sử dụng |
-| :---- | :--- | :------ |
-| `--text-xs` | 12px | Metadata, badge |
-| `--text-sm` | 13px | Secondary text, label |
-| `--text-base` | 14px | Body text (mặc định) |
-| `--text-md` | 15px | Card title |
-| `--text-lg` | 16px | Section title |
-| `--text-xl` | 18px | Page title |
-| `--text-2xl` | 20px | Hero title |
-| `--text-3xl` | 24px | Large heading |
-| `--text-4xl` | 32px | Display |
-| `--text-5xl` | 40px | Hero display |
+| Token         | Size | Sử dụng               |
+| :------------ | :--- | :-------------------- |
+| `--text-xs`   | 12px | Metadata, badge       |
+| `--text-sm`   | 13px | Secondary text, label |
+| `--text-base` | 14px | Body text (mặc định)  |
+| `--text-md`   | 15px | Card title            |
+| `--text-lg`   | 16px | Section title         |
+| `--text-xl`   | 18px | Page title            |
+| `--text-2xl`  | 20px | Hero title            |
+| `--text-3xl`  | 24px | Large heading         |
+| `--text-4xl`  | 32px | Display               |
+| `--text-5xl`  | 40px | Hero display          |
 
 ### Font Weights
 
-| Token | Weight | Sử dụng |
-| :---- | :----- | :------ |
-| `--font-normal` | 400 | Body text |
-| `--font-medium` | 500 | Label, button text |
-| `--font-semibold` | 600 | Card title, price |
-| `--font-bold` | 700 | Section heading |
+| Token             | Weight | Sử dụng            |
+| :---------------- | :----- | :----------------- |
+| `--font-normal`   | 400    | Body text          |
+| `--font-medium`   | 500    | Label, button text |
+| `--font-semibold` | 600    | Card title, price  |
+| `--font-bold`     | 700    | Section heading    |
 
 ### Quy tắc
 
@@ -144,30 +146,30 @@ sidebar active, hover backgrounds.
 
 Hệ 4px base unit:
 
-| Token | Value | Sử dụng |
-| :---- | :---- | :------ |
-| `--space-1` | 4px | Gap nhỏ (icon-text) |
-| `--space-2` | 8px | Gap giữa elements |
-| `--space-3` | 12px | Padding card nhỏ |
-| `--space-4` | 16px | Padding card, gutter mobile |
-| `--space-5` | 20px | — |
-| `--space-6` | 24px | Gutter tablet |
-| `--space-8` | 32px | Gutter desktop, section gap |
-| `--space-10` | 40px | Section gap lớn |
-| `--space-12` | 48px | Hero spacing |
-| `--space-16` | 64px | Large section gap |
+| Token        | Value | Sử dụng                     |
+| :----------- | :---- | :-------------------------- |
+| `--space-1`  | 4px   | Gap nhỏ (icon-text)         |
+| `--space-2`  | 8px   | Gap giữa elements           |
+| `--space-3`  | 12px  | Padding card nhỏ            |
+| `--space-4`  | 16px  | Padding card, gutter mobile |
+| `--space-5`  | 20px  | —                           |
+| `--space-6`  | 24px  | Gutter tablet               |
+| `--space-8`  | 32px  | Gutter desktop, section gap |
+| `--space-10` | 40px  | Section gap lớn             |
+| `--space-12` | 48px  | Hero spacing                |
+| `--space-16` | 64px  | Large section gap           |
 
 ## 5. Border Radius
 
-| Token | Value | Sử dụng |
-| :---- | :---- | :------ |
-| `--radius-sm` | 6px | Badge, tag, small button |
-| `--radius-md` | 10px | Input, medium button |
-| `--radius-lg` | 12px | Card, container |
-| `--radius-xl` | 16px | Modal, large card |
-| `--radius-2xl` | 20px | Sheet, hero card |
+| Token           | Value  | Sử dụng                   |
+| :-------------- | :----- | :------------------------ |
+| `--radius-sm`   | 6px    | Badge, tag, small button  |
+| `--radius-md`   | 10px   | Input, medium button      |
+| `--radius-lg`   | 12px   | Card, container           |
+| `--radius-xl`   | 16px   | Modal, large card         |
+| `--radius-2xl`  | 20px   | Sheet, hero card          |
 | `--radius-full` | 9999px | Pill, avatar, icon button |
-| `--radius` | 8px | Base (mặc định) |
+| `--radius`      | 8px    | Base (mặc định)           |
 
 ## 6. Elevation — không shadow
 
@@ -185,49 +187,47 @@ panel. Dialog/sheet/alert-dialog dựa vào scrim `bg-black/40`, không cần ha
 
 ## 7. Z-Index Scale
 
-| Token | Value | Sử dụng |
-| :---- | :---- | :------ |
-| `--z-base` | 0 | Default |
-| `--z-dropdown` | 1000 | Dropdown menu |
-| `--z-sticky` | 1020 | Sticky header, tabs |
-| `--z-header` | 1030 | Main header |
-| `--z-overlay` | 1040 | Backdrop |
-| `--z-modal` | 1050 | Modal dialog |
-| `--z-popover` | 1060 | Popover, tooltip |
-| `--z-toast` | 1070 | Sonner toast |
+| Token          | Value | Sử dụng             |
+| :------------- | :---- | :------------------ |
+| `--z-base`     | 0     | Default             |
+| `--z-dropdown` | 1000  | Dropdown menu       |
+| `--z-sticky`   | 1020  | Sticky header, tabs |
+| `--z-header`   | 1030  | Main header         |
+| `--z-overlay`  | 1040  | Backdrop            |
+| `--z-modal`    | 1050  | Modal dialog        |
+| `--z-popover`  | 1060  | Popover, tooltip    |
+| `--z-toast`    | 1070  | Sonner toast        |
 
 ## 8. Transitions
 
-| Token | Duration | Sử dụng |
-| :---- | :------- | :------ |
-| `--transition-fast` | 150ms | Color, opacity |
-| `--transition-normal` | 200ms | Background, border |
-| `--transition-slow` | 300ms | Transform, layout |
+| Token                 | Duration | Sử dụng            |
+| :-------------------- | :------- | :----------------- |
+| `--transition-fast`   | 150ms    | Color, opacity     |
+| `--transition-normal` | 200ms    | Background, border |
+| `--transition-slow`   | 300ms    | Transform, layout  |
 
 ## 9. Layout
 
-| Token | Value | Mô tả |
-| :---- | :---- | :---- |
-| `--container-max` | 1280px | Max width nội dung |
-| `--header-height` | 64px | Chiều cao header |
-| `--topbar-height` | 32px | Topbar (promotion bar) |
+| Token             | Value  | Mô tả                  |
+| :---------------- | :----- | :--------------------- |
+| `--container-max` | 1280px | Max width nội dung     |
+| `--header-height` | 64px   | Chiều cao header       |
+| `--topbar-height` | 32px   | Topbar (promotion bar) |
 
 ### Container
 
 ```tsx
-<div className="aura-container">
-  {/* Max-width 1280px, auto margin, padding 16px */}
-</div>
+<div className="aura-container">{/* Max-width 1280px, auto margin, padding 16px */}</div>
 ```
 
 ### Responsive Breakpoints
 
-| Breakpoint | Width | Hành vi |
-| :---------- | :---- | :------ |
-| Mobile | 360–390px | Header compact, action bar wrap |
-| Tablet | 768px | Filter → sheet, table scroll |
-| Laptop | 1024px | Giảm cột, ẩn secondary control |
-| Desktop | 1280px+ | Full toolbar, grid đầy đủ |
+| Breakpoint | Width     | Hành vi                         |
+| :--------- | :-------- | :------------------------------ |
+| Mobile     | 360–390px | Header compact, action bar wrap |
+| Tablet     | 768px     | Filter → sheet, table scroll    |
+| Laptop     | 1024px    | Giảm cột, ẩn secondary control  |
+| Desktop    | 1280px+   | Full toolbar, grid đầy đủ       |
 
 ## 10. Component Rules
 
@@ -270,14 +270,20 @@ panel. Dialog/sheet/alert-dialog dựa vào scrim `bg-black/40`, không cần ha
 ### Price Display
 
 ```tsx
-{/* Giá khuyến mãi */}
-<span className="price-discount text-lg">{formatPrice(salePrice)}</span>
+{
+  /* Giá khuyến mãi */
+}
+<span className="price-discount text-lg">{formatPrice(salePrice)}</span>;
 
-{/* Giá gốc gạch ngang */}
-<span className="price-strikethrough text-sm ml-2">{formatPrice(originalPrice)}</span>
+{
+  /* Giá gốc gạch ngang */
+}
+<span className="price-strikethrough text-sm ml-2">{formatPrice(originalPrice)}</span>;
 
-{/* Phần trăm giảm */}
-<Badge className="bg-primary-bg text-primary">-{discountPercent}%</Badge>
+{
+  /* Phần trăm giảm */
+}
+<Badge className="bg-primary-bg text-primary">-{discountPercent}%</Badge>;
 ```
 
 ## 11. Accessibility
@@ -310,6 +316,7 @@ client-ecommerce/src/app/globals.css
 ```
 
 Cấu trúc:
+
 1. `@theme inline` — map CSS variable sang Tailwind v4 utility class
 2. `:root` — định nghĩa giá trị token
 3. `@layer base` — reset + font

@@ -250,7 +250,7 @@ export default function VoucherSelectModal({
                       </p>
 
                       {!meetsCondition && (
-                        <div className="mt-1 flex items-center gap-1 text-[10px] text-amber-600 dark:text-amber-500 font-medium">
+                        <div className="mt-1 flex items-center gap-1 text-[10px] text-warning font-medium">
                           <AlertCircle className="h-3 w-3 shrink-0" />
                           <span>Mua thêm {formatCurrency(missingAmount)} để áp dụng</span>
                         </div>

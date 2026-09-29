@@ -16,19 +16,19 @@ const fastShortcuts = [
     icon: Ticket,
     title: 'Kho Voucher',
     href: '/vouchers',
-    color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/40 group-hover:bg-amber-500 group-hover:text-white',
+    color: 'text-warning bg-warning/15 group-hover:bg-warning group-hover:text-warning-foreground',
   },
   {
     icon: Flame,
     title: 'Hàng mới',
     href: '/new-arrivals',
-    color: 'text-orange-600 bg-orange-50 dark:bg-orange-950/40 group-hover:bg-orange-500 group-hover:text-white',
+    color: 'text-primary bg-primary-bg group-hover:bg-primary group-hover:text-primary-foreground',
   },
   {
     icon: Store,
     title: 'Người bán',
     href: '/seller',
-    color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 group-hover:bg-emerald-500 group-hover:text-white',
+    color: 'text-success bg-success/15 group-hover:bg-success group-hover:text-success-foreground',
   },
 ];
 
@@ -87,7 +87,7 @@ export default function BannerCarousel() {
                     href="/profile?tab=vouchers"
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-muted py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
                   >
-                    <Ticket className="h-3.5 w-3.5 text-amber-500" />
+                    <Ticket className="h-3.5 w-3.5 text-warning" />
                     <span>Ví Voucher</span>
                   </Link>
                 </>

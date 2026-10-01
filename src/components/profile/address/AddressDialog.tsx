@@ -18,6 +18,7 @@ import { AddressDialogProps, AddressFormData } from '@/types/address';
 import { MapPin, Navigation, Home } from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { getSafeErrorMessage } from '@/api';
+import { reverseGeocode } from '@/utils/geocoding';
 
 export default function AddressDialog({
   open,
@@ -67,93 +68,6 @@ export default function AddressDialog({
     }
   }, [editingAddress, user, open]);
 
-  // Hàm phân tích địa chỉ và điền vào các trường phù hợp
-  const parseAndFillAddress = (fullAddress: string) => {
-    const address = fullAddress.replace(/,\s*Việt Nam$/, '').replace(/,\s*Vietnam$/i, '');
-
-    // Mẫu regex để phân tích địa chỉ Việt Nam
-    const patterns = [
-      // Pattern cho địa chỉ dạng: Ấp X, Xã Y, Huyện Z, Thành phố/Tỉnh ABC
-      /(.*?),\s*(Phường|Xã|Thị trấn)\s*(.*?),\s*(Quận|Huyện|Thị xã|Thành phố)\s*(.*?),\s*(Tỉnh|Thành phố)\s*(.*)/,
-      // Pattern cho địa chỉ dạng: Số nhà, Đường, Phường, Quận, Thành phố
-      /(.*?),\s*(Phường|Xã)\s*(.*?),\s*(Quận|Huyện)\s*(.*?),\s*(.*)/,
-      // Pattern đơn giản hơn
-      /(.*?),\s*(.*?),\s*(.*?),\s*(.*)/,
-    ];
-
-    let city = '';
-    let district = '';
-    let ward = '';
-    let detailedAddress = address;
-
-    for (const pattern of patterns) {
-      const match = address.match(pattern);
-      if (match) {
-        if (pattern === patterns[0]) {
-          // Pattern chi tiết
-          detailedAddress = match[1].trim();
-          ward = `${match[2]} ${match[3]}`.trim();
-          district = `${match[4]} ${match[5]}`.trim();
-          city = `${match[6]} ${match[7]}`.trim();
-        } else if (pattern === patterns[1]) {
-          // Pattern trung bình
-          detailedAddress = match[1].trim();
-          ward = `${match[2]} ${match[3]}`.trim();
-          district = `${match[4]} ${match[5]}`.trim();
-          city = match[6].trim();
-        } else {
-          // Pattern đơn giản - chia thành 4 phần
-          const parts = address.split(',').map((part) => part.trim());
-          if (parts.length >= 4) {
-            detailedAddress = parts.slice(0, parts.length - 3).join(', ');
-            ward = parts[parts.length - 3];
-            district = parts[parts.length - 2];
-            city = parts[parts.length - 1];
-          }
-        }
-        break;
-      }
-    }
-
-    // Nếu không phân tích được bằng regex, thử phân tích thủ công
-    if (!city) {
-      const parts = address.split(',').map((part) => part.trim());
-
-      if (parts.length > 0) {
-        // Phần cuối cùng thường là thành phố/tỉnh
-        city = parts[parts.length - 1];
-
-        if (parts.length > 1) {
-          // Phần trước đó thường là quận/huyện
-          district = parts[parts.length - 2];
-        }
-
-        if (parts.length > 2) {
-          // Phần trước nữa thường là phường/xã
-          ward = parts[parts.length - 3];
-        }
-
-        // Phần còn lại là địa chỉ chi tiết
-        detailedAddress = parts.slice(0, Math.max(0, parts.length - 3)).join(', ');
-      }
-    }
-
-    // Chuẩn hóa tên thành phố
-    if (city.includes('Hồ Chí Minh') || city.includes('TP.HCM') || city.includes('TP HCM')) {
-      city = 'Thành phố Hồ Chí Minh';
-    } else if (city.includes('Hà Nội')) {
-      city = 'Thành phố Hà Nội';
-    } else if (city.includes('Đà Nẵng')) {
-      city = 'Thành phố Đà Nẵng';
-    }
-
-    return {
-      detailedAddress: detailedAddress || address,
-      city,
-      district,
-      ward,
-    };
-  };
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -173,27 +87,18 @@ export default function AddressDialog({
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
+          const parsedAddress = await reverseGeocode(latitude, longitude);
 
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=vi`,
-          );
-
-          if (!response.ok) {
-            throw new Error('Không thể lấy thông tin địa chỉ');
-          }
-
-          const data = await response.json();
-
-          if (data && data.display_name) {
-            const fullAddress = data.display_name;
-            const parsedAddress = parseAndFillAddress(fullAddress);
-
+          if (
+            parsedAddress &&
+            (parsedAddress.city || parsedAddress.district || parsedAddress.detailedAddress)
+          ) {
             setAddressForm((prev) => ({
               ...prev,
-              address: parsedAddress.detailedAddress,
-              city: parsedAddress.city,
-              district: parsedAddress.district,
-              ward: parsedAddress.ward,
+              address: parsedAddress.detailedAddress || prev.address,
+              city: parsedAddress.city || prev.city,
+              district: parsedAddress.district || prev.district,
+              ward: parsedAddress.ward || prev.ward,
             }));
 
             toast.success('Đã cập nhật vị trí');

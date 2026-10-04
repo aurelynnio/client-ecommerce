@@ -2,10 +2,28 @@
 import { useUploadAvatar, useDeleteAvatar } from '@/hooks/queries/useProfile';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Plus, User, Mail, MapPin, Check, Trash2, Phone, Calendar, Edit3 } from 'lucide-react';
+import {
+  Camera,
+  Upload,
+  User,
+  Mail,
+  MapPin,
+  Check,
+  Trash2,
+  Phone,
+  Calendar,
+  Edit3,
+} from 'lucide-react';
 import SpinnerLoading from '@/components/common/SpinnerLoading';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { Address, ProfileTabProps } from '@/types/address';
 import { getSafeErrorMessage } from '@/api';
@@ -54,41 +72,79 @@ export default function ProfileTab({ user, onEditProfile }: ProfileTabProps) {
     <div className="max-w-2xl mx-auto space-y-8 py-4">
       {/* Avatar Section */}
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative group">
-          <div className="w-28 h-28 rounded-full overflow-hidden transition-transform duration-200 group-hover:scale-105 relative">
+        <div className="relative group/avatar">
+          {/* Avatar Image Container */}
+          <div
+            onClick={user.avatar ? undefined : handleUploadAvatar}
+            className={`w-28 h-28 rounded-full overflow-hidden relative ring-4 ring-muted/60 shadow-sm transition-all duration-300 bg-muted ${
+              user.avatar ? 'cursor-default' : 'cursor-pointer hover:ring-primary/40 hover:shadow-md'
+            }`}
+          >
             <Image
               src={user.avatar || '/images/placeholder-avatar.svg'}
               alt={user.username}
               fill
-              className="object-cover rounded-full"
+              className="object-cover transition-transform duration-300 group-hover/avatar:scale-105"
             />
-          </div>
-          <Button
-            size="icon"
-            className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover transition-colors duration-200"
-            onClick={handleUploadAvatar}
-            disabled={isUploadingAvatar}
-            aria-label="Đổi ảnh đại diện"
-          >
-            {isUploadingAvatar ? (
-              <SpinnerLoading noWrapper size={16} className="text-primary-foreground" />
-            ) : (
-              <Plus className="h-4 w-4" />
+
+            {/* Subtle Hover Overlay for empty avatar */}
+            {!user.avatar && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1">
+                <Camera className="h-5 w-5" />
+                <span className="text-[11px] font-medium">Tải ảnh</span>
+              </div>
             )}
-          </Button>
-          {user.avatar && (
+
+            {/* Loading Indicator */}
+            {(isUploadingAvatar || deleteAvatarMutation.isPending) && (
+              <div className="absolute inset-0 bg-background/80 backdrop-blur-xs flex items-center justify-center z-10">
+                <SpinnerLoading noWrapper size={24} className="text-primary" />
+              </div>
+            )}
+          </div>
+
+          {/* Action Badge */}
+          {user.avatar ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="absolute -bottom-1 -right-1 h-9 w-9 rounded-full bg-background border-2 border-background shadow-md hover:bg-accent text-foreground transition-all duration-200 hover:scale-110 active:scale-95"
+                  aria-label="Tùy chọn ảnh đại diện"
+                  disabled={isUploadingAvatar || deleteAvatarMutation.isPending}
+                >
+                  <Camera className="h-4 w-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" side="bottom" className="w-48 shadow-lg">
+                <DropdownMenuItem onClick={handleUploadAvatar} className="cursor-pointer gap-2.5 py-2">
+                  <Upload className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">Tải ảnh mới</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleDeleteAvatar}
+                  className="cursor-pointer gap-2.5 py-2 text-destructive focus:text-destructive focus:bg-destructive/10"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span className="text-sm">Gỡ ảnh đại diện</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
             <Button
               size="icon"
-              variant="destructive"
-              className="absolute bottom-0 left-0 h-8 w-8 rounded-full"
-              onClick={handleDeleteAvatar}
-              disabled={deleteAvatarMutation.isPending}
-              aria-label="Xóa ảnh đại diện"
+              variant="outline"
+              className="absolute -bottom-1 -right-1 h-9 w-9 rounded-full bg-background border-2 border-background shadow-md hover:bg-accent text-foreground transition-all duration-200 hover:scale-110 active:scale-95"
+              onClick={handleUploadAvatar}
+              disabled={isUploadingAvatar}
+              aria-label="Tải ảnh đại diện"
             >
-              {deleteAvatarMutation.isPending ? (
-                <SpinnerLoading noWrapper size={14} />
+              {isUploadingAvatar ? (
+                <SpinnerLoading noWrapper size={16} className="text-primary" />
               ) : (
-                <Trash2 className="h-3.5 w-3.5" />
+                <Camera className="h-4 w-4 text-muted-foreground" />
               )}
             </Button>
           )}
